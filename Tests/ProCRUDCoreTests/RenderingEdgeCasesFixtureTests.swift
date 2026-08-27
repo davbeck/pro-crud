@@ -59,7 +59,7 @@ struct RenderingEdgeCasesFixtureTests {
 	private func assertRenderingSnapshot(_ image: NSImage, number: Int) {
 		assertSnapshot(
 			of: image,
-			as: .image(precision: 0.99, perceptualPrecision: 0.99),
+			as: .proCRUDImage(precision: 0.99, perceptualPrecision: 0.99),
 			named: "slide-\(number)",
 			testName: "rendersRenderingEdgeCasesSlide",
 		)

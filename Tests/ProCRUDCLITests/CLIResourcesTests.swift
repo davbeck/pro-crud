@@ -81,7 +81,6 @@ struct CLIResourcesTests {
 			.deletingLastPathComponent()
 		let fileManager = FileManager.default
 
-		#expect(resourceRoot.lastPathComponent == "ProCRUD_ProCRUDCLI.bundle")
 		for directory in ["skills", "Format", "Protobuf/proto"] {
 			var isDirectory: ObjCBool = false
 			#expect(fileManager.fileExists(

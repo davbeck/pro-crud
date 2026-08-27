@@ -26,7 +26,7 @@ struct MalformedGeneratedBundleRenderingTests {
 
 			assertSnapshot(
 				of: rendered,
-				as: .image(precision: 0.99, perceptualPrecision: 0.99),
+				as: .proCRUDImage(precision: 0.99, perceptualPrecision: 0.99),
 				named: "slide-\(index + 1)",
 				testName: "rendersMalformedGeneratedBundleSlide",
 			)

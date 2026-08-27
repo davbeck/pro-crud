@@ -202,8 +202,9 @@ skill_config="$workspace/Claude Config"
 CLAUDE_CONFIG_DIR="$skill_config" "$bin_path" skill install --agent claude >/dev/null
 installed_skill="$skill_config/skills/pro-crud"
 test -L "$installed_skill"
-test "$(readlink "$installed_skill")" = \
-  "$bin_directory/ProCRUD_ProCRUDCLI.bundle/skills/pro-crud"
+installed_skill_target="$(readlink "$installed_skill")"
+[[ "$installed_skill_target" == \
+  "$bin_directory/ProCRUD_ProCRUDCLI.bundle/"*"skills/pro-crud" ]]
 cmp -s \
   "$repo_root/skills/pro-crud/assets/themes/ProCRUD Design System.proTheme" \
   "$installed_skill/assets/themes/ProCRUD Design System.proTheme"

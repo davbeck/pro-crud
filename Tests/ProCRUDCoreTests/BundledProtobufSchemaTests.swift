@@ -32,7 +32,6 @@ struct BundledProtobufSchemaTests {
 			regularFilePaths.append(String(url.path.dropFirst(resourceRoot.path.count + 1)))
 		}
 
-		#expect(resourceRoot.lastPathComponent == "ProCRUD_ProCRUDCore.bundle")
 		#expect(regularFilePaths.sorted() == ["Protobuf/schema.pb"])
 	}
 }

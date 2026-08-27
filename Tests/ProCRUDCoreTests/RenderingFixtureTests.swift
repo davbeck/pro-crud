@@ -564,7 +564,7 @@ private func assertRenderingFixture(
 
 	assertSnapshot(
 		of: rendered,
-		as: .image(precision: precision, perceptualPrecision: perceptualPrecision),
+		as: .proCRUDImage(precision: precision, perceptualPrecision: perceptualPrecision),
 		named: "slide-\(slideNumber)",
 		fileID: fileID,
 		file: filePath,

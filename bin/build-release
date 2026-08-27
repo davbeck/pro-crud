@@ -199,14 +199,24 @@ done
 
 core_resource_bundle="$staging_directory/$core_resource_bundle_name"
 cli_resource_bundle="$staging_directory/$cli_resource_bundle_name"
+core_resource_root="$core_resource_bundle"
+cli_resource_root="$cli_resource_bundle"
+if [[ -d "$core_resource_bundle/Contents/Resources" ]]; then
+	core_resource_root="$core_resource_bundle/Contents/Resources"
+fi
+if [[ -d "$cli_resource_bundle/Contents/Resources" ]]; then
+	cli_resource_root="$cli_resource_bundle/Contents/Resources"
+fi
+core_resource_path_prefix="${core_resource_root#"$staging_directory/"}"
+cli_resource_path_prefix="${cli_resource_root#"$staging_directory/"}"
 required_resource_bundle_paths=(
-	"$core_resource_bundle_name/Protobuf/schema.pb"
-	"$cli_resource_bundle_name/Format/README.md"
-	"$cli_resource_bundle_name/Protobuf/content-sha256.txt"
-	"$cli_resource_bundle_name/Protobuf/proto/proApi.proto"
-	"$cli_resource_bundle_name/Protobuf/revision.txt"
-	"$cli_resource_bundle_name/skills/pro-crud/SKILL.md"
-	"$cli_resource_bundle_name/skills/propresenter-api/SKILL.md"
+	"$core_resource_path_prefix/Protobuf/schema.pb"
+	"$cli_resource_path_prefix/Format/README.md"
+	"$cli_resource_path_prefix/Protobuf/content-sha256.txt"
+	"$cli_resource_path_prefix/Protobuf/proto/proApi.proto"
+	"$cli_resource_path_prefix/Protobuf/revision.txt"
+	"$cli_resource_path_prefix/skills/pro-crud/SKILL.md"
+	"$cli_resource_path_prefix/skills/propresenter-api/SKILL.md"
 )
 for required_resource_bundle_path in "${required_resource_bundle_paths[@]}"; do
 	if [[ ! -f "$staging_directory/$required_resource_bundle_path" ]]; then
@@ -221,13 +231,13 @@ for cli_only_resource in \
 	"Protobuf/proto" \
 	"Protobuf/revision.txt" \
 	"skills"; do
-	if [[ -e "$core_resource_bundle/$cli_only_resource" ]] || \
-		[[ -L "$core_resource_bundle/$cli_only_resource" ]]; then
+	if [[ -e "$core_resource_root/$cli_only_resource" ]] || \
+		[[ -L "$core_resource_root/$cli_only_resource" ]]; then
 		echo "$core_resource_bundle_name unexpectedly contains $cli_only_resource." >&2
 		exit 1
 	fi
 done
-unexpected_cli_schema=$(find "$cli_resource_bundle" -name 'schema.pb' -print -quit)
+unexpected_cli_schema=$(find "$cli_resource_root" -name 'schema.pb' -print -quit)
 if [[ -n "$unexpected_cli_schema" ]]; then
 	echo "$cli_resource_bundle_name unexpectedly contains $unexpected_cli_schema." >&2
 	exit 1
@@ -306,7 +316,7 @@ skill_names=("pro-crud" "propresenter-api")
 mkdir -p "$skill_validation_directory"
 for skill_name in "${skill_names[@]}"; do
 	ditto \
-		"$cli_resource_bundle/skills/$skill_name" \
+		"$cli_resource_root/skills/$skill_name" \
 		"$skill_validation_directory/$skill_name"
 	printf 'outdated copied skill\n' >"$skill_validation_directory/$skill_name/SKILL.md"
 done
@@ -314,7 +324,7 @@ CODEX_HOME="$skill_validation_codex_home" \
 	"$binary" skill install --agent codex --force
 for skill_name in "${skill_names[@]}"; do
 	installed_skill="$skill_validation_directory/$skill_name"
-	expected_skill="$cli_resource_bundle/skills/$skill_name"
+	expected_skill="$cli_resource_root/skills/$skill_name"
 	if [[ ! -L "$installed_skill" ]]; then
 		echo "Skill install did not replace $installed_skill with a symbolic link." >&2
 		exit 1
@@ -326,7 +336,7 @@ for skill_name in "${skill_names[@]}"; do
 done
 
 notarization_archive="$staging_root/$product_name-notarization.zip"
-ditto -c -k --keepParent "$staging_directory" "$notarization_archive"
+ditto -c -k --keepParent "$binary" "$notarization_archive"
 notarize "$notarization_archive" "Binary" "binary-notarization"
 binary_notarization_id="$last_notarization_id"
 
@@ -341,6 +351,11 @@ for resource_bundle_name in "${resource_bundle_names[@]}"; do
 		"$staging_directory/$resource_bundle_name" \
 		"$package_binary_directory/$resource_bundle_name"
 done
+package_theme_relative_path="$cli_resource_path_prefix/skills/pro-crud/assets/themes/ProCRUD Design System.proTheme"
+package_theme="$package_payload/usr/local/bin/$package_theme_relative_path"
+package_encoded_theme="$package_theme.base64"
+/usr/bin/base64 -i "$package_theme" -o "$package_encoded_theme"
+/bin/rm "$package_theme"
 install -m 644 \
 	"$staging_directory/LICENSE" \
 	"$staging_directory/LICENSE-SwiftArgumentParser.txt" \
@@ -402,9 +417,34 @@ for required_package_file in "${required_package_files[@]}"; do
 		exit 1
 	fi
 done
+normalized_package_payload_files=$(printf '%s\n' "$package_payload_files" | sed 's#^\./##')
+if ! printf '%s\n' "$normalized_package_payload_files" | \
+	grep -Fqx "usr/local/bin/$package_theme_relative_path.base64"; then
+	echo "Installer package is missing the encoded design Theme." >&2
+	exit 1
+fi
+if printf '%s\n' "$normalized_package_payload_files" | \
+	grep -Fqx "usr/local/bin/$package_theme_relative_path"; then
+	echo "Installer package unexpectedly contains the unpackable design Theme." >&2
+	exit 1
+fi
 
 package_expansion="$staging_root/package-inspection"
 pkgutil --expand-full "$package" "$package_expansion"
+packaged_encoded_theme=$(find "$package_expansion" \
+	-name 'ProCRUD Design System.proTheme.base64' -type f -print -quit)
+if [[ -z "$packaged_encoded_theme" ]]; then
+	echo "Installer package is missing its encoded design Theme payload." >&2
+	exit 1
+fi
+decoded_package_theme="$staging_root/decoded-package-design-theme.proTheme"
+/usr/bin/base64 -D -i "$packaged_encoded_theme" -o "$decoded_package_theme"
+if ! cmp -s \
+	"$cli_resource_root/skills/pro-crud/assets/themes/ProCRUD Design System.proTheme" \
+	"$decoded_package_theme"; then
+	echo "Installer package's encoded design Theme does not match the release resource." >&2
+	exit 1
+fi
 for package_script_name in preinstall postinstall; do
 	packaged_script=$(find "$package_expansion" \
 		-path "*/Scripts/$package_script_name" -type f -print -quit)

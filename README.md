@@ -77,15 +77,13 @@ archive layouts, and path semantics.
   that includes Swift 6.3
 
 The release downloads contain a universal binary for Apple silicon and Intel
-Macs. Releases starting with v0.1.1 are signed by ThinkUltimate LLC with a
-hardened runtime and accepted by Apple's notarization service. Starting with
-v0.1.2, the installer package is also Developer ID signed, notarized, and
-stapled for offline Gatekeeper verification.
+Macs. The binary and installer package are signed by ThinkUltimate LLC,
+notarized by Apple, and stapled for offline Gatekeeper verification.
 
 ## Installation
 
-1. [Download pro-crud for macOS](https://github.com/davbeck/pro-crud/releases/download/v0.2.0/pro-crud-0.2.0-macos-universal.pkg).
-2. Open `pro-crud-0.2.0-macos-universal.pkg` from your Downloads folder.
+1. [Download pro-crud for macOS](https://github.com/davbeck/pro-crud/releases/download/v0.1.0/pro-crud-0.1.0-macos-universal.pkg).
+2. Open `pro-crud-0.1.0-macos-universal.pkg` from your Downloads folder.
 3. Follow the Installer prompts.
 
 The installer places `pro-crud` and its two SwiftPM resource bundles in
@@ -100,20 +98,20 @@ the files from the
 [latest GitHub release](https://github.com/davbeck/pro-crud/releases/latest):
 
 ```sh
-shasum -a 256 -c pro-crud-0.2.0-macos-universal.tar.gz.sha256
-tar -xzf pro-crud-0.2.0-macos-universal.tar.gz
+shasum -a 256 -c pro-crud-0.1.0-macos-universal.tar.gz.sha256
+tar -xzf pro-crud-0.1.0-macos-universal.tar.gz
 sudo install -m 755 \
-  pro-crud-0.2.0-macos-universal/pro-crud \
+  pro-crud-0.1.0-macos-universal/pro-crud \
   /usr/local/bin/pro-crud
 sudo /bin/rm -rf -- \
   /usr/local/bin/ProCRUD_ProCRUDCore.bundle \
   /usr/local/bin/ProCRUD_ProCRUDCLI.bundle \
   /usr/local/bin/ProCRUD_ProCRUDResources.bundle
 sudo ditto \
-  pro-crud-0.2.0-macos-universal/ProCRUD_ProCRUDCore.bundle \
+  pro-crud-0.1.0-macos-universal/ProCRUD_ProCRUDCore.bundle \
   /usr/local/bin/ProCRUD_ProCRUDCore.bundle
 sudo ditto \
-  pro-crud-0.2.0-macos-universal/ProCRUD_ProCRUDCLI.bundle \
+  pro-crud-0.1.0-macos-universal/ProCRUD_ProCRUDCLI.bundle \
   /usr/local/bin/ProCRUD_ProCRUDCLI.bundle
 pro-crud --version
 pro-crud skill install --force
