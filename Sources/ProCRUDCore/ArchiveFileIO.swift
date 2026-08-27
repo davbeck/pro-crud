@@ -6,6 +6,21 @@ enum ArchiveFileIO {
 		let size: UInt64
 	}
 
+	static func path(_ proposedPath: String, addingNumericSuffix suffix: Int) -> String {
+		guard suffix > 0 else { return proposedPath }
+		let path = proposedPath as NSString
+		let basename = path.lastPathComponent as NSString
+		let pathExtension = basename.pathExtension
+		let stem = basename.deletingPathExtension
+		let suffixedBasename = pathExtension.isEmpty
+			? "\(stem)-\(suffix)"
+			: "\(stem)-\(suffix).\(pathExtension)"
+		let directory = path.deletingLastPathComponent
+		return directory == "."
+			? suffixedBasename
+			: (directory as NSString).appendingPathComponent(suffixedBasename)
+	}
+
 	static func snapshot(of url: URL) throws -> Snapshot {
 		let opened = try openRegularFile(url)
 		defer { try? opened.handle.close() }

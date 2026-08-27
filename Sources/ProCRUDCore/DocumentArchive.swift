@@ -301,22 +301,30 @@ public enum DocumentArchive {
 			warnings.append("Missing media asset: \(mediaURL.renderPath)")
 			return
 		}
+		let containedPath = try? DocumentLoader.relativePath(of: source, in: sourceRoot)
+		let proposedRelative = containedPath ?? source.lastPathComponent
+		let standardizedSource = source.standardizedFileURL
 		let relative: String
-		if let containedPath = try? DocumentLoader.relativePath(of: source, in: sourceRoot) {
-			relative = containedPath
-		} else {
-			relative = source.lastPathComponent
-		}
-		try validateWorkspacePath(relative, limits: limits)
-		let destination = workspace.appendingPathComponent(relative)
-		if let copied = copiedAssets[relative] {
-			guard copied.standardizedFileURL == source.standardizedFileURL else {
-				throw DocumentArchiveError.assetCollision(relative)
+		var suffix = 0
+		while true {
+			try copyBudget.deadline.check()
+			let candidate = ArchiveFileIO.path(proposedRelative, addingNumericSuffix: suffix)
+			try validateWorkspacePath(candidate, limits: limits)
+			let destination = workspace.appendingPathComponent(candidate)
+			if let copied = copiedAssets[candidate] {
+				if copied.standardizedFileURL == standardizedSource {
+					relative = candidate
+					break
+				}
+			} else if !FileManager.default.fileExists(atPath: destination.path) {
+				try copyBudget.copy(from: standardizedSource, to: destination, entry: candidate)
+				relative = candidate
+				break
+			} else if candidate == containedPath {
+				relative = candidate
+				break
 			}
-		} else if !FileManager.default.fileExists(atPath: destination.path) {
-			try copyBudget.copy(from: source, to: destination, entry: relative)
-		} else if (try? DocumentLoader.relativePath(of: source, in: sourceRoot)) == nil {
-			throw DocumentArchiveError.assetCollision(relative)
+			suffix += 1
 		}
 		copiedAssets[relative] = source
 		mediaURL.relativePath = relative

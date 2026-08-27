@@ -759,18 +759,10 @@ public enum TemplateMediaMaterializer {
 		}
 
 		let fileManager = FileManager.default
-		let pathExtension = sourceURL.pathExtension
-		let stem = sourceURL.deletingPathExtension().lastPathComponent
-		var suffix = 1
+		var suffix = 0
 		while true {
 			try archiveBudget?.deadline.check()
-			let filename = if suffix == 1 {
-				sourceURL.lastPathComponent
-			} else if pathExtension.isEmpty {
-				"\(stem)-\(suffix)"
-			} else {
-				"\(stem)-\(suffix).\(pathExtension)"
-			}
+			let filename = ArchiveFileIO.path(sourceURL.lastPathComponent, addingNumericSuffix: suffix)
 			try validateArchivePath(filename, limits: archiveBudget?.limits)
 			let destination = destinationDirectory.appendingPathComponent(filename)
 			if !fileManager.fileExists(atPath: destination.path) {
@@ -793,11 +785,7 @@ public enum TemplateMediaMaterializer {
 			if contentsMatch {
 				return filename
 			}
-			let (nextSuffix, overflow) = suffix.addingReportingOverflow(1)
-			guard !overflow else {
-				throw ArchiveError.invalidEntry(sourceURL.lastPathComponent)
-			}
-			suffix = nextSuffix
+			suffix += 1
 		}
 	}
 

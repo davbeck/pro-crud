@@ -12,7 +12,7 @@ Archive extensions identify the export workflow. The extension is part of the us
 | `.proPlaylist` | ZIP | One root `data` file plus one or more root `.pro` files | `rv.data.PlaylistDocument` in `data`; `rv.data.Presentation` in each `.pro` | Playlist export/import. The `data` file preserves playlist tree structure, item ordering, per-item arrangement UUIDs, and references to embedded presentation documents. |
 | `.proTheme` | ZIP | One directory per exported theme; each directory contains a `Theme` file and may contain assets | `rv.data.Template.Document` in each `Theme` file | Theme export/import. Each theme document contains reusable template slides. |
 
-ProPresenter 21.4 exports use stored entries and ZIP64 size fields even for small files. Media members can retain an absolute source path. Its writer also records the central-directory size as 98 bytes too large by including the ZIP64 end record, ZIP64 locator, and classic end record in that size. Readers can tolerate that exact defect after independently validating the entry count, record boundaries, and trailer; other directory-size mismatches remain corruption errors.
+ProPresenter 21.4 exports use stored entries and ZIP64 size fields even for small files. A presentation-only export and the `.pro` entry in a presentation bundle are byte-identical to the selected live-library document. A media bundle retains the document's absolute media URLs and `ROOT_SHOW` local paths while storing each media file under its absolute source path in the ZIP. This is ProPresenter's native export shape, not a requirement for compatible third-party archives. Its writer also records the central-directory size as 98 bytes too large by including the ZIP64 end record, ZIP64 locator, and classic end record in that size. Readers can tolerate that exact defect after independently validating the entry count, record boundaries, and trailer; other directory-size mismatches remain corruption errors.
 
 Archive parsing and extraction are in-process and bounded. Before writing any output, the reader limits entry count, central-directory work, individual and aggregate expanded sizes, compression ratios, path lengths, and processing time. It rejects encrypted entries, unsupported methods, duplicate normalized destinations, traversal, symbolic links, and special files. Extraction uses a fresh sibling staging directory, resolved containment checks, and restrictive `0700` directory/`0600` regular-file permissions before atomically moving the completed tree into place.
 
@@ -131,6 +131,8 @@ Common relative roots:
 
 Archive readers should resolve embedded references against extracted archive contents first, then fall back to workspace-relative paths during import. Writers should prefer relative URLs for newly created portable documents while preserving absolute URL fields during lossless round-trips.
 
+ProPresenter 21.4 accepts root and nested relative media entries referenced by `URL.relative_path`. During import it copies those files into `Media/Assets`, rewrites each URL to an absolute file URL plus a `ROOT_SHOW` local path, sets the URL platform to macOS, and retains the media UUID. Archive directories do not prevent basename collisions at that destination: `a/shared.png` and `b/shared.png` both target `Media/Assets/shared.png`. The **New Version** import choice uses `shared-1.png` for the second file and updates the second URL.
+
 ## Adjacent Formats
 
 The broader Renewed Vision data ecosystem includes files outside the presentation/theme/playlist protobuf family:
@@ -154,11 +156,12 @@ The broader Renewed Vision data ecosystem includes files outside the presentatio
   arrangement selections.
 - For `.proTheme`, decode each `*/Theme` entry as an independent `rv.data.Template.Document`; preserve the containing directory because it supplies theme identity, and resolve assets as external, archive-local, or theme-local.
 - Preserve unknown protobuf fields during read/write.
+- When portable media from separate external locations would collide at one archive path, retain every file by adding `-1`, `-2`, and later suffixes before the extension. This matches ProPresenter's observed **New Version** naming convention.
 
 ## Direct Archive Editing
 
 The `edit` subcommands accept `.probundle`, `.proPlaylist`, and `.proTheme` files directly in addition to their raw document forms. Archive edits are performed in an owned temporary workspace and written to a validated replacement archive only after the edit succeeds. The replacement normalizes ZIP headers and trailers, stores the edited protobuf entry and new assets, and copies each unchanged compressed byte stream without decompressing or recompressing it. `edit apply` performs this work once for the entire command array.
 
-Existing archive entries and media references are preserved rather than passed through the bundler's media-portability rewrite. When an edit introduces a new media UUID backed by a local file, that file is copied into the archive and only the new reference is changed to its archive-relative path. An identical asset already stored at the intended path is reused; a different asset with the same filename receives a numeric suffix.
+Existing archive entries and media references are preserved rather than passed through the bundler's media-portability rewrite. When an edit introduces a new media UUID backed by a local file, that file is copied into the archive and only the new reference is changed to its archive-relative path. An identical asset already stored at the intended path is reused; a different asset with the same filename receives a `-1`, `-2`, or later numeric suffix.
 
 For `.proPlaylist`, edits address the root `data` playlist document and preserve embedded presentations. For a `.proTheme` containing multiple `*/Theme` documents, the existing `/slides[...]` paths address the first theme in display order while the other theme documents remain unchanged.

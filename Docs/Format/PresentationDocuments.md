@@ -443,7 +443,9 @@ A generated presentation that ProPresenter can import needs at least:
 
 A `.probundle` can contain only that root `.pro` file when there are no external media assets. The internal `.pro` filename does not need to match the archive filename.
 
-ProPresenter may rewrite generated documents on import/export. Observed rewrites include UUID changes, normalized text element structure, adjusted bounds, normalized font metadata, and explicit element `info` values. A writer should therefore target behavior and data preservation, not byte identity after ProPresenter saves the document.
+ProPresenter may rewrite generated documents on import. Observed rewrites include UUID changes, normalized text element structure, adjusted bounds, normalized font metadata, explicit element `info` values, current `application_info`, and default submessages. The installed presentation name follows the installed `.pro` filename, including a suffix chosen to resolve a library filename collision. A writer should therefore target behavior and data preservation, not byte identity after ProPresenter installs the document.
+
+Export alone behaves differently from import: ProPresenter 21.4's presentation-only export and the `.pro` payload in its bundle are byte-identical to the current live-library file. Re-exporting an imported document likewise preserves the already-normalized installed bytes.
 
 ## Slide Elements
 

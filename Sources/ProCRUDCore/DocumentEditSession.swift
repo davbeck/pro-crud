@@ -456,18 +456,10 @@ public final class DocumentEditSession {
 		}
 
 		let fileManager = FileManager.default
-		let extensionValue = sourceURL.pathExtension
-		let stem = sourceURL.deletingPathExtension().lastPathComponent
-		var suffix = 1
+		var suffix = 0
 		while true {
 			try budget.deadline.check()
-			let filename = if suffix == 1 {
-				sourceURL.lastPathComponent
-			} else if extensionValue.isEmpty {
-				"\(stem)-\(suffix)"
-			} else {
-				"\(stem)-\(suffix).\(extensionValue)"
-			}
+			let filename = ArchiveFileIO.path(sourceURL.lastPathComponent, addingNumericSuffix: suffix)
 			try validateNewArchivePath(filename, limits: budget.limits)
 			let destination = workspace.appendingPathComponent(filename)
 			if !fileManager.fileExists(atPath: destination.path) {
@@ -477,11 +469,7 @@ public final class DocumentEditSession {
 			if try ArchiveFileIO.contentsEqual(standardizedSource, destination, deadline: budget.deadline) {
 				return filename
 			}
-			let (nextSuffix, overflow) = suffix.addingReportingOverflow(1)
-			guard !overflow else {
-				throw ArchiveError.invalidEntry(sourceURL.lastPathComponent)
-			}
-			suffix = nextSuffix
+			suffix += 1
 		}
 	}
 

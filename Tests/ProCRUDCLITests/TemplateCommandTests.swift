@@ -368,7 +368,7 @@ struct TemplateCommandTests {
 				Issue.record("Expected materialized template media to use a relative path")
 				return
 			}
-			#expect(relativePath == "shared-2.png")
+			#expect(relativePath == "shared-1.png")
 			#expect(portableMedia.url.relativeFilePath == nil)
 			#expect(FileManager.default.contentsEqual(
 				atPath: themeAsset.path,

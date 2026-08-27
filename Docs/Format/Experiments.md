@@ -2,6 +2,26 @@
 
 Before an experiment changes saved ProPresenter library data, confirm that the user has identified the local instance as a development/test host or otherwise authorized library changes. If not, ask whether the local library may be changed; until authorized, use disposable documents or copied libraries. The goal of each experiment is to produce a small fixture, a decoded field map, and a ProPresenter-exported reference image or round-trip artifact when the behavior affects rendering or import compatibility.
 
+## Verified Round Trips
+
+The following observations were reproduced with ProPresenter 21.4 (build 352583705) on macOS 26.5.2 on July 18, 2026. The presentation experiments used a disposable local workspace and compared raw protobuf payloads as well as archive entries; they did not rely on rendered output.
+
+### Presentation And Bundle Exports
+
+- **Presentation** export writes the selected library `.pro` into a chosen directory without changing its protobuf bytes.
+- **Presentation Bundle** export also preserves the library `.pro` payload byte-for-byte. Media files are stored under their absolute source paths, and the `.pro` retains its absolute URL plus `ROOT_SHOW` local path.
+- ProPresenter's ZIP writer stores these entries without compression and records the central-directory length 98 bytes too large. The native reader tolerates that exact defect after independently validating the archive structure.
+- Re-exporting an imported ProCRUD bundle again preserves the newly installed library `.pro` byte-for-byte.
+
+### Import Normalization
+
+- ProPresenter 21.4 accepts ProCRUD bundles with a root `.pro`, root or nested relative media entries, and matching `url.relative_path` references.
+- On import, ProPresenter copies media into `Media/Assets`, replaces the portable URL with an absolute file URL plus a `ROOT_SHOW` local path, sets the URL platform to macOS, and retains the media UUID.
+- ProPresenter fills many empty/default submessages, updates `application_info` to the importing application and OS version, and can regenerate the presentation UUID. The installed presentation name follows the installed `.pro` filename, including a `-1` suffix chosen for a filename collision.
+- Importing two distinct archive entries named `a/shared.png` and `b/shared.png` flattens both into `Media/Assets`. Choosing **New Version** for the collision installs them as `shared.png` and `shared-1.png` and rewrites each media URL accordingly. A raw `.pro` whose two absolute media URLs have the same basename follows the same copy/version/rewrite behavior.
+
+These results establish that portable relative bundles do not need to reproduce ProPresenter's unusual absolute ZIP entry names. Writers should avoid ambiguous archive destinations, use ProPresenter's `-1`, `-2`, and later suffix convention for distinct external files with the same basename, and expect ProPresenter to normalize paths when it installs the document.
+
 ## Round-Trip Safety
 
 1. Decode and re-encode representative `.pro`, `Theme`, playlist, and configuration documents with unknown-field preservation enabled. Import or reopen them in ProPresenter and verify there are no warnings or data loss.
@@ -11,9 +31,9 @@ Before an experiment changes saved ProPresenter library data, confirm that the u
 
 ## Archive And Path Semantics
 
-1. Export the same presentation as presentation-only, bundle-with-media, bundle-without-media, and playlist export. Compare ZIP entries, path roots, and protobuf payload references.
-2. Import bundles whose media paths are absolute-only, relative-only, archive-local, missing, and relocated under an asset directory. Verify how ProPresenter resolves each case.
-3. Create bundles with duplicate media filenames from different folders. Determine whether ProPresenter disambiguates by path, UUID metadata, archive entry name, or rewrite on import.
+1. Finish comparing bundle-without-media, playlist, and theme exports. Presentation-only and bundle-with-media behavior is recorded under Verified Round Trips.
+2. Continue with absolute-only, missing, relocated, and `ROOT_CURRENT_RESOURCE` media paths. Root and nested relative archive-local paths are accepted and normalized as recorded above.
+3. Test the remaining duplicate-name choices (**Write Over** and **Use Existing**) and a ProPresenter-authored document whose live media sources share a basename. **New Version** behavior for a ProCRUD bundle and raw `.pro` is recorded above.
 4. Test whether ProPresenter accepts standard ZIP central directories, absolute entry names, relative entry names, and normalized permissions.
 
 ## Text Rendering

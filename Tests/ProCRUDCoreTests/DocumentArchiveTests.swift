@@ -11,9 +11,11 @@ import Testing
 struct DocumentArchiveTests {
 	@Test
 	func bundleCopiesResolvableMediaAndReportsMissingReferences() throws {
-		let directory = try archiveTemporaryDirectory()
-		defer { try? FileManager.default.removeItem(at: directory) }
-		let media = directory.deletingLastPathComponent().appendingPathComponent("external.png")
+		let root = try archiveTemporaryDirectory()
+		defer { try? FileManager.default.removeItem(at: root) }
+		let directory = root.appendingPathComponent("document")
+		try FileManager.default.createDirectory(at: directory, withIntermediateDirectories: true)
+		let media = root.appendingPathComponent("external.png")
 		try writeArchivePNG(to: media)
 		let source = directory.appendingPathComponent("Portable.pro")
 		try writePresentation(with: [media, directory.appendingPathComponent("missing.png")], to: source)
@@ -37,9 +39,11 @@ struct DocumentArchiveTests {
 
 	@Test
 	func bundleDeduplicatesRepeatedReferencesToTheSameExternalMedia() throws {
-		let directory = try archiveTemporaryDirectory()
-		defer { try? FileManager.default.removeItem(at: directory) }
-		let mediaURL = directory.deletingLastPathComponent().appendingPathComponent("background.png")
+		let root = try archiveTemporaryDirectory()
+		defer { try? FileManager.default.removeItem(at: root) }
+		let directory = root.appendingPathComponent("document")
+		try FileManager.default.createDirectory(at: directory, withIntermediateDirectories: true)
+		let mediaURL = root.appendingPathComponent("background.png")
 		try writeArchivePNG(to: mediaURL)
 
 		var presentation = DocumentFactory.presentation(name: "Repeated Background")
@@ -83,22 +87,38 @@ struct DocumentArchiveTests {
 	}
 
 	@Test
-	func bundleRejectsConflictingExternalMediaDestinations() throws {
-		let directory = try archiveTemporaryDirectory()
-		defer { try? FileManager.default.removeItem(at: directory) }
-		let externalRoot = directory.deletingLastPathComponent()
+	func bundleDisambiguatesConflictingExternalMediaDestinations() throws {
+		let root = try archiveTemporaryDirectory()
+		defer { try? FileManager.default.removeItem(at: root) }
+		let directory = root.appendingPathComponent("document")
+		let externalRoot = root.appendingPathComponent("external")
+		try FileManager.default.createDirectory(at: directory, withIntermediateDirectories: true)
 		let first = externalRoot.appendingPathComponent("first/shared.png")
 		let second = externalRoot.appendingPathComponent("second/shared.png")
+		let third = externalRoot.appendingPathComponent("third/shared.png")
 		try FileManager.default.createDirectory(at: first.deletingLastPathComponent(), withIntermediateDirectories: true)
 		try FileManager.default.createDirectory(at: second.deletingLastPathComponent(), withIntermediateDirectories: true)
+		try FileManager.default.createDirectory(at: third.deletingLastPathComponent(), withIntermediateDirectories: true)
 		try writeArchivePNG(to: first)
 		try writeArchivePNG(to: second, width: 2)
+		try writeArchivePNG(to: third, width: 3)
 		let source = directory.appendingPathComponent("Collision.pro")
-		try writePresentation(with: [first, second], to: source)
+		try writePresentation(with: [first, second, third], to: source)
 
-		#expect(throws: DocumentArchiveError.self) {
-			_ = try DocumentArchive.bundleWithReport(source, to: directory.appendingPathComponent("Collision.probundle"))
+		let archive = try DocumentArchive.bundle(source, to: directory.appendingPathComponent("Collision.probundle"))
+		let expanded = try DocumentArchive.expand(archive, to: directory.appendingPathComponent("expanded"))
+		#expect(try Data(contentsOf: expanded.appendingPathComponent("shared.png")) == Data(contentsOf: first))
+		#expect(try Data(contentsOf: expanded.appendingPathComponent("shared-1.png")) == Data(contentsOf: second))
+		#expect(try Data(contentsOf: expanded.appendingPathComponent("shared-2.png")) == Data(contentsOf: third))
+
+		let loaded = try DocumentLoader.loadRaw(expanded.appendingPathComponent("Collision.pro"))
+		guard case let .presentation(presentation) = loaded.payload else {
+			Issue.record("Expected presentation payload")
+			return
 		}
+		let paths = presentation.cues[0].actions[0].slide.presentation.baseSlide.elements
+			.map(\.element.fill.media.url.relativePath)
+		expectNoDifference(paths, ["shared.png", "shared-1.png", "shared-2.png"])
 	}
 
 	@Test(arguments: ["../outside.png", ".hidden.png"])
@@ -139,10 +159,11 @@ struct DocumentArchiveTests {
 
 	@Test
 	func bundleCountsExternalMediaAgainstEntryLimit() throws {
-		let directory = try archiveTemporaryDirectory()
-		defer { try? FileManager.default.removeItem(at: directory) }
-		let external = directory.deletingLastPathComponent().appendingPathComponent("limited-\(UUID().uuidString).png")
-		defer { try? FileManager.default.removeItem(at: external) }
+		let root = try archiveTemporaryDirectory()
+		defer { try? FileManager.default.removeItem(at: root) }
+		let directory = root.appendingPathComponent("document")
+		try FileManager.default.createDirectory(at: directory, withIntermediateDirectories: true)
+		let external = root.appendingPathComponent("limited.png")
 		try writeArchivePNG(to: external)
 		let source = directory.appendingPathComponent("Limited.pro")
 		try writePresentation(with: [external], to: source)
@@ -160,9 +181,11 @@ struct DocumentArchiveTests {
 
 	@Test
 	func bundleExpandAndRebundlePreservesUnknownDataOrderingMediaAndCopiedIDs() throws {
-		let directory = try archiveTemporaryDirectory()
-		defer { try? FileManager.default.removeItem(at: directory) }
-		let media = directory.deletingLastPathComponent().appendingPathComponent("roundtrip.png")
+		let root = try archiveTemporaryDirectory()
+		defer { try? FileManager.default.removeItem(at: root) }
+		let directory = root.appendingPathComponent("document")
+		try FileManager.default.createDirectory(at: directory, withIntermediateDirectories: true)
+		let media = root.appendingPathComponent("roundtrip.png")
 		try writeArchivePNG(to: media)
 		let source = directory.appendingPathComponent("Roundtrip.pro")
 		try writePresentation(with: [media], to: source)
@@ -243,10 +266,10 @@ struct DocumentArchiveTests {
 		#expect(afterPresentation.name == "Edited bundle")
 		let elements = afterPresentation.cues[0].actions[0].slide.presentation.baseSlide.elements
 		#expect(elements[0].element.fill.media.url == existingReference)
-		#expect(elements[1].element.fill.media.url.relativePath == "shared-2.png")
+		#expect(elements[1].element.fill.media.url.relativePath == "shared-1.png")
 		let expanded = try DocumentArchive.expand(archive, to: directory.appendingPathComponent("expanded-edited"))
 		#expect(try Data(contentsOf: expanded.appendingPathComponent("shared.png")) == existingMediaData)
-		#expect(try Data(contentsOf: expanded.appendingPathComponent("shared-2.png")) == replacementMediaData)
+		#expect(try Data(contentsOf: expanded.appendingPathComponent("shared-1.png")) == replacementMediaData)
 	}
 
 	@Test
