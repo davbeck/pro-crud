@@ -1,0 +1,41 @@
+#!/bin/bash
+
+set -eu
+
+target_volume="${3:-/}"
+if [[ "$target_volume" != "/" ]]; then
+	echo "pro-crud can only be installed on the startup volume." >&2
+	exit 1
+fi
+
+console_user=$(/usr/bin/stat -f '%Su' /dev/console)
+console_uid=$(/usr/bin/id -u "$console_user" 2>/dev/null || true)
+if [[ -z "$console_uid" ]] || [[ "$console_uid" -lt 500 ]] || \
+	[[ "$console_user" == "root" ]] || [[ "$console_user" == "loginwindow" ]] || \
+	[[ "$console_user" == "_mbsetupuser" ]]; then
+	echo "pro-crud: No logged-in user; skipped agent skill installation." >&2
+	echo "Run 'pro-crud skill install' after logging in to install the skills." >&2
+	exit 0
+fi
+
+console_home=$(
+	/usr/bin/dscacheutil -q user -a name "$console_user" 2>/dev/null \
+		| /usr/bin/awk '/^dir: / { sub(/^dir: /, ""); print; exit }'
+)
+if [[ -z "$console_home" ]]; then
+	echo "pro-crud: Could not find the home directory for $console_user." >&2
+	exit 1
+fi
+if [[ "$console_home" != /* ]] || [[ ! -d "$console_home" ]]; then
+	echo "pro-crud: Invalid home directory for $console_user: $console_home" >&2
+	exit 1
+fi
+
+user_path="$console_home/.local/bin:/opt/homebrew/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin"
+echo "pro-crud: Installing agent skills for $console_user."
+/usr/bin/sudo -H -u "$console_user" /usr/bin/env -i \
+	HOME="$console_home" \
+	USER="$console_user" \
+	LOGNAME="$console_user" \
+	PATH="$user_path" \
+	/usr/local/bin/pro-crud skill install --force --skip-if-none

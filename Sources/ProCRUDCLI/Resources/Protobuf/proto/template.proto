@@ -1,0 +1,25 @@
+syntax = "proto3";
+
+package rv.data;
+
+import "basicTypes.proto";
+import "slide.proto";
+import "action.proto";
+
+// Theme document data. Template slides are copied into presentations; a presentation
+// does not persist a live link back to this document.
+message Template {
+
+  // Reusable slide data and any actions associated with that template.
+  message Slide {
+    rv.data.Slide base_slide = 1;
+    string name = 2;
+    repeated rv.data.Action actions = 3;
+
+  }
+  message Document {
+    rv.data.ApplicationInfo application_info = 1;
+    repeated rv.data.Template.Slide slides = 3;
+
+  }
+}

@@ -1,0 +1,4 @@
+interface:
+  display_name: "Release pro-crud"
+  short_description: "Prepare and publish a signed pro-crud release"
+  default_prompt: "Use $release-pro-crud to prepare user-focused notes, bump the version, build, and publish the next pro-crud release."

@@ -1,0 +1,4 @@
+interface:
+  display_name: "ProPresenter Computer Use"
+  short_description: "Operate and validate local ProPresenter UI"
+  default_prompt: "Use $propresenter-computer-use to operate ProPresenter and verify its live screen output."

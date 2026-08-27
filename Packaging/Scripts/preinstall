@@ -1,0 +1,21 @@
+#!/bin/bash
+
+set -eu
+
+target_volume="${3:-}"
+if [[ "$target_volume" != "/" ]]; then
+	echo "pro-crud can only be installed on the startup volume." >&2
+	exit 1
+fi
+
+resource_bundles=(
+	"/usr/local/bin/ProCRUD_ProCRUDCore.bundle"
+	"/usr/local/bin/ProCRUD_ProCRUDCLI.bundle"
+	"/usr/local/bin/ProCRUD_ProCRUDResources.bundle"
+)
+for resource_bundle in "${resource_bundles[@]}"; do
+	if [[ -e "$resource_bundle" ]] || [[ -L "$resource_bundle" ]]; then
+		echo "pro-crud: Removing the previously installed resource bundle at $resource_bundle."
+		/bin/rm -rf -- "$resource_bundle"
+	fi
+done

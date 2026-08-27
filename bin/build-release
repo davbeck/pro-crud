@@ -1,0 +1,468 @@
+#!/usr/bin/env bash
+
+set -euo pipefail
+
+project_root=$(CDPATH= cd -- "$(dirname -- "$0")/.." && pwd)
+cd "$project_root"
+
+version=$(sed -n 's/^public let proCRUDVersion = "\([^"]*\)"$/\1/p' \
+	Sources/ProCRUDCore/Version.swift)
+if [[ -z "$version" ]]; then
+	echo "Could not determine the pro-crud version." >&2
+	exit 1
+fi
+
+release_tag="v$version"
+if [[ -n "$(git status --porcelain)" ]]; then
+	echo "The release must be built from a clean worktree." >&2
+	exit 1
+fi
+
+head_commit=$(git rev-parse HEAD)
+tag_commit=$(git rev-parse -q --verify "$release_tag^{commit}" 2>/dev/null || true)
+if [[ "$tag_commit" != "$head_commit" ]]; then
+	echo "HEAD must be tagged $release_tag before building the release." >&2
+	exit 1
+fi
+
+codesign_identity="${CODESIGN_IDENTITY:-}"
+if [[ -z "$codesign_identity" ]]; then
+	echo "CODESIGN_IDENTITY must name the Developer ID Application certificate." >&2
+	exit 1
+fi
+
+installer_identity="${INSTALLER_IDENTITY:-}"
+if [[ -z "$installer_identity" ]]; then
+	echo "INSTALLER_IDENTITY must name the Developer ID Installer certificate." >&2
+	exit 1
+fi
+
+notarytool_profile="${NOTARYTOOL_PROFILE:-}"
+if [[ -z "$notarytool_profile" ]]; then
+	echo "NOTARYTOOL_PROFILE must name a notarytool Keychain profile." >&2
+	exit 1
+fi
+
+release_team_identifier="7TR2B85D62"
+expected_installer_authority="Developer ID Installer: ThinkUltimate LLC ($release_team_identifier)"
+signing_identities=$(security find-identity -v -p codesigning)
+if [[ "$signing_identities" != *"\"$codesign_identity\""* ]]; then
+	echo "Could not find the code-signing identity: $codesign_identity" >&2
+	exit 1
+fi
+installer_identities=$(security find-identity -v)
+if [[ "$installer_identities" != *"\"$installer_identity\""* ]]; then
+	echo "Could not find the installer-signing identity: $installer_identity" >&2
+	exit 1
+fi
+
+if ! xcrun notarytool history \
+	--keychain-profile "$notarytool_profile" \
+	--output-format json >/dev/null; then
+	echo "Could not use notarytool Keychain profile: $notarytool_profile" >&2
+	exit 1
+fi
+
+product_name="pro-crud-$version-macos-universal"
+dist_directory="$project_root/dist"
+published_archive="$dist_directory/$product_name.tar.gz"
+published_archive_checksum="$published_archive.sha256"
+published_package="$dist_directory/$product_name.pkg"
+published_package_checksum="$published_package.sha256"
+published_files=(
+	"$published_archive"
+	"$published_archive_checksum"
+	"$published_package"
+	"$published_package_checksum"
+)
+
+mkdir -p "$dist_directory"
+for published_file in "${published_files[@]}"; do
+	if [[ -e "$published_file" ]]; then
+		echo "Release artifacts already exist for version $version." >&2
+		exit 1
+	fi
+done
+
+staging_root=$(mktemp -d "$dist_directory/.pro-crud-release.XXXXXX")
+publication_started=false
+publication_complete=false
+cleanup() {
+	rm -rf "$staging_root"
+	if [[ "$publication_started" == true && "$publication_complete" != true ]]; then
+		rm -f -- "${published_files[@]}"
+	fi
+}
+trap cleanup EXIT
+staging_directory="$staging_root/$product_name"
+archive="$staging_root/$product_name.tar.gz"
+archive_checksum="$archive.sha256"
+package="$staging_root/$product_name.pkg"
+package_checksum="$package.sha256"
+mkdir -p "$staging_directory"
+
+last_notarization_id=""
+notarize() {
+	local submission="$1"
+	local label="$2"
+	local result_name="$3"
+	local result="$staging_root/$result_name-result.json"
+	local log="$staging_root/$result_name-log.json"
+	local status
+	local submission_id
+	local issue_count
+
+	if ! xcrun notarytool submit "$submission" \
+		--keychain-profile "$notarytool_profile" \
+		--wait \
+		--output-format json >"$result"; then
+		echo "$label notarization submission failed." >&2
+		cat "$result" >&2
+		if submission_id=$(plutil -extract id raw -o - "$result" 2>/dev/null); then
+			xcrun notarytool log \
+				--keychain-profile "$notarytool_profile" \
+				"$submission_id" "$log" || true
+			if [[ -f "$log" ]]; then
+				cat "$log" >&2
+			fi
+		fi
+		exit 1
+	fi
+
+	status=$(plutil -extract status raw -o - "$result")
+	submission_id=$(plutil -extract id raw -o - "$result")
+	if [[ "$status" != "Accepted" ]]; then
+		echo "$label notarization finished with status: $status" >&2
+		xcrun notarytool log \
+			--keychain-profile "$notarytool_profile" \
+			"$submission_id" "$log" || true
+		if [[ -f "$log" ]]; then
+			cat "$log" >&2
+		fi
+		exit 1
+	fi
+
+	xcrun notarytool log \
+		--keychain-profile "$notarytool_profile" \
+		"$submission_id" "$log"
+	if [[ "$(plutil -extract status raw -o - "$log")" != "Accepted" ]]; then
+		echo "The $label notarization log did not report an accepted submission." >&2
+		exit 1
+	fi
+	issue_count=$(plutil -extract issues raw -o - "$log" 2>/dev/null || echo 0)
+	if [[ "$issue_count" != "0" ]]; then
+		echo "The accepted $label notarization contains issues:" >&2
+		cat "$log" >&2
+		exit 1
+	fi
+
+	last_notarization_id="$submission_id"
+	echo "$label notarization accepted: $submission_id"
+}
+
+arm_triple="arm64-apple-macosx26.0"
+intel_triple="x86_64-apple-macosx26.0"
+arm_scratch_path="$project_root/.build/release-arm64"
+intel_scratch_path="$project_root/.build/release-x86_64"
+
+swift build -c release --triple "$arm_triple" \
+	--scratch-path "$arm_scratch_path"
+swift build -c release --triple "$intel_triple" \
+	--scratch-path "$intel_scratch_path"
+
+arm_binary_directory=$(swift build -c release --triple "$arm_triple" \
+	--scratch-path "$arm_scratch_path" \
+	--show-bin-path)
+intel_binary_directory=$(swift build -c release --triple "$intel_triple" \
+	--scratch-path "$intel_scratch_path" \
+	--show-bin-path)
+core_resource_bundle_name="ProCRUD_ProCRUDCore.bundle"
+cli_resource_bundle_name="ProCRUD_ProCRUDCLI.bundle"
+resource_bundle_names=(
+	"$core_resource_bundle_name"
+	"$cli_resource_bundle_name"
+)
+
+for resource_bundle_name in "${resource_bundle_names[@]}"; do
+	arm_resource_bundle="$arm_binary_directory/$resource_bundle_name"
+	intel_resource_bundle="$intel_binary_directory/$resource_bundle_name"
+	if [[ ! -d "$arm_resource_bundle" ]] || [[ ! -d "$intel_resource_bundle" ]]; then
+		echo "Release build is missing the SwiftPM resource bundle: $resource_bundle_name" >&2
+		exit 1
+	fi
+	if ! diff -qr "$arm_resource_bundle" "$intel_resource_bundle"; then
+		echo "The arm64 and x86_64 $resource_bundle_name bundles differ." >&2
+		exit 1
+	fi
+	ditto "$arm_resource_bundle" "$staging_directory/$resource_bundle_name"
+done
+
+core_resource_bundle="$staging_directory/$core_resource_bundle_name"
+cli_resource_bundle="$staging_directory/$cli_resource_bundle_name"
+required_resource_bundle_paths=(
+	"$core_resource_bundle_name/Protobuf/schema.pb"
+	"$cli_resource_bundle_name/Format/README.md"
+	"$cli_resource_bundle_name/Protobuf/content-sha256.txt"
+	"$cli_resource_bundle_name/Protobuf/proto/proApi.proto"
+	"$cli_resource_bundle_name/Protobuf/revision.txt"
+	"$cli_resource_bundle_name/skills/pro-crud/SKILL.md"
+	"$cli_resource_bundle_name/skills/propresenter-api/SKILL.md"
+)
+for required_resource_bundle_path in "${required_resource_bundle_paths[@]}"; do
+	if [[ ! -f "$staging_directory/$required_resource_bundle_path" ]]; then
+		echo "SwiftPM resource bundles are missing $required_resource_bundle_path." >&2
+		exit 1
+	fi
+done
+
+for cli_only_resource in \
+	"Format" \
+	"Protobuf/content-sha256.txt" \
+	"Protobuf/proto" \
+	"Protobuf/revision.txt" \
+	"skills"; do
+	if [[ -e "$core_resource_bundle/$cli_only_resource" ]] || \
+		[[ -L "$core_resource_bundle/$cli_only_resource" ]]; then
+		echo "$core_resource_bundle_name unexpectedly contains $cli_only_resource." >&2
+		exit 1
+	fi
+done
+unexpected_cli_schema=$(find "$cli_resource_bundle" -name 'schema.pb' -print -quit)
+if [[ -n "$unexpected_cli_schema" ]]; then
+	echo "$cli_resource_bundle_name unexpectedly contains $unexpected_cli_schema." >&2
+	exit 1
+fi
+
+binary="$staging_directory/pro-crud"
+
+lipo -create \
+	"$arm_binary_directory/pro-crud" \
+	"$intel_binary_directory/pro-crud" \
+	-output "$binary"
+lipo "$binary" -verify_arch arm64
+lipo "$binary" -verify_arch x86_64
+chmod 755 "$binary"
+
+codesign --force --options runtime --timestamp \
+	--sign "$codesign_identity" "$binary"
+codesign --verify --strict --verbose=2 "$binary"
+
+signing_information=$(codesign --display --verbose=4 "$binary" 2>&1)
+if [[ "$signing_information" != *"Authority=Developer ID Application:"* ]]; then
+	echo "Release binary was not signed with a Developer ID Application certificate." >&2
+	exit 1
+fi
+if [[ "$signing_information" != *"TeamIdentifier=$release_team_identifier"* ]]; then
+	echo "Release binary was not signed by team $release_team_identifier." >&2
+	exit 1
+fi
+if [[ "$signing_information" != *flags=*runtime* ]]; then
+	echo "Release binary does not have the hardened runtime enabled." >&2
+	exit 1
+fi
+if [[ "$signing_information" != *Timestamp=* ]] || \
+	[[ "$signing_information" == *Timestamp=none* ]]; then
+	echo "Release binary does not have a secure timestamp." >&2
+	exit 1
+fi
+
+cp LICENSE "$staging_directory/"
+
+argument_parser_license=$(find "$arm_scratch_path/checkouts" \
+	-path '*/swift-argument-parser/LICENSE.txt' -print -quit)
+if [[ -z "$argument_parser_license" ]]; then
+	echo "Could not locate the Swift Argument Parser license." >&2
+	exit 1
+fi
+cp "$argument_parser_license" \
+	"$staging_directory/LICENSE-SwiftArgumentParser.txt"
+
+swift_protobuf_license=$(find "$arm_scratch_path/checkouts" \
+	-path '*/swift-protobuf/LICENSE.txt' -print -quit)
+if [[ -z "$swift_protobuf_license" ]]; then
+	echo "Could not locate the Swift Protobuf license." >&2
+	exit 1
+fi
+cp "$swift_protobuf_license" \
+	"$staging_directory/LICENSE-SwiftProtobuf.txt"
+
+if [[ "$($binary --version)" != "$version" ]]; then
+	echo "Built binary did not report version $version." >&2
+	exit 1
+fi
+
+resource_validation_descriptor="$staging_root/resource-validation-schema.pb"
+"$binary" docs protobuf export \
+	--format descriptor-set \
+	--output "$resource_validation_descriptor"
+if [[ ! -s "$resource_validation_descriptor" ]]; then
+	echo "Built binary could not export the schema from its sibling resource bundles." >&2
+	exit 1
+fi
+
+skill_validation_codex_home="$staging_root/skill-validation-codex-home"
+skill_validation_directory="$skill_validation_codex_home/skills"
+skill_names=("pro-crud" "propresenter-api")
+mkdir -p "$skill_validation_directory"
+for skill_name in "${skill_names[@]}"; do
+	ditto \
+		"$cli_resource_bundle/skills/$skill_name" \
+		"$skill_validation_directory/$skill_name"
+	printf 'outdated copied skill\n' >"$skill_validation_directory/$skill_name/SKILL.md"
+done
+CODEX_HOME="$skill_validation_codex_home" \
+	"$binary" skill install --agent codex --force
+for skill_name in "${skill_names[@]}"; do
+	installed_skill="$skill_validation_directory/$skill_name"
+	expected_skill="$cli_resource_bundle/skills/$skill_name"
+	if [[ ! -L "$installed_skill" ]]; then
+		echo "Skill install did not replace $installed_skill with a symbolic link." >&2
+		exit 1
+	fi
+	if [[ "$(readlink "$installed_skill")" != "$expected_skill" ]]; then
+		echo "Skill install linked $installed_skill to an unexpected resource." >&2
+		exit 1
+	fi
+done
+
+notarization_archive="$staging_root/$product_name-notarization.zip"
+ditto -c -k --keepParent "$staging_directory" "$notarization_archive"
+notarize "$notarization_archive" "Binary" "binary-notarization"
+binary_notarization_id="$last_notarization_id"
+
+package_payload="$staging_root/package-root"
+package_binary_directory="$package_payload/usr/local/bin"
+package_license_directory="$package_payload/usr/local/share/doc/pro-crud"
+package_scripts="$staging_root/package-scripts"
+mkdir -p "$package_binary_directory" "$package_license_directory"
+install -m 755 "$binary" "$package_binary_directory/pro-crud"
+for resource_bundle_name in "${resource_bundle_names[@]}"; do
+	ditto \
+		"$staging_directory/$resource_bundle_name" \
+		"$package_binary_directory/$resource_bundle_name"
+done
+install -m 644 \
+	"$staging_directory/LICENSE" \
+	"$staging_directory/LICENSE-SwiftArgumentParser.txt" \
+	"$staging_directory/LICENSE-SwiftProtobuf.txt" \
+	"$package_license_directory/"
+mkdir -p "$package_scripts"
+install -m 755 "$project_root/Packaging/Scripts/preinstall" \
+	"$package_scripts/preinstall"
+install -m 755 "$project_root/Packaging/Scripts/postinstall" \
+	"$package_scripts/postinstall"
+codesign --verify --strict --verbose=2 "$package_binary_directory/pro-crud"
+
+component_package="$staging_root/pro-crud-component.pkg"
+pkgbuild \
+	--root "$package_payload" \
+	--scripts "$package_scripts" \
+	--identifier com.thinkultimate.pro-crud.cli \
+	--version "$version" \
+	--install-location / \
+	--ownership recommended \
+	--min-os-version 26.0 \
+	--compression latest \
+	"$component_package"
+productbuild \
+	--distribution "$project_root/Packaging/Distribution.xml" \
+	--package-path "$staging_root" \
+	--identifier com.thinkultimate.pro-crud \
+	--version "$version" \
+	--sign "$installer_identity" \
+	--timestamp \
+	"$package"
+
+package_signature_information=$(pkgutil --check-signature "$package" 2>&1)
+echo "$package_signature_information"
+if [[ "$package_signature_information" != *"$expected_installer_authority"* ]]; then
+	echo "Installer package was not signed by $expected_installer_authority." >&2
+	exit 1
+fi
+if [[ "$package_signature_information" != *"Signed with a trusted timestamp"* ]]; then
+	echo "Installer package does not have a trusted timestamp." >&2
+	exit 1
+fi
+
+package_payload_files=$(pkgutil --payload-files "$package")
+required_package_files=(
+	"usr/local/bin/pro-crud"
+	"usr/local/share/doc/pro-crud/LICENSE"
+	"usr/local/share/doc/pro-crud/LICENSE-SwiftArgumentParser.txt"
+	"usr/local/share/doc/pro-crud/LICENSE-SwiftProtobuf.txt"
+)
+for required_resource_bundle_path in "${required_resource_bundle_paths[@]}"; do
+	required_package_files+=(
+		"usr/local/bin/$required_resource_bundle_path"
+	)
+done
+for required_package_file in "${required_package_files[@]}"; do
+	if [[ "$package_payload_files" != *"$required_package_file"* ]]; then
+		echo "Installer package is missing $required_package_file." >&2
+		exit 1
+	fi
+done
+
+package_expansion="$staging_root/package-inspection"
+pkgutil --expand-full "$package" "$package_expansion"
+for package_script_name in preinstall postinstall; do
+	packaged_script=$(find "$package_expansion" \
+		-path "*/Scripts/$package_script_name" -type f -print -quit)
+	if [[ -z "$packaged_script" ]]; then
+		echo "Installer package is missing its $package_script_name script." >&2
+		exit 1
+	fi
+	if ! cmp -s \
+		"$project_root/Packaging/Scripts/$package_script_name" \
+		"$packaged_script"; then
+		echo "Installer package contains an unexpected $package_script_name script." >&2
+		exit 1
+	fi
+done
+appledouble_entry=$(find "$package_expansion" -name '._*' -print -quit)
+if [[ -n "$appledouble_entry" ]]; then
+	echo "Installer package contains unexpected AppleDouble metadata: $appledouble_entry" >&2
+	exit 1
+fi
+
+notarize "$package" "Installer package" "package-notarization"
+package_notarization_id="$last_notarization_id"
+xcrun stapler staple "$package"
+xcrun stapler validate "$package"
+pkgutil --check-signature "$package"
+spctl --assess --type install --verbose=4 "$package"
+
+tar -czf "$archive" -C "$staging_root" "$product_name"
+required_archive_files=(
+	"$product_name/pro-crud"
+)
+for required_resource_bundle_path in "${required_resource_bundle_paths[@]}"; do
+	required_archive_files+=(
+		"$product_name/$required_resource_bundle_path"
+	)
+done
+for required_archive_file in "${required_archive_files[@]}"; do
+	if ! tar -tzf "$archive" "$required_archive_file" >/dev/null; then
+		echo "Release archive is missing $required_archive_file." >&2
+		exit 1
+	fi
+done
+(
+	cd "$staging_root"
+	shasum -a 256 "$(basename "$archive")" >"$(basename "$archive_checksum")"
+	shasum -a 256 "$(basename "$package")" >"$(basename "$package_checksum")"
+)
+
+publication_started=true
+mv "$archive" "$published_archive"
+mv "$archive_checksum" "$published_archive_checksum"
+mv "$package" "$published_package"
+mv "$package_checksum" "$published_package_checksum"
+publication_complete=true
+
+echo "Binary notarization accepted: $binary_notarization_id"
+echo "Installer package notarization accepted: $package_notarization_id"
+echo "Created $published_archive"
+echo "Created $published_archive_checksum"
+echo "Created $published_package"
+echo "Created $published_package_checksum"

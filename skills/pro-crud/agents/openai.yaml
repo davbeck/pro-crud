@@ -1,0 +1,4 @@
+interface:
+  display_name: "ProCRUD"
+  short_description: "Design, create, and edit ProPresenter documents"
+  default_prompt: "Use $pro-crud to inspect the existing ProPresenter workspace and design, create, or modify content that matches its Screens, Looks, themes, fonts, artwork, and media."

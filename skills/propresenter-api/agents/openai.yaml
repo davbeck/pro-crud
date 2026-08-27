@@ -1,0 +1,4 @@
+interface:
+  display_name: "ProPresenter API"
+  short_description: "Control ProPresenter through its HTTP API"
+  default_prompt: "Use $propresenter-api to safely inspect or control a running ProPresenter instance."

@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<installer-gui-script minSpecVersion="2">
+	<title>pro-crud</title>
+	<options customize="never" require-scripts="false" hostArchitectures="x86_64,arm64"/>
+	<domains enable_anywhere="false" enable_currentUserHome="false" enable_localSystem="true"/>
+	<volume-check script="true">
+		<allowed-os-versions>
+			<os-version min="26.0"/>
+		</allowed-os-versions>
+	</volume-check>
+	<choices-outline>
+		<line choice="com.thinkultimate.pro-crud.cli"/>
+	</choices-outline>
+	<choice id="com.thinkultimate.pro-crud.cli" title="pro-crud" visible="false">
+		<pkg-ref id="com.thinkultimate.pro-crud.cli"/>
+	</choice>
+	<pkg-ref id="com.thinkultimate.pro-crud.cli">pro-crud-component.pkg</pkg-ref>
+</installer-gui-script>
