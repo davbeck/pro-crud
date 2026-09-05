@@ -29,7 +29,7 @@ ProPresenter is a trademark of Renewed Vision, LLC. pro-crud is an independent, 
   Look-style result without modifying the source presentation.
 - Validate document structure and rendering, with optional workspace media checks.
 - Preserve protobuf fields that are unknown to the checked-in schema.
-- Print the bundled format notes and protobuf schema.
+- Print the bundled format reference and protobuf schema.
 - Install bundled AI-agent skills for document workflows and the official
   ProPresenter API.
 
@@ -67,7 +67,7 @@ to get started.
 | Theme        | `Theme`                                | `.proTheme`      |
 | Playlist     | `data`, `Library`, `Media`, or `Audio` | `.proPlaylist`   |
 
-See [the format notes](Docs/Format/README.md) for the documented protobuf roots,
+See [the format reference](Docs/Format/README.md) for the documented protobuf roots,
 archive layouts, and path semantics.
 
 ## Requirements

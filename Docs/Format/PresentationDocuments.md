@@ -59,8 +59,7 @@ Action(type: ACTION_TYPE_PRESENTATION_SLIDE)
 
 Media is represented by `rv.data.Media` from `graphicsData.proto`. Media URLs can be absolute or relative and can point at images, videos, audio, live video, or web content.
 
-Object Build In/Out, text Delivery, the ordered UUID graph, native observations,
-and the proposed supported tool surface are documented separately in
+Object Build In/Out, text Delivery, the ordered UUID graph, and supported tool behavior are documented separately in
 [TextBuilds.md](TextBuilds.md). Static rendering currently ignores those fields
 and draws the stored, unanimated composition, including elements that a
 completed Build Out would remove.
@@ -77,9 +76,8 @@ The [official Playback Markers workflow](https://support.renewedvision.com/hc/en
 limits markers to video and audio **media actions**; they do not apply to image
 media or media slide elements. A static image export selects one video
 thumbnail and does not run media time, transitions, marker actions, transport
-seeks, or marker data links. A focused native video/audio-action fixture is
-still required before semantic marker inspection or editing commands are
-exposed.
+seeks, or marker data links. Purpose-built semantic marker inspection and
+editing commands are not supported.
 
 ### Replacing Media Safely
 
@@ -443,7 +441,7 @@ A generated presentation that ProPresenter can import needs at least:
 
 A `.probundle` can contain only that root `.pro` file when there are no external media assets. The internal `.pro` filename does not need to match the archive filename.
 
-ProPresenter may rewrite generated documents on import. Observed rewrites include UUID changes, normalized text element structure, adjusted bounds, normalized font metadata, explicit element `info` values, current `application_info`, and default submessages. The installed presentation name follows the installed `.pro` filename, including a suffix chosen to resolve a library filename collision. A writer should therefore target behavior and data preservation, not byte identity after ProPresenter installs the document.
+ProPresenter may rewrite generated documents on import. In ProPresenter 21.4, these rewrites can include UUID changes, normalized text element structure, adjusted bounds, normalized font metadata, explicit element `info` values, current `application_info`, and default submessages. The installed presentation name follows the installed `.pro` filename, including a suffix chosen to resolve a library filename collision. A writer should therefore target behavior and data preservation, not byte identity after ProPresenter installs the document.
 
 Export alone behaves differently from import: ProPresenter 21.4's presentation-only export and the `.pro` payload in its bundle are byte-identical to the current live-library file. Re-exporting an imported document likewise preserves the already-normalized installed bytes.
 
@@ -456,7 +454,7 @@ Text elements should include both:
 - Cocoa RTF in `Graphics.Text.rtf_data`
 - compatible `Graphics.Text.Attributes`
 
-RTF is the visible text source in tested documents. ProPresenter preserves RTF run-level font, size, color, underline, strikethrough, highlight, stroke, shadow, kerning, baseline offset, and paragraph spacing. Box-level protobuf attributes remain important metadata for compatibility, but they should not be assumed to override fully styled RTF content unless a focused test document proves that specific fallback.
+Fully styled Cocoa RTF is the visible text source. ProPresenter preserves RTF run-level font, size, color, underline, strikethrough, highlight, stroke, shadow, kerning, baseline offset, and paragraph spacing. Box-level protobuf attributes remain important metadata for compatibility, but they should not be assumed to override fully styled RTF content without a supported fallback rule for that field.
 
 ### Styled Text Editing
 
@@ -511,15 +509,13 @@ Text transforms are applied at render time. For example, `Graphics.Text.transfor
 ## Element Paint Order
 
 Slide elements are stored front-to-back and painted in reverse stored order.
-The focused `Reverse stored element paint order` fixture isolates this behavior.
-Its stored `info` sequence is `[0, 2, 1]`, while ProPresenter paints source
-indices `[2, 1, 0]`; that counterexample proves `info` is not the sorting key.
-
 The meaning of `slide.elements[].info` remains unresolved. Preserve it as
 compatibility metadata, but do not reorder elements from it.
 
 ## Presentation Background And Slide Background
 
-Presentation-level background and slide-level background are separate. The focused `Transparent background` reference slide verifies whether untouched PNG pixels remain transparent when the generated document includes visible elements.
-
-Writers should choose the field that matches ProPresenter's UI behavior for the intended operation and verify with an export when background parity matters. Renderers should preserve transparent untouched pixels unless a fixture proves that a stored background paints for that export workflow.
+Presentation-level background and slide-level background are separate stored
+values. `pro-crud` renders slide images with background color disabled, leaving
+untouched pixels transparent; it does not paint either background color. Live
+Audience Screen output can composite these colors differently. See
+[RenderingBehavior.md](RenderingBehavior.md#action-composition).

@@ -1,12 +1,21 @@
 # Planning Center Playlists
 
+> Historical research record moved from `Docs/Format` on September 5, 2026.
+> Sample details, confidence assessments, and implementation status below are
+> retained as research context, not current public usage guidance. See the
+> [public reference](../../../Docs/Format/PlanningCenterPlaylists.md) for the supported contract.
+
 Planning Center playlists use the normal `rv.data.PlaylistDocument` store, but
 they are not ordinary editable playlists. A connected playlist is a local view
 of a Planning Center Services plan, with local presentation or media links
 nested inside Planning Center wrapper items.
 
-The stored connected-playlist behavior described here applies to ProPresenter
-21.4 (build 352583705).
+This note separates official workflow guarantees from observed persistence.
+The local observations were made on September 5, 2026 with ProPresenter 21.4
+(build 352583705), using the connected **Core Values - Core Values - September
+6, 2026** playlist in the authorized LSSS test workspace. No Planning Center
+identifiers, account data, or document binaries from that workspace are stored
+in this repository.
 
 ## Official Workflow
 
@@ -77,23 +86,50 @@ The outer item name, remote item name, and linked-data name are separate stored
 values and can differ in capitalization or punctuation. Treating any one of
 them as the authoritative name for all three layers would lose information.
 
-## Local Visibility
+## Core Values Observation
 
-Hiding a connected item sets the outer `PlaylistItem.is_hidden` flag. The
-remote item snapshot, outer UUID, plan identity, source update date, and
-last-update-check date remain unchanged by that local visibility edit.
-ProPresenter keeps the item available to unhide.
+The live playlist contained 22 outer Planning Center items before the local
+edit. Twenty had `linked_data`; **Abide** and **Announcement Reminder** were
+unlinked. Five items carried song metadata. Two linked songs had populated
+sequence group lists and selected local arrangements whose UI names ended in
+`(PCO)`.
 
-Connected items expose local linking, unlinking, and visibility controls.
-Ordinary copy, paste, duplicate, and delete operations are disabled for these
-managed items. Convert the playlist to standard in ProPresenter to edit its
-structure independently of the source plan.
+The item UI also differed by link state:
 
-## `pro-crud` Support
+- An unlinked item offered **New Presentation**, **Import**, **Search**, and
+  **Attachments** in the content area. Its context menu offered **Hide Item**;
+  copy, paste, duplicate, and delete were disabled.
+- A linked presentation item offered **Upload to Planning Center Services**,
+  **Unlink**, **Hide Item**, arrangement and destination selection, editing,
+  library navigation, and export. Copy, paste, duplicate, and delete remained
+  disabled.
+
+For the controlled modification, **Announcement Reminder** was hidden through
+the ProPresenter UI. The visible count changed from 22 to 21 and the UI added
+**1 Additional Hidden Item**. A before/after deterministic protobuf-JSON diff
+contained exactly this semantic change:
+
+```diff
+ {
++  "isHidden": true,
+   "name": "Announcement Reminder",
+   "planningCenter": { ... }
+ }
+```
+
+The outer item UUID, nested Planning Center item, playlist `pco_plan`, source
+update date, and last-update-check date were unchanged. This establishes
+`PlaylistItem.is_hidden` as a local overlay, not a mutation of the remote item
+snapshot.
+
+The post-edit `Playlists/Library` document passed the current structural
+validator. The edit remains in the authorized local test workspace.
+
+## Implemented Compatibility
 
 The checked-in protobuf schema includes `PlanningCenterPlan`,
 `Playlist.pco_plan`, and `PlaylistItem.planning_center`. Connected-playlist
-support builds on that lossless representation:
+support now builds on that lossless representation:
 
 - Effective-item traversal retains the outer synchronization wrapper while
   resolving its nested local item when linked.
@@ -110,7 +146,7 @@ support builds on that lossless representation:
   Planning Center-managed structure and direct users to convert the playlist
   in ProPresenter first.
 - `edit set-playlist-item-hidden --hidden` and `--visible` modify only the
-  outer local visibility flag. The same operation is available to `edit apply`
+  proven outer local overlay. The same operation is available to `edit apply`
   as `{"command":"set-playlist-item-hidden","path":"...","hidden":true}`.
 - `edit unlink-planning-center-item` clears only the wrapper's `linked_data`,
   leaving the outer UUID, remote plan-item snapshot, tags, name, order, and
@@ -120,7 +156,7 @@ support builds on that lossless representation:
   unlinked wrapper to an existing local presentation. It creates a fresh
   nested playlist-item identity, uses the presentation's stored name, and
   writes the absolute document URL. When the playlist and presentation are in
-  the same ProPresenter workspace it also writes ProPresenter's
+  the same ProPresenter workspace it also writes ProPresenter's observed
   `ROOT_SHOW`-relative `Libraries/...` path. Reassigning an already linked item
   is rejected; unlink it first, matching the UI's two-step workflow.
 
@@ -146,8 +182,25 @@ Center attachment association remain authenticated service workflows and are
 intentionally not simulated through protobuf edits. Local link/unlink does not
 upload, download, or otherwise modify Planning Center Services.
 
-## Compatibility Limits
+For additional compatibility work, capture a small ProPresenter-authored fixture from a
+disposable Planning Center test plan. It should contain a header, an ordinary
+item, media, linked and unlinked presentations, a hidden item, a song sequence
+with a repeated group, and a selected PCO-created arrangement. Do not check in
+real organization identifiers or absolute user paths.
 
-Connected-playlist export/import, conversion to standard, and preservation of
-local overlays across remote refreshes are not specified by this file-editing
-contract. Use ProPresenter for those service workflows.
+## Remaining Experiments
+
+The September 5 observation did not establish these behaviors:
+
+1. Export a connected playlist as `.proPlaylist` and compare its wrapper items,
+   embedded documents, and import round trip with a standard playlist export.
+2. Refresh after hiding, linking, unlinking, and changing a selected
+   arrangement; determine which local overlays survive remote order and name
+   changes.
+3. Convert a copied connected playlist to standard and diff the exact removal
+   or normalization of `pco_plan`, wrapper items, hidden state, headers, links,
+   and arrangement selections.
+4. Import a plan containing Planning Center headers and confirm current 21.4
+   persistence and the documented editing restrictions.
+5. Test automatic upload/download only with disposable account content while
+   recording attachment choice, duplication, replacement, and storage effects.

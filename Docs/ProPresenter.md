@@ -1,5 +1,15 @@
-This document logs various ProPresenter behavior outside of it's formats and rendering.
+# Working With ProPresenter
 
-# Importing
+`pro-crud` prepares document files for ProPresenter. Use ProPresenter to import
+those files and manage live presentation output.
 
-Importing a probundle with the same filename (the `.pro` file within the bundle) causes the presentation to be replaced, but the app often shows a cached rendering of the previous version. It's usually safer to either delete the original first and restart ProPresenter or use a new unique name. (Observed in 21.4)
+## Importing Bundles
+
+In ProPresenter 21.4, importing a `.probundle` whose internal `.pro` filename
+matches an existing presentation can replace that presentation while leaving
+cached thumbnails from the previous version visible. Use a unique internal
+`.pro` filename when importing a separate revision. Renaming only the bundle
+does not change that internal filename.
+
+See [presentation documents](Format/PresentationDocuments.md#minimal-authored-presentation)
+for import requirements and normalization behavior.

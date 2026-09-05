@@ -17,7 +17,7 @@ One of the core ways that we validate that our logic matches ProPresenter behavi
 
 ### Shipped pro-crud design skill
 
-- `skills/pro-crud` is a user-facing skill. Keep contributor workflow, generator rationale, reverse-engineering status, fixture provenance, test-scene descriptions, and release procedure in project-only `.agents/skills`, `AGENTS.md`, `Docs/`, generator sources, or tests rather than the shipped skill.
+- `skills/pro-crud` is a user-facing skill. Keep contributor workflow, generator rationale, reverse-engineering status, fixture provenance, test-scene descriptions, and release procedure in project-only `.agents/skills`, `AGENTS.md`, `Internal/`, generator sources, or tests rather than the shipped skill.
 - Do not ship an example `.probundle`, background image, or background video with the design skill. The bundled `.proTheme` must remain independently authored and media-free. Do not copy CMG Theme binaries, screenshots, artwork, fonts, or handbook pages into shipped assets.
 - `Sources/FixtureGenerator/DesignSystemFixture.swift` is the source of the bundled design Theme. Regenerate it with `swift run FixtureGenerator generate-design-system` and verify freshness with `swift run FixtureGenerator generate-design-system --check` after relevant changes.
 - Keep four Theme documents with all 99 independently authored functional variations in these generated paths: `ProCRUD - Streaming/Theme` (24), `ProCRUD - Teaching/Theme` (24), `ProCRUD - Worship 1/Theme` for Classic Worship (24), and `ProCRUD - Worship 2/Theme` for Creative Worship (27). Test document names, ordering, counts, semantic text slots, and media absence.
@@ -64,8 +64,9 @@ Captures preserve the configured source resolution. Treat Syphon captures as dia
 
 ### Domain notes
 
-- Read `Docs/Format/README.md` and the relevant companion note before changing parser, renderer, bundle, playlist, or fixture behavior.
-- `Docs/Format/Experiments.md` lists behavior that is not yet proven. Prefer adding a ProPresenter-exported fixture over guessing.
+- `Docs/` is published user and agent documentation. State supported behavior directly, qualify version and scope, and distinguish tool policies from native behavior. Keep experiment results, hypotheses, progress updates, proposed features, and fixture provenance in `Internal/`; see `Internal/README.md`.
+- Read `Docs/Format/README.md` and the relevant companion reference before changing parser, renderer, bundle, playlist, or fixture behavior.
+- `Internal/Research/Format/Experiments.md` lists behavior that is not yet proven. Prefer adding a ProPresenter-exported fixture over guessing.
 
 ### Safety
 

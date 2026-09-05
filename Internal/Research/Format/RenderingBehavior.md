@@ -1,17 +1,17 @@
 # Rendering Behavior
 
-This page describes how persisted presentation data maps to slide-image exports
-and how `pro-crud` renders that data. Native behavior described here is scoped
-to ProPresenter 21.4; renderer policies and compatibility limits are identified
-separately.
+> Historical research record moved from `Docs/Format` on September 5, 2026.
+> Sample details, confidence assessments, and implementation status below are
+> retained as research context, not current public usage guidance. See the
+> [public reference](../../../Docs/Format/RenderingBehavior.md) for the supported contract.
+
+These notes describe how persisted presentation data maps to ProPresenter slide-image exports. They are based on observed documents and generated probes that were imported into ProPresenter and exported back to images.
 
 ## Canvas And Coordinates
 
-Each slide stores its canvas dimensions in
-`slide.presentation.base_slide.size`. Use those dimensions rather than assuming
-a fixed resolution.
+Slide size is stored on `slide.presentation.base_slide.size`. Observed audience exports commonly use a 3840 by 2160 canvas.
 
-`pro-crud` bitmap and PDF rendering rejects non-finite canvas sizes, dimensions smaller
+Bitmap and PDF rendering rejects non-finite canvas sizes, dimensions smaller
 than one pixel, and canvases larger than 100 million pixels before converting
 dimensions to integers or allocating backing storage.
 
@@ -19,8 +19,7 @@ Element bounds are in slide-space coordinates. For exported slide images, those 
 
 Stored color components map directly to sRGB components in tested PNG exports. Using AppKit's calibrated color space changes the component values and does not match the exported fills.
 
-Untouched pixels are transparent in PNG slide-image exports with slide
-background color disabled. The renderer preserves that transparency.
+Untouched pixels in tested PNG exports are transparent. The focused `Transparent background` reference slide isolates this behavior. Those fields should not be composited into a basic PNG render without a fixture proving that they paint for that export workflow.
 
 An element opacity of exactly zero hides a shape element's fill and stroke.
 For text elements, ProPresenter applies element opacity to the box appearance
@@ -28,7 +27,7 @@ but still draws the RTF glyphs at full opacity. Generated text should be hidden
 or removed rather than relying on element opacity to hide its glyphs. Generated
 visible shape elements should write an explicit opacity of one.
 
-Full-slide media often has a natural size equal or very close to the slide size. If `custom_image_bounds` is empty, drawing the media to the full canvas is the renderer policy for simple background media.
+Full-slide media often has a natural size equal or very close to the slide size. If `custom_image_bounds` is empty, drawing the media to the full canvas matches the observed framing for simple background media.
 
 When a media URL has both an absolute source path and a matching archive-local
 filename, renderers should resolve the archive-local file first. The absolute
@@ -41,20 +40,20 @@ template first resolves source content into the template's element slots and
 produces either a materialized presentation slide or a per-screen live slide.
 Only that effective `rv.data.Slide` is then painted.
 
-ProPresenter 21.4 uses independent horizontal and vertical
+Controlled ProPresenter 21.4 probes found independent horizontal and vertical
 template-to-destination scaling, name-aware content assignment, removal of
 source-only elements, empty unmatched template placeholders, and a run-aware
 text merge. A Look targets the output screen directly and leaves the source
 presentation unchanged. See [ThemeDocuments.md](ThemeDocuments.md) for the
-supported behavior and compatibility limits.
+complete observed contract and remaining unknowns.
 
 The file resolver represents an empty template placeholder with a canonical
 Cocoa RTF document that decodes to an empty string, not with zero bytes. It also
 adds the known 42-point Helvetica Neue/default paragraph metadata when a
 graphics-only template slot must become text-capable: centered alignment,
 84-point default tabs, line-height multiple 1, and opaque white text fill. This
-is an explicit authoring policy; empty placeholders have no visible content, but their exact RTF byte
-representation is not prescribed.
+is an explicit authoring policy; the ProPresenter probes establish the absence
+of visible placeholder content, not a single required empty-RTF byte sequence.
 
 ## Build And Delivery State
 
@@ -65,14 +64,21 @@ its scheduled build state. This is neither an initial state nor necessarily a
 completed state, because a Build In can initially hide an object and a Build
 Out can remove it before playback completes.
 
-See [TextBuilds.md](TextBuilds.md) for the persistent graph and build-support
-limits.
+Future stable-state rendering must resolve start/grouping rules, delays, and
+text segmentation. The current behavior should remain explicitly named
+`stored`; playback terms such as `initial`, `advance:N`, and `completed` should
+be introduced only with fixture-backed semantics. See
+[TextBuilds.md](TextBuilds.md) for the persistent graph, evidence, and proposed
+experiments.
 
 ## Element Paint Order
 
-Slide elements paint in reverse stored order. Preserve
-`slide.elements[].info` as compatibility metadata; it does not determine paint
-order and its full meaning is not specified.
+Slide elements paint in reverse stored order. The focused `Reverse stored
+element paint order` fixture stores blue, orange, and violet at source indices
+`[0, 1, 2]` with `info` values `[0, 2, 1]`; ProPresenter paints them violet,
+orange, then blue (`[2, 1, 0]`). This disproves descending-`info` sorting.
+Preserve `slide.elements[].info` as unresolved compatibility metadata, but do
+not use it to reorder elements.
 
 ## Action Composition
 
@@ -82,16 +88,26 @@ The checked-in renderer targets **Export → Slide Images with “without slide
 background color”**, not a configured live Audience Screen. Therefore it clears
 the canvas, draws renderable media actions below slide elements, and deliberately
 does not paint `Presentation.background` or
-`Slide.draws_background_color/background_color`.
+`Slide.draws_background_color/background_color`. The native `Reverse stored
+element paint order` export has an enabled opaque gray slide background but
+transparent pixels outside its elements; it is the regression guard for this
+export-mode choice.
 
-ProPresenter's [live output layers](https://support.renewedvision.com/hc/en-us/articles/13634000690323-ProPresenter-Output-Layers)
-have different composition rules: enabled presentation/slide colors can cover
-background media, while foreground media remains above them. Static file
-rendering does not reproduce the complete configured Audience Screen stack.
-Presentation and slide gradient backgrounds are also unrendered.
+This is narrower than ProPresenter's [fixed live output-layer
+model](https://support.renewedvision.com/hc/en-us/articles/13634000690323-ProPresenter-Output-Layers),
+where background media can be covered by enabled presentation/slide colors and
+foreground media remains visible above them. A future live-output renderer must
+make its output/screen configuration explicit, then model background media,
+presentation and slide colors, foreground media, elements, video input,
+props/messages/masks, and screen color in their documented order. It must not
+silently change the portable slide-image export behavior to approximate that
+stack.
+
+Presentation and slide **gradient** backgrounds also remain unrendered until a
+focused ProPresenter export establishes their geometry and stop semantics.
 [Background effects](https://support.renewedvision.com/hc/en-us/articles/10911852908819-Using-Background-Effects-in-ProPresenter)
-operate on live media/video-input layers and are not simulated as local shape
-effects by the static renderer.
+operate on the live media/video-input layers, so a basic static renderer must
+not substitute a local blur or invert for them without that output context.
 
 Other rendering rules:
 
@@ -104,7 +120,7 @@ The action list still needs to be preserved exactly for editing and round-trippi
 
 ProPresenter stores text as Cocoa RTF in `Graphics.Text.rtf_data`, with additional protobuf metadata in `Graphics.Text.Attributes`.
 
-Text rendering follows these rules:
+Tested behavior:
 
 - Fully styled RTF determines visible font, size, color, and run-level styling.
 - Before decoding RTF, locally installed faces referenced by its font table need
@@ -115,13 +131,13 @@ Text rendering follows these rules:
   duplicate installations do not mix incompatible versions.
 - RTF run-level bold, italic, underline, strikethrough, foreground color, background/highlight color, stroke, shadow, kerning, baseline offset, and paragraph styling are preserved by ProPresenter.
 - Box-level attributes such as capitalization do not globally replace fully styled RTF content in tested documents.
-- Custom capitalization ranges apply all-caps and word-initial capitalization transforms while preserving the RTF styling within those ranges. Title case leaves minor words such as the conjunction `and`, the preposition `of`, and the article `a` lowercase, while start case capitalizes every word.
+- Custom capitalization ranges apply all-caps and word-initial capitalization transforms while preserving the RTF styling within those ranges. Title case leaves minor words such as the conjunction `and`, the preposition `of`, and the article `a` lowercase, while start case capitalizes every word. The focused capitalization fixture applies none, all caps, title case, and start case to identical text ranges in one text box.
 - Custom attributes are UTF-16 ranges into the RTF string. ProPresenter clips
   an oversized `originalFontSize` range to the overlapping text and applies
-  that size even when the range extends beyond the string. Handling of invalid
-  ranges depends on attribute kind and font state; there is no general rule
-  for normalizing all malformed ranges. The interaction between paired
-  `originalFontSize` and `fontScaleFactor` values is not specified here.
+  that size even when the range extends beyond the string. Negative-start,
+  reversed, and past-end ranges did not remove inline bold in the focused
+  Helvetica probes. A standalone `fontScaleFactor` of 0.5 or 2.0 did not change
+  the tested output; paired scale metadata still needs a separate probe.
 - Complete text replacement must clear all prior custom attributes. The
   renderer reports stale out-of-bounds ranges because imported behavior can
   depend on the attribute kind and font state instead of admitting one safe
@@ -131,8 +147,8 @@ Text rendering follows these rules:
   and range-only entries, and ignores placeholder-specific template ranges.
   `originalFontSize` and `fontScaleFactor` values are retained without applying
   the template's resolution scale and produce an explicit warning because
-  native precedence/scaling is not specified.
-- Sparse or minimal RTF does not provide a supported guarantee that protobuf text attributes alone define visible text.
+  native precedence/scaling remains unproven.
+- Sparse or minimal RTF should not be treated as proof that protobuf text attributes alone define visible text. That fallback needs separate verification.
 
 Generated text should use platform-native Cocoa RTF when targeting ProPresenter compatibility.
 
@@ -142,22 +158,19 @@ Generated text should use platform-native Cocoa RTF when targeting ProPresenter 
 
 ProPresenter lays out text with a 5-point inset on every edge. In the flipped AppKit bitmap context, bottom alignment must be inverted to preserve ProPresenter's visual direction. Cocoa RTF shadow offsets are already interpreted in the matching direction by AppKit and should be preserved.
 
-Paragraph alignment, line spacing, tabs, and indents encoded in Cocoa RTF are preserved. Literal bullet or numbered-list markers in the RTF string render as normal text. Native lists use both paragraph `textLists` metadata and RTF `\\listtext` destinations. AppKit otherwise discards that destination, so the renderer restores it as ordinary RTF before decoding. This preserves the marker's own styling and its native tab sequence, including depth-specific nested-list indentation. For lists without a native destination, the renderer synthesizes a marker and two tabs as a compatibility fallback.
+Paragraph alignment, line spacing, tabs, and indents encoded in Cocoa RTF are preserved. Literal bullet or numbered-list markers in the RTF string render as normal text. The authoritative `Rendering Edge Cases` and `List Indentation` fixtures establish that native lists use both paragraph `textLists` metadata and RTF `\\listtext` destinations. AppKit otherwise discards that destination, so the renderer restores it as ordinary RTF before decoding. This preserves the marker's own styling and its native tab sequence, including depth-specific nested-list indentation. For lists without a native destination, the renderer synthesizes a marker and two tabs as a compatibility fallback.
 
-Alternate-text data links resolve the source by element UUID, retain the target element's RTF formatting and layout, and replace the target content using the stored transform. `NONE` retains line returns and `REMOVE_LINE_RETURNS` replaces them with spaces. The renderer retains the native outline treatment. `ONE_WORD_PER_LINE` and `ONE_CHARACTER_PER_LINE` retain the stored target
-text in the renderer because their native transforms are not supported.
-Alternate-text output can differ from ProPresenter in scale-to-fit and outline
-positioning.
+Alternate-text data links resolve the source by element UUID, retain the target element's RTF formatting and layout, and replace the target content using the stored transform. `NONE` retains line returns and `REMOVE_LINE_RETURNS` replaces them with spaces. The renderer retains the native outline treatment. `ONE_WORD_PER_LINE` and `ONE_CHARACTER_PER_LINE` still need a controlled ProPresenter probe; until then they safely retain the stored target text. The focused alternate-text export is a known pixel-parity issue because mixed scale-to-fit and link-outline positioning have not yet been fully reconciled, while structural and effective-rendering tests verify content substitution and target formatting.
 
 `Graphics.Text.scale_behavior` controls font resizing:
 
-| Value | `pro-crud` behavior | Native compatibility |
+| Value | Observed local-renderer behavior | ProPresenter verification |
 | --- | --- | --- |
-| `SCALE_BEHAVIOR_NONE` | Draw without font scaling; overflowing content expands around the box center | Exact native parity is not established. |
-| `SCALE_BEHAVIOR_SCALE_FONT_DOWN` | Shrink to fit only | Supports native shrink-to-fit behavior. |
-| `SCALE_BEHAVIOR_SCALE_FONT_UP` | Grow to the largest fitting proportional scale when original text fits | Exact native parity is not established. |
-| `SCALE_BEHAVIOR_SCALE_FONT_UP_DOWN` | Grow or shrink to the largest fitting proportional scale | Exact native parity is not established. |
-| `SCALE_BEHAVIOR_ADJUST_CONTAINER_HEIGHT` | Preserve font sizes and adjust the drawing container from its top edge | Matches native contraction and expansion behavior. |
+| `SCALE_BEHAVIOR_NONE` | Draw without font scaling; overflowing content expands around the box center | Not yet covered by the focused fixture. |
+| `SCALE_BEHAVIOR_SCALE_FONT_DOWN` | Shrink to fit only | Common in exported presentations; shrink-to-fit behavior is required. |
+| `SCALE_BEHAVIOR_SCALE_FONT_UP` | Grow to the largest fitting proportional scale when original text fits | Not yet covered by the focused fixture. |
+| `SCALE_BEHAVIOR_SCALE_FONT_UP_DOWN` | Grow or shrink to the largest fitting proportional scale | Not yet covered by the focused fixture. |
+| `SCALE_BEHAVIOR_ADJUST_CONTAINER_HEIGHT` | Preserve font sizes and adjust the drawing container from its top edge | Verified by the focused contract and expand fixtures. |
 
 For stroked text, the shadow follows the combined fill-and-stroke silhouette.
 Renderers that split text into separate stroke and fill passes need one shadow
@@ -176,26 +189,27 @@ When font scaling is applied to mixed-size RTF, ProPresenter scales runs proport
 - Some helper elements carry a present but default line-mask value with empty RTF text. These act as helpers and should not render their fill as a full rectangle.
 - In a line-width mask, `widthOffset` is the total added width rather than padding on both sides. For text with a positive line-height multiple, ProPresenter's bar height excludes the additional multiple-leading. When a one-line bar plus `heightOffset` would exceed its text box, the bar is constrained to that box's height.
 
-Native compatibility for full-width and max-line-width masks with nonzero
-height offsets is not established.
+The `Rendering Edge Cases` fixture verifies line-width masks at height offsets 0, 10, 55, and 60. Full-width and max-line-width masks with nonzero height offsets remain unproven.
 
 ## Shape Feathering
 
-Enabled shape feathering is an inside alpha feather that applies to the combined fill and stroke appearance. ProPresenter first insets the alpha mask, then applies a Gaussian falloff; pixels outside the original shape remain transparent. The stored radius is normalized to the smaller element dimension, so the renderer converts it to canvas points before producing the feathered mask.
+Enabled shape feathering is an inside alpha feather that applies to the combined fill and stroke appearance. In the focused Shape Effects fixture, ProPresenter first insets the alpha mask, then applies a Gaussian falloff; pixels outside the original shape remain transparent. The stored radius is normalized to the smaller element dimension, so the renderer converts it to canvas points before producing the feathered mask.
 
 ## Video Frames
 
-Video media actions can render a thumbnail or representative frame in exported
-slide images. That frame is not necessarily the first frame. Exact native frame
-selection, cached thumbnails, and export-time playback state are not specified;
-video previews may therefore differ from ProPresenter exports.
+Video media actions can render a thumbnail or representative frame in exported slide images. Extracting the first video frame is not always correct; one tested bumper export matched an early visible frame several seconds into the clip rather than a black first frame.
 
-## Rendering Accuracy
+Exact frame selection, cached thumbnail behavior, and export-time video state should be treated as a separate rendering experiment.
 
-Output can differ from ProPresenter because of font availability, text
-antialiasing, shadows, stroke rasterization, feathering, line-mask geometry,
-and video frame selection. Use the same installed fonts and check the rendered
-result in ProPresenter when visual parity matters.
+## Acceptance Strategy
+
+Rendering validation should assert:
+
+- decoded slide count and output dimensions
+- non-empty rendered output
+- comparison against ProPresenter-exported images with an explicit tolerance
+
+Strict pixel parity is hard because of font availability, text antialiasing, shadows, stroke rasterization, feathering, line-mask geometry, and video frame selection. Toleranced image comparisons are appropriate until each source of variance has a dedicated focused example.
 
 ## Arrangement Resolution
 
@@ -203,8 +217,9 @@ Arrangement resolution is a cue-sequencing step that occurs before template or
 Look resolution and before drawing. An arrangement appends each referenced cue
 group's cues in order. Repeated group references therefore create repeated cue
 occurrences, omitted groups contribute no cues, and a valid empty arrangement
-resolves to an empty sequence. These are file-renderer sequencing rules; exact ProPresenter export selection
-when document, playlist, and active UI arrangements differ is not specified.
+resolves to an empty sequence. This behavior describes the file renderer; the
+remaining ProPresenter export comparisons are tracked in
+[Experiments.md](Experiments.md).
 
 Without an explicit option, the renderer uses the playlist item's arrangement
 UUID, then the presentation's stored selected arrangement, then Master/native

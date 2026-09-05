@@ -76,10 +76,7 @@ workflow](https://support.renewedvision.com/hc/en-us/articles/40377194830995-Cre
 The protobuf is vendored and losslessly available to code that handles raw
 messages, but `DocumentKind`, `DocumentLoader`, archive editing, and the CLI do
 not yet treat this store as a first-class document. Do not misidentify it as a
-regular `PlaylistDocument` or overwrite it with a playlist. Add a focused,
-ProPresenter-authored store fixture before exposing inspect/edit commands; it
-must cover headers, placeholders, and presentation items plus template
-creation from the UI.
+regular `PlaylistDocument` or overwrite it with a playlist.
 
 ### Presentation And Application Groups
 
@@ -113,8 +110,8 @@ of `--code` or `--clear` is required, and `--control-identifier` is valid only
 with `--code`.
 
 These are local file-editing policies; the exact way the ProPresenter UI
-creates, refreshes, or detaches linked groups remains a separate compatibility
-experiment.
+creates, refreshes, or detaches linked groups is not specified by these
+policies.
 
 Most files above are raw protobuf documents with no wrapping header. Some workspace files are JSON, TOML, databases, or other application state; tools should identify those by known path or content instead of assuming every file under `Configuration/` is protobuf.
 
@@ -142,7 +139,7 @@ The broader Renewed Vision data ecosystem includes files outside the presentatio
 | `*.rvbible` | ZIP | Bible packages commonly contain metadata XML and scripture XML files. |
 | `*.toml` | TOML text | Application or media-manager configuration can be stored as TOML. |
 | `*.json` | JSON | Application-level settings and service data can be stored as JSON. |
-| Runtime database folders | LevelDB-style files plus generated assets | Derived application state. Useful for observation, but not the primary editing model. |
+| Runtime database folders | LevelDB-style files plus generated assets | Derived application state. Not a supported document-editing interface. |
 
 ## Reader And Writer Notes
 
@@ -156,7 +153,7 @@ The broader Renewed Vision data ecosystem includes files outside the presentatio
   arrangement selections.
 - For `.proTheme`, decode each `*/Theme` entry as an independent `rv.data.Template.Document`; preserve the containing directory because it supplies theme identity, and resolve assets as external, archive-local, or theme-local.
 - Preserve unknown protobuf fields during read/write.
-- When portable media from separate external locations would collide at one archive path, retain every file by adding `-1`, `-2`, and later suffixes before the extension. This matches ProPresenter's observed **New Version** naming convention.
+- When portable media from separate external locations would collide at one archive path, retain every file by adding `-1`, `-2`, and later suffixes before the extension. This matches ProPresenter 21.4's **New Version** naming convention.
 
 ## Direct Archive Editing
 
