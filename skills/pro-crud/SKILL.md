@@ -155,6 +155,47 @@ hotkey, or replacing membership reports the `Affected` group; moving a cue
 between groups reports the `Affected` cue. Duplication reports the `Affected`
 source and `Created` copy, and removal reports the original group as `Removed`.
 
+## Planning Center playlists
+
+A connected Planning Center playlist owns its outer plan-item wrappers and
+order remotely, but each wrapper's nested `linked_data` is a local ProPresenter
+association. Start with `dump`; it reports the plan identity, remote item,
+link state, linked presentation path, arrangement, and song-sequence groups.
+Use the canonical outer item path from that report.
+
+Link an unlinked item to an existing local library presentation:
+
+```sh
+pro-crud edit link-planning-center-item INPUT \
+  --path PLAYLIST_ITEM_PATH \
+  --document PRESENTATION.pro \
+  --output OUTPUT
+```
+
+Unlink local content while retaining the Planning Center placeholder:
+
+```sh
+pro-crud edit unlink-planning-center-item INPUT \
+  --path PLAYLIST_ITEM_PATH \
+  --output OUTPUT
+```
+
+Linking creates a fresh nested playlist-item UUID and preserves the outer UUID,
+remote item snapshot, order, tags, and visibility. When both files belong to
+the same ProPresenter workspace, it records both the absolute presentation URL
+and the observed `ROOT_SHOW`-relative `Libraries/...` path. An already linked
+item must be unlinked before it can be linked elsewhere. Unlinking an already
+unlinked item is rejected.
+
+Use `edit set-playlist-item-hidden --hidden` or `--visible` for the separate
+local visibility overlay. Generic playlist structure edits remain blocked for
+connected playlists. Link, unlink, and visibility operations are also
+available in `edit apply` under the same command names and option keys.
+
+These operations edit only the local playlist document. They do not refresh a
+plan, change Planning Center items, associate Planning Center attachments, or
+upload or download content.
+
 ## Arrangements
 
 Use arrangements for alternate song or service sequences without changing the

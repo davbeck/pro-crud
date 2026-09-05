@@ -215,7 +215,13 @@ speculative:
 
 ## Broader Feature Coverage
 
-Use official ProPresenter workflow documentation as a checklist for missing fixtures. Areas still needing focused examples include screens and outputs, Looks, stage screens, announcement layer, Planning Center, Bible integration, alpha keying, audio routing, communication devices, MIDI, DMX, RossTalk, GlobalCache, capture/streaming, props, masks, messages, timers, playlist templates, and CCLI display behavior.
+Use official ProPresenter workflow documentation as a checklist for missing
+fixtures. Areas still needing focused examples include screens and outputs,
+Looks, stage screens, announcement layer, the connected-playlist export and
+refresh cases in [PlanningCenterPlaylists.md](PlanningCenterPlaylists.md), Bible
+integration, alpha keying, audio routing, communication devices, MIDI, DMX,
+RossTalk, GlobalCache, capture/streaming, props, masks, messages, timers,
+playlist templates, and CCLI display behavior.
 
 ## CLI Acceptance Tests
 

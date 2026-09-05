@@ -183,4 +183,30 @@ struct DocumentDumpTests {
 		#expect(playlistReport.playlist?.root.children.first?.name == "Sunday")
 		#expect(playlistReport.playlist?.root.children.first?.path.contains("/playlists/playlists[uuid=") == true)
 	}
+
+	@Test
+	func reportsPlanningCenterIdentityAndLinkedPresentationState() throws {
+		let presentationURL = URL(fileURLWithPath: "/Library/Core Values/Abide.pro")
+		let playlist = planningCenterPlaylist(documentURL: presentationURL)
+		let document = ProPresenterDocument(
+			payload: .playlist(playlist),
+			origin: .raw(URL(fileURLWithPath: "/tmp/data")),
+		)
+
+		let report = try DocumentDumpReport.make(from: document)
+		let connectedPlaylist = try #require(report.playlist?.root.children.first)
+		let item = try #require(connectedPlaylist.items.first)
+
+		expectNoDifference(connectedPlaylist.planningCenter?.planID, "plan-123")
+		expectNoDifference(connectedPlaylist.planningCenter?.planTitle, "September 5")
+		expectNoDifference(item.type, "planningCenter")
+		expectNoDifference(item.linkedType, "presentation")
+		expectNoDifference(item.documentPath, presentationURL.absoluteString)
+		expectNoDifference(item.arrangementUUID, "LOCAL-ARRANGEMENT")
+		expectNoDifference(item.planningCenter?.itemID, "item-789")
+		expectNoDifference(item.planningCenter?.remoteType, "song")
+		expectNoDifference(item.planningCenter?.linkedName, "Abide")
+		expectNoDifference(item.planningCenter?.song?.sequenceID, "sequence-303")
+		expectNoDifference(item.planningCenter?.song?.sequenceGroupNames, ["Verse 1", "Chorus"])
+	}
 }

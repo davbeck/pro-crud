@@ -114,6 +114,103 @@ struct EditCommandOutputTests {
 	}
 
 	@Test
+	func setPlaylistItemHiddenUpdatesOnlyLocalVisibility() throws {
+		var playlist = DocumentFactory.playlist(name: "Core Values")
+		playlist.rootNode.playlists.playlists[0].pcoPlan.planIDStr = "plan-123"
+		var remote = Rv_Data_PlanningCenterPlan.PlanItem()
+		remote.pcoIDStr = "item-789"
+		remote.name = "Announcement Reminder"
+		var connected = Rv_Data_PlaylistItem.PlanningCenter()
+		connected.item = remote
+		var item = Rv_Data_PlaylistItem()
+		item.uuid.string = "CONNECTED-ITEM"
+		item.name = remote.name
+		item.planningCenter = connected
+		playlist.rootNode.playlists.playlists[0].items.items = [item]
+		var document = ProPresenterDocument(
+			payload: .playlist(playlist),
+			origin: .raw(URL(fileURLWithPath: "/tmp/Playlist data")),
+		)
+		let command = try EditSetPlaylistItemHidden.parse([
+			"/tmp/Playlist data",
+			"--path", "/root_node/playlists/playlists[index=0]/items/items[index=0]",
+			"--hidden",
+		])
+
+		let outputs = try command.apply(to: &document)
+
+		#expect(outputs.count == 1)
+		guard case let .playlist(edited) = document.payload else {
+			Issue.record("Expected playlist payload")
+			return
+		}
+		let editedItem = edited.rootNode.playlists.playlists[0].items.items[0]
+		#expect(editedItem.isHidden)
+		#expect(editedItem.planningCenter.item.pcoIDStr == "item-789")
+	}
+
+	@Test
+	func planningCenterLinkCommandsReportTheWrapperAndPreserveRemoteIdentity() throws {
+		let presentationURL = FileManager.default.temporaryDirectory
+			.appendingPathComponent("pro-crud-link-command-\(UUID().uuidString).pro")
+		defer { try? FileManager.default.removeItem(at: presentationURL) }
+		try DocumentWriter.writeRaw(
+			ProPresenterDocument(
+				payload: .presentation(DocumentFactory.presentation(name: "Abide")),
+				origin: .raw(presentationURL),
+			),
+			to: presentationURL,
+		)
+
+		var playlist = DocumentFactory.playlist(name: "Core Values")
+		playlist.rootNode.playlists.playlists[0].pcoPlan.planIDStr = "plan-123"
+		var remote = Rv_Data_PlanningCenterPlan.PlanItem()
+		remote.pcoIDStr = "item-789"
+		remote.name = "Abide"
+		var connected = Rv_Data_PlaylistItem.PlanningCenter()
+		connected.item = remote
+		var item = Rv_Data_PlaylistItem()
+		item.uuid.string = "CONNECTED-ITEM"
+		item.name = remote.name
+		item.planningCenter = connected
+		playlist.rootNode.playlists.playlists[0].items.items = [item]
+		var document = ProPresenterDocument(
+			payload: .playlist(playlist),
+			origin: .raw(URL(fileURLWithPath: "/tmp/Library")),
+		)
+		let itemPath = "/root_node/playlists/playlists[index=0]/items/items[index=0]"
+		let link = try EditLinkPlanningCenterItem.parse([
+			"/tmp/Library",
+			"--path", itemPath,
+			"--document", presentationURL.path,
+		])
+
+		let linkOutputs = try link.apply(to: &document)
+		#expect(linkOutputs.count == 1)
+		guard case let .playlist(linkedPlaylist) = document.payload else {
+			Issue.record("Expected playlist payload")
+			return
+		}
+		let linked = linkedPlaylist.rootNode.playlists.playlists[0].items.items[0]
+		#expect(linked.planningCenter.hasLinkedData)
+		#expect(linked.planningCenter.item.pcoIDStr == "item-789")
+
+		let unlink = try EditUnlinkPlanningCenterItem.parse([
+			"/tmp/Library",
+			"--path", itemPath,
+		])
+		let unlinkOutputs = try unlink.apply(to: &document)
+		#expect(unlinkOutputs == linkOutputs)
+		guard case let .playlist(unlinkedPlaylist) = document.payload else {
+			Issue.record("Expected playlist payload")
+			return
+		}
+		let unlinked = unlinkedPlaylist.rootNode.playlists.playlists[0].items.items[0]
+		#expect(!unlinked.planningCenter.hasLinkedData)
+		#expect(unlinked.planningCenter.item.pcoIDStr == "item-789")
+	}
+
+	@Test
 	func mediaPathContextHandlesAFillCreatedByTheEdit() throws {
 		var theme = DocumentFactory.theme()
 		DocumentEditor.addTemplate(to: &theme, name: "Series")

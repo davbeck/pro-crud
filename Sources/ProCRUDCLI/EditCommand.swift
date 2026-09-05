@@ -8,7 +8,7 @@ import ProPresenterProto
 struct Edit: ParsableCommand {
 	static let configuration = CommandConfiguration(
 		abstract: "Edit a raw or bundled ProPresenter document.",
-		subcommands: [EditApply.self, EditApplyTemplate.self, EditSetMediaBatch.self, EditPatch.self, EditAddSlide.self, EditAddCueGroup.self, EditSetCueGroupCues.self, EditMoveCueToGroup.self, EditSetCueGroupColor.self, EditSetCueGroupHotKey.self, EditDuplicateCueGroup.self, EditRemoveCueGroup.self, EditAddArrangement.self, EditSetArrangementGroups.self, EditSelectArrangement.self, EditClearSelectedArrangement.self, EditRename.self, EditDuplicate.self, EditRemove.self, EditMove.self, EditSetText.self, EditSetBackground.self, EditSetMedia.self, EditAddElement.self, EditAddAction.self, EditRemoveAction.self, EditAddTemplate.self, EditAddPlaylistItem.self],
+		subcommands: [EditApply.self, EditApplyTemplate.self, EditSetMediaBatch.self, EditPatch.self, EditAddSlide.self, EditAddCueGroup.self, EditSetCueGroupCues.self, EditMoveCueToGroup.self, EditSetCueGroupColor.self, EditSetCueGroupHotKey.self, EditDuplicateCueGroup.self, EditRemoveCueGroup.self, EditAddArrangement.self, EditSetArrangementGroups.self, EditSelectArrangement.self, EditClearSelectedArrangement.self, EditRename.self, EditDuplicate.self, EditRemove.self, EditMove.self, EditSetText.self, EditSetBackground.self, EditSetMedia.self, EditAddElement.self, EditAddAction.self, EditRemoveAction.self, EditAddTemplate.self, EditAddPlaylistItem.self, EditSetPlaylistItemHidden.self, EditLinkPlanningCenterItem.self, EditUnlinkPlanningCenterItem.self],
 	)
 }
 
@@ -448,6 +448,85 @@ struct EditAddPlaylistItem: ParsableCommand {
 		try session.write(to: destination, replace: output == nil || replace)
 		printEditPathOutputs([.init(kind: .created, path: createdPath)])
 		print("Wrote: \(destination.path)")
+	}
+}
+
+struct EditSetPlaylistItemHidden: StructuralEditCommand {
+	static let configuration = CommandConfiguration(
+		commandName: "set-playlist-item-hidden",
+		abstract: "Set a playlist item's local hidden state, including a Planning Center item.",
+	)
+
+	@Argument(help: "Path to a raw data or .proPlaylist document.") var input: String
+	@Option(help: "Playlist item Component Reference.") var path: String
+	@Flag(help: "Hide the selected playlist item.") var hidden = false
+	@Flag(help: "Show the selected playlist item.") var visible = false
+	@Option(help: "Write to a new playlist document of the same kind.") var output: String?
+	@Flag(help: "Replace an existing --output file.") var replace = false
+
+	func run() throws {
+		try runStructuralEdit()
+	}
+
+	func apply(to document: inout ProPresenterDocument) throws -> [EditPathOutput] {
+		guard hidden != visible else {
+			throw ValidationError("Provide exactly one of --hidden or --visible.")
+		}
+		let componentPath = try ComponentPath(path)
+		let affectedPath = try canonicalPath(componentPath, in: document)
+		try DocumentEditor.setPlaylistItemHidden(&document, at: componentPath, hidden: hidden)
+		return [.init(kind: .affected, path: affectedPath)]
+	}
+}
+
+struct EditLinkPlanningCenterItem: StructuralEditCommand {
+	static let configuration = CommandConfiguration(
+		commandName: "link-planning-center-item",
+		abstract: "Link an unlinked Planning Center item to a local presentation.",
+	)
+
+	@Argument(help: "Path to a raw data or .proPlaylist document.") var input: String
+	@Option(help: "Planning Center playlist item Component Reference.") var path: String
+	@Option(help: "Raw local .pro presentation to link.") var document: String
+	@Option(help: "Write to a new playlist document of the same kind.") var output: String?
+	@Flag(help: "Replace an existing --output file.") var replace = false
+
+	func run() throws {
+		try runStructuralEdit()
+	}
+
+	func apply(to documentValue: inout ProPresenterDocument) throws -> [EditPathOutput] {
+		let componentPath = try ComponentPath(path)
+		let affectedPath = try canonicalPath(componentPath, in: documentValue)
+		try DocumentEditor.linkPlanningCenterItem(
+			&documentValue,
+			at: componentPath,
+			to: URL(fileURLWithPath: document),
+		)
+		return [.init(kind: .affected, path: affectedPath)]
+	}
+}
+
+struct EditUnlinkPlanningCenterItem: StructuralEditCommand {
+	static let configuration = CommandConfiguration(
+		commandName: "unlink-planning-center-item",
+		abstract: "Unlink local content while retaining its Planning Center item.",
+	)
+
+	@Argument(help: "Path to a raw data or .proPlaylist document.") var input: String
+	@Option(help: "Planning Center playlist item Component Reference.") var path: String
+	@Option(help: "Write to a new playlist document of the same kind.") var output: String?
+	@Flag(help: "Replace an existing --output file.") var replace = false
+
+	func run() throws {
+		try runStructuralEdit()
+	}
+
+	func apply(to document: inout ProPresenterDocument) throws -> [EditPathOutput] {
+		let componentPath = try ComponentPath(path)
+		let affectedPath = try canonicalPath(componentPath, in: document)
+		try DocumentEditor.unlinkPlanningCenterItem(&document, at: componentPath)
+		return [.init(kind: .affected, path: affectedPath)]
 	}
 }
 

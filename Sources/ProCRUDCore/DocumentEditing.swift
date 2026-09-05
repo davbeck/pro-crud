@@ -6,10 +6,25 @@ import UniformTypeIdentifiers
 
 public enum DocumentEditError: Error, CustomStringConvertible, Sendable {
 	case unsupportedPatchValue(String)
+	case planningCenterManagedContent(path: String)
+	case notPlanningCenterItem(path: String)
+	case planningCenterItemAlreadyLinked(path: String)
+	case planningCenterItemNotLinked(path: String)
+	case planningCenterItemOutsideConnectedPlaylist(path: String)
 
 	public var description: String {
 		switch self {
 		case let .unsupportedPatchValue(reason): reason
+		case let .planningCenterManagedContent(path):
+			"\(path) is managed by Planning Center. Convert the connected playlist to a regular playlist before changing its structure; use edit set-playlist-item-hidden to change local visibility."
+		case let .notPlanningCenterItem(path):
+			"\(path) is not a Planning Center item. Link and unlink operations require a Planning Center item wrapper."
+		case let .planningCenterItemAlreadyLinked(path):
+			"\(path) is already linked. Unlink it before selecting a different presentation."
+		case let .planningCenterItemNotLinked(path):
+			"\(path) is already unlinked."
+		case let .planningCenterItemOutsideConnectedPlaylist(path):
+			"\(path) is not inside a playlist connected to a Planning Center plan."
 		}
 	}
 }
@@ -319,6 +334,22 @@ public enum DocumentEditor {
 		case duplicate
 		case remove
 		case move(ComponentPath.Selector)
+		case setHidden(Bool)
+		case linkPlanningCenterItem(Rv_Data_PlaylistItem)
+		case unlinkPlanningCenterItem
+
+		var changesConnectedStructure: Bool {
+			if case .setHidden = self {
+				return false
+			}
+			if case .linkPlanningCenterItem = self {
+				return false
+			}
+			if case .unlinkPlanningCenterItem = self {
+				return false
+			}
+			return true
+		}
 	}
 
 	private static func templateIndex(in theme: Rv_Data_Template.Document, path: ComponentPath) throws -> Int {
@@ -371,6 +402,7 @@ public enum DocumentEditor {
 					result = try editPlaylistChildren(&wrapper.playlists, index: index, operation: operation)
 				} else {
 					var child = wrapper.playlists[index]
+					try rejectManagedStructureChange(child, path: ComponentPath(segments: Array(segments.prefix(2))).description, operation: operation)
 					result = try editPlaylist(&child, at: segments.dropFirst(2), operation: operation)
 					wrapper.playlists[index] = child
 				}
@@ -380,6 +412,8 @@ public enum DocumentEditor {
 				guard case .items? = playlist.childrenType, segments.count == 2 else {
 					throw ComponentPathError.unsupported(field: ComponentPath(segments: Array(segments)).description, at: "/root_node/items")
 				}
+				try requirePlanningCenterPlaylistIfNeeded(playlist, path: "/root_node", operation: operation)
+				try rejectManagedStructureChange(playlist, path: "/root_node", operation: operation)
 				var wrapper = playlist.items
 				let index = try index(in: wrapper.items, selector: selector, path: "/root_node/items/items", identity: { $0.uuid.string }, name: { $0.name })
 				let result = try editPlaylistItems(&wrapper.items, index: index, operation: operation)
@@ -400,12 +434,15 @@ public enum DocumentEditor {
 				return try editPlaylistChildren(&playlist.children, index: index, operation: operation)
 			} else {
 				var child = playlist.children[index]
+				try rejectManagedStructureChange(child, path: ComponentPath(segments: Array(segments.prefix(1))).description, operation: operation)
 				let result = try editPlaylist(&child, at: segments.dropFirst(), operation: operation)
 				playlist.children[index] = child
 				return result
 			}
 		case "items":
 			guard segments.count == 1 else { throw ComponentPathError.unsupported(field: ComponentPath(segments: Array(segments)).description, at: "/root_node/items") }
+			try requirePlanningCenterPlaylistIfNeeded(playlist, path: "/root_node", operation: operation)
+			try rejectManagedStructureChange(playlist, path: "/root_node", operation: operation)
 			var items = playlist.items
 			let index = try index(in: items.items, selector: selector, path: "/root_node/items", identity: { $0.uuid.string }, name: { $0.name })
 			let result = try editPlaylistItems(&items.items, index: index, operation: operation)
@@ -417,6 +454,7 @@ public enum DocumentEditor {
 	}
 
 	private static func editPlaylistChildren(_ children: inout [Rv_Data_Playlist], index selectedIndex: Int, operation: StructuralOperation) throws -> String? {
+		try rejectManagedStructureChange(children[selectedIndex], path: "/root_node/playlists", operation: operation)
 		switch operation {
 		case let .rename(name):
 			children[selectedIndex].name = name
@@ -431,6 +469,10 @@ public enum DocumentEditor {
 		case let .move(after):
 			try move(&children, from: selectedIndex, after: index(in: children, selector: after, path: "/root_node/children", identity: { $0.uuid.string }, name: { $0.name }))
 			return nil
+		case .setHidden:
+			throw ComponentPathError.unsupported(field: "is_hidden", at: "/root_node/playlists")
+		case .linkPlanningCenterItem, .unlinkPlanningCenterItem:
+			throw ComponentPathError.unsupported(field: "planning_center", at: "/root_node/playlists")
 		}
 	}
 
@@ -449,7 +491,185 @@ public enum DocumentEditor {
 		case let .move(after):
 			try move(&items, from: selectedIndex, after: index(in: items, selector: after, path: "/root_node/items", identity: { $0.uuid.string }, name: { $0.name }))
 			return nil
+		case let .setHidden(hidden):
+			items[selectedIndex].isHidden = hidden
+			return nil
+		case let .linkPlanningCenterItem(linkedItem):
+			guard case var .planningCenter(planningCenter)? = items[selectedIndex].itemType else {
+				throw DocumentEditError.notPlanningCenterItem(path: "/root_node/items")
+			}
+			guard !planningCenter.hasLinkedData else {
+				throw DocumentEditError.planningCenterItemAlreadyLinked(path: "/root_node/items")
+			}
+			planningCenter.linkedData = linkedItem
+			items[selectedIndex].planningCenter = planningCenter
+			return nil
+		case .unlinkPlanningCenterItem:
+			guard case var .planningCenter(planningCenter)? = items[selectedIndex].itemType else {
+				throw DocumentEditError.notPlanningCenterItem(path: "/root_node/items")
+			}
+			guard planningCenter.hasLinkedData else {
+				throw DocumentEditError.planningCenterItemNotLinked(path: "/root_node/items")
+			}
+			planningCenter.clearLinkedData()
+			items[selectedIndex].planningCenter = planningCenter
+			return nil
 		}
+	}
+
+	private static func requirePlanningCenterPlaylistIfNeeded(
+		_ playlist: Rv_Data_Playlist,
+		path: String,
+		operation: StructuralOperation,
+	) throws {
+		guard case .linkPlanningCenterItem = operation else {
+			if case .unlinkPlanningCenterItem = operation, !playlist.isPlanningCenterConnected {
+				throw DocumentEditError.planningCenterItemOutsideConnectedPlaylist(path: path)
+			}
+			return
+		}
+		guard playlist.isPlanningCenterConnected else {
+			throw DocumentEditError.planningCenterItemOutsideConnectedPlaylist(path: path)
+		}
+	}
+
+	private static func rejectManagedStructureChange(
+		_ playlist: Rv_Data_Playlist,
+		path: String,
+		operation: StructuralOperation,
+	) throws {
+		guard operation.changesConnectedStructure, playlist.isPlanningCenterConnected else { return }
+		throw DocumentEditError.planningCenterManagedContent(path: path)
+	}
+
+	public static func setPlaylistItemHidden(
+		_ document: inout ProPresenterDocument,
+		at path: ComponentPath,
+		hidden: Bool,
+	) throws {
+		guard case var .playlist(playlist) = document.payload else {
+			throw ComponentPathError.unsupported(field: path.description, at: "/")
+		}
+		let sourceDocument = ProPresenterDocument(
+			payload: .playlist(playlist),
+			origin: .raw(URL(fileURLWithPath: "/tmp/pro-crud-playlist-visibility")),
+		)
+		let canonicalPath = try ComponentPath(ComponentResolver.resolve(path, in: sourceDocument).canonicalPath)
+		_ = try editPlaylist(&playlist, at: ArraySlice(canonicalPath.segments), operation: .setHidden(hidden))
+		document.payload = .playlist(playlist)
+	}
+
+	public static func linkPlanningCenterItem(
+		_ document: inout ProPresenterDocument,
+		at path: ComponentPath,
+		to presentationURL: URL,
+		linkedItemUUID: String? = nil,
+	) throws {
+		let loaded = try DocumentLoader.loadRaw(presentationURL, kind: .presentation)
+		guard case let .presentation(presentation) = loaded.payload else {
+			throw DocumentLoadError.invalidPayload(
+				expected: DocumentKind.presentation.rawValue,
+				location: presentationURL.path,
+				underlying: "input is not a presentation",
+			)
+		}
+		if let linkedItemUUID, linkedItemUUID.isEmpty {
+			throw DocumentEditError.unsupportedPatchValue("A linked playlist-item UUID cannot be empty.")
+		}
+		var linkedItem = Rv_Data_PlaylistItem()
+		linkedItem.uuid.string = linkedItemUUID ?? DocumentFactory.uuid().string
+		linkedItem.name = presentation.name.isEmpty
+			? presentationURL.deletingPathExtension().lastPathComponent
+			: presentation.name
+		linkedItem.presentation.documentPath = planningCenterDocumentPath(
+			presentationURL,
+			showRoot: planningCenterShowRoot(for: document, presentationURL: presentationURL),
+		)
+		linkedItem.presentation.userMusicKey.musicKey = .c
+
+		guard case var .playlist(playlist) = document.payload else {
+			throw ComponentPathError.unsupported(field: path.description, at: "/")
+		}
+		let canonicalPath = try canonicalPlaylistPath(path, playlist: playlist)
+		try editPlanningCenterItem(
+			&playlist,
+			at: canonicalPath,
+			operation: .linkPlanningCenterItem(linkedItem),
+		)
+		document.payload = .playlist(playlist)
+	}
+
+	public static func unlinkPlanningCenterItem(
+		_ document: inout ProPresenterDocument,
+		at path: ComponentPath,
+	) throws {
+		guard case var .playlist(playlist) = document.payload else {
+			throw ComponentPathError.unsupported(field: path.description, at: "/")
+		}
+		let canonicalPath = try canonicalPlaylistPath(path, playlist: playlist)
+		try editPlanningCenterItem(&playlist, at: canonicalPath, operation: .unlinkPlanningCenterItem)
+		document.payload = .playlist(playlist)
+	}
+
+	private static func editPlanningCenterItem(
+		_ playlist: inout Rv_Data_PlaylistDocument,
+		at path: ComponentPath,
+		operation: StructuralOperation,
+	) throws {
+		do {
+			_ = try editPlaylist(&playlist, at: ArraySlice(path.segments), operation: operation)
+		} catch let error as DocumentEditError {
+			switch error {
+			case .notPlanningCenterItem:
+				throw DocumentEditError.notPlanningCenterItem(path: path.description)
+			case .planningCenterItemAlreadyLinked:
+				throw DocumentEditError.planningCenterItemAlreadyLinked(path: path.description)
+			case .planningCenterItemNotLinked:
+				throw DocumentEditError.planningCenterItemNotLinked(path: path.description)
+			case .planningCenterItemOutsideConnectedPlaylist:
+				throw DocumentEditError.planningCenterItemOutsideConnectedPlaylist(path: path.description)
+			default:
+				throw error
+			}
+		}
+	}
+
+	private static func canonicalPlaylistPath(
+		_ path: ComponentPath,
+		playlist: Rv_Data_PlaylistDocument,
+	) throws -> ComponentPath {
+		let sourceDocument = ProPresenterDocument(
+			payload: .playlist(playlist),
+			origin: .raw(URL(fileURLWithPath: "/tmp/pro-crud-playlist-edit")),
+		)
+		return try ComponentPath(ComponentResolver.resolve(path, in: sourceDocument).canonicalPath)
+	}
+
+	private static func planningCenterShowRoot(
+		for document: ProPresenterDocument,
+		presentationURL: URL,
+	) -> URL? {
+		guard case let .raw(playlistURL) = document.origin,
+		      playlistURL.deletingLastPathComponent().lastPathComponent == "Playlists"
+		else { return nil }
+		let showRoot = playlistURL.deletingLastPathComponent().deletingLastPathComponent()
+		let librariesRoot = showRoot.appendingPathComponent("Libraries", isDirectory: true)
+		return (try? DocumentLoader.relativePath(of: presentationURL, in: librariesRoot)) == nil ? nil : showRoot
+	}
+
+	private static func planningCenterDocumentPath(
+		_ presentationURL: URL,
+		showRoot: URL?,
+	) -> Rv_Data_URL {
+		let standardized = presentationURL.standardizedFileURL
+		var path = Rv_Data_URL()
+		path.platform = .macos
+		path.absoluteString = standardized.absoluteString
+		if let showRoot, let relativePath = try? DocumentLoader.relativePath(of: standardized, in: showRoot) {
+			path.local.root = .show
+			path.local.path = relativePath
+		}
+		return path
 	}
 
 	private static func index<T>(in values: [T], selector: ComponentPath.Selector, path: String, identity: (T) -> String, name: (T) -> String) throws -> Int {
@@ -1645,6 +1865,9 @@ public enum DocumentEditor {
 				wrapper.playlists[0] = child
 				playlist.playlists = wrapper
 				return result
+			}
+			if playlist.isPlanningCenterConnected {
+				throw DocumentEditError.planningCenterManagedContent(path: basePath)
 			}
 			if case .playlists? = playlist.childrenType, !playlist.playlists.playlists.isEmpty {
 				throw ComponentPathError.unsupported(field: "items", at: "Selected playlist contains child playlists rather than items.")

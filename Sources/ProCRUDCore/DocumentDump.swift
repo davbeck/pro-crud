@@ -202,6 +202,7 @@ public struct DocumentDumpReport: Codable, Sendable {
 		public var uuid: String
 		public var name: String
 		public var type: String
+		public var planningCenter: PlanningCenterPlan?
 		public var items: [PlaylistItem]
 		public var children: [Playlist]
 	}
@@ -212,10 +213,42 @@ public struct DocumentDumpReport: Codable, Sendable {
 		public var uuid: String
 		public var name: String
 		public var type: String
+		public var linkedType: String?
 		public var hidden: Bool
 		public var documentPath: String?
 		public var arrangementUUID: String?
 		public var actions: [Action]
+		public var planningCenter: PlanningCenterItem?
+	}
+
+	public struct PlanningCenterPlan: Codable, Sendable {
+		public var planID: String?
+		public var parentID: String?
+		public var seriesTitle: String?
+		public var planTitle: String?
+		public var dateList: String?
+	}
+
+	public struct PlanningCenterItem: Codable, Sendable {
+		public var itemID: String?
+		public var serviceID: String?
+		public var parentID: String?
+		public var remoteName: String?
+		public var remoteType: String
+		public var linked: Bool
+		public var linkedName: String?
+		public var attachments: [String]
+		public var song: PlanningCenterSong?
+	}
+
+	public struct PlanningCenterSong: Codable, Sendable {
+		public var songID: String?
+		public var arrangementID: String?
+		public var title: String?
+		public var ccliNumber: UInt32?
+		public var sequenceID: String?
+		public var sequenceName: String?
+		public var sequenceGroupNames: [String]
 	}
 }
 
@@ -599,6 +632,7 @@ private struct DocumentDumpBuilder {
 			uuid: playlist.uuid.string,
 			name: playlist.name,
 			type: String(describing: playlist.type),
+			planningCenter: planningCenterPlan(playlist.linkData),
 			items: items.enumerated().map { index, item in
 				let itemPath = try canonical("\(path)/items[index=\(index)]")
 				return try makePlaylistItem(item, index: index, path: itemPath)
@@ -613,44 +647,68 @@ private struct DocumentDumpBuilder {
 		path: String,
 	) throws -> DocumentDumpReport.PlaylistItem {
 		let type: String
+		let linkedType: String?
 		let documentPath: String?
 		let arrangementUUID: String?
 		let actions: [DocumentDumpReport.Action]
+		let planningCenter: DocumentDumpReport.PlanningCenterItem?
 		switch item.itemType {
 		case let .header(header):
 			type = "header"
+			linkedType = nil
 			documentPath = nil
 			arrangementUUID = nil
 			actions = try header.actions.enumerated().map { actionIndex, action in
 				try makeAction(action, index: actionIndex, path: canonical("\(path)/header/actions[index=\(actionIndex)]"))
 			}
+			planningCenter = nil
 		case let .presentation(presentation):
 			type = "presentation"
+			linkedType = nil
 			documentPath = nonEmpty(presentation.documentPath.renderPath)
 			arrangementUUID = presentation.hasArrangement ? nonEmpty(presentation.arrangement.string) : nil
 			actions = []
+			planningCenter = nil
 		case let .cue(cue):
 			type = "cue"
+			linkedType = nil
 			documentPath = nil
 			arrangementUUID = nil
 			actions = try cue.actions.enumerated().map { actionIndex, action in
 				try makeAction(action, index: actionIndex, path: canonical("\(path)/cue/actions[index=\(actionIndex)]"))
 			}
-		case .planningCenter:
+			planningCenter = nil
+		case let .planningCenter(value):
 			type = "planningCenter"
-			documentPath = nil
-			arrangementUUID = nil
-			actions = []
+			let resolved = EffectivePlaylistItem(item)
+			linkedType = resolved.content.map(playlistItemType)
+			if let content = resolved.content, case let .presentation(presentation)? = content.itemType {
+				documentPath = nonEmpty(presentation.documentPath.renderPath)
+				arrangementUUID = presentation.hasArrangement ? nonEmpty(presentation.arrangement.string) : nil
+			} else {
+				documentPath = nil
+				arrangementUUID = nil
+			}
+			actions = if let content = resolved.content {
+				try playlistItemActions(content, path: "\(path)/planning_center/linked_data")
+			} else {
+				[]
+			}
+			planningCenter = planningCenterItem(value)
 		case .placeholder:
 			type = "placeholder"
+			linkedType = nil
 			documentPath = nil
 			arrangementUUID = nil
 			actions = []
+			planningCenter = nil
 		case nil:
 			type = "unknown"
+			linkedType = nil
 			documentPath = nil
 			arrangementUUID = nil
 			actions = []
+			planningCenter = nil
 		}
 		return .init(
 			index: index,
@@ -658,11 +716,25 @@ private struct DocumentDumpBuilder {
 			uuid: item.uuid.string,
 			name: item.name,
 			type: type,
+			linkedType: linkedType,
 			hidden: item.isHidden,
 			documentPath: documentPath,
 			arrangementUUID: arrangementUUID,
 			actions: actions,
+			planningCenter: planningCenter,
 		)
+	}
+
+	private mutating func playlistItemActions(_ item: Rv_Data_PlaylistItem, path: String) throws -> [DocumentDumpReport.Action] {
+		let source: (field: String, actions: [Rv_Data_Action])? = switch item.itemType {
+		case let .header(header): ("header", header.actions)
+		case let .cue(cue): ("cue", cue.actions)
+		default: nil
+		}
+		guard let source else { return [] }
+		return try source.actions.enumerated().map { index, action in
+			try makeAction(action, index: index, path: canonical("\(path)/\(source.field)/actions[index=\(index)]"))
+		}
 	}
 
 	private func canonical(_ path: String) throws -> String {
@@ -683,6 +755,62 @@ private struct DocumentDumpBuilder {
 
 private func nonEmpty(_ value: String) -> String? {
 	value.isEmpty ? nil : value
+}
+
+private func planningCenterIdentifier(string: String, number: UInt32) -> String? {
+	nonEmpty(string) ?? (number == 0 ? nil : String(number))
+}
+
+private func planningCenterPlan(_ linkData: Rv_Data_Playlist.OneOf_LinkData?) -> DocumentDumpReport.PlanningCenterPlan? {
+	guard case let .pcoPlan(plan)? = linkData else { return nil }
+	return .init(
+		planID: planningCenterIdentifier(string: plan.planIDStr, number: plan.planIDNum),
+		parentID: planningCenterIdentifier(string: plan.parentIDStr, number: plan.parentIDNum),
+		seriesTitle: nonEmpty(plan.seriesTitle),
+		planTitle: nonEmpty(plan.planTitle),
+		dateList: nonEmpty(plan.dateList),
+	)
+}
+
+private func planningCenterItem(_ value: Rv_Data_PlaylistItem.PlanningCenter) -> DocumentDumpReport.PlanningCenterItem {
+	let item = value.item
+	let song: DocumentDumpReport.PlanningCenterSong? = if item.hasLinkedSong {
+		.init(
+			songID: planningCenterIdentifier(string: item.linkedSong.pcoIDStr, number: item.linkedSong.pcoIDNum),
+			arrangementID: planningCenterIdentifier(string: item.linkedSong.arrangementIDStr, number: item.linkedSong.arrangementIDNum),
+			title: item.linkedSong.hasCcli ? nonEmpty(item.linkedSong.ccli.songTitle) : nil,
+			ccliNumber: item.linkedSong.hasCcli && item.linkedSong.ccli.songNumber != 0 ? item.linkedSong.ccli.songNumber : nil,
+			sequenceID: item.linkedSong.hasSequence
+				? planningCenterIdentifier(string: item.linkedSong.sequence.pcoIDStr, number: item.linkedSong.sequence.pcoIDNum)
+				: nil,
+			sequenceName: item.linkedSong.hasSequence ? nonEmpty(item.linkedSong.sequence.name) : nil,
+			sequenceGroupNames: item.linkedSong.hasSequence ? item.linkedSong.sequence.groupNames : [],
+		)
+	} else {
+		nil
+	}
+	return .init(
+		itemID: planningCenterIdentifier(string: item.pcoIDStr, number: item.pcoIDNum),
+		serviceID: planningCenterIdentifier(string: item.serviceIDStr, number: item.serviceIDNum),
+		parentID: planningCenterIdentifier(string: item.parentIDStr, number: item.parentIDNum),
+		remoteName: nonEmpty(item.name),
+		remoteType: String(describing: item.itemType),
+		linked: value.hasLinkedData,
+		linkedName: value.hasLinkedData ? nonEmpty(value.linkedData.name) : nil,
+		attachments: item.attachments.map(\.name),
+		song: song,
+	)
+}
+
+private func playlistItemType(_ item: Rv_Data_PlaylistItem) -> String {
+	switch item.itemType {
+	case .header: "header"
+	case .presentation: "presentation"
+	case .cue: "cue"
+	case .planningCenter: "planningCenter"
+	case .placeholder: "placeholder"
+	case nil: "unknown"
+	}
 }
 
 private func text(fromRTF data: Data) -> DocumentDumpReport.Text? {

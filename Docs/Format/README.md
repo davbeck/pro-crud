@@ -9,6 +9,9 @@ This directory documents the ProPresenter document formats used by this package.
 ## Documents
 
 - `TopLevelFileFormats.md`: export archives, live workspace folders, raw protobuf file roots, and portable path semantics.
+- `PlanningCenterPlaylists.md`: connected-plan workflow, nested playlist-item
+  storage, the ProPresenter 21.4 Core Values observation, compatibility gaps,
+  and safe editor boundaries.
 - `PresentationDocuments.md`: `.pro` presentation structure, cue ordering, slide actions, text elements, media references, and minimal authoring requirements.
 - `TextBuilds.md`: object Build In/Out, text Delivery modes, Build Order persistence, ProPresenter 21.4 observations, current gaps, and the proposed inspection/edit/render surface.
 - `ThemeDocuments.md`: theme/template structure and ProPresenter 21.4 behavior for existing-slide application, new-slide creation, mixed text runs, element mismatches, resolution changes, and per-screen Looks.

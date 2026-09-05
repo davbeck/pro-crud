@@ -46,7 +46,7 @@ The primary editable document model lives in `Libraries/`, `Playlists/`, `Themes
 | File shape | Typical location | Root protobuf message | Purpose |
 | --- | --- | --- | --- |
 | `*.pro` | `Libraries/**/*.pro`; root entries inside `.probundle` and `.proPlaylist` exports | `rv.data.Presentation` from `presentation.proto` | Presentation documents: metadata, arrangements, cue groups, cues, slide actions, media actions, CCLI/music metadata, and timeline data. |
-| `Playlists/Library` | `Playlists/Library` | `rv.data.PlaylistDocument` from `propresenter.proto` | Presentation playlist tree. Playlist items reference `.pro` documents with `rv.data.URL` paths and can select an arrangement UUID for that item. |
+| `Playlists/Library` | `Playlists/Library` | `rv.data.PlaylistDocument` from `propresenter.proto` | Presentation playlist tree. Standard playlist items reference `.pro` documents with `rv.data.URL` paths and can select an arrangement UUID. Planning Center playlists add a plan link and wrap the same local item data inside connected items; see [PlanningCenterPlaylists.md](PlanningCenterPlaylists.md). |
 | `Playlists/Media` | `Playlists/Media` | `rv.data.PlaylistDocument` | Media playlist tree. Items can inline `rv.data.Cue` values with media actions. |
 | `Playlists/Audio` | `Playlists/Audio` | `rv.data.PlaylistDocument` | Audio playlist tree. |
 | `Playlists/PlaylistTemplates` | `Playlists/PlaylistTemplates` | `rv.data.PlaylistTemplate` from `playlistTemplate.proto` | Playlist template store. |

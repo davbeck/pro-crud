@@ -238,6 +238,41 @@ struct DocumentModelTests {
 	}
 
 	@Test
+	func playlistRenderingInputsResolveLinkedPlanningCenterPresentationsAndLocalVisibility() throws {
+		let directory = try temporaryDirectory()
+		defer { try? FileManager.default.removeItem(at: directory) }
+		let presentationURL = directory.appendingPathComponent("Abide.pro")
+		try DocumentWriter.writeRaw(
+			ProPresenterDocument(
+				payload: .presentation(DocumentFactory.presentation(name: "Abide")),
+				origin: .raw(presentationURL),
+			),
+			to: presentationURL,
+		)
+		let playlistURL = directory.appendingPathComponent("data")
+		let playlist = planningCenterPlaylist(documentURL: presentationURL)
+		try DocumentWriter.writeRaw(
+			ProPresenterDocument(payload: .playlist(playlist), origin: .raw(playlistURL)),
+			to: playlistURL,
+		)
+
+		let loaded = try PresentationLoader.loadPresentations(from: playlistURL)
+		expectNoDifference(loaded.map(\.document.presentation.name), ["Abide"])
+		expectNoDifference(loaded.map(\.document.arrangementSelection), [.uuid("LOCAL-ARRANGEMENT")])
+
+		var hiddenDocument = ProPresenterDocument(payload: .playlist(playlist), origin: .raw(playlistURL))
+		try DocumentEditor.setPlaylistItemHidden(
+			&hiddenDocument,
+			at: ComponentPath("/root_node/playlists/playlists[index=0]/items/items[index=0]"),
+			hidden: true,
+		)
+		try DocumentWriter.writeRaw(hiddenDocument, to: playlistURL, replace: true)
+		#expect(throws: DocumentLoadError.self) {
+			try PresentationLoader.loadPresentations(from: playlistURL)
+		}
+	}
+
+	@Test
 	func preservesUnknownProtobufFields() throws {
 		let presentation = DocumentFactory.presentation(name: "Unknown fields")
 		var bytes = try presentation.serializedData()
@@ -854,6 +889,155 @@ struct DocumentModelTests {
 		let editedItems = editedPlaylist.rootNode.playlists.playlists[0].items.items
 		#expect(editedItems.map(\.name) == ["Second", "Intro Copy"])
 		#expect(editedItems[1].uuid != firstID)
+	}
+
+	@Test
+	func planningCenterPlaylistAllowsVisibilityButRejectsStructuralEdits() throws {
+		let playlist = planningCenterPlaylist(documentURL: URL(fileURLWithPath: "/Library/Abide.pro"))
+		var document = ProPresenterDocument(
+			payload: .playlist(playlist),
+			origin: .raw(URL(fileURLWithPath: "/tmp/data")),
+		)
+		let itemPath = try ComponentPath("/root_node/playlists/playlists[index=0]/items/items[index=0]")
+
+		try DocumentEditor.setPlaylistItemHidden(&document, at: itemPath, hidden: true)
+		guard case let .playlist(hiddenPlaylist) = document.payload else {
+			Issue.record("Expected playlist payload")
+			return
+		}
+		#expect(hiddenPlaylist.rootNode.playlists.playlists[0].items.items[0].isHidden)
+		#expect(throws: DocumentEditError.self) {
+			try DocumentEditor.rename(&document, at: itemPath, to: "Local Rename")
+		}
+		#expect(throws: DocumentEditError.self) {
+			guard case var .playlist(value) = document.payload else { return }
+			try DocumentEditor.addPlaylistItem(
+				to: &value,
+				at: ComponentPath("/root_node/playlists/playlists[index=0]"),
+				type: "header",
+				name: "Local Header",
+				documentURL: nil,
+			)
+		}
+	}
+
+	@Test
+	func planningCenterItemsLinkAndUnlinkLocalPresentationsWithoutChangingRemoteState() throws {
+		let workspace = try temporaryDirectory()
+		defer { try? FileManager.default.removeItem(at: workspace) }
+		let playlistURL = workspace.appendingPathComponent("Playlists/Library")
+		let presentationURL = workspace.appendingPathComponent("Libraries/Main Service Sections/Abide.pro")
+		try DocumentWriter.writeRaw(
+			ProPresenterDocument(
+				payload: .presentation(DocumentFactory.presentation(name: "Abide")),
+				origin: .raw(presentationURL),
+			),
+			to: presentationURL,
+		)
+		let playlist = planningCenterPlaylist()
+		var document = ProPresenterDocument(payload: .playlist(playlist), origin: .raw(playlistURL))
+		let itemPath = try ComponentPath("/root_node/playlists/playlists[index=0]/items/items[index=0]")
+		let originalItem = playlist.rootNode.playlists.playlists[0].items.items[0]
+		var linkedItem = originalItem
+
+		try DocumentEditor.linkPlanningCenterItem(
+			&document,
+			at: itemPath,
+			to: presentationURL,
+			linkedItemUUID: "LINKED-ITEM",
+		)
+		guard case let .playlist(linkedPlaylist) = document.payload else {
+			Issue.record("Expected playlist payload")
+			return
+		}
+		let result = linkedPlaylist.rootNode.playlists.playlists[0].items.items[0]
+		expectDifference(linkedItem) {
+			linkedItem = result
+		} changes: {
+			$0.planningCenter.linkedData.uuid.string = "LINKED-ITEM"
+			$0.planningCenter.linkedData.name = "Abide"
+			$0.planningCenter.linkedData.presentation.documentPath.platform = .macos
+			$0.planningCenter.linkedData.presentation.documentPath.absoluteString = presentationURL.standardizedFileURL.absoluteString
+			$0.planningCenter.linkedData.presentation.documentPath.local.root = .show
+			$0.planningCenter.linkedData.presentation.documentPath.local.path = "Libraries/Main Service Sections/Abide.pro"
+			$0.planningCenter.linkedData.presentation.userMusicKey.musicKey = .c
+		}
+
+		try DocumentEditor.unlinkPlanningCenterItem(&document, at: itemPath)
+		guard case let .playlist(unlinkedPlaylist) = document.payload else {
+			Issue.record("Expected playlist payload")
+			return
+		}
+		let unlinkedItem = unlinkedPlaylist.rootNode.playlists.playlists[0].items.items[0]
+		expectDifference(linkedItem) {
+			linkedItem = unlinkedItem
+		} changes: {
+			$0.planningCenter.clearLinkedData()
+		}
+		expectNoDifference(unlinkedItem, originalItem)
+	}
+
+	@Test
+	func planningCenterLinkStateErrorsAreSpecificAndNonmutating() throws {
+		let directory = try temporaryDirectory()
+		defer { try? FileManager.default.removeItem(at: directory) }
+		let presentationURL = directory.appendingPathComponent("Abide.pro")
+		try DocumentWriter.writeRaw(
+			ProPresenterDocument(
+				payload: .presentation(DocumentFactory.presentation(name: "Abide")),
+				origin: .raw(presentationURL),
+			),
+			to: presentationURL,
+		)
+		let path = try ComponentPath("/root_node/playlists/playlists[index=0]/items/items[index=0]")
+		var unlinkedDocument = ProPresenterDocument(
+			payload: .playlist(planningCenterPlaylist()),
+			origin: .raw(URL(fileURLWithPath: "/tmp/Library")),
+		)
+		guard case let .playlist(originalUnlinkedPlaylist) = unlinkedDocument.payload else {
+			Issue.record("Expected playlist payload")
+			return
+		}
+
+		do {
+			try DocumentEditor.unlinkPlanningCenterItem(&unlinkedDocument, at: path)
+			Issue.record("Expected an already-unlinked error")
+		} catch let error as DocumentEditError {
+			guard case let .planningCenterItemNotLinked(errorPath) = error else {
+				Issue.record("Unexpected error: \(error)")
+				return
+			}
+			expectNoDifference(errorPath, "/root_node/playlists/playlists[uuid=\"CONNECTED-PLAYLIST\"]/items/items[uuid=\"CONNECTED-ITEM\"]")
+		}
+		guard case let .playlist(stillUnlinkedPlaylist) = unlinkedDocument.payload else {
+			Issue.record("Expected playlist payload")
+			return
+		}
+		expectNoDifference(stillUnlinkedPlaylist, originalUnlinkedPlaylist)
+
+		var linkedDocument = ProPresenterDocument(
+			payload: .playlist(planningCenterPlaylist(documentURL: presentationURL)),
+			origin: .raw(URL(fileURLWithPath: "/tmp/Library")),
+		)
+		guard case let .playlist(originalLinkedPlaylist) = linkedDocument.payload else {
+			Issue.record("Expected playlist payload")
+			return
+		}
+		do {
+			try DocumentEditor.linkPlanningCenterItem(&linkedDocument, at: path, to: presentationURL)
+			Issue.record("Expected an already-linked error")
+		} catch let error as DocumentEditError {
+			guard case let .planningCenterItemAlreadyLinked(errorPath) = error else {
+				Issue.record("Unexpected error: \(error)")
+				return
+			}
+			expectNoDifference(errorPath, "/root_node/playlists/playlists[uuid=\"CONNECTED-PLAYLIST\"]/items/items[uuid=\"CONNECTED-ITEM\"]")
+		}
+		guard case let .playlist(stillLinkedPlaylist) = linkedDocument.payload else {
+			Issue.record("Expected playlist payload")
+			return
+		}
+		expectNoDifference(stillLinkedPlaylist, originalLinkedPlaylist)
 	}
 
 	@Test

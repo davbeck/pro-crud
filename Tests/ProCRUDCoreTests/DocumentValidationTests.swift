@@ -147,6 +147,35 @@ struct DocumentValidationTests {
 	}
 
 	@Test
+	func validatesPlanningCenterIdentityAndNestedLinkedData() {
+		var playlist = planningCenterPlaylist(documentURL: URL(fileURLWithPath: "/Library/Abide.pro"))
+		let validDocument = ProPresenterDocument(
+			payload: .playlist(playlist),
+			origin: .raw(URL(fileURLWithPath: "/tmp/data")),
+		)
+		let validCodes = Set(DocumentValidator.structuralDiagnostics(in: validDocument).map(\.code))
+		#expect(validCodes.isDisjoint(with: [
+			"structure.missing-planning-center-plan-id",
+			"structure.missing-planning-center-item-id",
+			"structure.missing-presentation-document-reference",
+		]))
+
+		playlist.rootNode.playlists.playlists[0].pcoPlan.planIDStr = ""
+		playlist.rootNode.playlists.playlists[0].items.items[0].planningCenter.item.pcoIDStr = ""
+		playlist.rootNode.playlists.playlists[0].items.items[0].planningCenter.linkedData.presentation.clearDocumentPath()
+		let invalidDocument = ProPresenterDocument(
+			payload: .playlist(playlist),
+			origin: .raw(URL(fileURLWithPath: "/tmp/data")),
+		)
+		let invalidCodes = Set(DocumentValidator.structuralDiagnostics(in: invalidDocument).map(\.code))
+		#expect(invalidCodes.isSuperset(of: [
+			"structure.missing-planning-center-plan-id",
+			"structure.missing-planning-center-item-id",
+			"structure.missing-presentation-document-reference",
+		]))
+	}
+
+	@Test
 	func validatesEveryThemeDocumentWithStructuredDocumentPath() {
 		let source = DocumentFactory.presentation(name: "Template source")
 		var validTheme = DocumentFactory.theme()

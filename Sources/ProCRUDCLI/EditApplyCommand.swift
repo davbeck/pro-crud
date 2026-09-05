@@ -83,6 +83,7 @@ private struct BatchEditOperation: Decodable {
 	let leaveOmittedUngrouped: Bool?
 	let first: Bool?
 	let clear: Bool?
+	let hidden: Bool?
 	let deleteCues: Bool?
 	let leaveCuesUngrouped: Bool?
 	let moveCuesTo: String?
@@ -97,7 +98,7 @@ private struct BatchEditOperation: Decodable {
 	let jsonFile: String?
 
 	private enum CodingKeys: String, CodingKey {
-		case command, path, name, after, text, rtf, color, code, source, playlist, item, bounds, type, group, cue, empty, select, transfer, first, clear, theme, template, duplicate, json
+		case command, path, name, after, text, rtf, color, code, source, playlist, item, bounds, type, group, cue, empty, select, transfer, first, clear, hidden, theme, template, duplicate, json
 		case rtfFile = "rtf-file"
 		case documentPath = "document"
 		case jsonFile = "json-file"
@@ -172,6 +173,7 @@ private struct BatchEditOperation: Decodable {
 		leaveOmittedUngrouped = try values.decodeIfPresent(Bool.self, forKey: .leaveOmittedUngrouped)
 		first = try values.decodeIfPresent(Bool.self, forKey: .first)
 		clear = try values.decodeIfPresent(Bool.self, forKey: .clear)
+		hidden = try values.decodeIfPresent(Bool.self, forKey: .hidden)
 		deleteCues = try values.decodeIfPresent(Bool.self, forKey: .deleteCues)
 		leaveCuesUngrouped = try values.decodeIfPresent(Bool.self, forKey: .leaveCuesUngrouped)
 		moveCuesTo = try values.decodeIfPresent(String.self, forKey: .moveCuesTo)
@@ -629,6 +631,29 @@ private struct BatchEditOperation: Decodable {
 			let createdPath = try canonicalPath(ComponentPath(createdCandidatePath), in: document)
 			return [.init(kind: .created, path: createdPath)]
 
+		case "set-playlist-item-hidden":
+			let componentPath = try ComponentPath(required(path, option: "path"))
+			let affectedPath = try canonicalPath(componentPath, in: document)
+			guard let hidden else { throw ValidationError("Missing required option hidden.") }
+			try DocumentEditor.setPlaylistItemHidden(&document, at: componentPath, hidden: hidden)
+			return [.init(kind: .affected, path: affectedPath)]
+
+		case "link-planning-center-item":
+			let componentPath = try ComponentPath(required(path, option: "path"))
+			let affectedPath = try canonicalPath(componentPath, in: document)
+			try DocumentEditor.linkPlanningCenterItem(
+				&document,
+				at: componentPath,
+				to: URL(fileURLWithPath: required(documentPath, option: "document")),
+			)
+			return [.init(kind: .affected, path: affectedPath)]
+
+		case "unlink-planning-center-item":
+			let componentPath = try ComponentPath(required(path, option: "path"))
+			let affectedPath = try canonicalPath(componentPath, in: document)
+			try DocumentEditor.unlinkPlanningCenterItem(&document, at: componentPath)
+			return [.init(kind: .affected, path: affectedPath)]
+
 		default:
 			preconditionFailure("Unsupported batch command was decoded.")
 		}
@@ -694,6 +719,9 @@ private struct BatchEditOperation: Decodable {
 		"remove-action": ["path"],
 		"add-template": ["name"],
 		"add-playlist-item": ["path", "type", "name", "document"],
+		"set-playlist-item-hidden": ["path", "hidden"],
+		"link-planning-center-item": ["path", "document"],
+		"unlink-planning-center-item": ["path"],
 	]
 }
 

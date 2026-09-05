@@ -479,6 +479,20 @@ public enum DocumentValidator {
 			))
 		}
 
+		let isPlanningCenterPlaylist: Bool
+		if case let .pcoPlan(plan)? = playlist.linkData {
+			isPlanningCenterPlaylist = true
+			if planningCenterIdentifier(string: plan.planIDStr, number: plan.planIDNum) == nil {
+				diagnostics.append(error(
+					code: "structure.missing-planning-center-plan-id",
+					path: "\(path)/pco_plan",
+					message: "Connected playlist is missing its Planning Center plan identifier.",
+				))
+			}
+		} else {
+			isPlanningCenterPlaylist = false
+		}
+
 		let childIDs = playlist.children.map(\.uuid.string)
 		for (index, child) in playlist.children.enumerated() {
 			let childPath = ComponentPathBuilder.repeatedPath(
@@ -525,7 +539,14 @@ public enum DocumentValidator {
 					storageIndex: index,
 					identities: itemIDs,
 				)
-				appendPlaylistItemDiagnostics(item, path: itemPath, seenItemIDs: &seenItemIDs, to: &diagnostics)
+				appendPlaylistItemDiagnostics(
+					item,
+					path: itemPath,
+					inPlanningCenterPlaylist: isPlanningCenterPlaylist,
+					allowPlanningCenterWrapper: true,
+					seenItemIDs: &seenItemIDs,
+					to: &diagnostics,
+				)
 			}
 		case nil:
 			break
@@ -535,6 +556,8 @@ public enum DocumentValidator {
 	private static func appendPlaylistItemDiagnostics(
 		_ item: Rv_Data_PlaylistItem,
 		path: String,
+		inPlanningCenterPlaylist: Bool,
+		allowPlanningCenterWrapper: Bool,
 		seenItemIDs: inout Set<String>,
 		to diagnostics: inout [DocumentValidationDiagnostic],
 	) {
@@ -562,6 +585,52 @@ public enum DocumentValidator {
 				message: "Presentation playlist item has no document path.",
 			))
 		}
+
+		if case let .planningCenter(planningCenter)? = item.itemType {
+			if !allowPlanningCenterWrapper {
+				diagnostics.append(error(
+					code: "structure.nested-planning-center-item",
+					path: path,
+					message: "Planning Center linked data cannot contain another Planning Center wrapper.",
+				))
+			} else if !inPlanningCenterPlaylist {
+				diagnostics.append(error(
+					code: "structure.orphaned-planning-center-item",
+					path: path,
+					message: "Planning Center item is outside a playlist with Planning Center plan identity.",
+				))
+			}
+			if planningCenterIdentifier(string: planningCenter.item.pcoIDStr, number: planningCenter.item.pcoIDNum) == nil {
+				diagnostics.append(error(
+					code: "structure.missing-planning-center-item-id",
+					path: "\(path)/planning_center/item",
+					message: "Planning Center item is missing its remote item identifier.",
+				))
+			}
+			if planningCenter.hasLinkedData {
+				appendPlaylistItemDiagnostics(
+					planningCenter.linkedData,
+					path: "\(path)/planning_center/linked_data",
+					inPlanningCenterPlaylist: true,
+					allowPlanningCenterWrapper: false,
+					seenItemIDs: &seenItemIDs,
+					to: &diagnostics,
+				)
+			}
+		} else if inPlanningCenterPlaylist, allowPlanningCenterWrapper {
+			diagnostics.append(error(
+				code: "structure.unwrapped-planning-center-item",
+				path: path,
+				message: "Connected playlist contains an item outside a Planning Center wrapper.",
+			))
+		}
+	}
+
+	private static func planningCenterIdentifier(string: String, number: UInt32) -> String? {
+		if !string.isEmpty {
+			return string
+		}
+		return number == 0 ? nil : String(number)
 	}
 
 	private static func warning(code: String, path: String, message: String) -> DocumentValidationDiagnostic {

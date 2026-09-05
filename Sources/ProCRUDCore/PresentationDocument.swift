@@ -386,7 +386,7 @@ public enum PresentationLoader {
 			guard let resourceDirectory = loaded.resourceDirectory else {
 				throw DocumentLoadError.missingPayload(kind: .playlist, location: url)
 			}
-			let items = presentationItems(in: playlist.rootNode).filter { !$0.isHidden }
+			let items = presentationItems(in: playlist.rootNode)
 			guard !items.isEmpty else {
 				throw DocumentLoadError.missingPayload(kind: .presentation, location: url)
 			}
@@ -485,15 +485,25 @@ public enum PresentationLoader {
 		return result
 	}
 
-	private static func presentationItems(in playlist: Rv_Data_Playlist) -> [Rv_Data_PlaylistItem] {
-		var result: [Rv_Data_PlaylistItem] = []
+	private struct PresentationPlaylistItem {
+		var name: String
+		var presentation: Rv_Data_PlaylistItem.Presentation
+	}
+
+	private static func presentationItems(in playlist: Rv_Data_Playlist) -> [PresentationPlaylistItem] {
+		var result: [PresentationPlaylistItem] = []
 		switch playlist.childrenType {
 		case let .items(items):
-			result.append(contentsOf: items.items.filter {
-				if case .presentation? = $0.itemType {
-					return true
-				}
-				return false
+			result.append(contentsOf: items.items.compactMap { item in
+				let resolved = EffectivePlaylistItem(item)
+				guard !resolved.isHidden,
+				      let content = resolved.content,
+				      case let .presentation(presentation)? = content.itemType
+				else { return nil }
+				return PresentationPlaylistItem(
+					name: item.name.isEmpty ? content.name : item.name,
+					presentation: presentation,
+				)
 			})
 		case let .playlists(playlists):
 			for child in playlists.playlists {

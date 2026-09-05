@@ -146,9 +146,22 @@ enum DumpTextFormatter {
 		to lines: inout [String],
 	) {
 		lines.append("\(indentation)\(playlist.name) (\(playlist.uuid)) [\(playlist.path)]")
+		if let plan = playlist.planningCenter {
+			let title = plan.planTitle ?? plan.seriesTitle ?? "Untitled plan"
+			let identifier = plan.planID.map { " (\($0))" } ?? ""
+			lines.append("\(indentation)  Planning Center: \(title)\(identifier)")
+		}
 		for item in playlist.items {
 			lines.append("\(indentation)  \(item.index + 1). \(item.name) [\(item.path)]")
 			lines.append("\(indentation)    Type: \(item.type)\(item.hidden ? ", hidden" : "")")
+			if let connected = item.planningCenter {
+				let state = item.linkedType.map { "linked as \($0)" } ?? "unlinked"
+				let identifier = connected.itemID.map { " (\($0))" } ?? ""
+				lines.append("\(indentation)    Planning Center: \(connected.remoteType), \(state)\(identifier)")
+				if let sequence = connected.song?.sequenceName {
+					lines.append("\(indentation)    Sequence: \(sequence) [\(connected.song?.sequenceGroupNames.joined(separator: ", ") ?? "")]")
+				}
+			}
 			if let documentPath = item.documentPath {
 				lines.append("\(indentation)    Document: \(documentPath)")
 			}
