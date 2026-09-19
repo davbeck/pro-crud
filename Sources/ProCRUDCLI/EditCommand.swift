@@ -8,7 +8,7 @@ import ProPresenterProto
 struct Edit: ParsableCommand {
 	static let configuration = CommandConfiguration(
 		abstract: "Edit a raw or bundled ProPresenter document.",
-		subcommands: [EditApply.self, EditApplyTemplate.self, EditSetMediaBatch.self, EditPatch.self, EditAddSlide.self, EditAddCueGroup.self, EditSetCueGroupCues.self, EditMoveCueToGroup.self, EditSetCueGroupColor.self, EditSetCueGroupHotKey.self, EditDuplicateCueGroup.self, EditRemoveCueGroup.self, EditAddArrangement.self, EditSetArrangementGroups.self, EditSelectArrangement.self, EditClearSelectedArrangement.self, EditRename.self, EditDuplicate.self, EditRemove.self, EditMove.self, EditSetText.self, EditSetBackground.self, EditSetMedia.self, EditAddElement.self, EditAddAction.self, EditRemoveAction.self, EditAddTemplate.self, EditAddPlaylistItem.self, EditSetPlaylistItemHidden.self, EditLinkPlanningCenterItem.self, EditUnlinkPlanningCenterItem.self],
+		subcommands: [EditApply.self, EditApplyTemplate.self, EditSetMediaBatch.self, EditPatch.self, EditAddSlide.self, EditAddCueGroup.self, EditSetCueGroupCues.self, EditMoveCueToGroup.self, EditSetCueGroupColor.self, EditSetCueGroupHotKey.self, EditDuplicateCueGroup.self, EditRemoveCueGroup.self, EditAddArrangement.self, EditSetArrangementGroups.self, EditSelectArrangement.self, EditClearSelectedArrangement.self, EditRename.self, EditDuplicate.self, EditRemove.self, EditMove.self, EditSetText.self, EditSetTextDelivery.self, EditSetBackground.self, EditSetMedia.self, EditAddElement.self, EditAddAction.self, EditRemoveAction.self, EditAddTemplate.self, EditAddPlaylistItem.self, EditSetPlaylistItemHidden.self, EditLinkPlanningCenterItem.self, EditUnlinkPlanningCenterItem.self],
 	)
 }
 
@@ -94,14 +94,14 @@ struct EditApplyTemplate: ParsableCommand {
 	}
 }
 
-private protocol PresentationEditCommand: ParsableCommand {
+protocol PresentationEditCommand: ParsableCommand {
 	var input: String { get }
 	var output: String? { get }
 	var replace: Bool { get }
 	func apply(to presentation: inout Rv_Data_Presentation) throws -> [EditPathOutput]
 }
 
-private extension PresentationEditCommand {
+extension PresentationEditCommand {
 	func runPresentationEdit() throws {
 		let inputURL = URL(fileURLWithPath: input)
 		let session = try DocumentEditSession.open(inputURL)

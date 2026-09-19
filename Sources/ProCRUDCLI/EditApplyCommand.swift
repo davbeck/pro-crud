@@ -62,6 +62,7 @@ private struct BatchEditOperation: Decodable {
 	let text: String?
 	let rtf: String?
 	let rtfFile: String?
+	let initiallyVisible: Int?
 	let color: String?
 	let code: HotKeyCodeArgument?
 	let controlIdentifier: String?
@@ -100,6 +101,7 @@ private struct BatchEditOperation: Decodable {
 	private enum CodingKeys: String, CodingKey {
 		case command, path, name, after, text, rtf, color, code, source, playlist, item, bounds, type, group, cue, empty, select, transfer, first, clear, hidden, theme, template, duplicate, json
 		case rtfFile = "rtf-file"
+		case initiallyVisible = "initially-visible"
 		case documentPath = "document"
 		case jsonFile = "json-file"
 		case fromPlaylist = "from-playlist"
@@ -144,6 +146,7 @@ private struct BatchEditOperation: Decodable {
 		text = try values.decodeIfPresent(String.self, forKey: .text)
 		rtf = try values.decodeIfPresent(String.self, forKey: .rtf)
 		rtfFile = try values.decodeIfPresent(String.self, forKey: .rtfFile)
+		initiallyVisible = try values.decodeIfPresent(Int.self, forKey: .initiallyVisible)
 		color = try values.decodeIfPresent(String.self, forKey: .color)
 		code = try values.decodeIfPresent(HotKeyCodeArgument.self, forKey: .code)
 		controlIdentifier = try values.decodeIfPresent(String.self, forKey: .controlIdentifier)
@@ -504,6 +507,17 @@ private struct BatchEditOperation: Decodable {
 			let affectedPath = try outputPath.resolvedPath(in: document)
 			return [.init(kind: .affected, path: affectedPath)]
 
+		case "set-text-delivery":
+			guard (initiallyVisible != nil) != (clear == true) else {
+				throw ValidationError("Provide exactly one of initially-visible or clear.")
+			}
+			let componentPath = try ComponentPath(required(path, option: "path"))
+			let affectedPath = try canonicalPath(componentPath, in: document)
+			try applyToPresentation(&document, command: command) { presentation in
+				try DocumentEditor.setTextDelivery(in: &presentation, at: componentPath, initiallyVisible: initiallyVisible)
+			}
+			return [.init(kind: .affected, path: affectedPath)]
+
 		case "set-text":
 			let componentPath = try ComponentPath(required(path, option: "path"))
 			let affectedPath = try canonicalPath(componentPath, in: document)
@@ -711,6 +725,7 @@ private struct BatchEditOperation: Decodable {
 		"duplicate": ["path"],
 		"remove": ["path"],
 		"move": ["path", "after"],
+		"set-text-delivery": ["path", "initially-visible", "clear"],
 		"set-text": ["path", "text", "rtf", "rtf-file"],
 		"set-background": ["path", "color"],
 		"set-media": ["path", "source", "from-playlist", "playlist", "item", "preserve-uuid", "sync-label"],

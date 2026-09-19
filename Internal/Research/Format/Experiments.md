@@ -48,9 +48,10 @@ These results establish that portable relative bundles do not need to reproduce 
 
 The persistent graph, official product behavior, two native By Bullet samples,
 and the proposed implementation sequence are documented in
-[TextBuilds.md](TextBuilds.md). The highest-value unresolved questions are the
-exact text unit represented by `ChildBuild.index`, the meaning and base of
-`reveal_from_index`, Underline segmentation, contextual start-enum labels,
+[TextBuilds.md](TextBuilds.md). The September 6 follow-up in
+[TextDeliveryRepair.md](TextDeliveryRepair.md) establishes By Bullet child indexes,
+initial visibility, and blank/soft-return boundaries for the supported authoring
+surface. The remaining questions include Underline segmentation, contextual start-enum labels,
 parent-transition inheritance, and Build Order grouping.
 
 Run the focused matrix in that note before exposing purpose-built Delivery

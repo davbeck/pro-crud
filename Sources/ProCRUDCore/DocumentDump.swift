@@ -123,6 +123,9 @@ public struct DocumentDumpReport: Codable, Sendable {
 	}
 
 	public struct ElementBuilds: Codable, Sendable {
+		public var delivery: String
+		public var initiallyVisible: UInt32
+		public var childIndexes: [UInt32]
 		public var hasBuildIn: Bool
 		public var hasBuildOut: Bool
 		public var childBuildCount: Int
@@ -562,6 +565,9 @@ private struct DocumentDumpBuilder {
 			text: element.hasText ? text(fromRTF: element.text.rtfData) : nil,
 			media: elementMedia,
 			builds: .init(
+				delivery: String(describing: slideElement.revealType),
+				initiallyVisible: slideElement.revealFromIndex,
+				childIndexes: slideElement.childBuilds.map(\.index),
 				hasBuildIn: slideElement.hasBuildIn,
 				hasBuildOut: slideElement.hasBuildOut,
 				childBuildCount: slideElement.childBuilds.count,

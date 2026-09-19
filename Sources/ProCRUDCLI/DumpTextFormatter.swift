@@ -242,7 +242,7 @@ enum DumpTextFormatter {
 			}
 			if element.builds.hasBuildIn || element.builds.hasBuildOut || element.builds.childBuildCount > 0 {
 				lines.append(
-					"\(indentation)    Builds: in \(element.builds.hasBuildIn), out \(element.builds.hasBuildOut), child \(element.builds.childBuildCount)",
+					"\(indentation)    Builds: in \(element.builds.hasBuildIn), out \(element.builds.hasBuildOut), child \(element.builds.childBuildCount), delivery \(element.builds.delivery), initially visible \(element.builds.initiallyVisible), child indexes \(element.builds.childIndexes)",
 				)
 			}
 		}

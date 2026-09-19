@@ -196,6 +196,12 @@ public enum DocumentValidator {
 					storageIndex: actionIndex,
 					identities: actionIDs,
 				)
+				if case let .slide(slideType) = action.actionTypeData, case let .presentation(presentationSlide) = slideType.slide {
+					diagnostics.append(contentsOf: textDeliveryDiagnostics(
+						presentationSlide.baseSlide,
+						path: "\(actionPath)/slide/presentation/base_slide",
+					))
+				}
 				if action.uuid.string.isEmpty {
 					diagnostics.append(warning(
 						code: "structure.missing-action-uuid",
@@ -337,6 +343,24 @@ public enum DocumentValidator {
 		return diagnostics
 	}
 
+	private static func textDeliveryDiagnostics(_ slide: Rv_Data_Slide, path: String) -> [DocumentValidationDiagnostic] {
+		let identities = slide.elements.map(\.element.uuid.string)
+		return slide.elements.enumerated().compactMap { index, element in
+			let message: String
+			do {
+				guard let issue = try TextDelivery.issue(in: slide, elementIndex: index) else { return nil }
+				message = issue
+			} catch {
+				message = "Text Delivery could not be inspected: \(error)"
+			}
+			return warning(
+				code: element.revealType == .bullet ? "builds.inconsistent-text-delivery" : "builds.unverified-text-delivery",
+				path: ComponentPathBuilder.repeatedPath(parent: path, field: "elements", storageIndex: index, identities: identities),
+				message: message,
+			)
+		}
+	}
+
 	private static func themeDiagnostics(
 		_ theme: Rv_Data_Template.Document,
 	) -> [DocumentValidationDiagnostic] {
@@ -365,6 +389,7 @@ public enum DocumentValidator {
 				continue
 			}
 
+			diagnostics.append(contentsOf: textDeliveryDiagnostics(slide.baseSlide, path: "\(path)/base_slide"))
 			let identifier = slide.baseSlide.uuid.string
 			if !slide.baseSlide.hasUuid || identifier.isEmpty {
 				diagnostics.append(error(

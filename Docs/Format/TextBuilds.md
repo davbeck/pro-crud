@@ -9,8 +9,8 @@ object builds and those text units.
 
 This page describes ProPresenter's build model, its stored graph, and the limits
 of `pro-crud` support. The persisted Delivery structure described here applies
-to ProPresenter 21.4 (build 352583705); text-unit indexing and Underline
-segmentation are not established compatibility contracts.
+to ProPresenter 21.4 (build 352583705); By Bullet paragraph indexing is supported for this version. Underline
+segmentation is not established.
 
 Product behavior is described in Renewed Vision's
 [Transitions guide](https://support.renewedvision.com/hc/en-us/articles/360041342354-Using-Transitions-In-ProPresenter)
@@ -149,9 +149,14 @@ Preserve these compatibility cases during lossless editing:
 - Defined children need not all appear in the build order.
 - A parent Build In need not appear in the order when its children do.
 
-These fields do not establish a formula mapping child indexes or
-`reveal_from_index` to text units. Raw graph edits cannot reliably regenerate
-Delivery after text changes.
+For By Bullet, nonempty hard-return-separated paragraphs are the text units.
+Empty paragraphs and a trailing return do not add steps; a soft line break
+(U+2028) stays in its paragraph. `reveal_from_index` is the number of units
+initially visible. Child index zero introduces the second unit. There are
+`N - 1` children for `N` units, including children for initially visible units.
+The schedule includes children whose index is at least
+`reveal_from_index - 1`. When the initial count is zero, the parent Build In
+UUID precedes the children and introduces the first unit.
 
 ## `pro-crud` Support
 
@@ -159,26 +164,61 @@ The binary layer decodes and losslessly round-trips all known fields,
 including unknown protobuf data. Graph copying regenerates element, Build, and
 child-build UUIDs, then remaps known order and `elementUUID` references.
 
-The supported semantic surface is much smaller:
+## Authoring By Bullet Delivery
 
-- `dump` reports only the order UUIDs and aggregate Build In, Build Out, and
-  child counts.
-- Generic protobuf JSON patching can reach the raw fields, but it offers no
-  graph invariants and is not safe build authoring.
-- `set-text` rewrites the nested graphics RTF and base-font metadata, clears
-  range-based custom text attributes, and preserves the containing
-  slide-element wrapper. Existing child indexes and Delivery state therefore
-  survive even if the new text has incompatible segmentation.
-- Template resolution starts from the template slide wrapper. Assigned source
-  text replaces the nested template text, so template Build and Delivery state
-  survives while corresponding source wrapper state is discarded. Instantiating
-  a new slide also copies the template state. The resolution report warns when
-  either side has Build or Delivery state, but does not offer another precedence
-  choice.
-- Validation does not inspect build graphs.
-- Static rendering ignores builds and draws the stored, unanimated composition:
-  every non-hidden element eligible for normal painting is considered without
-  evaluating Build In, Build Out, Delivery, or Build Order state.
+Configure a text object using its canonical text path:
 
-Build data can be transported losslessly, but purpose-built build authoring
-and playback-state rendering are not supported.
+```sh
+pro-crud edit set-text-delivery INPUT \
+  --path '/cues[index=8]/actions[index=0]/slide/presentation/base_slide/elements[index=0]/element/text' \
+  --initially-visible 1 \
+  --output OUTPUT
+```
+
+`--initially-visible 1` leaves the heading visible and reveals each subsequent
+nonempty paragraph on successive clicks. Zero initially hides the entire text
+object. The count must be between zero and the number of nonempty paragraphs;
+using the full count leaves all text visible with no scheduled Build In steps.
+The operation retains an existing Build In transition, start condition, and
+step delays. A new Build In uses a 0.3-second Dissolve with On Click steps.
+Existing custom start conditions still apply; an automatic step does not become
+On Click merely because it was retained.
+
+Use `--clear` instead of `--initially-visible` to remove the text Build In,
+Delivery children, and their schedule references. Build Out is retained.
+Both forms are supported by `edit apply` using `command: "set-text-delivery"`
+and the same option keys.
+
+`set-text`, including RTF input, automatically rebuilds By Bullet children and
+schedule references for the replacement text. It preserves the initially-visible
+count, clamping it to the new unit count when text shrinks. Surviving children
+retain UUIDs and timing; new children receive fresh UUIDs and On Click timing.
+Obsolete child references are removed, and new steps are inserted next to their
+siblings while preserving unrelated object builds and their order. The
+operation preserves unknown fields on retained messages.
+
+A text edit cannot infer a new initial visibility intent. Use
+`set-text-delivery --initially-visible 1` explicitly when the heading should be
+the only initially visible unit. This also repairs an inherited stale schedule.
+
+Template resolution uses the template wrapper's Delivery settings and rebuilds
+By Bullet children for assigned text. Empty template slots have no scheduled
+text reveals; their initially-visible count becomes zero. Source wrapper builds
+are not transferred. Underline and unknown Delivery modes remain preserved
+without resegmentation; use native ProPresenter to edit those modes.
+
+## Inspection And Validation
+
+- `dump` reports Delivery mode, initial visibility, child indexes and counts,
+  and the slide's ordered build UUIDs.
+- Validation reports `builds.inconsistent-text-delivery` when By Bullet children
+  or schedule membership do not match the current text. Custom step order and
+  timing are retained, so this is a warning rather than a blanket rejection of
+  native documents. Other active Delivery modes produce
+  `builds.unverified-text-delivery`.
+- Static rendering draws the stored, unanimated composition. It does not
+  evaluate Build In, Build Out, Delivery, or Build Order state.
+
+After authoring, verify initial visibility and every advance through the final
+text unit in ProPresenter, particularly when using alternate Themes or custom
+start conditions. A static render cannot verify click progression.

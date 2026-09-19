@@ -1353,6 +1353,18 @@ public enum DocumentEditor {
 		)
 	}
 
+	/// Configures By Bullet delivery, or removes the text Build In when nil.
+	public static func setTextDelivery(in presentation: inout Rv_Data_Presentation, at path: ComponentPath, initiallyVisible: Int?) throws {
+		let target = try presentationTextTarget(in: presentation, at: path)
+		var slide = target.slide
+		if let initiallyVisible {
+			try TextDelivery.refresh(in: &slide.baseSlide, elementIndex: target.elementIndex, initiallyVisible: initiallyVisible)
+		} else {
+			TextDelivery.clear(in: &slide.baseSlide, elementIndex: target.elementIndex)
+		}
+		presentation.cues[target.cueIndex].actions[target.actionIndex].slide.presentation = slide
+	}
+
 	public static func setRTF(in presentation: inout Rv_Data_Presentation, at path: ComponentPath, data: Data) throws {
 		try setRTF(in: &presentation, at: path, data: data, fallbackFont: nil)
 	}
@@ -1395,6 +1407,7 @@ public enum DocumentEditor {
 			element.text.attributes.font.italic = font.fontDescriptor.symbolicTraits.contains(.italic)
 		}
 		slide.baseSlide.elements[target.elementIndex].element = element
+		try TextDelivery.refresh(in: &slide.baseSlide, elementIndex: target.elementIndex)
 		action.slide.presentation = slide
 		presentation.cues[target.cueIndex].actions[target.actionIndex] = action
 	}

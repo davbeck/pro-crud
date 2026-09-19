@@ -529,12 +529,12 @@ struct TemplateResolverTests {
 
 		expectNoDifference(result.report.warnings, [
 			"Template Build In/Out and Build Order state is retained in the resolved slide; native precedence and remapping behavior are unproven.",
-			"Template text Delivery state is retained in the resolved slide; native precedence and segmentation behavior are unproven.",
+			"Template By Bullet Delivery is rebuilt for the resolved text; other Delivery modes are preserved without resegmentation.",
 		])
-		#expect(result.slide.elementBuildOrder.count == 2)
+		#expect(result.slide.elementBuildOrder.count == 1)
 		#expect(result.slide.elements[2].hasBuildIn)
 		#expect(result.slide.elements[0].revealType == .bullet)
-		#expect(result.slide.elements[0].childBuilds.count == 1)
+		#expect(result.slide.elements[0].childBuilds.isEmpty)
 	}
 
 	@Test

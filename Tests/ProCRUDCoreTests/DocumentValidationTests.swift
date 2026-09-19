@@ -7,6 +7,47 @@ import Testing
 @Suite("Document validation")
 struct DocumentValidationTests {
 	@Test
+	func textReplacementRepairsInheritedBulletDelivery() throws {
+		var presentation = DocumentFactory.presentation(name: "Inherited Delivery")
+		try DocumentEditor.addElement(
+			to: &presentation,
+			at: ComponentPath("/cues[index=0]/actions[index=0]/slide/presentation/base_slide"),
+			name: "Title",
+			bounds: CGRect(x: 100, y: 100, width: 1600, height: 800),
+			color: DocumentEditor.color(hex: "#FFFFFF"),
+		)
+		var element = presentation.cues[0].actions[0].slide.presentation.baseSlide.elements[0]
+		element.revealType = .bullet
+		element.revealFromIndex = 2
+		element.childBuilds = (0 ..< 2).map { index in
+			var child = Rv_Data_Slide.Element.ChildBuild()
+			child.uuid.string = "CHILD-\(index)"
+			child.index = UInt32(index)
+			return child
+		}
+		presentation.cues[0].actions[0].slide.presentation.baseSlide.elements[0] = element
+		try DocumentEditor.setText(
+			in: &presentation,
+			at: ComponentPath("/cues[index=0]/actions[index=0]/slide/presentation/base_slide/elements[index=0]/element/text"),
+			to: "IN THE CITY FOR THE CITY\nPhysically\nCulturally\nSpiritually",
+		)
+		let document = ProPresenterDocument(payload: .presentation(presentation), origin: .raw(URL(fileURLWithPath: "/tmp/Delivery.pro")))
+		let report = DocumentValidator.validate(document)
+		#expect(!report.diagnostics.contains { $0.code.hasPrefix("builds.") })
+		#expect(presentation.cues[0].actions[0].slide.presentation.baseSlide.elements[0].childBuilds.count == 3)
+	}
+
+	@Test
+	func inactiveRevealIndexDoesNotWarn() {
+		var presentation = DocumentFactory.presentation(name: "Inactive Delivery")
+		var element = Rv_Data_Slide.Element()
+		element.revealFromIndex = 2
+		presentation.cues[0].actions[0].slide.presentation.baseSlide.elements = [element]
+		let document = ProPresenterDocument(payload: .presentation(presentation), origin: .raw(URL(fileURLWithPath: "/tmp/Inactive.pro")))
+		#expect(!DocumentValidator.validate(document).diagnostics.contains { $0.code == "builds.unverified-text-delivery" })
+	}
+
+	@Test
 	func combinesStoredReferenceAndRenderingDiagnostics() {
 		var presentation = DocumentFactory.presentation(name: "Invalid")
 		presentation.selectedArrangement.string = "UNKNOWN-ARRANGEMENT"

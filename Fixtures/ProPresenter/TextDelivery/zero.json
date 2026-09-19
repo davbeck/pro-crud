@@ -1,0 +1,220 @@
+{
+  "backgroundColor": {
+    "alpha": 1,
+    "blue": 0.2627451,
+    "green": 0.19607843,
+    "red": 0.003921569
+  },
+  "elementBuildOrder": [
+    {
+      "string": "B5C31FC8-6D29-40B8-927D-1A71366E854A"
+    },
+    {
+      "string": "01655B3A-22EE-4CE7-BE67-673FB76FCFB0"
+    },
+    {
+      "string": "223F3BB0-D355-44F3-A043-D995A31EF9B6"
+    },
+    {
+      "string": "C2233307-DD50-4804-90A1-B2F7A7CDB369"
+    }
+  ],
+  "elements": [
+    {
+      "buildIn": {
+        "elementUUID": {
+          "string": "4DC35AB1-B08A-4F85-AC8B-1B9D015D5260"
+        },
+        "transition": {
+          "duration": 0.6000000238418579,
+          "effect": {
+            "behaviorDescription": "Cross Dissolve.",
+            "category": "Dissolves",
+            "name": "Dissolve",
+            "renderId": "EC52A828-AD85-4602-B70C-1DEE7C904DB6",
+            "uuid": {
+              "string": "73762EBB-9861-426E-9A99-9A651785BF1E"
+            }
+          }
+        },
+        "uuid": {
+          "string": "B5C31FC8-6D29-40B8-927D-1A71366E854A"
+        }
+      },
+      "childBuilds": [
+        {
+          "uuid": {
+            "string": "01655B3A-22EE-4CE7-BE67-673FB76FCFB0"
+          }
+        },
+        {
+          "index": 1,
+          "uuid": {
+            "string": "223F3BB0-D355-44F3-A043-D995A31EF9B6"
+          }
+        },
+        {
+          "index": 2,
+          "uuid": {
+            "string": "C2233307-DD50-4804-90A1-B2F7A7CDB369"
+          }
+        }
+      ],
+      "element": {
+        "bounds": {
+          "origin": {
+            "x": 280,
+            "y": 280
+          },
+          "size": {
+            "height": 1599.9999999999998,
+            "width": 3280.021876918411
+          }
+        },
+        "feather": {
+          "radius": 0.05
+        },
+        "fill": {
+          "color": {
+            "alpha": 1,
+            "blue": 0.95,
+            "green": 0.59,
+            "red": 0.13
+          }
+        },
+        "name": "Title",
+        "opacity": 1,
+        "path": {
+          "closed": true,
+          "points": [
+            {
+              "point": {},
+              "q0": {},
+              "q1": {}
+            },
+            {
+              "point": {
+                "x": 1
+              },
+              "q0": {
+                "x": 1
+              },
+              "q1": {
+                "x": 1
+              }
+            },
+            {
+              "point": {
+                "x": 1,
+                "y": 1
+              },
+              "q0": {
+                "x": 1,
+                "y": 1
+              },
+              "q1": {
+                "x": 1,
+                "y": 1
+              }
+            },
+            {
+              "point": {
+                "y": 1
+              },
+              "q0": {
+                "y": 1
+              },
+              "q1": {
+                "y": 1
+              }
+            }
+          ],
+          "shape": {
+            "type": "TYPE_RECTANGLE"
+          }
+        },
+        "shadow": {
+          "angle": 315,
+          "color": {
+            "alpha": 1
+          },
+          "offset": 5,
+          "opacity": 0.75,
+          "radius": 5
+        },
+        "stroke": {
+          "color": {
+            "alpha": 1,
+            "blue": 1,
+            "green": 1,
+            "red": 1
+          },
+          "width": 3
+        },
+        "text": {
+          "attributes": {
+            "font": {
+              "family": "Helvetica",
+              "name": "Helvetica",
+              "size": 180
+            },
+            "paragraphStyle": {
+              "lineHeightMultiple": 1,
+              "paragraphSpacing": 70,
+              "textList": {}
+            },
+            "strikethroughStyle": {},
+            "strokeWidth": 0,
+            "textSolidFill": {
+              "alpha": 1,
+              "blue": 1,
+              "green": 1,
+              "red": 1
+            },
+            "underlineStyle": {}
+          },
+          "chordPro": {
+            "color": {
+              "alpha": 1,
+              "blue": 1,
+              "green": 1,
+              "red": 1
+            }
+          },
+          "isSuperscriptStandardized": true,
+          "margins": {},
+          "rtfData": "e1xydGYxXGFuc2lcYW5zaWNwZzEyNTJcY29jb2FydGYyODcwClxjb2NvYXRleHRzY2FsaW5nMFxjb2NvYXBsYXRmb3JtMHtcZm9udHRibFxmMFxmc3dpc3NcZmNoYXJzZXQwIEhlbHZldGljYS1Cb2xkO1xmMVxmc3dpc3NcZmNoYXJzZXQwIEhlbHZldGljYTt9CntcY29sb3J0Ymw7XHJlZDI1NVxncmVlbjI1NVxibHVlMjU1O30Ke1wqXGV4cGFuZGVkY29sb3J0Ymw7O30KXHBhcmRcc2ExNDAwXHBhcnRpZ2h0ZW5mYWN0b3IwCgpcZjBcYlxmczM2MCBcY2YxIElOIFRIRSBDSVRZIEZPUiBUSEUgQ0lUWVwKClxmMVxiMFxmczMyMCBQaHlzaWNhbGx5XApDdWx0dXJhbGx5XApTcGlyaXR1YWxseX0=",
+          "scaleBehavior": "SCALE_BEHAVIOR_SCALE_FONT_DOWN",
+          "shadow": {
+            "angle": 315,
+            "color": {
+              "alpha": 1
+            },
+            "offset": 5,
+            "opacity": 0.75,
+            "radius": 5
+          },
+          "transformDelimiter": "  \u2022  "
+        },
+        "textLineMask": {},
+        "uuid": {
+          "string": "4DC35AB1-B08A-4F85-AC8B-1B9D015D5260"
+        }
+      },
+      "info": 3,
+      "revealType": "TEXT_REVEAL_TYPE_BULLET",
+      "textScroller": {
+        "repeatDistance": 0.03048760153208192,
+        "scrollRate": 0.5,
+        "shouldRepeat": true
+      }
+    }
+  ],
+  "size": {
+    "height": 2160,
+    "width": 3840
+  },
+  "uuid": {
+    "string": "A6D7D67C-A202-42AF-93E0-2EA5770943D9"
+  }
+}

@@ -284,12 +284,30 @@ Preserve semantic element names so Theme assignment and alternate Looks can map
 content reliably. Keep action changes intentional and use the `apply-template`
 action policy that matches the requested result.
 
-Preserve existing native builds when duplicating a proven cue. Static rendering
-shows the effective fully revealed composition and cannot prove reveal timing or
-progression. Inspect the dump's build summary, use protobuf JSON only for
-unmodeled build details, and click through the result in ProPresenter when
-builds matter. Do not synthesize undocumented build graphs from guessed
-protobuf fields.
+Preserve native builds when duplicating a cue. `set-text` (including RTF) and
+Theme text assignment rebuild By Bullet children for the new text. The initial
+visibility count is preserved, capped at the new number of nonempty paragraphs.
+For an explicit reveal intent, configure it after writing the text:
+
+```sh
+pro-crud edit set-text-delivery INPUT \
+  --path TEXT_PATH --initially-visible 1 --output OUTPUT
+```
+
+One leaves a heading visible and reveals subsequent paragraphs on successive
+clicks; zero hides all text initially. Existing transition and step timing are
+retained. Use `--clear` to remove the text Build In and Delivery. These options
+also work in `edit apply`. See
+the bundled Text Builds and Delivery reference through
+`pro-crud docs format` for the supported model.
+
+Do not infer initial visibility from the replacement text: set it explicitly
+when copying a cue whose reveal intent differs. Inspect the dump's Delivery
+mode, initially-visible count, and child indexes, and investigate validation
+warnings. Underline Delivery is preserved but is not rebuilt automatically.
+Verify initial visibility and every click through the final reveal in
+ProPresenter. Static rendering cannot prove reveal timing or progression.
+Do not synthesize build graphs from guessed protobuf fields.
 
 ## Make coordinated edits
 

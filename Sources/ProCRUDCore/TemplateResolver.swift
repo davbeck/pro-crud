@@ -201,6 +201,9 @@ public enum TemplateResolver {
 				slide.elements[index].element.text.rtfData = emptyRTF
 				slide.elements[index].element.text.attributes.customAttributes = []
 			}
+			for index in slide.elements.indices {
+				try TextDelivery.refresh(in: &slide, elementIndex: index)
+			}
 			slide = ProPresenterGraphCopier.freshSlide(slide)
 			let actions = template.actions.map(ProPresenterGraphCopier.freshAction)
 			let unfilled = slide.elements.enumerated().map { index, element in
@@ -318,6 +321,9 @@ public enum TemplateResolver {
 			}
 		}
 		ProPresenterGraphCopier.remapInternalReferences(in: &slide, using: templateToResultUUID)
+		for index in slide.elements.indices {
+			try TextDelivery.refresh(in: &slide, elementIndex: index)
+		}
 
 		let assignedSource = Set(matchedTemplateBySource.keys)
 		let removed = source.elements.indices.filter { !assignedSource.contains($0) }.map {
@@ -887,7 +893,7 @@ public enum TemplateResolver {
 			warnings.append("Template Build In/Out and Build Order state is retained in the resolved slide; native precedence and remapping behavior are unproven.")
 		}
 		if hasDeliveryState(in: templateSlide) {
-			warnings.append("Template text Delivery state is retained in the resolved slide; native precedence and segmentation behavior are unproven.")
+			warnings.append("Template By Bullet Delivery is rebuilt for the resolved text; other Delivery modes are preserved without resegmentation.")
 		}
 		if let source, hasBuildState(in: source) {
 			warnings.append("Source Build In/Out and Build Order state is not transferred; the template slide wrapper remains authoritative. Native precedence and remapping behavior are unproven.")

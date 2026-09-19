@@ -440,6 +440,7 @@ Resolution reports identify these limits:
 
 Dry-run/template reports surface the supported geometry, media, data-link, and
 unknown-field warning cases described above. They also warn when source Build
-or text Delivery state will be dropped, or template state retained, but do not
-yet offer an explicit precedence policy. The current implicit behavior and
+or text Delivery state will be dropped, or template settings retained. By Bullet
+children and schedule references are rebuilt for the assigned text. There is
+no explicit precedence policy. The current implicit behavior and
 support limits are documented in [TextBuilds.md](TextBuilds.md).
