@@ -96,6 +96,17 @@ Its references belong only in
 named `rendersListIndentationSlide.slide-1.png` through
 `rendersListIndentationSlide.slide-3.png`.
 
+## Sermon list-rendering fixture
+
+`SermonListRendering/SermonListRendering.probundle` is a focused derivative of
+the original generated sermon presentation from a user-reported release
+discrepancy. Slide 3 covers a native disc list whose leading tab, marker, and
+trailing tab cause ProPresenter to place each marker on a separate line from
+its item text. Its reference image belongs only in
+`Tests/ProCRUDCoreTests/__Snapshots__/SermonListRenderingFixtureTests/` and was
+exported from ProPresenter 21.4 on macOS 27.0 using **File → Export → Slide
+Images**. See the fixture's README for source transformations and provenance.
+
 ## Regenerating the playlist and references
 
 1. In ProPresenter, select the rendering-fixture playlist and use **File →
