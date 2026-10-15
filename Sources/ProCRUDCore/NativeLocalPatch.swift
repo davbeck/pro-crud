@@ -9,6 +9,7 @@ public enum NativePresentationEdit: Codable, Sendable, Equatable {
 	case notes(String)
 	case copyrightTitle(String)
 	case slideNotes(actionID: UUID, content: NativeSlideNotesContent)
+	case slideText(actionID: UUID, elementID: UUID, content: NativeSlideTextContent)
 	case moveCue(UUID, after: UUID)
 	case transferCue(UUID, to: UUID, after: UUID?)
 	case cueGroupName(UUID, String)
@@ -117,6 +118,8 @@ public struct NativeLocalPatch: Sendable {
 				notes = try slide.insertContainer(key: "notes", child: LoroMap())
 			}
 			try notes.insert(key: "rtf_data", v: LoroValue.binary(value: rtf))
+		case let .slideText(actionID, elementID, content):
+			try NativeTextEditing.apply(content, actionID: actionID, elementID: elementID, root: root, identity: identity, value: value)
 		case let .cueGroupName(groupID, name):
 			guard !name.isEmpty else { throw NativeSemanticError.invalidValue(path: "/cue_group_placements/\(groupID)/name", expected: "nonempty group name") }
 			guard let group = layout.groups.first(where: { $0.id == groupID }) else { throw NativeSemanticError.missingReference(path: "/cue_group_placements", identity: groupID.uuidString) }

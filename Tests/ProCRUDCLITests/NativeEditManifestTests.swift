@@ -49,6 +49,22 @@ struct NativeEditManifestTests {
 		let bytes = try JSONSerialization.data(withJSONObject: ["version": 1, "operations": instructions])
 		let result = try NativeEditManifest.decode(bytes, relativeTo: directory)
 		#expect(result.first?.edit == .slideNotes(actionID: action, content: .rtf(data)))
+		let element = UUID()
+		let textInstructions: [[String: Any]] = [["stream": UUID().uuidString, "op": "set-text", "action": action.uuidString, "element": element.uuidString, "rtfFile": "Notes.rtf"]]
+		let textBytes = try JSONSerialization.data(withJSONObject: ["version": 1, "operations": textInstructions])
+		#expect(try NativeEditManifest.decode(textBytes, relativeTo: directory).first?.edit == .slideText(actionID: action, elementID: element, content: .rtf(data)))
+	}
+
+	@Test func nativeTextRequiresScopedIDsAndOneContentSource() throws {
+		let stream = UUID(), action = UUID(), element = UUID()
+		let valid: [String: Any] = ["stream": stream.uuidString, "op": "set-text", "action": action.uuidString, "element": element.uuidString, "text": ""]
+		#expect(try decode([valid]).first?.edit == .slideText(actionID: action, elementID: element, content: .text("")))
+		#expect(throws: ValidationError.self) { try decode([valid.merging(["rtfFile": "Notes.rtf"]) { _, new in new }]) }
+		#expect(throws: ValidationError.self) { try decode([valid.filter { $0.key != "element" }]) }
+		let base = ["/tmp/Exact", "--stream", stream.uuidString, "--action", action.uuidString, "--element", element.uuidString, "--registry", "/tmp/registry-v1.sqlite3"]
+		#expect(try ProCRUD.parseAsRoot(["workspace", "set-text"] + base + ["--text", ""]) is WorkspaceSetText)
+		#expect(throws: (any Error).self) { try WorkspaceSetText.parse(base) }
+		#expect(throws: (any Error).self) { try WorkspaceSetText.parse(base + ["--text", "X", "--rtf", "Notes.rtf"]) }
 	}
 
 	private func decode(_ operations: [[String: Any]], version: Int = 1) throws -> [NativePresentationOperation] {

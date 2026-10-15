@@ -171,6 +171,7 @@ of the application version. The same stopped-writer/local-registration rules app
 | `set-copyright-title` | `title` string; empty clears |
 | `set-notes` | `text` string for plain Presentation Operator Notes |
 | `set-slide-notes` | `action` UUID and exactly one of `text` or `rtfFile`; RTF paths are relative to the manifest directory |
+| `set-text` | `action` and `element` UUIDs and exactly one of `text` or `rtfFile`; replaces static slide text, rejects delivery/element builds |
 | `move-cue` | `cue` and `after` UUIDs in the same group |
 | `transfer-cue` | `cue` and destination `group` UUIDs; optional `after` UUID, otherwise append |
 | `rename-cue-group` | `group` UUID and nonempty `name` |

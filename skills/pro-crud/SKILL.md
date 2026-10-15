@@ -60,6 +60,13 @@ Use `workspace set-slide-notes ROOT --stream UUID --action SLIDE_ACTION_UUID
 text. The action UUID identifies the Presentation slide action, distinct from
 the cue and base-slide UUIDs. Matching text is a no-op; empty text clears notes.
 The same offline/local checks apply.
+Use `workspace set-text ROOT --stream UUID --action SLIDE_ACTION_UUID
+--element ELEMENT_UUID --registry PATH --text TEXT` to replace a static native
+slide element's text using its default formatting, or `--rtf FILE` to supply
+complete rich text. Matching plain text preserves existing rich formatting.
+Replacing content clears old range attributes and updates the first-run font
+metadata. Native elements with delivery or element builds are currently rejected.
+The same offline/local checks apply.
 Use `workspace move-cue ROOT --stream UUID --cue CUE_UUID --after ANCHOR_CUE_UUID
 --registry PATH` to move an existing cue after another in the same group. This
 retains the existing cue and placement identities, content and arrangements.

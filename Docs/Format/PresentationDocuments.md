@@ -475,6 +475,18 @@ pro-crud edit set-text deck.pro --path '/cues[index=0]/actions[index=0]/slide/pr
 
 Inline and file RTF are decoded before the presentation is changed, and their original bytes are preserved. The first RTF run also updates the text box's compatibility font metadata; mixed run styling remains in the RTF itself.
 
+For a registered local native 22 workspace, use `workspace set-text ROOT
+--stream PRESENTATION_UUID --action SLIDE_ACTION_UUID --element ELEMENT_UUID
+--registry PATH` with exactly one of `--text TEXT` or `--rtf FILE`. Select the
+slide action and element by UUID; stop ProPresenter and its workspace helpers
+before writing. Plain text uses the element's default formatting. Matching plain
+text preserves existing rich formatting and makes no change. Full replacement
+clears old custom ranges, updates the first-run font metadata and preserves the
+existing native containers and history. Native delivery and element builds are
+not yet supported by this operation. The version-1 `workspace apply` manifest
+also accepts `{"stream":"UUID","op":"set-text","action":"UUID",
+"element":"UUID","text":"Replacement"}`, or `rtfFile` instead of `text`.
+
 Replacing the complete RTF also clears all `custom_attributes`. Those entries
 are ranges into the previous string and can otherwise apply stale
 capitalization, original-size, scale, fill, chord, and color-preservation

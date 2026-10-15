@@ -59,6 +59,7 @@ enum NativeEditManifest {
 		private enum Payload {
 			case edit(NativePresentationEdit)
 			case rtfFile(action: UUID, path: String)
+			case textRTFFile(action: UUID, element: UUID, path: String)
 		}
 
 		func resolve(relativeTo directory: URL) throws -> NativePresentationOperation {
@@ -66,6 +67,7 @@ enum NativeEditManifest {
 			switch payload {
 			case let .edit(value): edit = value
 			case let .rtfFile(action, path): edit = try .slideNotes(actionID: action, content: .rtf(Data(contentsOf: URL(fileURLWithPath: path, relativeTo: URL(fileURLWithPath: directory.path, isDirectory: true)))))
+			case let .textRTFFile(action, element, path): edit = try .slideText(actionID: action, elementID: element, content: .rtf(Data(contentsOf: URL(fileURLWithPath: path, relativeTo: URL(fileURLWithPath: directory.path, isDirectory: true)))))
 			}
 			return .init(documentID: stream, edit: edit)
 		}
@@ -92,6 +94,16 @@ enum NativeEditManifest {
 					let path = try container.decode(String.self, forKey: .rtfFile)
 					payload = .rtfFile(action: action, path: path)
 				}
+			case .setText:
+				fields = ["action", "element", "text", "rtfFile"]
+				let action = try container.decode(UUID.self, forKey: .action)
+				let element = try container.decode(UUID.self, forKey: .element)
+				guard container.contains(.text) != container.contains(.rtfFile) else { throw invalid("set-text requires exactly one of text or rtfFile.", decoder: decoder) }
+				if container.contains(.text) {
+					payload = try .edit(.slideText(actionID: action, elementID: element, content: .text(container.decode(String.self, forKey: .text))))
+				} else {
+					payload = try .textRTFFile(action: action, element: element, path: container.decode(String.self, forKey: .rtfFile))
+				}
 			case .moveCue:
 				fields = ["cue", "after"]
 				payload = try .edit(.moveCue(container.decode(UUID.self, forKey: .cue), after: container.decode(UUID.self, forKey: .after)))
@@ -113,6 +125,7 @@ enum NativeEditManifest {
 		case setCopyrightTitle = "set-copyright-title"
 		case setNotes = "set-notes"
 		case setSlideNotes = "set-slide-notes"
+		case setText = "set-text"
 		case moveCue = "move-cue"
 		case transferCue = "transfer-cue"
 		case renameCueGroup = "rename-cue-group"
@@ -120,7 +133,7 @@ enum NativeEditManifest {
 	}
 
 	private enum Key: String, CodingKey {
-		case version, operations, stream, op, title, text, action, rtfFile, cue, after, group, name, arrangement, groups
+		case version, operations, stream, op, title, text, action, element, rtfFile, cue, after, group, name, arrangement, groups
 	}
 
 	private struct AnyKey: CodingKey {
