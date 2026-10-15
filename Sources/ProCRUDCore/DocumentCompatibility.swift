@@ -56,6 +56,15 @@ public struct DocumentCompatibilityError: Error, CustomStringConvertible, Sendab
 }
 
 public enum DocumentCompatibility {
+	/// Checks versioned wire semantics for configuration/runtime roots as well
+	/// as document payloads. The input bytes are never decoded through a
+	/// singular timeline type or rebuilt by the compatibility analyzer.
+	public static func analyze(protobuf: Data, messageType: String, target: ProPresenterTargetVersion, sourceApplicationMajorVersion: UInt32? = nil) throws -> DocumentCompatibilityReport {
+		var analyzer = try Analyzer(schema: .bundled(), target: target, source: sourceApplicationMajorVersion)
+		try analyzer.inspect(protobuf, message: messageType, path: "")
+		return .init(profile: .init(targetVersion: target), sourceApplicationMajorVersion: sourceApplicationMajorVersion, issues: analyzer.issues)
+	}
+
 	public static func analyzeExportContents(in directory: URL, target: ProPresenterTargetVersion) throws -> DocumentCompatibilityReport {
 		var issues: [DocumentCompatibilityIssue] = []
 		for file in try DocumentLoader.recursiveFiles(in: directory).sorted(by: { $0.path < $1.path })
@@ -103,22 +112,44 @@ public enum DocumentCompatibility {
 		let schema: ProtobufSchema
 		let target: ProPresenterTargetVersion
 		let source: UInt32?
+		let baseline21: ProtobufSchema
+		let native22: ProtobufSchema
 		var issues: [DocumentCompatibilityIssue] = []
 		private var enumCache: [String: Set<Int32>] = [:]
 
-		init(schema: ProtobufSchema, target: ProPresenterTargetVersion, source: UInt32?) {
+		init(schema: ProtobufSchema, target: ProPresenterTargetVersion, source: UInt32?) throws {
 			self.schema = schema
 			self.target = target
 			self.source = source
+			baseline21 = try .baseline21()
+			native22 = try .bundled(version: .v22)
 		}
 
-		mutating func inspect(_ data: Data, message: String, path: String) throws {
-			let descriptor = try schema.message(named: message)
+		mutating func inspect(_ data: Data, message: String, path: String, keyMapping: Bool = false) throws {
+			let selectedSchema: ProtobufSchema
+			switch message {
+			case "rv.data.TimedPlayback.Sequence", "rv.data.TimedPlayback.Sequence.SequenceItem": selectedSchema = native22
+			case "rv.data.CollectionElementType": selectedSchema = baseline21
+			default: selectedSchema = schema
+			}
+			let descriptor = try selectedSchema.message(named: message)
 			let known = Dictionary(uniqueKeysWithValues: descriptor.fields.map { ($0.number, $0) })
+			let fields = try ProtobufJSONPatcher.WireField.parse(data)
+			if message == "rv.data.TimedPlayback.Sequence", target == .v21, fields.filter({ $0.number == 3 }).count > 1 {
+				append("multi-presentation-timeline", path: "\(path)/presentations", unsupported: true, message: "ProPresenter 21.4 has one embedded timeline Presentation. Multiple 22 messages would merge and lose identity/ordering; no flattening conversion is qualified.")
+			}
 			var occurrences: [Int: Int] = [:]
-			for wire in try ProtobufJSONPatcher.WireField.parse(data) {
+			for wire in fields {
 				let index = occurrences[wire.number, default: 0]
 				occurrences[wire.number] = index + 1
+				if message == "rv.data.TimedPlayback.Sequence.SequenceItem", wire.number == 8, target == .v21 {
+					append("timeline-presentation-reference", path: "\(path)/presentation_uuid", unsupported: true, message: "ProPresenter 21.4 has no per-item Presentation UUID field; this cross-Presentation reference requires a qualified conversion.")
+					continue
+				}
+				if keyMapping, message == "rv.data.CollectionElementType", wire.number == 3, target == .v22 {
+					append("key-mapping-parent-scope", path: "\(path)/parent_collection", unsupported: true, message: "The 21.4 mapping's parent scope is absent from the 22 CollectionElementTypeKey layout. Preserving those bytes does not preserve lookup scope.")
+					continue
+				}
 				if let feature = Self.nativeGraphs[message]?[wire.number] {
 					append(feature, path: "\(path)/field[\(wire.number)]", unsupported: true,
 					       message: "This active 22 representation requires a qualified adapter. Export its compatibility representation from ProPresenter before editing or packaging it.")
@@ -131,7 +162,7 @@ public enum DocumentCompatibility {
 				}
 				let fieldPath = "\(path)/\(field.protoName)" + (field.isRepeated ? "[index=\(index)]" : "")
 				if field.isMessage, let nested = field.typeName, let payload = wire.payload {
-					try inspect(payload, message: nested, path: fieldPath)
+					try inspect(payload, message: nested, path: fieldPath, keyMapping: keyMapping || (message == "rv.data.KeyMapping" && (101 ... 106).contains(wire.number)))
 				} else if field.type == .enum, let type = field.typeName, let value = wire.varint,
 				          let values = enumValues(type), !values.contains(Int32(truncatingIfNeeded: value))
 				{

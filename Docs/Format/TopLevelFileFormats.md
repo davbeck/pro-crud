@@ -118,6 +118,12 @@ and edit batches do not request conversion: export the edited document with
 `bundle --target-version` for explicit target checking.
 
 Use `compatibility INPUT --target-version 21|22` to obtain a structured report.
+The core protobuf-root analyzer also handles configuration/runtime roots. It
+recognizes the shared UUID/name KeyMapping wire fields and the single embedded
+Timeline Presentation layout. Multiple Timeline Presentations or per-item
+Presentation UUIDs fail a 21-target check; legacy mapping parent scope fails a
+22-target check. These checks preserve source bytes and provide no flattening
+fallback. Wire compatibility does not establish native execution or rendering.
 It reports the declared source metadata separately from the requested profile,
 feature/component paths, severity, and available conversion. Creation and
 bundling accept `--json` to include the selected profile in their results.
