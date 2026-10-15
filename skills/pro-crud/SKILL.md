@@ -31,7 +31,10 @@ conversions remain gated; this command does not copy assets. Use native export
 when a capability diagnostic requires it.
 Shared and client streams are separate. Diagnostic output is not editable
 protobuf JSON; use native export/import for edits, media validation, and
-media-dependent renders. `workspace media ROOT` inspects native occurrence/asset
+media-dependent renders. Preview a supported native Presentation directly with
+`render ROOT --native-stream UUID --output SEPARATE_PATH`; this preserves native
+history and rejects unsupported active media/features before replacing output.
+`workspace media ROOT` inspects native occurrence/asset
 identities and local file availability, with uninspected streams explicit.
 `workspace configuration ROOT` lists saved/live Looks, screens and Theme links.
 For a selected Theme slide without media, preview a native Look with

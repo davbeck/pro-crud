@@ -123,3 +123,33 @@ retains the stored native values rather than pretending those export defaults
 were present in Loro. Group order/identity, cue/action/slide identity, geometry and
 fill agree with the independent export. Media-dependent output remains gated
 until native asset resolution is implemented.
+
+## Direct production native Presentation rendering
+
+`render ROOT --native-stream UUID --output SEPARATE_PATH` now materializes the
+selected shared native Presentation in memory and uses the existing renderer.
+It requires an explicit output separate from workspace roots and their parent
+directories. Unsupported selected representations are checked before replacing
+an existing output. Missing identities do not fall back to raw leftovers, and
+native source bytes remain unchanged. Native media writes/render adaptations
+remain gated.
+
+The owned original stream `48e32307-7a5a-56cc-8cca-0bc82d6079c1` from the
+retained consistent reader oracle renders directly to 854×480 with **zero
+differing RGBA channels** versus the previously retained native ProPresenter
+Slide Images PNG. The CLI regression also compares its complete effective
+render description to the independent `Interchange/NativePresentation.pro`.
+The only string-level difference is lowercase native root UUID spelling versus
+uppercase native-export spelling; tests compare actual UUID identity before
+normalizing that spelling for the description comparison.
+
+The disposable live local workspace's existing Presentation
+`bfa7b647-93ab-5ee6-b397-ec61b08bcfee`, stored acceptance Look
+`88d5d2fc-6918-40d9-994d-afaab5a78a62`, screen
+`76df51a3-11ed-5e71-abb9-23ddfbd54b09` and referenced owned Theme are read from
+one SQLite/Loro snapshot. Its 1440×900 output agrees with the independent native
+Presentation/Theme export input path at zero differing RGBA channels. This
+second comparison is between CLI rendering paths, not an Audience/Syphon
+capture. No output or active Look was changed in ProPresenter. Diagnostic
+artifacts are `.build/pro22-direct-native-*`; existing reference images and
+tolerances remain unchanged.

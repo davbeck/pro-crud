@@ -362,6 +362,20 @@ public struct LoadedPresentationDocument: Sendable {
 }
 
 public enum PresentationLoader {
+	/// Materializes a read-only view from one consistent native snapshot. The
+	/// original Loro history remains the source of truth; rendering still checks
+	/// the selected content's capabilities before using this interchange view.
+	public static func load(nativeDocumentID: UUID, from snapshot: NativeWorkspaceSnapshot) throws -> LoadedPresentationDocument {
+		guard let stream = snapshot.streams.first(where: { $0.identity.documentID == nativeDocumentID && $0.identity.scope == .shared }) else {
+			throw NativeSemanticError.missingReference(path: "/streams", identity: nativeDocumentID.uuidString)
+		}
+		let presentation = try stream.protobufProjection().presentation()
+		return LoadedPresentationDocument(
+			sourceName: safeDirectoryName(presentation.name.isEmpty ? nativeDocumentID.uuidString : presentation.name),
+			document: PresentationDocument(presentation: presentation, mediaDirectory: snapshot.root),
+		)
+	}
+
 	public static func load(from url: URL) throws -> PresentationDocument {
 		let loaded = try DocumentLoader.load(from: url)
 		guard case let .presentation(presentation) = loaded.payload else {

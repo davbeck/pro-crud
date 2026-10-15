@@ -5,6 +5,30 @@ and how `pro-crud` renders that data. Native behavior described here is scoped
 to ProPresenter 21.4; renderer policies and compatibility limits are identified
 separately.
 
+## Native 22 Presentation Inputs
+
+For schema-9 local/native snapshots, select an exact shared Presentation UUID:
+
+```sh
+pro-crud render /exact/native/workspace --native-stream PRESENTATION_UUID \
+  --output /separate/render-output
+```
+
+The reader materializes a transient interchange view from retained native
+history, with native cue/group/arrangement/build ordering resolved. All existing
+render formats, slide selection, arrangement selection and supported Theme
+options apply. Input history is read-only. An explicit output is required;
+output and template reports must be outside source workspace roots and cannot
+replace their parent directories. Unsupported native media representations
+fail before replacing existing output. Static rendering retains its existing
+runtime-feature limitations.
+
+Use `--workspace ROOT --look LOOK_UUID --screen SCREEN_UUID` with this input to
+apply a supported media-free native Look. When the source and Look workspace
+are the same root, Presentation, shared/client configuration and selected Theme
+are read from the same consistent snapshot. No running app, API, or Cloud
+connection is required.
+
 ## Canvas And Coordinates
 
 Each slide stores its canvas dimensions in

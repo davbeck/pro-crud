@@ -24,7 +24,8 @@ struct Render: ParsableCommand {
 	}
 
 	static let configuration = CommandConfiguration(abstract: "Render ProPresenter presentations, themes, and playlists to images, PDF, or structured JSON.")
-	@Argument(help: "Path to a raw presentation, theme, playlist, or matching archive.") var input: String
+	@Argument(help: "Path to a raw presentation, theme, playlist, matching archive, or native workspace root with --native-stream.") var input: String
+	@Option(help: "Exact shared native Presentation stream UUID. INPUT must be its native workspace root; --output must be separate from that root.") var nativeStream: String?
 	@Option(name: .customLong("format"), help: "Comma-delimited output formats: png, jpg, heic, pdf, or json.") var formats = FormatList([.png])
 	@Option(help: "One-based slide number to render. Repeat to select multiple slides.") var slide: [Int] = []
 	@Option(help: "Arrangement UUID, selected, or native. Overrides playlist-item and presentation selections.") var arrangement: String?
@@ -43,15 +44,31 @@ struct Render: ParsableCommand {
 
 	func run() throws {
 		let inputURL = URL(fileURLWithPath: input)
-		var documents = try PresentationLoader.loadPresentations(from: inputURL)
+		let nativeSnapshot: NativeWorkspaceSnapshot?
+		var documents: [LoadedPresentationDocument]
+		if let nativeStream {
+			guard let id = UUID(uuidString: nativeStream) else { throw ValidationError("--native-stream requires a UUID.") }
+			try preflightNativeOutput(inputURL)
+			let snapshot = try NativeWorkspaceSnapshot.read(from: inputURL)
+			nativeSnapshot = snapshot
+			documents = try [PresentationLoader.load(nativeDocumentID: id, from: snapshot)]
+		} else {
+			nativeSnapshot = nil
+			documents = try PresentationLoader.loadPresentations(from: inputURL)
+		}
 		if let selection = arrangementSelection() {
 			for index in documents.indices {
 				documents[index].document.arrangementSelection = selection
 			}
 		}
 		let slideIndices = try selectedSlideIndices(in: documents)
-		let templateResolution = try resolveTemplates(in: documents, slideIndices: slideIndices)
+		let templateResolution = try resolveTemplates(in: documents, slideIndices: slideIndices, nativeSnapshot: nativeSnapshot)
 		documents = templateResolution.documents
+		if nativeSnapshot != nil {
+			// Reject unsupported native representations before --replace removes an
+			// existing output. Use the same selected slides as the actual render.
+			_ = try PresentationRenderer.effectiveRendering(documents: documents.map(\.document), slideIndices: slideIndices)
+		}
 		for report in templateResolution.reports {
 			for warning in report.warnings {
 				print("Warning [template \(report.templateName)]: \(warning)")
@@ -102,6 +119,21 @@ struct Render: ParsableCommand {
 		try writeTemplateReport(templateResolution.reports)
 	}
 
+	private func preflightNativeOutput(_ inputURL: URL) throws {
+		guard output != nil else { throw ValidationError("Native rendering requires an explicit --output outside the workspace.") }
+		let roots = ([inputURL] + (workspace.map { [URL(fileURLWithPath: $0)] } ?? []))
+			.map { $0.resolvingSymlinksInPath().standardizedFileURL.path }
+		for path in [output, templateReport].compactMap(\.self) {
+			let destination = URL(fileURLWithPath: path).resolvingSymlinksInPath().standardizedFileURL
+			guard roots.allSatisfy({ root in
+				destination.path != root && !destination.path.hasPrefix(root + "/") && !root.hasPrefix(destination.path == "/" ? "/" : destination.path + "/")
+			}) else {
+				throw ValidationError("Native render output and template reports must be separate from the source workspace and its parent directories.")
+			}
+			try WorkspaceInspector.requireLegacyAccess(at: destination)
+		}
+	}
+
 	private struct ResolvedDocuments {
 		var documents: [LoadedPresentationDocument]
 		var reports: [TemplateResolutionReport]
@@ -110,6 +142,7 @@ struct Render: ParsableCommand {
 	private func resolveTemplates(
 		in source: [LoadedPresentationDocument],
 		slideIndices: Set<Int>?,
+		nativeSnapshot: NativeWorkspaceSnapshot?,
 	) throws -> ResolvedDocuments {
 		let lookOptionCount = [workspace != nil, look != nil, screen != nil].count(where: { $0 })
 		guard lookOptionCount == 0 || lookOptionCount == 3 else {
@@ -139,11 +172,13 @@ struct Render: ParsableCommand {
 			)
 			destinationSize = try size.map(DocumentFactory.canvasSize)
 		} else if let workspace, let look, let screen {
-			let selection = try LookResolver.resolve(
-				workspace: URL(fileURLWithPath: workspace),
-				look: look,
-				screen: screen,
-			)
+			let workspaceURL = URL(fileURLWithPath: workspace).resolvingSymlinksInPath().standardizedFileURL
+			let selection: LookTemplateSelection
+			if let nativeSnapshot, workspaceURL == nativeSnapshot.root.resolvingSymlinksInPath().standardizedFileURL {
+				selection = try LookResolver.resolve(snapshot: nativeSnapshot, look: look, screen: screen)
+			} else {
+				selection = try LookResolver.resolve(workspace: workspaceURL, look: look, screen: screen)
+			}
 			candidate = selection.template
 			destinationSize = selection.destinationSize
 			lookWarnings = selection.warnings

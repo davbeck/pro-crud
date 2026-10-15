@@ -32,8 +32,11 @@ incomplete WAL/shared-memory pair requires a coherent SQLite backup or native
 open before inspection.
 Other database schemas and storage markers are rejected explicitly.
 
-General native document edits, direct native presentation rendering, and strict
-media validation require their native adapters. The qualified local metadata
+General native document edits and strict media validation require their native
+adapters. Render a supported shared Presentation directly with
+`render ROOT --native-stream UUID --output SEPARATE_PATH`. The native reader
+resolves order and builds from one consistent snapshot; unsupported native
+media/features remain explicit capability errors before replacing output. The qualified local metadata
 operation below and media-free native Look previews have separate support. Use **File → Export → Legacy
 Workspace** or export an individual bundle in ProPresenter, then select the
 exported documents. A Legacy Workspace export is a point-in-time snapshot;
