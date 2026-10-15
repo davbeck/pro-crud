@@ -84,6 +84,10 @@ with explicit `stream` UUID and `op` fields; see the installed format reference
 for operation-specific fields. All operations prepare before one atomic commit,
 with ordered edits within each Presentation, one receipt per changed document
 and no changes if any operation fails. RTF paths are relative to the manifest.
+Native batches also accept `rename-arrangement` with `arrangement` UUID and
+`name`, and `select-arrangement` with `arrangement` UUID or explicit JSON `null`
+for Master. Naming preserves the group sequence; selection preserves all
+arrangements. Matching names/selections make no change.
 Use `workspace transfer-cue ROOT --stream UUID --cue CUE_UUID --group GROUP_UUID
 --registry PATH` to transfer ownership into an existing group. Omit `--after` to
 append or name a cue in the destination group. Cue and placement identities are

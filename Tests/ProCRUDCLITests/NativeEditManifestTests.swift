@@ -67,6 +67,18 @@ struct NativeEditManifestTests {
 		#expect(throws: (any Error).self) { try WorkspaceSetText.parse(base + ["--text", "X", "--rtf", "Notes.rtf"]) }
 	}
 
+	@Test func arrangementSelectionRequiresExplicitUUIDOrNullForMaster() throws {
+		let stream = UUID(), arrangement = UUID()
+		let operations = try decode([
+			["stream": stream.uuidString, "op": "rename-arrangement", "arrangement": arrangement.uuidString, "name": "Verse"],
+			["stream": stream.uuidString, "op": "select-arrangement", "arrangement": arrangement.uuidString],
+			["stream": stream.uuidString, "op": "select-arrangement", "arrangement": NSNull()],
+		])
+		#expect(operations.map(\.edit) == [.arrangementName(arrangement, "Verse"), .selectedArrangement(arrangement), .selectedArrangement(nil)])
+		#expect(throws: ValidationError.self) { try decode([["stream": stream.uuidString, "op": "select-arrangement"]]) }
+		#expect(throws: ValidationError.self) { try decode([["stream": stream.uuidString, "op": "select-arrangement", "arrangement": "Master"]]) }
+	}
+
 	private func decode(_ operations: [[String: Any]], version: Int = 1) throws -> [NativePresentationOperation] {
 		let data = try JSONSerialization.data(withJSONObject: ["version": version, "operations": operations])
 		return try NativeEditManifest.decode(data, relativeTo: URL(fileURLWithPath: "/tmp"))

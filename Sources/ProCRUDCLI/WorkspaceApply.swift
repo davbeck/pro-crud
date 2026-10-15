@@ -116,6 +116,13 @@ enum NativeEditManifest {
 			case .setArrangementGroups:
 				fields = ["arrangement", "groups"]
 				payload = try .edit(.arrangementGroups(container.decode(UUID.self, forKey: .arrangement), container.decode([UUID].self, forKey: .groups)))
+			case .renameArrangement:
+				fields = ["arrangement", "name"]
+				payload = try .edit(.arrangementName(container.decode(UUID.self, forKey: .arrangement), container.decode(String.self, forKey: .name)))
+			case .selectArrangement:
+				fields = ["arrangement"]
+				guard container.contains(.arrangement) else { throw invalid("select-arrangement requires an arrangement UUID or explicit null for Master.", decoder: decoder) }
+				payload = try .edit(.selectedArrangement(container.decodeIfPresent(UUID.self, forKey: .arrangement)))
 			}
 			try requireKeys(fields.union(["stream", "op"]), decoder: decoder)
 		}
@@ -130,6 +137,8 @@ enum NativeEditManifest {
 		case transferCue = "transfer-cue"
 		case renameCueGroup = "rename-cue-group"
 		case setArrangementGroups = "set-arrangement-groups"
+		case renameArrangement = "rename-arrangement"
+		case selectArrangement = "select-arrangement"
 	}
 
 	private enum Key: String, CodingKey {

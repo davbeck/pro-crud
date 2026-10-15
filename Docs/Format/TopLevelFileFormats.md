@@ -176,6 +176,8 @@ of the application version. The same stopped-writer/local-registration rules app
 | `transfer-cue` | `cue` and destination `group` UUIDs; optional `after` UUID, otherwise append |
 | `rename-cue-group` | `group` UUID and nonempty `name` |
 | `set-arrangement-groups` | `arrangement` UUID and ordered `groups` UUID array, including repeats or an empty array |
+| `rename-arrangement` | `arrangement` UUID and nonempty `name`; retains identity, sequence and selection |
+| `select-arrangement` | `arrangement` UUID, or explicit JSON `null` to select Master; omitting the field is an error |
 
 Every operation requires `stream` and `op`. Unknown keys, operations and manifest
 versions fail. Native editing preserves the source storage generation; target

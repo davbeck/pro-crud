@@ -14,6 +14,8 @@ public enum NativePresentationEdit: Codable, Sendable, Equatable {
 	case transferCue(UUID, to: UUID, after: UUID?)
 	case cueGroupName(UUID, String)
 	case arrangementGroups(UUID, [UUID])
+	case arrangementName(UUID, String)
+	case selectedArrangement(UUID?)
 }
 
 public enum NativeSlideNotesContent: Codable, Sendable, Equatable {
@@ -133,6 +135,31 @@ public struct NativeLocalPatch: Sendable {
 			let original = layout.arrangements[index].groupIDs
 			guard original != groups else { return }
 			try NativeStructuralEditing.setGroups(groups, replacing: original, at: index, root: root)
+		case let .arrangementName(arrangementID, name):
+			guard !name.isEmpty else { throw NativeSemanticError.invalidValue(path: "/arrangements/\(arrangementID)/name", expected: "nonempty arrangement name") }
+			guard let index = layout.arrangements.firstIndex(where: { $0.id == arrangementID }) else { throw NativeSemanticError.missingReference(path: "/arrangements", identity: arrangementID.uuidString) }
+			guard layout.arrangements[index].name != name else { return }
+			guard let arrangements = root.get(key: "arrangements")?.asLoroMovableList(), let arrangement = arrangements.get(index: UInt32(index))?.asLoroMap() else {
+				throw NativeSemanticError.invalidValue(path: "/arrangements/\(arrangementID)", expected: "native movable arrangement list and map")
+			}
+			try arrangement.insert(key: "name", v: name)
+		case let .selectedArrangement(arrangementID):
+			let index = layout.arrangements.firstIndex { $0.id == arrangementID }
+			if let arrangementID, index == nil {
+				throw NativeSemanticError.missingReference(path: "/arrangements", identity: arrangementID.uuidString)
+			}
+			guard layout.selectedArrangementID != arrangementID else { return }
+			let selected: LoroValue
+			if let index {
+				guard let arrangements = root.get(key: "arrangements")?.asLoroMovableList(),
+				      let arrangement = arrangements.get(index: UInt32(index))?.asLoroMap(),
+				      case let .string(uuid)? = arrangement.get(key: "uuid")?.asValue()
+				else { throw NativeSemanticError.invalidValue(path: "/arrangements[\(index)]/uuid", expected: "native arrangement UUID string") }
+				selected = .string(value: uuid)
+			} else {
+				selected = .null
+			}
+			try root.insert(key: "selected_arrangement", v: selected)
 		case let .transferCue(cueID, to: groupID, after: anchorID):
 			try NativeStructuralEditing.transfer(cue: cueID, to: groupID, after: anchorID, layout: layout, root: root) {
 				// Removing an emptied group also removes its arrangement references.
