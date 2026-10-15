@@ -1,0 +1,15 @@
+{
+  "operation_id": "d459b5c7-e9c8-467a-96b3-a21b54860140",
+  "operation_kind": "patch",
+  "workspace_generation": 1,
+  "document_id": "4eb485bd-667d-56db-9525-779a88cfce0f",
+  "scope": 0,
+  "payload_fingerprint": "76a4d85b8b021606e80da9b1d138975546fc9e1734779229510ce3c7e03276a8",
+  "disposition": 0,
+  "durable_version_vector": "0301dc0294eb360ee0d786f4a0bda6f4810102",
+  "created_at_ms": 1792046457685,
+  "operation_context_fingerprint": "0000000000000000000000000000000000000000000000000000000000000000",
+  "source_application": "ProPresenter 22 beta 369098875",
+  "before_song_title": "Native Acceptance 22",
+  "after_song_title": "Native Local Persistence 22"
+}

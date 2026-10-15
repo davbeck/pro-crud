@@ -1,0 +1,15 @@
+{
+  "operation_id": "c24a17bb-1df9-40bb-bd2a-944bd7c7c287",
+  "operation_kind": "patch",
+  "workspace_generation": 0,
+  "document_id": "bfa7b647-93ab-5ee6-b397-ec61b08bcfee",
+  "scope": 0,
+  "payload_fingerprint": "6cc582500e6f159a2d5984fcb74b0e633559d7cf8ad321e16f158c1141231624",
+  "disposition": 0,
+  "durable_version_vector": "03f2d4f3e6ded388e27902e1e5b28a908aecba8f010201dc02",
+  "created_at_ms": 1792048057829,
+  "operation_context_fingerprint": "0000000000000000000000000000000000000000000000000000000000000000",
+  "source_application": "ProPresenter 22 beta 369098875",
+  "cli_title": "CLI Local Commit Accepted",
+  "continued_native_title": "Native Continued Edit After CLI"
+}

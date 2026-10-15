@@ -12,10 +12,10 @@ Do not describe the entire ProPresenter 22 feature set or native writes as suppo
 | Schema | Existing generated 21 decoder retained; independently pinned 53-file 22 descriptor set with binary provenance, CRDT map/tree/atomic annotations and versioned binary materialization; repeated timeline and nested KeyMapping descriptor tests; schema resource checks pass | Full 21.4 catch-up and explicit cross-target KeyMapping/timeline conversions. Existing generated Swift drifts with installed protoc-gen-swift 1.38.1 through generator output changes; do not hand-edit generated files to suppress that check |
 | Native reader | System SQLite read-only/in-memory WAL snapshot, schema-9 gates, IDs/scopes/availability/checksums/counts/vectors; pinned official Swift Loro; registry metadata; typed library membership, logical presentation references, Master/group/arrangement ordering, playlist trees; 336 native-export comparisons pass; all 358 retained Presentation/Theme streams materialize without unmapped fields; separate-target export and pixel-exact native probe render | Playlist/configuration protobuf materialization, Looks/screens and media resolution; bounded external-writer retry matrix |
 | Native media | Native identity/provider/HLS fields are diagnosed and unsafe legacy operations rejected | Authoritative native media resolver, identity/reference/asset adapters, dependency export and stale projection cases |
-| Native writes | No native writes exposed; contributor offline environment preflight and failure manifest | Controlled persistence experiments, operations/history/receipts, conflicts, atomic multi-stream/media commits and native restart/edit/render acceptance |
+| Native writes | Targeted existing-Loro metadata operations; atomic SQLite stream/receipt publication, no-op/idempotency/conflict/rollback tests; pinned contributor harness; disposable local CCLI commit survives native restart, continued edit and native re-export | Production CLI integration and remaining edit families: placement/group/build graphs, library locations, creation/deletion/duplication, playlists/PCO, templates and media transactions; corresponding native acceptance |
 | New features/rendering | Existing unknown bytes preserved; unsupported active representations are visible and gated; existing 21 snapshots retained | Native fixtures and independent inspect/preserve/edit/render/package statuses for animations, stickers, APlay, HLS, ProDisplay, disabled screens, PowerPoint backgrounds and new rendering/PCO cases |
 | CI/docs/release | Distinct immutable-fixture 21/22 checks plus full suite; scoped public docs/skills; native test guidance; Loro license packaging; arm64 runtime and x86_64 compile | Extend existing 21 regression coverage for changed adapters; native 22 acceptance for new behavior; signed universal package and transitive dependency license audit |
-| Cloud | Discovery reports local/Cloud metadata; local implementation and acceptance do not require a Cloud connection | Cloud write support alone requires disposable-workspace offline/reconnect/concurrent-writer/delete/tombstone acceptance; retain an explicit local write boundary until then |
+| Cloud | Deferred by the user; discovery reports local/Cloud metadata and the writer rejects Cloud registrations | Outside the current local implementation scope |
 
 Evidence is in `../Research/Format/ProPresenter22Reader.md`. The official Swift
 binding decoded all 385 retained native snapshots, with exact deep-value agreement
@@ -27,15 +27,21 @@ and 22-profile bundles importing successfully into the pinned 22 build, a
 committed native metadata edit, and native re-export with retained nested IDs.
 The two generated MISC test presentations remain available for review.
 
-Local validation: full Swift suite (276 core + 78 CLI tests; eight existing known
+Local validation: full Swift suite (308 core + 78 CLI + one harness test; eight existing known
 rendering issues), CLI acceptance, SwiftFormat/SwiftLint, protobuf resource
 freshness, and bundled four-document/99-variation Theme freshness pass. The Theme
 generator now fixes only AppKit's informational RTF writer-version header: all
 140 host-generated differences were exactly that header; the shipped asset and
 reference images remain unchanged. The native harness adds a separate passing
-negative-control test. x86_64 compilation passes. An x86_64 runtime smoke test
+negative-control test and the pinned positive local metadata experiment. x86_64 compilation passes. An x86_64 runtime smoke test
 can use Rosetta; a separate Intel host is not required and this check does not
 block local implementation.
+
+`../Research/Format/ProPresenter22LocalPersistence.md` records the first qualified
+local metadata commit: exact native update/receipt hash, only one affected shared
+stream, native restart/continued editing/re-export, integrated writer WAL setup,
+and a byte-identical real no-op. No production CLI native edit command is exposed
+by the contributor experiment.
 
 The existing native-exported 21 fixtures, reference images, documentation and
 tests are the 21 regression baseline. Reuse them rather than requiring a new 21

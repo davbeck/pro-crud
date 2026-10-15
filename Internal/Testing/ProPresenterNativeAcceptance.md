@@ -18,15 +18,18 @@ Cloud acceptance is independent of these local experiments.
 
 `swift run NativeTestHarness --profile /path/profile.json --output /path/run.json`
 is a contributor-only preflight for the initial offline persistence experiments.
-It is not embedded in the document CLI or its installed skills. It never
-launches applications, stops processes, changes helper installations, edits a
-workspace, or treats a successful preflight as a passed acceptance experiment.
+It is not embedded in the document CLI or its installed skills. Preflight alone never launches applications, stops processes, changes helper
+installations, edits document rows, or substitutes for native acceptance. The
+explicit metadata experiment described below is a separate write action.
 
 Create a private profile in the isolated account. Pin the actual app path,
 version/build and signing team; use the registered workspace identity and exact
-root, not a display name. Obtain the API endpoint from that instance's Network
-settings and the Syphon source UUID with `snap-syphon list --json` before
-stopping the app/helper. A 22 profile has these fields (replace placeholders):
+root, not a display name. When API/output checks are relevant, obtain the API endpoint from that
+instance's Network settings and the Syphon source UUID with `snap-syphon list
+--json` before stopping the app/helper. Omit `apiBaseURL` when no endpoint check
+is selected; omit both Syphon fields when no Syphon output is configured. The
+manifest records these checks as not applicable. Metadata-only experiments do
+not require configuring an API server or screen output. A 22 profile has these fields (replace placeholders):
 
 ```json
 {
@@ -62,13 +65,47 @@ workspace and checks native registration/identity/local status. Mismatches write
 a failure manifest without inspecting workspace storage. Invalid/unreadable
 profiles remain command errors. Never automate helper deletion as a retry.
 
-Only the rejection path has been exercised here: a deliberately mismatched
-account/application emits a failure manifest, leaves sentinel workspace bytes
-unchanged, and does not query its API or inspect its workspace. Passing profiles
-must be exercised before describing this harness as qualified for that experiment
-environment. The harness itself does not require a new test account for work
-confined to the current authorized 22 test host. Shared ports/services and account
-isolation need cross-login acceptance only for cross-version native tests.
+The rejection path leaves sentinel workspace bytes unchanged and never queries
+an API or inspects the workspace after account/application mismatches. A passing
+local 22 profile has now been exercised in the authorized account against the
+new disposable **ProCRUD Local Persistence Test** workspace, with exact app
+build/signature and helper hash, every native writer stopped, and a local registry
+entry. No new macOS account or Cloud connection was needed. This does not qualify
+cross-version helper isolation.
+
+## Local metadata experiment
+
+After the pinned process/account/build checks, this contributor-only command
+applies targeted Loro operations and commits the new snapshot/vector/integrity
+columns with an operation receipt in one SQLite transaction:
+
+```sh
+swift run NativeTestHarness --profile /private/local-test-profile.json \
+  --output /private/local-test-run.json \
+  --document-id DISPOSABLE_PRESENTATION_UUID \
+  --set-copyright-title 'Local persistence acceptance'
+```
+
+Use only an explicitly disposable local Presentation. No production CLI native
+edit command is exposed by this experiment. The writer checks local registration
+and stopped writers again before commit, rejects changed source revisions, and
+preserves client streams, logical location, shared-version bookkeeping and all
+unrelated fields/history. Retries recognize their existing operation receipt;
+a matching value creates no patch or receipt. Cloud roots are rejected.
+
+Explicit writer setup may initialize SQLite's normal WAL sidecars while holding
+ordinary SQLite handles. This is necessary for the observed closed-WAL case on
+this host; it does not bypass SQLite locks or run a migration/repair. Ordinary
+inspection retains its read-only opening policy. Preflight-only runs may need a
+readable SQLite backup when the stopped source cannot be opened read-only.
+No helper installation is deleted or replaced. The tested launchd-managed helper
+restarted after SIGTERM; a controlled `launchctl bootout` stopped the submitted
+job, and opening the pinned app restored the service automatically.
+
+See `../Research/Format/ProPresenter22LocalPersistence.md` for the actual native
+restart, continued edit, re-export, exact affected-row comparison and fixtures.
+This evidence qualifies the tested metadata operation. Structure, membership,
+media and other native edit families remain separate implementation work.
 
 ## Native experiment record
 

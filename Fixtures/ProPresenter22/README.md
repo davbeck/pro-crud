@@ -31,3 +31,16 @@ deleted. No other workspace streams or registry/account data are included.
 Its native root identity is `48e32307-7a5a-56cc-8cca-0bc82d6079c1`. Tests use
 this independent native snapshot to validate the official Swift Loro binding,
 then construct disposable SQLite envelopes for integrity and transaction cases.
+
+`Native/Persistence/` contains native before/after snapshots, vectors, the exact
+native update and receipt for one CCLI title edit on the independently authored
+acceptance probe. `Native/schema-9.sql` captures table/index definitions only.
+`Native/LocalCommit/` records the separate disposable local workspace experiment:
+original history, a CLI metadata commit, a continued native edit after restart,
+the durable receipt, and native Presentation re-export. These snapshots contain
+only the owned rectangle presentation and its test metadata, including retained
+history; no other workspace documents or account data are included. The update
+hash must agree with its receipt, and the native continuation must extend the
+CLI-authored version vector. See
+`Internal/Research/Format/ProPresenter22LocalPersistence.md` for exact provenance
+and the deliberately limited metadata-write acceptance scope.

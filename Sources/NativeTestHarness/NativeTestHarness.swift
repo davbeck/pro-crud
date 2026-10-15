@@ -10,10 +10,16 @@ import ProCRUDCore
 struct NativeTestHarness: AsyncParsableCommand {
 	@Option(help: "JSON profile for an isolated macOS test account and pinned application.") var profile: String
 	@Option(help: "Run manifest path, written even when a preflight check fails.") var output: String
+	@Option(help: "Disposable native Presentation UUID for an offline metadata experiment.") var documentID: String?
+	@Option(help: "Experimental: commit this copyright title only after the pinned local/offline preflight passes. Requires --document-id.") var setCopyrightTitle: String?
 
 	func run() async throws {
 		let configuration = try JSONDecoder().decode(Profile.self, from: Data(contentsOf: URL(fileURLWithPath: profile)))
+		guard (documentID == nil) == (setCopyrightTitle == nil), documentID == nil || documentID.flatMap(UUID.init(uuidString:)) != nil else {
+			throw ValidationError("Provide both --document-id UUID and --set-copyright-title for an offline metadata experiment, or omit both for preflight only.")
+		}
 		var checks: [Check] = []
+		var notApplicableChecks: [String] = []
 		func check(_ name: String, _ passed: Bool, _ detail: String) {
 			checks.append(Check(name: name, passed: passed, detail: detail))
 		}
@@ -55,33 +61,47 @@ struct NativeTestHarness: AsyncParsableCommand {
 			let columns = line.split(maxSplits: 2, whereSeparator: \.isWhitespace)
 			guard columns.count == 3 else { return nil }
 			let path = String(columns[2])
-			guard path.contains("/Helpers/Workspaces/") || path == helperExecutable.path || URL(fileURLWithPath: path).lastPathComponent == "ProPresenter" else { return nil }
+			let name = URL(fileURLWithPath: path).lastPathComponent
+			guard path.contains("/Helpers/Workspaces/") || path == helperExecutable.path || name == "ProPresenter" || name.hasPrefix("ProPresenter Helper (") else { return nil }
 			return "uid \(columns[0]), pid \(columns[1]): \(path)"
 		}
 		check("offline-writers-stopped", processes.status == 0 && writers.isEmpty, writers.isEmpty ? "No ProPresenter UI/helper writers; other test sessions must also be stopped." : writers.joined(separator: "; "))
 
-		guard let api = URL(string: configuration.apiBaseURL), api.scheme == "http", api.host == "127.0.0.1", api.port != nil else {
-			throw ValidationError("apiBaseURL must explicitly identify an http://127.0.0.1:PORT test endpoint.")
+		let api: URL?
+		if let configuredAPI = configuration.apiBaseURL {
+			guard let url = URL(string: configuredAPI), url.scheme == "http", url.host == "127.0.0.1", url.port != nil else {
+				throw ValidationError("apiBaseURL must explicitly identify an http://127.0.0.1:PORT test endpoint.")
+			}
+			api = url
+		} else {
+			api = nil; notApplicableChecks.append("offline-api-stopped: no API endpoint configured")
+		}
+		guard (configuration.syphonSourceUUID == nil) == (configuration.snapSyphonExecutable == nil) else {
+			throw ValidationError("Provide both snapSyphonExecutable and syphonSourceUUID, or omit both when no Syphon output is configured.")
+		}
+		if let source = configuration.syphonSourceUUID, UUID(uuidString: source) == nil {
+			throw ValidationError("syphonSourceUUID must be a source UUID discovered with snap-syphon list --json.")
 		}
 		if checks.allSatisfy(\.passed) {
-			var request = URLRequest(url: api.appendingPathComponent("version"))
-			request.timeoutInterval = 2
-			do {
-				_ = try await URLSession.shared.data(for: request)
-				check("offline-api-stopped", false, "The configured API endpoint is still serving requests.")
-			} catch let error as URLError where error.code == .cannotConnectToHost {
-				check("offline-api-stopped", true, "Configured API endpoint is not listening.")
-			} catch {
-				check("offline-api-stopped", false, "Cannot prove the API is stopped: \(String(describing: error))")
+			if let api {
+				var request = URLRequest(url: api.appendingPathComponent("version"))
+				request.timeoutInterval = 2
+				do {
+					_ = try await URLSession.shared.data(for: request)
+					check("offline-api-stopped", false, "The configured API endpoint is still serving requests.")
+				} catch let error as URLError where error.code == .cannotConnectToHost {
+					check("offline-api-stopped", true, "Configured API endpoint is not listening.")
+				} catch { check("offline-api-stopped", false, "Cannot prove the API is stopped: \(String(describing: error))") }
 			}
-			guard UUID(uuidString: configuration.syphonSourceUUID) != nil else {
-				throw ValidationError("syphonSourceUUID must be a source UUID discovered with snap-syphon list --json before stopping the app.")
+			if let executable = configuration.snapSyphonExecutable, let source = configuration.syphonSourceUUID {
+				do {
+					let sources = try process(executable, ["list", "--json"])
+					let array = try JSONSerialization.jsonObject(with: Data(sources.text.utf8)) as? [Any]
+					check("offline-output-stopped", sources.status == 0 && array != nil && !sources.text.lowercased().contains(source.lowercased()), "Configured Syphon source must not be active during offline experiments.")
+				} catch { check("offline-output-stopped", false, String(describing: error)) }
+			} else {
+				notApplicableChecks.append("offline-output-stopped: no Syphon output configured")
 			}
-			do {
-				let sources = try process(configuration.snapSyphonExecutable, ["list", "--json"])
-				let array = try JSONSerialization.jsonObject(with: Data(sources.text.utf8)) as? [Any]
-				check("offline-output-stopped", sources.status == 0 && array != nil && !sources.text.lowercased().contains(configuration.syphonSourceUUID.lowercased()), "Configured Syphon source must not be active during offline experiments.")
-			} catch { check("offline-output-stopped", false, String(describing: error)) }
 		}
 
 		// Resolve storage only after process/account/build checks, before any
@@ -95,16 +115,34 @@ struct NativeTestHarness: AsyncParsableCommand {
 				if let expectedID = configuration.workspaceID {
 					check("workspace-identity", inspection.workspaceID?.lowercased() == expectedID.lowercased(), "Expected workspace \(expectedID).")
 				}
-				if configuration.storage == .nativeLoro {
+				if configuration.storage == .nativeLoro, checks.allSatisfy(\.passed) {
 					guard let registry = configuration.registryPath else { throw ValidationError("Native profiles require registryPath.") }
-					let entries = try WorkspaceRegistry.read(from: URL(fileURLWithPath: registry))
-					let matching = entries.filter { URL(fileURLWithPath: $0.root).resolvingSymlinksInPath() == root }
-					check("registered-local-workspace", matching.count == 1 && matching.first?.cloudID == nil && matching.first?.localID.lowercased() == inspection.workspaceID?.lowercased(), "Expected one matching local workspace registration. Cloud experiments require independent acceptance.")
+					if setCopyrightTitle != nil {
+						try NativeLocalWorkspaceWriter.withOfflineWriteAccess(to: root, registry: URL(fileURLWithPath: registry)) { _ in
+							check("registered-local-workspace", true, "Offline writer setup verified one matching local registration; Cloud writes are rejected.")
+						}
+					} else {
+						let entries = try WorkspaceRegistry.read(from: URL(fileURLWithPath: registry))
+						let matching = entries.filter { URL(fileURLWithPath: $0.root).resolvingSymlinksInPath() == root }
+						check("registered-local-workspace", matching.count == 1 && matching.first?.cloudID == nil && matching.first?.localID.lowercased() == inspection.workspaceID?.lowercased(), "Expected one matching local workspace registration. Cloud writes are rejected.")
+					}
 				}
 			} catch { check("workspace-inspection", false, String(describing: error)) }
 		}
+		var committedOperations: [NativeLocalCommitReceipt] = []
+		if let documentID, let id = UUID(uuidString: documentID), let title = setCopyrightTitle, checks.allSatisfy(\.passed) {
+			do {
+				guard configuration.storage == .nativeLoro, let registry = configuration.registryPath else { throw ValidationError("The metadata experiment requires a registered native local workspace.") }
+				committedOperations = try NativeLocalWorkspaceWriter.edit(.copyrightTitle(title), documentID: id, in: root, registry: URL(fileURLWithPath: registry))
+				if !committedOperations.isEmpty {
+					check("native-metadata-commit", true, "Committed targeted Loro operations and a durable receipt; native reopen/edit acceptance remains a separate check.")
+				} else {
+					check("native-metadata-no-op", true, "Value already matches; no history, database rows, or receipt were changed.")
+				}
+			} catch { check("native-metadata-commit", false, String(describing: error)) }
+		}
 		let manifest = Manifest(date: Date(), operatingSystem: ProcessInfo.processInfo.operatingSystemVersionString,
-		                        profile: configuration, checks: checks, workspace: storage, passed: checks.allSatisfy(\.passed))
+		                        profile: configuration, checks: checks, notApplicableChecks: notApplicableChecks, committedOperations: committedOperations, workspace: storage, passed: checks.allSatisfy(\.passed))
 		let encoder = JSONEncoder()
 		encoder.outputFormatting = [.prettyPrinted, .sortedKeys, .withoutEscapingSlashes]
 		encoder.dateEncodingStrategy = .iso8601
@@ -144,9 +182,9 @@ private struct Profile: Codable {
 	var helperRoot: String
 	var helperExecutable: String
 	var helperSHA256: String
-	var apiBaseURL: String
-	var snapSyphonExecutable: String
-	var syphonSourceUUID: String
+	var apiBaseURL: String?
+	var snapSyphonExecutable: String?
+	var syphonSourceUUID: String?
 }
 
 private struct Check: Codable {
@@ -160,6 +198,8 @@ private struct Manifest: Encodable {
 	var operatingSystem: String
 	var profile: Profile
 	var checks: [Check]
+	var notApplicableChecks: [String]
+	var committedOperations: [NativeLocalCommitReceipt]
 	var workspace: WorkspaceInspection?
 	var passed: Bool
 }

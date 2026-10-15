@@ -17,13 +17,22 @@ Control the local ProPresenter UI with `node_repl` and `@oai/sky`, then validate
 
 ## Versioned native acceptance
 
-For 21.4/22 compatibility experiments, follow
-`Internal/Testing/ProPresenterNativeAcceptance.md` and run the contributor-only
-`NativeTestHarness` in the selected isolated test account before initial offline
-persistence work. Pin the app path/build/signature, account-local helper binary
-hash, exact workspace root/identity, API endpoint and discovered Syphon source.
-A successful preflight is not native acceptance. Do not delete or replace
-helpers as an automatic retry, and do not run both test sessions concurrently.
+For local 22 experiments, use the authorized test account and an explicitly
+disposable local workspace. Follow `Internal/Testing/ProPresenterNativeAcceptance.md`
+and run the contributor-only `NativeTestHarness` before initial offline writes.
+Pin the app path/build/signature, helper hash/ownership, workspace root/identity
+and local registration; stop every actual UI/helper writer. API and Syphon
+checks apply when selected/configured; metadata-only tests do not require
+creating either service. A successful preflight does not replace native reopen,
+continued edit, re-export or rendering acceptance.
+
+The explicit contributor metadata experiment may initialize normal SQLite WAL
+sidecars and commit a targeted Loro edit. Ordinary preflight/inspection does not
+automatically edit document rows. Never delete or replace helpers as a retry.
+The tested launchd helper needs its submitted job stopped for offline work;
+relaunching the pinned app restored it. Verify that restoration. Use isolated
+21/22 accounts when actually switching app versions; new accounts are not a
+prerequisite for tests against existing fixtures or the authorized local 22 host.
 
 Launch the pinned app by its absolute bundle path after offline experiments,
 then verify its actual version/build and selected workspace in the UI. When
