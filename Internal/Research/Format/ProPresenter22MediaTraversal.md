@@ -96,3 +96,20 @@ transactions remain unqualified. Existing rendering references are unchanged.
 Full suite: **404 core + 92 CLI + one harness test pass**, with the same nine
 tracked rendering issues. SwiftFormat, SwiftLint and descriptor resource
 freshness pass.
+
+## Authoritative locator precedence
+
+The pinned `graphicsData.proto` source comments explicitly define the reader
+order: a selected `SourceInfo` supersedes type-specific `FileProperties`; the
+root `Media.url` is read only when neither is present. The root URL continues
+to be written for compatibility. A SourceInfo message with no selected oneof
+type does not select a source. An explicitly selected empty file/HLS source,
+or present empty legacy FileProperties, suppresses the older fallback.
+
+`MediaReference.activeLocators` now exposes that selection independently from
+all stored `locators`. Inventory resolves and hashes only the active source,
+so a stale missing fallback does not invalidate a present current asset. HLS
+is classified by its selected source even when its URL is absent. Tests cover
+all three precedence levels, empty selections, stale remote root URLs, and
+current file availability while retaining superseded paths. No locator bytes,
+identity, native history or media store is changed.

@@ -67,13 +67,13 @@ public struct NativeMediaInventory: Encodable, Sendable {
 				for reference in try stream.mediaReferences() {
 					var files: [File] = []
 					var diagnostics = Self.identityDiagnostics(reference)
-					if reference.locators.isEmpty, reference.dependencyKind == .file {
+					if reference.activeLocators.isEmpty, reference.dependencyKind == .file {
 						diagnostics.append("No file locator in the document occurrence.")
 					}
-					if reference.locators.isEmpty, [.remoteStream, .webContent].contains(reference.dependencyKind) {
+					if reference.activeLocators.isEmpty, [.remoteStream, .webContent].contains(reference.dependencyKind) {
 						diagnostics.append("No URL in the stored runtime source.")
 					}
-					for locator in reference.locators where reference.dependencyKind == .file {
+					for locator in reference.activeLocators where reference.dependencyKind == .file {
 						do {
 							let url = try Self.resolve(locator, workspaceRoot: snapshot.root)
 							let file: File

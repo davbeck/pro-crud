@@ -57,6 +57,9 @@ public struct MediaReference: Codable, Sendable, Equatable {
 	public let kind: String?
 	public let dependencyKind: DependencyKind
 	public let locators: [Locator]
+	/// Locators selected by native SourceInfo → FileProperties → root URL
+	/// precedence. Superseded values remain in `locators` for inspection.
+	public let activeLocators: [Locator]
 	public let hasProvider: Bool
 
 	public init(media: Rv_Data_Media, path: String = "/") throws {
@@ -74,43 +77,63 @@ public struct MediaReference: Codable, Sendable, Equatable {
 		let type = active.flatMap { wire in types.first { $0.number == wire.number } }
 		kind = type?.protoName
 		var locators: [Locator] = []
+		var selected: [Locator]?
+		var sourceIsHLS = false
 		if media.hasURL {
 			locators.append(.init(field: "url", url: media.url))
 		}
 		if let type, let name = type.typeName, let properties = try root.message(type.number, oneofFields: Set(types.map(\.number))) {
 			let fields = try schema.message(named: name).fieldsByName
-			if let field = fields["file"], let file = try properties.message(field.number), let url = try file.message(1) {
-				try locators.append(.init(field: "\(type.protoName)/file/local_url", url: Rv_Data_URL(serializedBytes: url.data)))
+			if let field = fields["file"], let file = try properties.message(field.number) {
+				selected = []
+				if let url = try file.message(1) {
+					let locator = try Locator(field: "\(type.protoName)/file/local_url", url: Rv_Data_URL(serializedBytes: url.data))
+					locators.append(locator)
+					selected = [locator]
+				}
 			}
 			if let field = fields["source"], let source = try properties.message(field.number) {
 				// SourceType is a oneof: a later file/HLS field selects its type.
 				switch source.fields.last(where: { $0.number == 1 || $0.number == 2 })?.number {
 				case 1:
+					selected = []
 					if let file = try source.message(1, oneofFields: [1, 2]), let url = try file.message(1) {
-						try locators.append(.init(field: "\(type.protoName)/source/file/url", url: Rv_Data_URL(serializedBytes: url.data)))
+						let locator = try Locator(field: "\(type.protoName)/source/file/url", url: Rv_Data_URL(serializedBytes: url.data))
+						locators.append(locator)
+						selected = [locator]
 					}
 				case 2:
+					selected = []
+					sourceIsHLS = true
 					if let hls = try source.message(2, oneofFields: [1, 2]), let url = try hls.string(1) {
-						locators.append(.init(field: "\(type.protoName)/source/hls/url", remote: url))
+						let locator = Locator(field: "\(type.protoName)/source/hls/url", remote: url)
+						locators.append(locator)
+						selected = [locator]
 					}
 				default: break
 				}
 			}
 			if type.protoName == "hls_stream", let url = try properties.string(5) {
-				locators.append(.init(field: "hls_stream/url", remote: url))
+				let locator = Locator(field: "hls_stream/url", remote: url)
+				locators.append(locator)
+				selected = [locator]
 			}
 			if type.protoName == "web_content", let url = try properties.message(2) {
-				try locators.append(.init(field: "web_content/url", url: Rv_Data_URL(serializedBytes: url.data)))
+				let locator = try Locator(field: "web_content/url", url: Rv_Data_URL(serializedBytes: url.data))
+				locators.append(locator)
+				selected = [locator]
 			}
 		}
 		self.locators = locators
+		let rootFallback = ["live_video", "hls_stream", "web_content"].contains(kind ?? "") ? [] : locators.filter { $0.field == "url" }
+		activeLocators = selected ?? rootFallback
 		if kind == "live_video" {
 			dependencyKind = .liveDevice
-		} else if kind == "hls_stream" || locators.contains(where: { $0.remote != nil }) {
+		} else if kind == "hls_stream" || sourceIsHLS {
 			dependencyKind = .remoteStream
 		} else if kind == "web_content" {
 			dependencyKind = .webContent
-		} else if locators.contains(where: { locator in
+		} else if activeLocators.contains(where: { locator in
 			guard locator.localPath == nil, locator.relative == nil,
 			      let string = locator.absolute, let url = URL(string: string), url.scheme != nil
 			else { return false }

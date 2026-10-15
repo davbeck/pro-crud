@@ -452,7 +452,12 @@ and shared/client Workspace configuration graphs. This includes native macro
 and prop collections and media inside Workspace masks; it does not export those
 configuration documents. Every occurrence reports its document ID and stream
 scope. It distinguishes reference, asset and
-container identities, identity schema strings, and each stored locator. Exact
+container identities, identity schema strings, and each stored locator.
+`activeLocators` identifies the selected source: a selected `SourceInfo` file or
+HLS source takes precedence over type-specific `FileProperties`, which takes
+precedence over the root URL. Superseded locators remain inspectable but are not
+resolved or hashed as current dependencies. An explicitly selected empty source
+does not fall back to a stale URL. Exact
 ROOT_SHOW paths resolve against the selected workspace; a same-basename file
 does not substitute for a missing asset. Optional hashing checks local content
 agreement within a 30-second budget. Remote/live URLs are reported without

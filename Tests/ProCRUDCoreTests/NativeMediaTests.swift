@@ -8,6 +8,77 @@ import Testing
 
 @Suite("Native media identities and file locators")
 struct NativeMediaTests {
+	@Test func sourceInfoOverridesStaleFileAndRootLocatorsWithoutDiscardingThem() throws {
+		func field(_ number: Int, _ data: Data) -> Data {
+			ProtobufJSONPatcher.WireField.lengthDelimited(number: number, payload: data).raw
+		}
+		func url(_ path: String) throws -> Data {
+			var url = Rv_Data_URL(); url.relativePath = path; return try url.serializedData()
+		}
+		let root = try url("Missing/root.png")
+		let oldFile = try field(1, url("Missing/old.png"))
+		let selected = try field(1, field(1, url("Media/Assets/SharedRectangle.png")))
+		let mediaBytes = try field(1, Rv_Data_UUID.with { $0.string = UUID().uuidString }.serializedData()) + field(2, root) + field(5, field(2, oldFile) + field(3, selected)) + field(10, Rv_Data_UUID.with { $0.string = UUID().uuidString }.serializedData()) + field(11, Data("1".utf8))
+		let reference = try MediaReference(media: Rv_Data_Media(serializedBytes: mediaBytes))
+		#expect(reference.locators.map(\.field) == ["url", "image/file/local_url", "image/source/file/url"])
+		#expect(reference.activeLocators.map(\.field) == ["image/source/file/url"])
+		#expect(reference.dependencyKind == .file)
+		func nativeURL(_ path: String) -> NativeWorkspaceValue {
+			.map(["Storage": .map(["__tag": .string("relative_path"), "relative_path": .string(path)])])
+		}
+		let source: NativeWorkspaceValue = .map(["SourceType": .map([
+			"__tag": .string("file"), "file": .map(["url": nativeURL("Media/Assets/SharedRectangle.png")]),
+		])])
+		let image: NativeWorkspaceValue = .map([
+			"file": .map(["local_url": nativeURL("Missing/old.png")]), "source": source,
+		])
+		let media: NativeWorkspaceValue = try .map([
+			"uuid": .string(reference.referenceID), "asset_id": .string(#require(reference.assetID)),
+			"identity_schema_version": .string("1"), "url": nativeURL("Missing/root.png"),
+			"TypeProperties": .map(["__tag": .string("image"), "image": image]),
+		])
+		let action: NativeWorkspaceValue = .map([
+			"uuid": .string(UUID().uuidString), "type": .integer(13),
+			"ActionTypeData": .map(["__tag": .string("media"), "media": .map(["element": media])]),
+		])
+		let document = LoroDoc()
+		try document.getMap(id: "root").insert(key: "macros", v: loro(.list([.map(["actions": .list([action])])])))
+		let stream = try documentStream(document, kind: "Macros", scope: .shared)
+		let inventory = try NativeMediaInventory(snapshot: .init(root: interchange, workspaceID: UUID(), metadata: [:], streams: [stream]), hashFiles: true)
+		#expect(inventory.occurrences.first?.localFilesAvailable == true)
+		#expect(inventory.occurrences.first?.diagnostics.isEmpty == true)
+	}
+
+	@Test func explicitlySelectedEmptySourceAndLegacyFileDoNotFallBackToRootURL() throws {
+		func field(_ number: Int, _ data: Data) -> Data {
+			ProtobufJSONPatcher.WireField.lengthDelimited(number: number, payload: data).raw
+		}
+		var root = Rv_Data_URL(); root.absoluteString = "file:///stale.png"
+		for properties in [field(2, Data()), field(3, field(1, Data()))] {
+			let reference = try MediaReference(media: Rv_Data_Media(serializedBytes: field(2, root.serializedData()) + field(5, properties)))
+			#expect(reference.locators.count == 1)
+			#expect(reference.activeLocators.isEmpty)
+		}
+		let stream = try MediaReference(media: Rv_Data_Media(serializedBytes: field(2, root.serializedData()) + field(6, field(6, field(2, Data())))))
+		#expect(stream.dependencyKind == .remoteStream)
+		#expect(stream.activeLocators.isEmpty)
+	}
+
+	@Test func legacyFileOverridesRootWhenSourceHasNoSelectedType() throws {
+		func field(_ number: Int, _ data: Data) -> Data {
+			ProtobufJSONPatcher.WireField.lengthDelimited(number: number, payload: data).raw
+		}
+		var root = Rv_Data_URL(); root.absoluteString = "https://example.invalid/stale.png"
+		var file = Rv_Data_URL(); file.relativePath = "Media/current.png"
+		for source in [Data(), field(3, Data())] {
+			let properties = try field(2, field(1, file.serializedData())) + source
+			let reference = try MediaReference(media: Rv_Data_Media(serializedBytes: field(2, root.serializedData()) + field(5, properties)))
+			#expect(reference.locators.count == 2)
+			#expect(reference.activeLocators.map(\.relative) == ["Media/current.png"])
+			#expect(reference.dependencyKind == .file)
+		}
+	}
+
 	@Test func configurationPropsMacrosStageAndTemplatesTraverseOwnedMediaAndRejectUnknownDependencies() throws {
 		let source = try #require(snapshot(root: interchange).streams.first)
 		let cues = try source.decodedValue().object(at: "/").required("root", at: "/").object(at: "/root").required("cues", at: "/root").object(at: "/cues")
