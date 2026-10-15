@@ -202,23 +202,23 @@ private struct NativeInventory: Encodable {
 		workspaceID = snapshot.workspaceID
 		streams = snapshot.streams.map(\.identity)
 		if includeProjections {
-			projections = try snapshot.streams.filter { $0.identity.scope == .shared && ["Presentation", "Theme", "PlaylistLibrary", "PlaylistMedia", "PlaylistAudio"].contains($0.identity.kind) }.map { stream in
-				guard stream.identity.availability == .available else { return .init(documentID: stream.identity.documentID, issues: [], failure: "unavailable-local-content") }
+			projections = try snapshot.streams.filter(\.supportsProtobufProjection).map { stream in
+				guard stream.identity.availability == .available else { return .init(documentID: stream.identity.documentID, scope: stream.identity.scope, issues: [], failure: "unavailable-local-content") }
 				do {
-					if stream.identity.kind.hasPrefix("Playlist") {
+					if stream.identity.scope == .shared, ["PlaylistLibrary", "PlaylistMedia", "PlaylistAudio"].contains(stream.identity.kind) {
 						let client = snapshot.streams.first { $0.identity.documentID == stream.identity.documentID && $0.identity.scope == .client }
 						let projection = try NativePlaylistProjection(shared: stream, client: client)
 						let issues = projection.unappliedClientNodeIDs.map { id in
 							NativeProjectionIssue(path: "/client/root/node_states/\(id.uuidString)", message: "Client expansion state has no matching shared playlist/group; retained in the native source.")
 						}
-						return .init(documentID: stream.identity.documentID, issues: issues, failure: nil)
+						return .init(documentID: stream.identity.documentID, scope: stream.identity.scope, issues: issues, failure: nil)
 					}
 					let projection = try stream.protobufProjection()
-					return .init(documentID: stream.identity.documentID, issues: projection.issues, failure: nil)
+					return .init(documentID: stream.identity.documentID, scope: stream.identity.scope, issues: projection.issues, failure: nil)
 				} catch let error as NativeProjectionError {
-					return .init(documentID: stream.identity.documentID, issues: error.issues, failure: nil)
+					return .init(documentID: stream.identity.documentID, scope: stream.identity.scope, issues: error.issues, failure: nil)
 				} catch let error as NativeSemanticError {
-					return .init(documentID: stream.identity.documentID, issues: [], failure: error.description)
+					return .init(documentID: stream.identity.documentID, scope: stream.identity.scope, issues: [], failure: error.description)
 				}
 			}
 		}
@@ -226,6 +226,7 @@ private struct NativeInventory: Encodable {
 
 	struct ProjectionStatus: Encodable {
 		let documentID: UUID
+		let scope: NativeWorkspaceStream.Scope
 		let issues: [NativeProjectionIssue]
 		let failure: String?
 	}

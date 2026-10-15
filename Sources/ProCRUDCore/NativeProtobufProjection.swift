@@ -51,28 +51,40 @@ public struct NativeProjectionError: Error, CustomStringConvertible, Sendable {
 }
 
 public extension NativeWorkspaceStream {
+	/// A kind/scope adapter exists; unavailable content or unmapped fields can
+	/// still prevent a complete projection. This does not authorize export/edit.
+	var supportsProtobufProjection: Bool {
+		(identity.scope == .shared && ["Presentation", "Theme", "PlaylistLibrary", "PlaylistMedia", "PlaylistAudio"].contains(identity.kind)) || NativeConfigurationAdapter.message(for: identity) != nil
+	}
+
 	func protobufProjection() throws -> NativeProtobufProjection {
-		try NativeProtobufProjection.read(identity: identity, source: decodedValue())
+		if identity.scope == .shared, ["PlaylistLibrary", "PlaylistMedia", "PlaylistAudio"].contains(identity.kind) {
+			let projection = try NativePlaylistProjection(shared: self)
+			return try .init(identity: identity, source: decodedValue(), messageType: Rv_Data_PlaylistDocument.protoMessageName, protobuf: projection.document.serializedData(), issues: [], retainedMetadataPaths: [])
+		}
+		return try NativeProtobufProjection.read(identity: identity, source: decodedValue())
 	}
 }
 
 extension NativeProtobufProjection {
 	static func read(identity: NativeWorkspaceStream.Identity, source: NativeWorkspaceValue) throws -> Self {
-		guard identity.scope == .shared else { throw NativeSemanticError.invalidValue(path: identity.documentID.uuidString, expected: "shared content stream; client state is not an interchange document") }
 		let root = try source.object(at: "/").required("root", at: "/")
 		let message: String
 		let adapted: NativeWorkspaceValue
-		switch identity.kind {
-		case "Presentation":
+		switch (identity.kind, identity.scope) {
+		case ("Presentation", .shared):
 			message = Rv_Data_Presentation.protoMessageName
 			guard try root.object(at: "/root").required("uuid", at: "/root").uuid(at: "/root/uuid") == identity.documentID else {
 				throw NativeSemanticError.invalidValue(path: "/root/uuid", expected: "native stream identity \(identity.documentID)")
 			}
 			adapted = try NativeInterchangeAdapter.presentation(root)
-		case "Theme":
+		case ("Theme", .shared):
 			message = Rv_Data_Template.Document.protoMessageName
 			adapted = root
-		default: throw NativeSemanticError.invalidValue(path: identity.documentID.uuidString, expected: "Presentation or Theme stream")
+		default:
+			guard let type = NativeConfigurationAdapter.message(for: identity) else { throw NativeSemanticError.invalidValue(path: identity.documentID.uuidString, expected: "mapped native document kind and scope") }
+			message = type
+			adapted = try message == "rv.data.ProPresenterWorkspace" ? NativeConfigurationAdapter.workspace(root) : root
 		}
 		var encoder = try NativeProtobufEncoder(schema: .bundled(version: .v22))
 		let data = try encoder.encode(adapted, message: message, path: "/root")
@@ -159,11 +171,15 @@ struct NativeProtobufEncoder {
 					continue
 				} else if case let .map(entries) = value, let mapKey = descriptor.nativeMapKey {
 					values = try entries.keys.sorted().map { key in
+						guard let nested = descriptor.typeName, let keyDescriptor = try schema.message(named: nested).fieldsByName[mapKey] else { throw NativeSemanticError.unsupportedNode(path: fieldPath, kind: "native map key \(mapKey) requires a qualified identity adapter") }
 						var entry = try entries.required(key, at: fieldPath).object(at: "\(fieldPath)/\(key)")
-						if let stored = entry.optional(mapKey), stored != .string(key) {
+						let encodedKey = try encodeField(.string(key), descriptor: keyDescriptor, path: "\(fieldPath)/\(key)")
+						if let stored = entry.optional(mapKey), try encodeField(stored, descriptor: keyDescriptor, path: "\(fieldPath)/\(key)/\(mapKey)") != encodedKey {
 							throw NativeSemanticError.invalidValue(path: "\(fieldPath)/\(key)", expected: "map key matching \(mapKey)")
 						}
-						entry[mapKey] = .string(key)
+						if entry.optional(mapKey) == nil {
+							entry[mapKey] = .string(key)
+						}
 						return .map(entry)
 					}
 				} else if case let .map(entries) = value, let nested = descriptor.typeName, try schema.message(named: nested).isMapEntry {

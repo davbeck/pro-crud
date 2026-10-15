@@ -31,7 +31,10 @@ For native storage, use `workspace inventory ROOT` for stream identities and
 availability, and `workspace dump ROOT` for typed diagnostic Loro content.
 Use `workspace contents ROOT` for library references, presentation/group and
 arrangement order, and playlist trees. `workspace inventory ROOT --projections`
-checks Presentation/Theme materialization and native playlist protobuf views.
+checks mapped Presentation/Theme, playlist and configuration views, including
+independent client streams. Statuses include document ID and scope. Unknown
+fields and unavailable content remain explicit; this does not enable
+configuration export/editing.
 Export a standard playlist and its media-free Presentation dependencies with
 `workspace export-playlist ROOT --playlist PLAYLIST_NODE_UUID --output PATH`.
 Select the tree node UUID from `workspace contents`; repeated links and hidden

@@ -15,6 +15,10 @@ Native workspaces contain `DocumentStore/workspace-v1.sqlite3` and storage/ID
 markers. `workspace inventory ROOT` captures a consistent read-only SQLite
 snapshot including committed WAL content, validates schema 9 and stream
 identities/checksums, and reports shared/client streams and unavailable content.
+With `--projections`, inventory checks the mapped document/configuration roots
+and reports each document ID and scope independently, including client state.
+Unknown fields and unavailable content prevent a complete projection. This
+diagnostic view does not enable configuration export or editing.
 `workspace dump ROOT [--stream UUID] [--scope shared|client]` decodes native
 snapshots with the pinned official Loro Swift binding. Its typed diagnostic
 values preserve binary data as base64. They are not protobuf JSON and cannot
@@ -462,8 +466,11 @@ is checked independently. Traversal also covers shared macros, props, stage
 layouts, playlist templates and messages, plus the independent client messages
 and shared/client Workspace configuration graphs. This includes native macro
 and prop collections and media inside Workspace masks; it does not export those
-configuration documents. Every occurrence reports its document ID and stream
-scope. It distinguishes reference, asset and
+configuration documents. Other mapped roots include calendar, CCLI, clear
+groups, communication devices, groups/labels, key mappings, library data, test
+patterns and shared/client timers. Non-Media URL/reference roles are not file
+assets in this report. Populated oneof-keyed KeyMappings remain unqualified.
+Every occurrence reports its document ID and stream scope. It distinguishes reference, asset and
 container identities, identity schema strings, and each stored locator.
 `activeLocators` identifies the selected source: a selected `SourceInfo` file or
 HLS source takes precedence over type-specific `FileProperties`, which takes

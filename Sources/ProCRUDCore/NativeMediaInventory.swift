@@ -119,7 +119,7 @@ public struct NativeMediaInventory: Encodable, Sendable {
 	private static func supports(_ identity: NativeWorkspaceStream.Identity) -> Bool {
 		["PlaylistLibrary", "PlaylistMedia", "PlaylistAudio"].contains(identity.kind) ||
 			(identity.scope == .shared && ["Presentation", "Theme"].contains(identity.kind)) ||
-			NativeMediaDocumentAdapter.message(for: identity) != nil
+			NativeConfigurationAdapter.message(for: identity) != nil
 	}
 
 	private static func identityDiagnostics(_ reference: MediaReference) -> [String] {
@@ -180,18 +180,10 @@ public extension NativeWorkspaceStream {
 	/// Client playlist state is inspected independently; it is never merged into
 	/// a shared tree or treated as an alternate source of content.
 	func mediaReferences() throws -> [MediaReference] {
-		if identity.scope == .shared, ["Presentation", "Theme"].contains(identity.kind) {
+		if supportsProtobufProjection, !(["PlaylistLibrary", "PlaylistMedia", "PlaylistAudio"].contains(identity.kind) && identity.scope == .shared) {
 			let projection = try protobufProjection()
 			try projection.requireComplete()
 			return try MediaReference.collect(protobuf: projection.protobuf, messageType: projection.messageType)
-		}
-		if let message = NativeMediaDocumentAdapter.message(for: identity) {
-			let root = try decodedValue().object(at: "/").required("root", at: "/")
-			var encoder = try NativeProtobufEncoder(schema: .bundled(version: .v22))
-			let value = try message == "rv.data.ProPresenterWorkspace" ? NativeMediaDocumentAdapter.workspace(root) : root
-			let data = try encoder.encode(value, message: message, path: "/root")
-			guard encoder.issues.isEmpty else { throw NativeProjectionError(issues: encoder.issues) }
-			return try MediaReference.collect(protobuf: data, messageType: message)
 		}
 		guard ["PlaylistLibrary", "PlaylistMedia", "PlaylistAudio"].contains(identity.kind) else {
 			throw NativeSemanticError.unsupportedNode(path: identity.documentID.uuidString, kind: "media traversal of \(identity.kind)/\(identity.scope)")
@@ -230,9 +222,9 @@ public extension NativeWorkspaceStream {
 	}
 }
 
-/// Read-only media traversal of independently scoped native document roots.
+/// Read-only encoding of independently scoped native configuration roots.
 /// This does not export or reconstruct the Workspace/configuration documents.
-enum NativeMediaDocumentAdapter {
+enum NativeConfigurationAdapter {
 	static func message(for identity: NativeWorkspaceStream.Identity) -> String? {
 		switch (identity.kind, identity.scope) {
 		case ("Workspace", .shared): "rv.data.ProPresenterWorkspace"
@@ -243,6 +235,19 @@ enum NativeMediaDocumentAdapter {
 		case ("Stage", .shared): "rv.data.Stage.Document"
 		case ("Messages", .shared): "rv.data.MessageDocument"
 		case ("Messages", .client): "rv.data.MessageLocalDocument"
+		case ("Calendar", .shared): "rv.data.Calendar"
+		case ("Ccli", .shared): "rv.data.CCLIDocument"
+		case ("ClearGroups", .shared): "rv.data.ClearGroupsDocument"
+		case ("CommunicationDevices", .shared): "rv.data.ProPresenterCommunications"
+		case ("CommunicationDevices", .client): "rv.data.ProPresenterLocalCommunications"
+		case ("Groups", .shared): "rv.data.ProGroupsDocument"
+		case ("KeyMappings", .shared): "rv.data.KeyMappingDocument"
+		case ("Labels", .shared): "rv.data.ProLabelsDocument"
+		case ("LibraryData", .shared): "rv.data.LibraryTreeDocument"
+		case ("TestPatterns", .shared), ("TestPatterns", .client): "rv.data.TestPatternDocument"
+		case ("Timers", .shared): "rv.data.TimersDocument"
+		case ("Timers", .client): "rv.data.TimersLocalDocument"
+		case ("PlaylistLibrary", .client), ("PlaylistMedia", .client), ("PlaylistAudio", .client): "rv.data.PlaylistLocalDocument"
 		default: nil
 		}
 	}

@@ -132,12 +132,12 @@ struct NativeMediaTests {
 
 	@Test func workspaceRolloutProjectionUsesTheDocumentedMaximumAndRetainsUnknownFields() throws {
 		let value: NativeWorkspaceValue = .map(["bundled_theme_rollout_sequence": .integer(0), "bundled_theme_rollout_sequence__version_3": .integer(3), "bundled_theme_rollout_sequence__version_1": .integer(1), "future_media": .string("unmapped")])
-		#expect(try NativeMediaDocumentAdapter.workspace(value) == .map(["bundled_theme_rollout_sequence": .integer(3), "future_media": .string("unmapped")]))
+		#expect(try NativeConfigurationAdapter.workspace(value) == .map(["bundled_theme_rollout_sequence": .integer(3), "future_media": .string("unmapped")]))
 		for invalid: NativeWorkspaceValue in [.integer(-1), .integer(Int64(UInt32.max) + 1), .string("3"), .null] {
-			#expect(throws: NativeSemanticError.self) { try NativeMediaDocumentAdapter.workspace(.map(["bundled_theme_rollout_sequence__version_3": invalid])) }
+			#expect(throws: NativeSemanticError.self) { try NativeConfigurationAdapter.workspace(.map(["bundled_theme_rollout_sequence__version_3": invalid])) }
 		}
 		let future: NativeWorkspaceValue = .map(["bundled_theme_rollout_sequence__version_unknown": .integer(1)])
-		#expect(try NativeMediaDocumentAdapter.workspace(future) == future)
+		#expect(try NativeConfigurationAdapter.workspace(future) == future)
 	}
 
 	@Test func liveDeviceAndRemoteSourcesDoNotRequireFileAssetsOrReportMissingFiles() throws {

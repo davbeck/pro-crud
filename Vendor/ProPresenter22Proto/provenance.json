@@ -3,7 +3,7 @@
   "applicationBuild": "369098875",
   "sourceBinary": "Contents/Frameworks/ProCore.framework/ProCore",
   "sourceSHA256": "793c50c3e28dc742a06eb6ac2029478843372a3667963302737e0f746d273e09",
-  "descriptorSetSHA256": "e14d58defe05e9a9f31a31ce5af10dcec624c829ec225d755e052d5cac8cefe8",
+  "descriptorSetSHA256": "12a01eb9618834ca51a782122088a6bf818922e596d380156b4435cf6526c8fa",
   "files": {
     "action.proto": {
       "offset": 127578325,
@@ -59,6 +59,11 @@
       "offset": 127388876,
       "length": 703,
       "sha256": "667dee7aa87ebc086fd04a1bfe4b52846ee7a8fb30bba0440df99edf34231965"
+    },
+    "communications.proto": {
+      "offset": 127741359,
+      "length": 13961,
+      "sha256": "f4de384031c294bc612ebb54c5d966427cf04d02374c5306c8a204adb5eba306"
     },
     "contentProvider.proto": {
       "offset": 127390006,
@@ -259,6 +264,11 @@
       "offset": 127503399,
       "length": 1047,
       "sha256": "299fdca8c330771bc12748c6174e4ee19f608575b7ef58ab417cf38ff46343f7"
+    },
+    "testPattern.proto": {
+      "offset": 127755987,
+      "length": 19138,
+      "sha256": "0d6da520cf160d256d9e252e5d52b6e29d06c64ba4a042108b46830d13f9230d"
     },
     "timedPlayback.proto": {
       "offset": 131084201,

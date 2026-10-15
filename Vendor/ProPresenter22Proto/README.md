@@ -2,7 +2,7 @@
 
 `schema.pb` is a versioned FileDescriptorSet from ProPresenter 22 beta build
 369098875's `Contents/Frameworks/ProCore.framework/ProCore`, inspected on macOS
-27.0.1. It contains 56 document/configuration descriptor files and their captured
+27.0.1. It contains 58 document/configuration descriptor files and their captured
 dependencies. It contains no workspace content, credentials, artwork or fonts.
 The standard `google/protobuf/descriptor.proto` dependency of custom options is
 provided by SwiftProtobuf/protoc rather than extracted from the application.
@@ -15,7 +15,7 @@ The original investigation found 5,634 copies of 165 descriptors with no
 structural variants. See `Internal/Research/Format/ProPresenter22CodeAudit.md`.
 This subset starts at presentation, Theme, playlist, Workspace, library,
 calendar, key mapping, timeline, CCLI, clear-group, label, recording, macro, prop,
-playlist-template and preference
+playlist-template, communications, test-pattern and preference
 documents, then includes their captured import closure.
 
 These descriptors are separate from `Vendor/ProPresenter7Proto` and its generated
