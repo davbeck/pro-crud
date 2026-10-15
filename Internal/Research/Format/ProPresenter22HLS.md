@@ -76,9 +76,11 @@ resource freshness checks pass.
 
 ## Remaining gates
 
-Native asset-identity raw writes/exports and media-store transactions remain
-gated. The bundling regression strips native-only identity fields to test its
-file-handling policy; it does not qualify a native-identity interchange adapter.
-Fresh-workspace import, root Media.hls_stream, other source variants, transport
-execution, playback markers, provider effects and migration require independent
-qualification. No ProPresenter 21 HLS runtime acceptance is claimed.
+At this initial checkpoint native asset-identity interchange remained gated;
+the subsequent [bounded HLS interchange profile](ProPresenter22HLSInterchange.md)
+qualifies target-22 preservation using fresh identities/URL and actual CLI
+bundle import/re-export. The first bundling regression deliberately strips
+native-only identity fields to isolate its file-handling policy. Media-store
+transactions, root Media.hls_stream, other source variants, transport execution,
+playback markers, provider effects and migration remain separate work.
+No ProPresenter 21 HLS runtime acceptance is claimed.

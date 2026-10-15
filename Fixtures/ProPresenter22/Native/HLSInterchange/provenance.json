@@ -1,0 +1,56 @@
+{
+  "application": "ProPresenter",
+  "version": "22",
+  "build": "369098875",
+  "osVersion": "27.0.1",
+  "date": "2026-10-15",
+  "source": "Native HLS standalone export with deliberately fresh URL and Presentation/reference/asset IDs; native fresh input import; production raw edit, native export and bundle; native CLI bundle import and independent Presentation re-export",
+  "constructedInput": "ConstructedInput.pro changes only source name/UUID, reference UUID, asset UUID and HLS URL of HLSStream/NativeStandalone.pro",
+  "sourceNativeSHA256": "8a25783516adc33221790d5594414174be4820981783180fad89369965e89115",
+  "inputIdentities": {
+    "presentationID": "26617457-AFE5-490C-A936-6190C5C9BE53",
+    "referenceID": "27DF8D09-57EB-4DB7-8041-799C74FF48FE",
+    "assetID": "5F7CC3BF-2920-489D-ABAE-2E531F18892D",
+    "url": "http://127.0.0.1:49765/stream.m3u8"
+  },
+  "nativeProbe": {
+    "documentID": "cf9668c3-03e2-4c31-b265-c0aa64f4528c"
+  },
+  "nativeCLIImport": {
+    "documentID": "e3592c20-2828-5688-827d-1242bf558e03"
+  },
+  "files": [
+    {
+      "path": "CLIEdited.pro",
+      "sha256": "993b8057452b3793ebb0b21314c8a26e086c989a579ab28cdc65ddd7d105a83d"
+    },
+    {
+      "path": "CLIExport.pro",
+      "sha256": "76732d41df186d01c400ed514617ab3cbe257f0caa15e9c8d2788733e1743bb0"
+    },
+    {
+      "path": "ConstructedInput.pro",
+      "sha256": "fa4c518ba113a4dc5d4adcebde5b4a6de52b28a1519d2f24ff7bc10d4ca1fc6b"
+    },
+    {
+      "path": "NativeReexport.pro",
+      "sha256": "d49606b026e0c517477a9999f76becec7ac524e82faf4af4ec17ccbae9242036"
+    },
+    {
+      "path": "native-cli-import.loro",
+      "sha256": "2e6f090824015bc9c768cdf7394117983a59eb9e75c6ccb3d8fcb52ccc364f89"
+    },
+    {
+      "path": "native-cli-import.vector",
+      "sha256": "737cdafc56ba677275b171cabb568015f6bce858dde8d319be99ef75099e6e28"
+    },
+    {
+      "path": "native-probe.loro",
+      "sha256": "036e436c94fbfcb2af456009679d5ccfabc5b973eebc822821eac834c8e90b01"
+    },
+    {
+      "path": "native-probe.vector",
+      "sha256": "79205172ae56fdd3d51d22277618be95c3ef71f7e6fa2b225a92c72ec90a8fd3"
+    }
+  ]
+}

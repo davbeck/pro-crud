@@ -9,8 +9,11 @@ both export paths and same-workspace reimport evidence. Runtime classification
 now excludes streams from file validation and file bundling/rebasing; all static
 render paths diagnose HLS explicitly, including media-only cues. A production
 metadata edit retains the entire media action and exact native-reopened history.
-Native asset-identity interchange/media-store writes and HLS playback remain
-unqualified. Cloud work remains deferred by the user.
+`../Research/Format/ProPresenter22HLSInterchange.md` qualifies preserving the
+closed schema-1 video-source HLS action in target-22 edits, native exports and
+bundles, using fresh URL/asset import and actual CLI bundle import/re-export.
+Native media-store writes, other HLS variants and playback remain unqualified.
+Cloud work remains deferred by the user.
 
 | Plan area | Implemented | Remaining gate/work |
 | --- | --- | --- |

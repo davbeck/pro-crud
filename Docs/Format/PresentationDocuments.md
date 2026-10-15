@@ -184,8 +184,15 @@ selected asset. It does not modify the document.
 HLS sources are runtime dependencies. Strict file-media validation excludes
 them from file existence, filename-label and file-identity comparisons, including
 HLS entries in the Media registry. It does not fetch their URLs or verify stream
-availability. Native 22 asset-identity interchange remains subject to the target
-compatibility checks; recognizing a stream does not enable native media writes.
+availability.
+
+Target 22 supports preserving native schema-1 video-source HLS media actions in
+raw edits, native Presentation exports and bundles. The action must have valid
+occurrence/asset UUIDs and one HTTP(S) stream source, with no provider/container,
+file dependency, effect, transition or playback marker. Unknown fields/enums
+inside this action's media graph fail compatibility checks. Target 21 rejects
+this native representation. HLS fills, the separate root `hls_stream` variant,
+media-store construction and runtime playback remain unsupported.
 
 ## Cue Groups
 

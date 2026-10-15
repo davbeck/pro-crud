@@ -125,11 +125,18 @@ public enum DocumentCompatibility {
 			native22 = try .bundled(version: .v22)
 		}
 
-		mutating func inspect(_ data: Data, message: String, path: String, keyMapping: Bool = false) throws {
+		mutating func inspect(_ data: Data, message: String, path: String, keyMapping: Bool = false, nativeHLS: Bool = false) throws {
+			var nativeHLS = nativeHLS
+			if message == "rv.data.Action.MediaType", target == .v22 {
+				nativeHLS = try NativeHLSInterchange.qualifiesAction(data)
+			} else if message == "rv.data.Media" {
+				nativeHLS = try nativeHLS && NativeHLSInterchange.qualifiesMedia(data)
+			}
 			let selectedSchema: ProtobufSchema
-			switch message {
-			case "rv.data.TimedPlayback.Sequence", "rv.data.TimedPlayback.Sequence.SequenceItem": selectedSchema = native22
-			case "rv.data.CollectionElementType": selectedSchema = baseline21
+			switch (nativeHLS, message) {
+			case (true, _): selectedSchema = native22
+			case (_, "rv.data.TimedPlayback.Sequence"), (_, "rv.data.TimedPlayback.Sequence.SequenceItem"): selectedSchema = native22
+			case (_, "rv.data.CollectionElementType"): selectedSchema = baseline21
 			default: selectedSchema = schema
 			}
 			let descriptor = try selectedSchema.message(named: message)
@@ -150,23 +157,23 @@ public enum DocumentCompatibility {
 					append("key-mapping-parent-scope", path: "\(path)/parent_collection", unsupported: true, message: "The 21.4 mapping's parent scope is absent from the 22 CollectionElementTypeKey layout. Preserving those bytes does not preserve lookup scope.")
 					continue
 				}
-				if let feature = Self.nativeGraphs[message]?[wire.number] {
+				if let feature = Self.nativeGraphs[message]?[wire.number], !(nativeHLS && message == "rv.data.Media" && [10, 11].contains(wire.number)) {
 					append(feature, path: "\(path)/field[\(wire.number)]", unsupported: true,
 					       message: "This active 22 representation requires a qualified adapter. Export its compatibility representation from ProPresenter before editing or packaging it.")
 					continue
 				}
 				guard let field = known[wire.number] else {
-					append("unknown-field", path: "\(path)/field[\(wire.number)][index=\(index)]", unsupported: target == .v21,
+					append("unknown-field", path: "\(path)/field[\(wire.number)][index=\(index)]", unsupported: target == .v21 || nativeHLS,
 					       message: "Wire field \(wire.number) of \(message) is opaque. Its bytes can be preserved, but its behavior and dependencies are unqualified for the requested target.")
 					continue
 				}
 				let fieldPath = "\(path)/\(field.protoName)" + (field.isRepeated ? "[index=\(index)]" : "")
 				if field.isMessage, let nested = field.typeName, let payload = wire.payload {
-					try inspect(payload, message: nested, path: fieldPath, keyMapping: keyMapping || (message == "rv.data.KeyMapping" && (101 ... 106).contains(wire.number)))
+					try inspect(payload, message: nested, path: fieldPath, keyMapping: keyMapping || (message == "rv.data.KeyMapping" && (101 ... 106).contains(wire.number)), nativeHLS: nativeHLS)
 				} else if field.type == .enum, let type = field.typeName, let value = wire.varint,
-				          let values = enumValues(type), !values.contains(Int32(truncatingIfNeeded: value))
+				          let values = enumValues(type, nativeHLS: nativeHLS), !values.contains(Int32(truncatingIfNeeded: value))
 				{
-					append("unknown-enum-value", path: fieldPath, unsupported: target == .v21,
+					append("unknown-enum-value", path: fieldPath, unsupported: target == .v21 || nativeHLS,
 					       message: "Enum \(type) value \(value) has no qualified target behavior.")
 				}
 			}
@@ -187,8 +194,9 @@ public enum DocumentCompatibility {
 			"rv.data.Media": [9: "media-container-identity", 10: "media-asset-identity", 11: "media-identity-schema", 12: "hls-source", 13: "media-provider"],
 		]
 
-		private mutating func enumValues(_ name: String) -> Set<Int32>? {
-			if let cached = enumCache[name] {
+		private mutating func enumValues(_ name: String, nativeHLS: Bool = false) -> Set<Int32>? {
+			let cacheKey = "\(nativeHLS):\(name)"
+			if let cached = enumCache[cacheKey] {
 				return cached
 			}
 			func find(_ enums: [Google_Protobuf_EnumDescriptorProto], prefix: String) -> Set<Int32>? {
@@ -203,9 +211,9 @@ public enum DocumentCompatibility {
 				}
 				return nil
 			}
-			for file in schema.descriptorSet.file {
+			for file in (nativeHLS ? native22 : schema).descriptorSet.file {
 				if let values = find(file.enumType, prefix: file.package) ?? nested(file.messageType, prefix: file.package) {
-					enumCache[name] = values
+					enumCache[cacheKey] = values
 					return values
 				}
 			}

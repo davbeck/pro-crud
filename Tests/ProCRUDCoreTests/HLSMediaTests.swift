@@ -15,7 +15,8 @@ struct HLSMediaTests {
 			#expect(reference.assetID == "92C2701D-3874-4D50-8F8D-A2A52BEF730F")
 			#expect(reference.identitySchemaVersion == "1")
 			#expect(reference.activeLocators.map(\.remote) == ["http://127.0.0.1:61541/stream.m3u8"])
-			#expect(try !DocumentCompatibility.analyze(document(presentation)).canWrite)
+			#expect(try DocumentCompatibility.analyze(document(presentation), target: .v22).canWrite)
+			#expect(try !DocumentCompatibility.analyze(document(presentation), target: .v21).canWrite)
 		}
 	}
 
