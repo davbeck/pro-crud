@@ -15,6 +15,13 @@ bundles, using fresh URL/asset import and actual CLI bundle import/re-export.
 Native media-store writes, other HLS variants and playback remain unqualified.
 Cloud work remains deferred by the user.
 
+`../Research/Format/ProPresenter22MediaStore.md` reconstructs the current frozen
+native MediaStore from its manifest, checksum-verified SST tables and WAL, and
+retains selected native model evidence. All 78 current file occurrences have
+Reference models; one actual Theme occurrence's declared asset ID differs from
+its materialized association. Production asset-store reads/writes still require
+a bounded coherent backend and controlled native mutation qualification.
+
 | Plan area | Implemented | Remaining gate/work |
 | --- | --- | --- |
 | Storage boundary | Explicit-root storage inspection and explicit macOS userWorkspaces preference discovery with active/minimum-version hints kept separate from actual storage; native markers take precedence over leftovers; expanded exports distinguished; native access rejected in legacy readers/writers/Look/media/batch paths | Broader ambiguous/mixed fixture matrix |

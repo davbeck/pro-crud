@@ -29,3 +29,12 @@ remain release gates; ad-hoc signing does not satisfy those gates.
 The a659c5f universal rebuild also passes strict local ad-hoc signature
 verification, the full CLI acceptance script and all 385 retained native
 projections. This includes the menu-map adapter and unknown-oneof diagnostics.
+
+Checkpoint **153124d**, including group splitting and bounded native HLS
+interchange, builds both architectures in 137.30 seconds. After local ad-hoc
+hardened signing, strict codesign verification and full CLI/resource/skill
+acceptance pass. An explicit `workspace inventory --projections` reports all
+385 projections with **zero failures and zero issues**. Reference inspection
+still reports exactly two links and zero uninspected streams. This verifies the
+actual universal product, separately from the debug tests. The 727ede9 build
+also completed; 153124d supersedes it for this qualification.
