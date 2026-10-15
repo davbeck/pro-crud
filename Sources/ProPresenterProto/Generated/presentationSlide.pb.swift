@@ -8,7 +8,11 @@
 // For information on using the generated types, please see the documentation:
 //   https://github.com/apple/swift-protobuf/
 
+#if canImport(FoundationEssentials)
+import FoundationEssentials
+#else
 import Foundation
+#endif
 import SwiftProtobuf
 
 // If the compiler emits an error on this type, it is because this file
@@ -16,60 +20,60 @@ import SwiftProtobuf
 // incompatible with the version of SwiftProtobuf to which you are linking.
 // Please ensure that you are building against the same version of the API
 // that was used to generate this file.
-fileprivate struct _GeneratedWithProtocGenSwiftVersion: SwiftProtobuf.ProtobufAPIVersionCheck {
+fileprivate nonisolated struct _GeneratedWithProtocGenSwiftVersion: SwiftProtobuf.ProtobufAPIVersionCheck {
   struct _2: SwiftProtobuf.ProtobufAPIVersion_2 {}
   typealias Version = _2
 }
 
-public struct Rv_Data_PresentationSlide: @unchecked Sendable {
+public nonisolated struct Rv_Data_PresentationSlide: @unchecked Sendable {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
   // methods supported on all messages.
 
   public var baseSlide: Rv_Data_Slide {
-    get {return _storage._baseSlide ?? Rv_Data_Slide()}
+    get {_storage._baseSlide ?? Rv_Data_Slide()}
     set {_uniqueStorage()._baseSlide = newValue}
   }
   /// Returns true if `baseSlide` has been explicitly set.
-  public var hasBaseSlide: Bool {return _storage._baseSlide != nil}
+  public var hasBaseSlide: Bool {_storage._baseSlide != nil}
   /// Clears the value of `baseSlide`. Subsequent reads from it will return its default value.
   public mutating func clearBaseSlide() {_uniqueStorage()._baseSlide = nil}
 
   public var notes: Rv_Data_PresentationSlide.Notes {
-    get {return _storage._notes ?? Rv_Data_PresentationSlide.Notes()}
+    get {_storage._notes ?? Rv_Data_PresentationSlide.Notes()}
     set {_uniqueStorage()._notes = newValue}
   }
   /// Returns true if `notes` has been explicitly set.
-  public var hasNotes: Bool {return _storage._notes != nil}
+  public var hasNotes: Bool {_storage._notes != nil}
   /// Clears the value of `notes`. Subsequent reads from it will return its default value.
   public mutating func clearNotes() {_uniqueStorage()._notes = nil}
 
   public var templateGuidelines: [Rv_Data_AlignmentGuide] {
-    get {return _storage._templateGuidelines}
+    get {_storage._templateGuidelines}
     set {_uniqueStorage()._templateGuidelines = newValue}
   }
 
   public var chordChart: Rv_Data_URL {
-    get {return _storage._chordChart ?? Rv_Data_URL()}
+    get {_storage._chordChart ?? Rv_Data_URL()}
     set {_uniqueStorage()._chordChart = newValue}
   }
   /// Returns true if `chordChart` has been explicitly set.
-  public var hasChordChart: Bool {return _storage._chordChart != nil}
+  public var hasChordChart: Bool {_storage._chordChart != nil}
   /// Clears the value of `chordChart`. Subsequent reads from it will return its default value.
   public mutating func clearChordChart() {_uniqueStorage()._chordChart = nil}
 
   public var transition: Rv_Data_Transition {
-    get {return _storage._transition ?? Rv_Data_Transition()}
+    get {_storage._transition ?? Rv_Data_Transition()}
     set {_uniqueStorage()._transition = newValue}
   }
   /// Returns true if `transition` has been explicitly set.
-  public var hasTransition: Bool {return _storage._transition != nil}
+  public var hasTransition: Bool {_storage._transition != nil}
   /// Clears the value of `transition`. Subsequent reads from it will return its default value.
   public mutating func clearTransition() {_uniqueStorage()._transition = nil}
 
   public var unknownFields = SwiftProtobuf.UnknownStorage()
 
-  public struct Notes: Sendable {
+  public nonisolated struct Notes: Sendable {
     // SwiftProtobuf.Message conformance is added in an extension below. See the
     // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
     // methods supported on all messages.
@@ -77,11 +81,11 @@ public struct Rv_Data_PresentationSlide: @unchecked Sendable {
     public var rtfData: Data = Data()
 
     public var attributes: Rv_Data_Graphics.Text.Attributes {
-      get {return _attributes ?? Rv_Data_Graphics.Text.Attributes()}
+      get {_attributes ?? Rv_Data_Graphics.Text.Attributes()}
       set {_attributes = newValue}
     }
     /// Returns true if `attributes` has been explicitly set.
-    public var hasAttributes: Bool {return self._attributes != nil}
+    public var hasAttributes: Bool {self._attributes != nil}
     /// Clears the value of `attributes`. Subsequent reads from it will return its default value.
     public mutating func clearAttributes() {self._attributes = nil}
 
@@ -99,9 +103,9 @@ public struct Rv_Data_PresentationSlide: @unchecked Sendable {
 
 // MARK: - Code below here is support for the SwiftProtobuf runtime.
 
-fileprivate let _protobuf_package = "rv.data"
+fileprivate nonisolated let _protobuf_package = "rv.data"
 
-extension Rv_Data_PresentationSlide: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+nonisolated extension Rv_Data_PresentationSlide: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   public static let protoMessageName: String = _protobuf_package + ".PresentationSlide"
   public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{3}base_slide\0\u{1}notes\0\u{3}template_guidelines\0\u{3}chord_chart\0\u{1}transition\0")
 
@@ -199,7 +203,7 @@ extension Rv_Data_PresentationSlide: SwiftProtobuf.Message, SwiftProtobuf._Messa
   }
 }
 
-extension Rv_Data_PresentationSlide.Notes: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+nonisolated extension Rv_Data_PresentationSlide.Notes: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   public static let protoMessageName: String = Rv_Data_PresentationSlide.protoMessageName + ".Notes"
   public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{3}rtf_data\0\u{1}attributes\0")
 

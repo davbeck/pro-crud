@@ -15,33 +15,33 @@ import SwiftProtobuf
 // incompatible with the version of SwiftProtobuf to which you are linking.
 // Please ensure that you are building against the same version of the API
 // that was used to generate this file.
-fileprivate struct _GeneratedWithProtocGenSwiftVersion: SwiftProtobuf.ProtobufAPIVersionCheck {
+fileprivate nonisolated struct _GeneratedWithProtocGenSwiftVersion: SwiftProtobuf.ProtobufAPIVersionCheck {
   struct _2: SwiftProtobuf.ProtobufAPIVersion_2 {}
   typealias Version = _2
 }
 
-public struct Rv_Data_TemplateIdentification: Sendable {
+public nonisolated struct Rv_Data_TemplateIdentification: Sendable {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
   // methods supported on all messages.
 
   public var uuid: Rv_Data_UUID {
-    get {return _uuid ?? Rv_Data_UUID()}
+    get {_uuid ?? Rv_Data_UUID()}
     set {_uuid = newValue}
   }
   /// Returns true if `uuid` has been explicitly set.
-  public var hasUuid: Bool {return self._uuid != nil}
+  public var hasUuid: Bool {self._uuid != nil}
   /// Clears the value of `uuid`. Subsequent reads from it will return its default value.
   public mutating func clearUuid() {self._uuid = nil}
 
   public var name: String = String()
 
   public var slideUuid: Rv_Data_UUID {
-    get {return _slideUuid ?? Rv_Data_UUID()}
+    get {_slideUuid ?? Rv_Data_UUID()}
     set {_slideUuid = newValue}
   }
   /// Returns true if `slideUuid` has been explicitly set.
-  public var hasSlideUuid: Bool {return self._slideUuid != nil}
+  public var hasSlideUuid: Bool {self._slideUuid != nil}
   /// Clears the value of `slideUuid`. Subsequent reads from it will return its default value.
   public mutating func clearSlideUuid() {self._slideUuid = nil}
 
@@ -59,9 +59,9 @@ public struct Rv_Data_TemplateIdentification: Sendable {
 
 // MARK: - Code below here is support for the SwiftProtobuf runtime.
 
-fileprivate let _protobuf_package = "rv.data"
+fileprivate nonisolated let _protobuf_package = "rv.data"
 
-extension Rv_Data_TemplateIdentification: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+nonisolated extension Rv_Data_TemplateIdentification: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   public static let protoMessageName: String = _protobuf_package + ".TemplateIdentification"
   public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{1}uuid\0\u{1}name\0\u{3}slide_uuid\0\u{3}slide_name\0\u{3}slide_index\0")
 

@@ -15,22 +15,22 @@ import SwiftProtobuf
 // incompatible with the version of SwiftProtobuf to which you are linking.
 // Please ensure that you are building against the same version of the API
 // that was used to generate this file.
-fileprivate struct _GeneratedWithProtocGenSwiftVersion: SwiftProtobuf.ProtobufAPIVersionCheck {
+fileprivate nonisolated struct _GeneratedWithProtocGenSwiftVersion: SwiftProtobuf.ProtobufAPIVersionCheck {
   struct _2: SwiftProtobuf.ProtobufAPIVersion_2 {}
   typealias Version = _2
 }
 
-public struct Rv_Data_ProAudienceLook: Sendable {
+public nonisolated struct Rv_Data_ProAudienceLook: Sendable {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
   // methods supported on all messages.
 
   public var uuid: Rv_Data_UUID {
-    get {return _uuid ?? Rv_Data_UUID()}
+    get {_uuid ?? Rv_Data_UUID()}
     set {_uuid = newValue}
   }
   /// Returns true if `uuid` has been explicitly set.
-  public var hasUuid: Bool {return self._uuid != nil}
+  public var hasUuid: Bool {self._uuid != nil}
   /// Clears the value of `uuid`. Subsequent reads from it will return its default value.
   public mutating func clearUuid() {self._uuid = nil}
 
@@ -39,89 +39,89 @@ public struct Rv_Data_ProAudienceLook: Sendable {
   public var screenLooks: [Rv_Data_ProAudienceLook.ProScreenLook] = []
 
   public var originalLookUuid: Rv_Data_UUID {
-    get {return _originalLookUuid ?? Rv_Data_UUID()}
+    get {_originalLookUuid ?? Rv_Data_UUID()}
     set {_originalLookUuid = newValue}
   }
   /// Returns true if `originalLookUuid` has been explicitly set.
-  public var hasOriginalLookUuid: Bool {return self._originalLookUuid != nil}
+  public var hasOriginalLookUuid: Bool {self._originalLookUuid != nil}
   /// Clears the value of `originalLookUuid`. Subsequent reads from it will return its default value.
   public mutating func clearOriginalLookUuid() {self._originalLookUuid = nil}
 
   public var unknownFields = SwiftProtobuf.UnknownStorage()
 
-  public struct ProScreenLook: @unchecked Sendable {
+  public nonisolated struct ProScreenLook: @unchecked Sendable {
     // SwiftProtobuf.Message conformance is added in an extension below. See the
     // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
     // methods supported on all messages.
 
     public var proScreenUuid: Rv_Data_UUID {
-      get {return _storage._proScreenUuid ?? Rv_Data_UUID()}
+      get {_storage._proScreenUuid ?? Rv_Data_UUID()}
       set {_uniqueStorage()._proScreenUuid = newValue}
     }
     /// Returns true if `proScreenUuid` has been explicitly set.
-    public var hasProScreenUuid: Bool {return _storage._proScreenUuid != nil}
+    public var hasProScreenUuid: Bool {_storage._proScreenUuid != nil}
     /// Clears the value of `proScreenUuid`. Subsequent reads from it will return its default value.
     public mutating func clearProScreenUuid() {_uniqueStorage()._proScreenUuid = nil}
 
     public var propsEnabled: Bool {
-      get {return _storage._propsEnabled}
+      get {_storage._propsEnabled}
       set {_uniqueStorage()._propsEnabled = newValue}
     }
 
     public var liveVideoEnabled: Bool {
-      get {return _storage._liveVideoEnabled}
+      get {_storage._liveVideoEnabled}
       set {_uniqueStorage()._liveVideoEnabled = newValue}
     }
 
     public var presentationBackgroundEnabled: Bool {
-      get {return _storage._presentationBackgroundEnabled}
+      get {_storage._presentationBackgroundEnabled}
       set {_uniqueStorage()._presentationBackgroundEnabled = newValue}
     }
 
     public var templateDocumentFilePath: Rv_Data_URL {
-      get {return _storage._templateDocumentFilePath ?? Rv_Data_URL()}
+      get {_storage._templateDocumentFilePath ?? Rv_Data_URL()}
       set {_uniqueStorage()._templateDocumentFilePath = newValue}
     }
     /// Returns true if `templateDocumentFilePath` has been explicitly set.
-    public var hasTemplateDocumentFilePath: Bool {return _storage._templateDocumentFilePath != nil}
+    public var hasTemplateDocumentFilePath: Bool {_storage._templateDocumentFilePath != nil}
     /// Clears the value of `templateDocumentFilePath`. Subsequent reads from it will return its default value.
     public mutating func clearTemplateDocumentFilePath() {_uniqueStorage()._templateDocumentFilePath = nil}
 
     public var templateSlideUuid: Rv_Data_UUID {
-      get {return _storage._templateSlideUuid ?? Rv_Data_UUID()}
+      get {_storage._templateSlideUuid ?? Rv_Data_UUID()}
       set {_uniqueStorage()._templateSlideUuid = newValue}
     }
     /// Returns true if `templateSlideUuid` has been explicitly set.
-    public var hasTemplateSlideUuid: Bool {return _storage._templateSlideUuid != nil}
+    public var hasTemplateSlideUuid: Bool {_storage._templateSlideUuid != nil}
     /// Clears the value of `templateSlideUuid`. Subsequent reads from it will return its default value.
     public mutating func clearTemplateSlideUuid() {_uniqueStorage()._templateSlideUuid = nil}
 
     public var presentationForegroundEnabled: Bool {
-      get {return _storage._presentationForegroundEnabled}
+      get {_storage._presentationForegroundEnabled}
       set {_uniqueStorage()._presentationForegroundEnabled = newValue}
     }
 
     public var maskUuid: Rv_Data_UUID {
-      get {return _storage._maskUuid ?? Rv_Data_UUID()}
+      get {_storage._maskUuid ?? Rv_Data_UUID()}
       set {_uniqueStorage()._maskUuid = newValue}
     }
     /// Returns true if `maskUuid` has been explicitly set.
-    public var hasMaskUuid: Bool {return _storage._maskUuid != nil}
+    public var hasMaskUuid: Bool {_storage._maskUuid != nil}
     /// Clears the value of `maskUuid`. Subsequent reads from it will return its default value.
     public mutating func clearMaskUuid() {_uniqueStorage()._maskUuid = nil}
 
     public var announcementsEnabled: Bool {
-      get {return _storage._announcementsEnabled}
+      get {_storage._announcementsEnabled}
       set {_uniqueStorage()._announcementsEnabled = newValue}
     }
 
     public var propsLayerEnabled: Bool {
-      get {return _storage._propsLayerEnabled}
+      get {_storage._propsLayerEnabled}
       set {_uniqueStorage()._propsLayerEnabled = newValue}
     }
 
     public var messagesLayerEnabled: Bool {
-      get {return _storage._messagesLayerEnabled}
+      get {_storage._messagesLayerEnabled}
       set {_uniqueStorage()._messagesLayerEnabled = newValue}
     }
 
@@ -140,9 +140,9 @@ public struct Rv_Data_ProAudienceLook: Sendable {
 
 // MARK: - Code below here is support for the SwiftProtobuf runtime.
 
-fileprivate let _protobuf_package = "rv.data"
+fileprivate nonisolated let _protobuf_package = "rv.data"
 
-extension Rv_Data_ProAudienceLook: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+nonisolated extension Rv_Data_ProAudienceLook: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   public static let protoMessageName: String = _protobuf_package + ".ProAudienceLook"
   public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{1}uuid\0\u{1}name\0\u{3}screen_looks\0\u{3}original_look_uuid\0")
 
@@ -191,7 +191,7 @@ extension Rv_Data_ProAudienceLook: SwiftProtobuf.Message, SwiftProtobuf._Message
   }
 }
 
-extension Rv_Data_ProAudienceLook.ProScreenLook: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+nonisolated extension Rv_Data_ProAudienceLook.ProScreenLook: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   public static let protoMessageName: String = Rv_Data_ProAudienceLook.protoMessageName + ".ProScreenLook"
   public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{3}pro_screen_uuid\0\u{3}props_enabled\0\u{3}live_video_enabled\0\u{3}presentation_background_enabled\0\u{3}template_document_file_path\0\u{3}template_slide_uuid\0\u{3}presentation_foreground_enabled\0\u{3}mask_uuid\0\u{3}announcements_enabled\0\u{3}props_layer_enabled\0\u{3}messages_layer_enabled\0")
 

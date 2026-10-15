@@ -15,22 +15,22 @@ import SwiftProtobuf
 // incompatible with the version of SwiftProtobuf to which you are linking.
 // Please ensure that you are building against the same version of the API
 // that was used to generate this file.
-fileprivate struct _GeneratedWithProtocGenSwiftVersion: SwiftProtobuf.ProtobufAPIVersionCheck {
+fileprivate nonisolated struct _GeneratedWithProtocGenSwiftVersion: SwiftProtobuf.ProtobufAPIVersionCheck {
   struct _2: SwiftProtobuf.ProtobufAPIVersion_2 {}
   typealias Version = _2
 }
 
-public struct Rv_Data_ProMask: Sendable {
+public nonisolated struct Rv_Data_ProMask: Sendable {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
   // methods supported on all messages.
 
   public var baseSlide: Rv_Data_Slide {
-    get {return _baseSlide ?? Rv_Data_Slide()}
+    get {_baseSlide ?? Rv_Data_Slide()}
     set {_baseSlide = newValue}
   }
   /// Returns true if `baseSlide` has been explicitly set.
-  public var hasBaseSlide: Bool {return self._baseSlide != nil}
+  public var hasBaseSlide: Bool {self._baseSlide != nil}
   /// Clears the value of `baseSlide`. Subsequent reads from it will return its default value.
   public mutating func clearBaseSlide() {self._baseSlide = nil}
 
@@ -45,9 +45,9 @@ public struct Rv_Data_ProMask: Sendable {
 
 // MARK: - Code below here is support for the SwiftProtobuf runtime.
 
-fileprivate let _protobuf_package = "rv.data"
+fileprivate nonisolated let _protobuf_package = "rv.data"
 
-extension Rv_Data_ProMask: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+nonisolated extension Rv_Data_ProMask: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   public static let protoMessageName: String = _protobuf_package + ".ProMask"
   public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{3}base_slide\0\u{1}name\0")
 

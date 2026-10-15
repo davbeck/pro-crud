@@ -15,52 +15,52 @@ import SwiftProtobuf
 // incompatible with the version of SwiftProtobuf to which you are linking.
 // Please ensure that you are building against the same version of the API
 // that was used to generate this file.
-fileprivate struct _GeneratedWithProtocGenSwiftVersion: SwiftProtobuf.ProtobufAPIVersionCheck {
+fileprivate nonisolated struct _GeneratedWithProtocGenSwiftVersion: SwiftProtobuf.ProtobufAPIVersionCheck {
   struct _2: SwiftProtobuf.ProtobufAPIVersion_2 {}
   typealias Version = _2
 }
 
-public struct Rv_Data_CCLIDocument: @unchecked Sendable {
+public nonisolated struct Rv_Data_CCLIDocument: @unchecked Sendable {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
   // methods supported on all messages.
 
   public var applicationInfo: Rv_Data_ApplicationInfo {
-    get {return _storage._applicationInfo ?? Rv_Data_ApplicationInfo()}
+    get {_storage._applicationInfo ?? Rv_Data_ApplicationInfo()}
     set {_uniqueStorage()._applicationInfo = newValue}
   }
   /// Returns true if `applicationInfo` has been explicitly set.
-  public var hasApplicationInfo: Bool {return _storage._applicationInfo != nil}
+  public var hasApplicationInfo: Bool {_storage._applicationInfo != nil}
   /// Clears the value of `applicationInfo`. Subsequent reads from it will return its default value.
   public mutating func clearApplicationInfo() {_uniqueStorage()._applicationInfo = nil}
 
   public var enableCcliDisplay: Bool {
-    get {return _storage._enableCcliDisplay}
+    get {_storage._enableCcliDisplay}
     set {_uniqueStorage()._enableCcliDisplay = newValue}
   }
 
   public var ccliLicense: String {
-    get {return _storage._ccliLicense}
+    get {_storage._ccliLicense}
     set {_uniqueStorage()._ccliLicense = newValue}
   }
 
   public var displayType: Rv_Data_CCLIDocument.DisplayType {
-    get {return _storage._displayType}
+    get {_storage._displayType}
     set {_uniqueStorage()._displayType = newValue}
   }
 
   public var template: Rv_Data_Template.Slide {
-    get {return _storage._template ?? Rv_Data_Template.Slide()}
+    get {_storage._template ?? Rv_Data_Template.Slide()}
     set {_uniqueStorage()._template = newValue}
   }
   /// Returns true if `template` has been explicitly set.
-  public var hasTemplate: Bool {return _storage._template != nil}
+  public var hasTemplate: Bool {_storage._template != nil}
   /// Clears the value of `template`. Subsequent reads from it will return its default value.
   public mutating func clearTemplate() {_uniqueStorage()._template = nil}
 
   public var unknownFields = SwiftProtobuf.UnknownStorage()
 
-  public enum DisplayType: SwiftProtobuf.Enum, Swift.CaseIterable {
+  public nonisolated enum DisplayType: SwiftProtobuf.Enum, Swift.CaseIterable {
     public typealias RawValue = Int
     case firstSlide // = 0
     case lastSlide // = 1
@@ -109,9 +109,9 @@ public struct Rv_Data_CCLIDocument: @unchecked Sendable {
 
 // MARK: - Code below here is support for the SwiftProtobuf runtime.
 
-fileprivate let _protobuf_package = "rv.data"
+fileprivate nonisolated let _protobuf_package = "rv.data"
 
-extension Rv_Data_CCLIDocument: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+nonisolated extension Rv_Data_CCLIDocument: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   public static let protoMessageName: String = _protobuf_package + ".CCLIDocument"
   public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{3}application_info\0\u{3}enable_ccli_display\0\u{3}ccli_license\0\u{3}display_type\0\u{1}template\0")
 
@@ -209,6 +209,6 @@ extension Rv_Data_CCLIDocument: SwiftProtobuf.Message, SwiftProtobuf._MessageImp
   }
 }
 
-extension Rv_Data_CCLIDocument.DisplayType: SwiftProtobuf._ProtoNameProviding {
+nonisolated extension Rv_Data_CCLIDocument.DisplayType: SwiftProtobuf._ProtoNameProviding {
   public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{2}\0DISPLAY_TYPE_FIRST_SLIDE\0\u{1}DISPLAY_TYPE_LAST_SLIDE\0\u{1}DISPLAY_TYPE_FIRST_AND_LAST_SLIDE\0\u{1}DISPLAY_TYPE_ALL_SLIDES\0")
 }

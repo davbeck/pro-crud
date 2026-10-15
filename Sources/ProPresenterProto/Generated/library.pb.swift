@@ -15,22 +15,22 @@ import SwiftProtobuf
 // incompatible with the version of SwiftProtobuf to which you are linking.
 // Please ensure that you are building against the same version of the API
 // that was used to generate this file.
-fileprivate struct _GeneratedWithProtocGenSwiftVersion: SwiftProtobuf.ProtobufAPIVersionCheck {
+fileprivate nonisolated struct _GeneratedWithProtocGenSwiftVersion: SwiftProtobuf.ProtobufAPIVersionCheck {
   struct _2: SwiftProtobuf.ProtobufAPIVersion_2 {}
   typealias Version = _2
 }
 
-public struct Rv_Data_Library: Sendable {
+public nonisolated struct Rv_Data_Library: Sendable {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
   // methods supported on all messages.
 
   public var url: Rv_Data_URL {
-    get {return _url ?? Rv_Data_URL()}
+    get {_url ?? Rv_Data_URL()}
     set {_url = newValue}
   }
   /// Returns true if `url` has been explicitly set.
-  public var hasURL: Bool {return self._url != nil}
+  public var hasURL: Bool {self._url != nil}
   /// Clears the value of `url`. Subsequent reads from it will return its default value.
   public mutating func clearURL() {self._url = nil}
 
@@ -54,13 +54,13 @@ public struct Rv_Data_Library: Sendable {
 
   public var unknownFields = SwiftProtobuf.UnknownStorage()
 
-  public enum OneOf_ChildType: Equatable, Sendable {
+  public nonisolated enum OneOf_ChildType: Equatable, Sendable {
     case libraryChildren(Rv_Data_Library.LibraryArray)
     case libraryItems(Rv_Data_Library.LibraryItems)
 
   }
 
-  public struct LibraryArray: Sendable {
+  public nonisolated struct LibraryArray: Sendable {
     // SwiftProtobuf.Message conformance is added in an extension below. See the
     // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
     // methods supported on all messages.
@@ -72,7 +72,7 @@ public struct Rv_Data_Library: Sendable {
     public init() {}
   }
 
-  public struct LibraryItems: Sendable {
+  public nonisolated struct LibraryItems: Sendable {
     // SwiftProtobuf.Message conformance is added in an extension below. See the
     // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
     // methods supported on all messages.
@@ -89,17 +89,17 @@ public struct Rv_Data_Library: Sendable {
   fileprivate var _url: Rv_Data_URL? = nil
 }
 
-public struct Rv_Data_LibraryItem: Sendable {
+public nonisolated struct Rv_Data_LibraryItem: Sendable {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
   // methods supported on all messages.
 
   public var url: Rv_Data_URL {
-    get {return _url ?? Rv_Data_URL()}
+    get {_url ?? Rv_Data_URL()}
     set {_url = newValue}
   }
   /// Returns true if `url` has been explicitly set.
-  public var hasURL: Bool {return self._url != nil}
+  public var hasURL: Bool {self._url != nil}
   /// Clears the value of `url`. Subsequent reads from it will return its default value.
   public mutating func clearURL() {self._url = nil}
 
@@ -112,9 +112,9 @@ public struct Rv_Data_LibraryItem: Sendable {
 
 // MARK: - Code below here is support for the SwiftProtobuf runtime.
 
-fileprivate let _protobuf_package = "rv.data"
+fileprivate nonisolated let _protobuf_package = "rv.data"
 
-extension Rv_Data_Library: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+nonisolated extension Rv_Data_Library: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   public static let protoMessageName: String = _protobuf_package + ".Library"
   public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{1}url\0\u{1}libraryChildren\0\u{1}libraryItems\0")
 
@@ -186,7 +186,7 @@ extension Rv_Data_Library: SwiftProtobuf.Message, SwiftProtobuf._MessageImplemen
   }
 }
 
-extension Rv_Data_Library.LibraryArray: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+nonisolated extension Rv_Data_Library.LibraryArray: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   public static let protoMessageName: String = Rv_Data_Library.protoMessageName + ".LibraryArray"
   public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{1}libraries\0")
 
@@ -216,7 +216,7 @@ extension Rv_Data_Library.LibraryArray: SwiftProtobuf.Message, SwiftProtobuf._Me
   }
 }
 
-extension Rv_Data_Library.LibraryItems: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+nonisolated extension Rv_Data_Library.LibraryItems: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   public static let protoMessageName: String = Rv_Data_Library.protoMessageName + ".LibraryItems"
   public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{1}items\0")
 
@@ -246,7 +246,7 @@ extension Rv_Data_Library.LibraryItems: SwiftProtobuf.Message, SwiftProtobuf._Me
   }
 }
 
-extension Rv_Data_LibraryItem: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+nonisolated extension Rv_Data_LibraryItem: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   public static let protoMessageName: String = _protobuf_package + ".LibraryItem"
   public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{1}url\0")
 

@@ -15,12 +15,12 @@ import SwiftProtobuf
 // incompatible with the version of SwiftProtobuf to which you are linking.
 // Please ensure that you are building against the same version of the API
 // that was used to generate this file.
-fileprivate struct _GeneratedWithProtocGenSwiftVersion: SwiftProtobuf.ProtobufAPIVersionCheck {
+fileprivate nonisolated struct _GeneratedWithProtocGenSwiftVersion: SwiftProtobuf.ProtobufAPIVersionCheck {
   struct _2: SwiftProtobuf.ProtobufAPIVersion_2 {}
   typealias Version = _2
 }
 
-public struct Rv_Data_ProApiIn: Sendable {
+public nonisolated struct Rv_Data_ProApiIn: Sendable {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
   // methods supported on all messages.
@@ -53,7 +53,7 @@ public struct Rv_Data_ProApiIn: Sendable {
 
   public var unknownFields = SwiftProtobuf.UnknownStorage()
 
-  public enum OneOf_MessageType: Equatable, Sendable {
+  public nonisolated enum OneOf_MessageType: Equatable, Sendable {
     case handlerIn(Rv_Data_ProLink.HandlerIn)
     case networkApi(Rv_Data_NetworkAPI)
     case networkApiV1(Rv_Data_NetworkAPI_v1)
@@ -63,7 +63,7 @@ public struct Rv_Data_ProApiIn: Sendable {
   public init() {}
 }
 
-public struct Rv_Data_ProApiOut: Sendable {
+public nonisolated struct Rv_Data_ProApiOut: Sendable {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
   // methods supported on all messages.
@@ -104,7 +104,7 @@ public struct Rv_Data_ProApiOut: Sendable {
 
   public var unknownFields = SwiftProtobuf.UnknownStorage()
 
-  public enum OneOf_MessageType: Equatable, Sendable {
+  public nonisolated enum OneOf_MessageType: Equatable, Sendable {
     case handlerOut(Rv_Data_ProLink.HandlerOut)
     case clientAction(Rv_Data_ProLink.ClientAction)
     case networkApi(Rv_Data_NetworkAPI)
@@ -115,7 +115,7 @@ public struct Rv_Data_ProApiOut: Sendable {
   public init() {}
 }
 
-public struct Rv_Data_ProApiNetworkConfiguration: Sendable {
+public nonisolated struct Rv_Data_ProApiNetworkConfiguration: Sendable {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
   // methods supported on all messages.
@@ -149,24 +149,24 @@ public struct Rv_Data_ProApiNetworkConfiguration: Sendable {
   public init() {}
 }
 
-public struct Rv_Data_ProLink: Sendable {
+public nonisolated struct Rv_Data_ProLink: Sendable {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
   // methods supported on all messages.
 
   public var unknownFields = SwiftProtobuf.UnknownStorage()
 
-  public struct GroupDefinition: Sendable {
+  public nonisolated struct GroupDefinition: Sendable {
     // SwiftProtobuf.Message conformance is added in an extension below. See the
     // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
     // methods supported on all messages.
 
     public var timestamp: Rv_Data_Timestamp {
-      get {return _timestamp ?? Rv_Data_Timestamp()}
+      get {_timestamp ?? Rv_Data_Timestamp()}
       set {_timestamp = newValue}
     }
     /// Returns true if `timestamp` has been explicitly set.
-    public var hasTimestamp: Bool {return self._timestamp != nil}
+    public var hasTimestamp: Bool {self._timestamp != nil}
     /// Clears the value of `timestamp`. Subsequent reads from it will return its default value.
     public mutating func clearTimestamp() {self._timestamp = nil}
 
@@ -177,17 +177,17 @@ public struct Rv_Data_ProLink: Sendable {
     public var members: [Rv_Data_ProLink.GroupDefinition.Member] = []
 
     public var groupIdentifier: Rv_Data_UUID {
-      get {return _groupIdentifier ?? Rv_Data_UUID()}
+      get {_groupIdentifier ?? Rv_Data_UUID()}
       set {_groupIdentifier = newValue}
     }
     /// Returns true if `groupIdentifier` has been explicitly set.
-    public var hasGroupIdentifier: Bool {return self._groupIdentifier != nil}
+    public var hasGroupIdentifier: Bool {self._groupIdentifier != nil}
     /// Clears the value of `groupIdentifier`. Subsequent reads from it will return its default value.
     public mutating func clearGroupIdentifier() {self._groupIdentifier = nil}
 
     public var unknownFields = SwiftProtobuf.UnknownStorage()
 
-    public struct Member: Sendable {
+    public nonisolated struct Member: Sendable {
       // SwiftProtobuf.Message conformance is added in an extension below. See the
       // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
       // methods supported on all messages.
@@ -207,14 +207,14 @@ public struct Rv_Data_ProLink: Sendable {
     fileprivate var _groupIdentifier: Rv_Data_UUID? = nil
   }
 
-  public struct ZeroConfig: Sendable {
+  public nonisolated struct ZeroConfig: Sendable {
     // SwiftProtobuf.Message conformance is added in an extension below. See the
     // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
     // methods supported on all messages.
 
     public var unknownFields = SwiftProtobuf.UnknownStorage()
 
-    public struct NetworkEnvironment: Sendable {
+    public nonisolated struct NetworkEnvironment: Sendable {
       // SwiftProtobuf.Message conformance is added in an extension below. See the
       // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
       // methods supported on all messages.
@@ -228,26 +228,26 @@ public struct Rv_Data_ProLink: Sendable {
       public init() {}
     }
 
-    public struct MulticastPacket: Sendable {
+    public nonisolated struct MulticastPacket: Sendable {
       // SwiftProtobuf.Message conformance is added in an extension below. See the
       // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
       // methods supported on all messages.
 
       public var group: Rv_Data_ProLink.GroupDefinition {
-        get {return _group ?? Rv_Data_ProLink.GroupDefinition()}
+        get {_group ?? Rv_Data_ProLink.GroupDefinition()}
         set {_group = newValue}
       }
       /// Returns true if `group` has been explicitly set.
-      public var hasGroup: Bool {return self._group != nil}
+      public var hasGroup: Bool {self._group != nil}
       /// Clears the value of `group`. Subsequent reads from it will return its default value.
       public mutating func clearGroup() {self._group = nil}
 
       public var device: Rv_Data_ProLink.MemberStatus {
-        get {return _device ?? Rv_Data_ProLink.MemberStatus()}
+        get {_device ?? Rv_Data_ProLink.MemberStatus()}
         set {_device = newValue}
       }
       /// Returns true if `device` has been explicitly set.
-      public var hasDevice: Bool {return self._device != nil}
+      public var hasDevice: Bool {self._device != nil}
       /// Clears the value of `device`. Subsequent reads from it will return its default value.
       public mutating func clearDevice() {self._device = nil}
 
@@ -262,14 +262,14 @@ public struct Rv_Data_ProLink: Sendable {
     public init() {}
   }
 
-  public struct TowerMessage: Sendable {
+  public nonisolated struct TowerMessage: Sendable {
     // SwiftProtobuf.Message conformance is added in an extension below. See the
     // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
     // methods supported on all messages.
 
     public var unknownFields = SwiftProtobuf.UnknownStorage()
 
-    public struct TowerStatusRequest: Sendable {
+    public nonisolated struct TowerStatusRequest: Sendable {
       // SwiftProtobuf.Message conformance is added in an extension below. See the
       // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
       // methods supported on all messages.
@@ -279,7 +279,7 @@ public struct Rv_Data_ProLink: Sendable {
       public init() {}
     }
 
-    public struct TowerStatusResponse: Sendable {
+    public nonisolated struct TowerStatusResponse: Sendable {
       // SwiftProtobuf.Message conformance is added in an extension below. See the
       // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
       // methods supported on all messages.
@@ -298,7 +298,7 @@ public struct Rv_Data_ProLink: Sendable {
 
       public var unknownFields = SwiftProtobuf.UnknownStorage()
 
-      public enum OneOf_Response: Equatable, Sendable {
+      public nonisolated enum OneOf_Response: Equatable, Sendable {
         case groupDefinition(Rv_Data_ProLink.GroupDefinition)
 
       }
@@ -306,7 +306,7 @@ public struct Rv_Data_ProLink: Sendable {
       public init() {}
     }
 
-    public struct TowerAddMemberRequest: Sendable {
+    public nonisolated struct TowerAddMemberRequest: Sendable {
       // SwiftProtobuf.Message conformance is added in an extension below. See the
       // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
       // methods supported on all messages.
@@ -331,7 +331,7 @@ public struct Rv_Data_ProLink: Sendable {
 
       public var unknownFields = SwiftProtobuf.UnknownStorage()
 
-      public enum OneOf_Request: Equatable, Sendable {
+      public nonisolated enum OneOf_Request: Equatable, Sendable {
         case groupDefinition(Rv_Data_ProLink.GroupDefinition)
         case joiningMember(Rv_Data_ProLink.GroupDefinition.Member)
 
@@ -340,17 +340,17 @@ public struct Rv_Data_ProLink: Sendable {
       public init() {}
     }
 
-    public struct TowerRemoveMemberRequest: Sendable {
+    public nonisolated struct TowerRemoveMemberRequest: Sendable {
       // SwiftProtobuf.Message conformance is added in an extension below. See the
       // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
       // methods supported on all messages.
 
       public var removingMember: Rv_Data_ProLink.GroupDefinition.Member {
-        get {return _removingMember ?? Rv_Data_ProLink.GroupDefinition.Member()}
+        get {_removingMember ?? Rv_Data_ProLink.GroupDefinition.Member()}
         set {_removingMember = newValue}
       }
       /// Returns true if `removingMember` has been explicitly set.
-      public var hasRemovingMember: Bool {return self._removingMember != nil}
+      public var hasRemovingMember: Bool {self._removingMember != nil}
       /// Clears the value of `removingMember`. Subsequent reads from it will return its default value.
       public mutating func clearRemovingMember() {self._removingMember = nil}
 
@@ -361,7 +361,7 @@ public struct Rv_Data_ProLink: Sendable {
       fileprivate var _removingMember: Rv_Data_ProLink.GroupDefinition.Member? = nil
     }
 
-    public struct TowerAddMemberResponse: Sendable {
+    public nonisolated struct TowerAddMemberResponse: Sendable {
       // SwiftProtobuf.Message conformance is added in an extension below. See the
       // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
       // methods supported on all messages.
@@ -394,14 +394,14 @@ public struct Rv_Data_ProLink: Sendable {
 
       public var unknownFields = SwiftProtobuf.UnknownStorage()
 
-      public enum OneOf_Response: Equatable, Sendable {
+      public nonisolated enum OneOf_Response: Equatable, Sendable {
         case groupDefinition(Rv_Data_ProLink.GroupDefinition)
         case accept(Rv_Data_ProLink.TowerMessage.TowerAddMemberResponse.Accept)
         case declineReason(Rv_Data_ProLink.TowerMessage.TowerAddMemberResponse.DeclineReason)
 
       }
 
-      public enum DeclineReason: SwiftProtobuf.Enum, Swift.CaseIterable {
+      public nonisolated enum DeclineReason: SwiftProtobuf.Enum, Swift.CaseIterable {
         public typealias RawValue = Int
         case alreadyInGroup // = 0
         case userDeclined // = 1
@@ -435,7 +435,7 @@ public struct Rv_Data_ProLink: Sendable {
 
       }
 
-      public struct Accept: Sendable {
+      public nonisolated struct Accept: Sendable {
         // SwiftProtobuf.Message conformance is added in an extension below. See the
         // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
         // methods supported on all messages.
@@ -448,7 +448,7 @@ public struct Rv_Data_ProLink: Sendable {
       public init() {}
     }
 
-    public struct TowerHeartbeatRequest: Sendable {
+    public nonisolated struct TowerHeartbeatRequest: Sendable {
       // SwiftProtobuf.Message conformance is added in an extension below. See the
       // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
       // methods supported on all messages.
@@ -458,17 +458,17 @@ public struct Rv_Data_ProLink: Sendable {
       public init() {}
     }
 
-    public struct TowerHeartbeatResponse: Sendable {
+    public nonisolated struct TowerHeartbeatResponse: Sendable {
       // SwiftProtobuf.Message conformance is added in an extension below. See the
       // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
       // methods supported on all messages.
 
       public var groupDefinition: Rv_Data_ProLink.GroupDefinition {
-        get {return _groupDefinition ?? Rv_Data_ProLink.GroupDefinition()}
+        get {_groupDefinition ?? Rv_Data_ProLink.GroupDefinition()}
         set {_groupDefinition = newValue}
       }
       /// Returns true if `groupDefinition` has been explicitly set.
-      public var hasGroupDefinition: Bool {return self._groupDefinition != nil}
+      public var hasGroupDefinition: Bool {self._groupDefinition != nil}
       /// Clears the value of `groupDefinition`. Subsequent reads from it will return its default value.
       public mutating func clearGroupDefinition() {self._groupDefinition = nil}
 
@@ -482,7 +482,7 @@ public struct Rv_Data_ProLink: Sendable {
     public init() {}
   }
 
-  public struct MemberStatus: Sendable {
+  public nonisolated struct MemberStatus: Sendable {
     // SwiftProtobuf.Message conformance is added in an extension below. See the
     // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
     // methods supported on all messages.
@@ -505,7 +505,7 @@ public struct Rv_Data_ProLink: Sendable {
 
     public var unknownFields = SwiftProtobuf.UnknownStorage()
 
-    public enum Platform: SwiftProtobuf.Enum, Swift.CaseIterable {
+    public nonisolated enum Platform: SwiftProtobuf.Enum, Swift.CaseIterable {
       public typealias RawValue = Int
       case undefined // = 0
       case macos // = 1
@@ -543,7 +543,7 @@ public struct Rv_Data_ProLink: Sendable {
 
     }
 
-    public enum ConnectionStatus: SwiftProtobuf.Enum, Swift.CaseIterable {
+    public nonisolated enum ConnectionStatus: SwiftProtobuf.Enum, Swift.CaseIterable {
       public typealias RawValue = Int
       case unknown // = 0
       case connected // = 1
@@ -584,7 +584,7 @@ public struct Rv_Data_ProLink: Sendable {
     public init() {}
   }
 
-  public struct ClientAction: Sendable {
+  public nonisolated struct ClientAction: Sendable {
     // SwiftProtobuf.Message conformance is added in an extension below. See the
     // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
     // methods supported on all messages.
@@ -625,7 +625,7 @@ public struct Rv_Data_ProLink: Sendable {
 
     public var unknownFields = SwiftProtobuf.UnknownStorage()
 
-    public enum OneOf_ActionType: Equatable, Sendable {
+    public nonisolated enum OneOf_ActionType: Equatable, Sendable {
       case addConnection(Rv_Data_ProLink.ClientAction.AddConnection)
       case removeConnection(Rv_Data_ProLink.ClientAction.RemoveConnection)
       case cancelAction(Rv_Data_ProLink.ClientAction.CancelAction)
@@ -633,7 +633,7 @@ public struct Rv_Data_ProLink: Sendable {
 
     }
 
-    public struct AddConnection: Sendable {
+    public nonisolated struct AddConnection: Sendable {
       // SwiftProtobuf.Message conformance is added in an extension below. See the
       // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
       // methods supported on all messages.
@@ -649,7 +649,7 @@ public struct Rv_Data_ProLink: Sendable {
       public init() {}
     }
 
-    public struct RemoveConnection: Sendable {
+    public nonisolated struct RemoveConnection: Sendable {
       // SwiftProtobuf.Message conformance is added in an extension below. See the
       // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
       // methods supported on all messages.
@@ -663,7 +663,7 @@ public struct Rv_Data_ProLink: Sendable {
       public init() {}
     }
 
-    public struct CancelAction: Sendable {
+    public nonisolated struct CancelAction: Sendable {
       // SwiftProtobuf.Message conformance is added in an extension below. See the
       // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
       // methods supported on all messages.
@@ -673,7 +673,7 @@ public struct Rv_Data_ProLink: Sendable {
       public init() {}
     }
 
-    public struct RenderTime: Sendable {
+    public nonisolated struct RenderTime: Sendable {
       // SwiftProtobuf.Message conformance is added in an extension below. See the
       // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
       // methods supported on all messages.
@@ -690,7 +690,7 @@ public struct Rv_Data_ProLink: Sendable {
     public init() {}
   }
 
-  public struct HandlerIn: Sendable {
+  public nonisolated struct HandlerIn: Sendable {
     // SwiftProtobuf.Message conformance is added in an extension below. See the
     // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
     // methods supported on all messages.
@@ -795,7 +795,7 @@ public struct Rv_Data_ProLink: Sendable {
 
     public var unknownFields = SwiftProtobuf.UnknownStorage()
 
-    public enum OneOf_Request: Equatable, Sendable {
+    public nonisolated enum OneOf_Request: Equatable, Sendable {
       case groupName(Rv_Data_ProLink.HandlerIn.GroupName)
       case groupDefinitionRequest(Rv_Data_ProLink.HandlerIn.GroupDefinitionRequest)
       case groupJoinConfirmation(Rv_Data_ProLink.HandlerIn.GroupJoinConfirmation)
@@ -811,7 +811,7 @@ public struct Rv_Data_ProLink: Sendable {
 
     }
 
-    public struct GroupName: Sendable {
+    public nonisolated struct GroupName: Sendable {
       // SwiftProtobuf.Message conformance is added in an extension below. See the
       // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
       // methods supported on all messages.
@@ -821,7 +821,7 @@ public struct Rv_Data_ProLink: Sendable {
       public init() {}
     }
 
-    public struct GroupDefinitionRequest: Sendable {
+    public nonisolated struct GroupDefinitionRequest: Sendable {
       // SwiftProtobuf.Message conformance is added in an extension below. See the
       // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
       // methods supported on all messages.
@@ -831,19 +831,7 @@ public struct Rv_Data_ProLink: Sendable {
       public init() {}
     }
 
-    public struct GroupJoinConfirmation: Sendable {
-      // SwiftProtobuf.Message conformance is added in an extension below. See the
-      // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
-      // methods supported on all messages.
-
-      public var name: String = String()
-
-      public var unknownFields = SwiftProtobuf.UnknownStorage()
-
-      public init() {}
-    }
-
-    public struct GroupJoinPassword: Sendable {
+    public nonisolated struct GroupJoinConfirmation: Sendable {
       // SwiftProtobuf.Message conformance is added in an extension below. See the
       // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
       // methods supported on all messages.
@@ -855,7 +843,19 @@ public struct Rv_Data_ProLink: Sendable {
       public init() {}
     }
 
-    public struct AddConnectionResult: Sendable {
+    public nonisolated struct GroupJoinPassword: Sendable {
+      // SwiftProtobuf.Message conformance is added in an extension below. See the
+      // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
+      // methods supported on all messages.
+
+      public var name: String = String()
+
+      public var unknownFields = SwiftProtobuf.UnknownStorage()
+
+      public init() {}
+    }
+
+    public nonisolated struct AddConnectionResult: Sendable {
       // SwiftProtobuf.Message conformance is added in an extension below. See the
       // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
       // methods supported on all messages.
@@ -880,23 +880,23 @@ public struct Rv_Data_ProLink: Sendable {
 
       public var unknownFields = SwiftProtobuf.UnknownStorage()
 
-      public enum OneOf_Result: Equatable, Sendable {
+      public nonisolated enum OneOf_Result: Equatable, Sendable {
         case success(Rv_Data_ProLink.HandlerIn.AddConnectionResult.Success)
         case failure(Rv_Data_ProLink.HandlerIn.AddConnectionResult.Failure)
 
       }
 
-      public struct Success: Sendable {
+      public nonisolated struct Success: Sendable {
         // SwiftProtobuf.Message conformance is added in an extension below. See the
         // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
         // methods supported on all messages.
 
         public var newGroupDefinition: Rv_Data_ProLink.GroupDefinition {
-          get {return _newGroupDefinition ?? Rv_Data_ProLink.GroupDefinition()}
+          get {_newGroupDefinition ?? Rv_Data_ProLink.GroupDefinition()}
           set {_newGroupDefinition = newValue}
         }
         /// Returns true if `newGroupDefinition` has been explicitly set.
-        public var hasNewGroupDefinition: Bool {return self._newGroupDefinition != nil}
+        public var hasNewGroupDefinition: Bool {self._newGroupDefinition != nil}
         /// Clears the value of `newGroupDefinition`. Subsequent reads from it will return its default value.
         public mutating func clearNewGroupDefinition() {self._newGroupDefinition = nil}
 
@@ -907,7 +907,7 @@ public struct Rv_Data_ProLink: Sendable {
         fileprivate var _newGroupDefinition: Rv_Data_ProLink.GroupDefinition? = nil
       }
 
-      public struct Failure: Sendable {
+      public nonisolated struct Failure: Sendable {
         // SwiftProtobuf.Message conformance is added in an extension below. See the
         // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
         // methods supported on all messages.
@@ -988,7 +988,7 @@ public struct Rv_Data_ProLink: Sendable {
 
         public var unknownFields = SwiftProtobuf.UnknownStorage()
 
-        public enum OneOf_Reason: Equatable, Sendable {
+        public nonisolated enum OneOf_Reason: Equatable, Sendable {
           case unexpected(Rv_Data_ProLink.HandlerIn.AddConnectionResult.Failure.Unexpected)
           case declined(Rv_Data_ProLink.HandlerIn.AddConnectionResult.Failure.Declined)
           case timeout(Rv_Data_ProLink.HandlerIn.AddConnectionResult.Failure.Timeout)
@@ -1001,7 +1001,7 @@ public struct Rv_Data_ProLink: Sendable {
 
         }
 
-        public struct Unexpected: Sendable {
+        public nonisolated struct Unexpected: Sendable {
           // SwiftProtobuf.Message conformance is added in an extension below. See the
           // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
           // methods supported on all messages.
@@ -1011,7 +1011,7 @@ public struct Rv_Data_ProLink: Sendable {
           public init() {}
         }
 
-        public struct Declined: Sendable {
+        public nonisolated struct Declined: Sendable {
           // SwiftProtobuf.Message conformance is added in an extension below. See the
           // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
           // methods supported on all messages.
@@ -1021,7 +1021,7 @@ public struct Rv_Data_ProLink: Sendable {
           public init() {}
         }
 
-        public struct Timeout: Sendable {
+        public nonisolated struct Timeout: Sendable {
           // SwiftProtobuf.Message conformance is added in an extension below. See the
           // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
           // methods supported on all messages.
@@ -1031,7 +1031,7 @@ public struct Rv_Data_ProLink: Sendable {
           public init() {}
         }
 
-        public struct LinkDisabled: Sendable {
+        public nonisolated struct LinkDisabled: Sendable {
           // SwiftProtobuf.Message conformance is added in an extension below. See the
           // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
           // methods supported on all messages.
@@ -1041,31 +1041,7 @@ public struct Rv_Data_ProLink: Sendable {
           public init() {}
         }
 
-        public struct InOtherGroup: Sendable {
-          // SwiftProtobuf.Message conformance is added in an extension below. See the
-          // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
-          // methods supported on all messages.
-
-          public var memberName: String = String()
-
-          public var groupName: String = String()
-
-          public var unknownFields = SwiftProtobuf.UnknownStorage()
-
-          public init() {}
-        }
-
-        public struct InvalidIpAddress: Sendable {
-          // SwiftProtobuf.Message conformance is added in an extension below. See the
-          // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
-          // methods supported on all messages.
-
-          public var unknownFields = SwiftProtobuf.UnknownStorage()
-
-          public init() {}
-        }
-
-        public struct AlreadyInGroup: Sendable {
+        public nonisolated struct InOtherGroup: Sendable {
           // SwiftProtobuf.Message conformance is added in an extension below. See the
           // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
           // methods supported on all messages.
@@ -1079,7 +1055,31 @@ public struct Rv_Data_ProLink: Sendable {
           public init() {}
         }
 
-        public struct CouldNotAdd: Sendable {
+        public nonisolated struct InvalidIpAddress: Sendable {
+          // SwiftProtobuf.Message conformance is added in an extension below. See the
+          // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
+          // methods supported on all messages.
+
+          public var unknownFields = SwiftProtobuf.UnknownStorage()
+
+          public init() {}
+        }
+
+        public nonisolated struct AlreadyInGroup: Sendable {
+          // SwiftProtobuf.Message conformance is added in an extension below. See the
+          // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
+          // methods supported on all messages.
+
+          public var memberName: String = String()
+
+          public var groupName: String = String()
+
+          public var unknownFields = SwiftProtobuf.UnknownStorage()
+
+          public init() {}
+        }
+
+        public nonisolated struct CouldNotAdd: Sendable {
           // SwiftProtobuf.Message conformance is added in an extension below. See the
           // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
           // methods supported on all messages.
@@ -1091,7 +1091,7 @@ public struct Rv_Data_ProLink: Sendable {
           public init() {}
         }
 
-        public struct CouldNotJoin: Sendable {
+        public nonisolated struct CouldNotJoin: Sendable {
           // SwiftProtobuf.Message conformance is added in an extension below. See the
           // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
           // methods supported on all messages.
@@ -1109,7 +1109,7 @@ public struct Rv_Data_ProLink: Sendable {
       public init() {}
     }
 
-    public struct MemberStatusChange: Sendable {
+    public nonisolated struct MemberStatusChange: Sendable {
       // SwiftProtobuf.Message conformance is added in an extension below. See the
       // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
       // methods supported on all messages.
@@ -1121,7 +1121,7 @@ public struct Rv_Data_ProLink: Sendable {
       public init() {}
     }
 
-    public struct ProPresenterInfo: Sendable {
+    public nonisolated struct ProPresenterInfo: Sendable {
       // SwiftProtobuf.Message conformance is added in an extension below. See the
       // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
       // methods supported on all messages.
@@ -1131,7 +1131,7 @@ public struct Rv_Data_ProLink: Sendable {
       public init() {}
     }
 
-    public struct ServerState: Sendable {
+    public nonisolated struct ServerState: Sendable {
       // SwiftProtobuf.Message conformance is added in an extension below. See the
       // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
       // methods supported on all messages.
@@ -1149,7 +1149,7 @@ public struct Rv_Data_ProLink: Sendable {
       public init() {}
     }
 
-    public struct ConfigurationRequest: Sendable {
+    public nonisolated struct ConfigurationRequest: Sendable {
       // SwiftProtobuf.Message conformance is added in an extension below. See the
       // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
       // methods supported on all messages.
@@ -1159,7 +1159,7 @@ public struct Rv_Data_ProLink: Sendable {
       public init() {}
     }
 
-    public struct LogRequest: Sendable {
+    public nonisolated struct LogRequest: Sendable {
       // SwiftProtobuf.Message conformance is added in an extension below. See the
       // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
       // methods supported on all messages.
@@ -1170,7 +1170,7 @@ public struct Rv_Data_ProLink: Sendable {
 
       public var unknownFields = SwiftProtobuf.UnknownStorage()
 
-      public enum Severity: SwiftProtobuf.Enum, Swift.CaseIterable {
+      public nonisolated enum Severity: SwiftProtobuf.Enum, Swift.CaseIterable {
         public typealias RawValue = Int
         case debug // = 0
         case debugWarning // = 1
@@ -1226,7 +1226,7 @@ public struct Rv_Data_ProLink: Sendable {
     public init() {}
   }
 
-  public struct HandlerOut: Sendable {
+  public nonisolated struct HandlerOut: Sendable {
     // SwiftProtobuf.Message conformance is added in an extension below. See the
     // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
     // methods supported on all messages.
@@ -1283,7 +1283,7 @@ public struct Rv_Data_ProLink: Sendable {
 
     public var unknownFields = SwiftProtobuf.UnknownStorage()
 
-    public enum OneOf_Response: Equatable, Sendable {
+    public nonisolated enum OneOf_Response: Equatable, Sendable {
       case groupName(Rv_Data_ProLink.HandlerOut.GroupName)
       case groupDefinition(Rv_Data_ProLink.GroupDefinition)
       case groupJoinConfirmation(Rv_Data_ProLink.HandlerOut.GroupJoinConfirmation)
@@ -1293,7 +1293,7 @@ public struct Rv_Data_ProLink: Sendable {
 
     }
 
-    public struct GroupName: Sendable {
+    public nonisolated struct GroupName: Sendable {
       // SwiftProtobuf.Message conformance is added in an extension below. See the
       // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
       // methods supported on all messages.
@@ -1305,7 +1305,7 @@ public struct Rv_Data_ProLink: Sendable {
       public init() {}
     }
 
-    public struct GroupJoinConfirmation: Sendable {
+    public nonisolated struct GroupJoinConfirmation: Sendable {
       // SwiftProtobuf.Message conformance is added in an extension below. See the
       // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
       // methods supported on all messages.
@@ -1317,7 +1317,7 @@ public struct Rv_Data_ProLink: Sendable {
       public init() {}
     }
 
-    public struct GroupJoinPassword: Sendable {
+    public nonisolated struct GroupJoinPassword: Sendable {
       // SwiftProtobuf.Message conformance is added in an extension below. See the
       // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
       // methods supported on all messages.
@@ -1329,7 +1329,7 @@ public struct Rv_Data_ProLink: Sendable {
       public init() {}
     }
 
-    public struct ProPresenterInfo: Sendable {
+    public nonisolated struct ProPresenterInfo: Sendable {
       // SwiftProtobuf.Message conformance is added in an extension below. See the
       // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
       // methods supported on all messages.
@@ -1342,7 +1342,7 @@ public struct Rv_Data_ProLink: Sendable {
 
       public var unknownFields = SwiftProtobuf.UnknownStorage()
 
-      public enum Platform: SwiftProtobuf.Enum, Swift.CaseIterable {
+      public nonisolated enum Platform: SwiftProtobuf.Enum, Swift.CaseIterable {
         public typealias RawValue = Int
         case undefined // = 0
         case macos // = 1
@@ -1389,7 +1389,7 @@ public struct Rv_Data_ProLink: Sendable {
   public init() {}
 }
 
-public struct Rv_Data_NetworkAPI: Sendable {
+public nonisolated struct Rv_Data_NetworkAPI: Sendable {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
   // methods supported on all messages.
@@ -1430,7 +1430,7 @@ public struct Rv_Data_NetworkAPI: Sendable {
 
   public var unknownFields = SwiftProtobuf.UnknownStorage()
 
-  public enum OneOf_Command: Equatable, Sendable {
+  public nonisolated enum OneOf_Command: Equatable, Sendable {
     case action(Rv_Data_NetworkAPI.Action)
     case serverState(Rv_Data_NetworkAPI.ServerState)
     case groupChange(Rv_Data_NetworkAPI.GroupChange)
@@ -1438,7 +1438,7 @@ public struct Rv_Data_NetworkAPI: Sendable {
 
   }
 
-  public struct LinkStatus: Sendable {
+  public nonisolated struct LinkStatus: Sendable {
     // SwiftProtobuf.Message conformance is added in an extension below. See the
     // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
     // methods supported on all messages.
@@ -1452,17 +1452,17 @@ public struct Rv_Data_NetworkAPI: Sendable {
     public var description_p: String = String()
 
     public var groupInfo: Rv_Data_NetworkAPI.Group {
-      get {return _groupInfo ?? Rv_Data_NetworkAPI.Group()}
+      get {_groupInfo ?? Rv_Data_NetworkAPI.Group()}
       set {_groupInfo = newValue}
     }
     /// Returns true if `groupInfo` has been explicitly set.
-    public var hasGroupInfo: Bool {return self._groupInfo != nil}
+    public var hasGroupInfo: Bool {self._groupInfo != nil}
     /// Clears the value of `groupInfo`. Subsequent reads from it will return its default value.
     public mutating func clearGroupInfo() {self._groupInfo = nil}
 
     public var unknownFields = SwiftProtobuf.UnknownStorage()
 
-    public enum Platform: SwiftProtobuf.Enum, Swift.CaseIterable {
+    public nonisolated enum Platform: SwiftProtobuf.Enum, Swift.CaseIterable {
       public typealias RawValue = Int
       case undefined // = 0
       case macos // = 1
@@ -1505,7 +1505,7 @@ public struct Rv_Data_NetworkAPI: Sendable {
     fileprivate var _groupInfo: Rv_Data_NetworkAPI.Group? = nil
   }
 
-  public struct Group: Sendable {
+  public nonisolated struct Group: Sendable {
     // SwiftProtobuf.Message conformance is added in an extension below. See the
     // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
     // methods supported on all messages.
@@ -1516,7 +1516,7 @@ public struct Rv_Data_NetworkAPI: Sendable {
 
     public var unknownFields = SwiftProtobuf.UnknownStorage()
 
-    public struct Member: Sendable {
+    public nonisolated struct Member: Sendable {
       // SwiftProtobuf.Message conformance is added in an extension below. See the
       // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
       // methods supported on all messages.
@@ -1533,7 +1533,7 @@ public struct Rv_Data_NetworkAPI: Sendable {
     public init() {}
   }
 
-  public struct GroupChange: Sendable {
+  public nonisolated struct GroupChange: Sendable {
     // SwiftProtobuf.Message conformance is added in an extension below. See the
     // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
     // methods supported on all messages.
@@ -1574,7 +1574,7 @@ public struct Rv_Data_NetworkAPI: Sendable {
 
     public var unknownFields = SwiftProtobuf.UnknownStorage()
 
-    public enum OneOf_Change: Equatable, Sendable {
+    public nonisolated enum OneOf_Change: Equatable, Sendable {
       case invite(Rv_Data_NetworkAPI.GroupInvite)
       case join(Rv_Data_NetworkAPI.GroupJoin)
       case kick(Rv_Data_NetworkAPI.GroupKick)
@@ -1585,7 +1585,7 @@ public struct Rv_Data_NetworkAPI: Sendable {
     public init() {}
   }
 
-  public struct GroupResponse: Sendable {
+  public nonisolated struct GroupResponse: Sendable {
     // SwiftProtobuf.Message conformance is added in an extension below. See the
     // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
     // methods supported on all messages.
@@ -1610,13 +1610,13 @@ public struct Rv_Data_NetworkAPI: Sendable {
 
     public var unknownFields = SwiftProtobuf.UnknownStorage()
 
-    public enum OneOf_Response: Equatable, Sendable {
+    public nonisolated enum OneOf_Response: Equatable, Sendable {
       case success(Rv_Data_NetworkAPI.GroupResponse.Success)
       case status(Rv_Data_NetworkAPI.GroupResponse.Status)
 
     }
 
-    public struct Success: Sendable {
+    public nonisolated struct Success: Sendable {
       // SwiftProtobuf.Message conformance is added in an extension below. See the
       // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
       // methods supported on all messages.
@@ -1626,7 +1626,7 @@ public struct Rv_Data_NetworkAPI: Sendable {
       public init() {}
     }
 
-    public struct Status: Sendable {
+    public nonisolated struct Status: Sendable {
       // SwiftProtobuf.Message conformance is added in an extension below. See the
       // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
       // methods supported on all messages.
@@ -1643,17 +1643,17 @@ public struct Rv_Data_NetworkAPI: Sendable {
     public init() {}
   }
 
-  public struct GroupStatus: Sendable {
+  public nonisolated struct GroupStatus: Sendable {
     // SwiftProtobuf.Message conformance is added in an extension below. See the
     // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
     // methods supported on all messages.
 
     public var member: Rv_Data_NetworkAPI.Group.Member {
-      get {return _member ?? Rv_Data_NetworkAPI.Group.Member()}
+      get {_member ?? Rv_Data_NetworkAPI.Group.Member()}
       set {_member = newValue}
     }
     /// Returns true if `member` has been explicitly set.
-    public var hasMember: Bool {return self._member != nil}
+    public var hasMember: Bool {self._member != nil}
     /// Clears the value of `member`. Subsequent reads from it will return its default value.
     public mutating func clearMember() {self._member = nil}
 
@@ -1664,28 +1664,28 @@ public struct Rv_Data_NetworkAPI: Sendable {
     fileprivate var _member: Rv_Data_NetworkAPI.Group.Member? = nil
   }
 
-  public struct GroupInvite: Sendable {
+  public nonisolated struct GroupInvite: Sendable {
     // SwiftProtobuf.Message conformance is added in an extension below. See the
     // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
     // methods supported on all messages.
 
     public var groupInfo: Rv_Data_NetworkAPI.Group {
-      get {return _groupInfo ?? Rv_Data_NetworkAPI.Group()}
+      get {_groupInfo ?? Rv_Data_NetworkAPI.Group()}
       set {_groupInfo = newValue}
     }
     /// Returns true if `groupInfo` has been explicitly set.
-    public var hasGroupInfo: Bool {return self._groupInfo != nil}
+    public var hasGroupInfo: Bool {self._groupInfo != nil}
     /// Clears the value of `groupInfo`. Subsequent reads from it will return its default value.
     public mutating func clearGroupInfo() {self._groupInfo = nil}
 
     public var secret: String = String()
 
     public var prospect: Rv_Data_NetworkAPI.Group.Member {
-      get {return _prospect ?? Rv_Data_NetworkAPI.Group.Member()}
+      get {_prospect ?? Rv_Data_NetworkAPI.Group.Member()}
       set {_prospect = newValue}
     }
     /// Returns true if `prospect` has been explicitly set.
-    public var hasProspect: Bool {return self._prospect != nil}
+    public var hasProspect: Bool {self._prospect != nil}
     /// Clears the value of `prospect`. Subsequent reads from it will return its default value.
     public mutating func clearProspect() {self._prospect = nil}
 
@@ -1697,26 +1697,26 @@ public struct Rv_Data_NetworkAPI: Sendable {
     fileprivate var _prospect: Rv_Data_NetworkAPI.Group.Member? = nil
   }
 
-  public struct GroupJoin: Sendable {
+  public nonisolated struct GroupJoin: Sendable {
     // SwiftProtobuf.Message conformance is added in an extension below. See the
     // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
     // methods supported on all messages.
 
     public var sponsor: Rv_Data_NetworkAPI.Group.Member {
-      get {return _sponsor ?? Rv_Data_NetworkAPI.Group.Member()}
+      get {_sponsor ?? Rv_Data_NetworkAPI.Group.Member()}
       set {_sponsor = newValue}
     }
     /// Returns true if `sponsor` has been explicitly set.
-    public var hasSponsor: Bool {return self._sponsor != nil}
+    public var hasSponsor: Bool {self._sponsor != nil}
     /// Clears the value of `sponsor`. Subsequent reads from it will return its default value.
     public mutating func clearSponsor() {self._sponsor = nil}
 
     public var prospect: Rv_Data_NetworkAPI.Group.Member {
-      get {return _prospect ?? Rv_Data_NetworkAPI.Group.Member()}
+      get {_prospect ?? Rv_Data_NetworkAPI.Group.Member()}
       set {_prospect = newValue}
     }
     /// Returns true if `prospect` has been explicitly set.
-    public var hasProspect: Bool {return self._prospect != nil}
+    public var hasProspect: Bool {self._prospect != nil}
     /// Clears the value of `prospect`. Subsequent reads from it will return its default value.
     public mutating func clearProspect() {self._prospect = nil}
 
@@ -1728,17 +1728,17 @@ public struct Rv_Data_NetworkAPI: Sendable {
     fileprivate var _prospect: Rv_Data_NetworkAPI.Group.Member? = nil
   }
 
-  public struct GroupKick: Sendable {
+  public nonisolated struct GroupKick: Sendable {
     // SwiftProtobuf.Message conformance is added in an extension below. See the
     // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
     // methods supported on all messages.
 
     public var member: Rv_Data_NetworkAPI.Group.Member {
-      get {return _member ?? Rv_Data_NetworkAPI.Group.Member()}
+      get {_member ?? Rv_Data_NetworkAPI.Group.Member()}
       set {_member = newValue}
     }
     /// Returns true if `member` has been explicitly set.
-    public var hasMember: Bool {return self._member != nil}
+    public var hasMember: Bool {self._member != nil}
     /// Clears the value of `member`. Subsequent reads from it will return its default value.
     public mutating func clearMember() {self._member = nil}
 
@@ -1749,7 +1749,7 @@ public struct Rv_Data_NetworkAPI: Sendable {
     fileprivate var _member: Rv_Data_NetworkAPI.Group.Member? = nil
   }
 
-  public struct ServerState: Sendable {
+  public nonisolated struct ServerState: Sendable {
     // SwiftProtobuf.Message conformance is added in an extension below. See the
     // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
     // methods supported on all messages.
@@ -1765,7 +1765,7 @@ public struct Rv_Data_NetworkAPI: Sendable {
     public init() {}
   }
 
-  public struct Action: Sendable {
+  public nonisolated struct Action: Sendable {
     // SwiftProtobuf.Message conformance is added in an extension below. See the
     // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
     // methods supported on all messages.
@@ -1878,7 +1878,7 @@ public struct Rv_Data_NetworkAPI: Sendable {
 
     public var unknownFields = SwiftProtobuf.UnknownStorage()
 
-    public enum OneOf_Command: Equatable, Sendable {
+    public nonisolated enum OneOf_Command: Equatable, Sendable {
       case clear(Rv_Data_NetworkAPI.Action.API_Clear)
       case trigger(Rv_Data_NetworkAPI.Action.API_Trigger)
       case transport(Rv_Data_NetworkAPI.Action.API_Transport)
@@ -1895,7 +1895,7 @@ public struct Rv_Data_NetworkAPI: Sendable {
 
     }
 
-    public struct API_Clear: Sendable {
+    public nonisolated struct API_Clear: Sendable {
       // SwiftProtobuf.Message conformance is added in an extension below. See the
       // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
       // methods supported on all messages.
@@ -1920,13 +1920,13 @@ public struct Rv_Data_NetworkAPI: Sendable {
 
       public var unknownFields = SwiftProtobuf.UnknownStorage()
 
-      public enum OneOf_ClearInfo: Equatable, Sendable {
+      public nonisolated enum OneOf_ClearInfo: Equatable, Sendable {
         case layer(Rv_Data_NetworkAPI.Action.API_Clear.Layer)
         case groupIdentifier(Rv_Data_NetworkAPI.IndexOrNameIdentifier)
 
       }
 
-      public enum Layer: SwiftProtobuf.Enum, Swift.CaseIterable {
+      public nonisolated enum Layer: SwiftProtobuf.Enum, Swift.CaseIterable {
         public typealias RawValue = Int
         case unknown // = 0
         case videoInput // = 1
@@ -1987,7 +1987,7 @@ public struct Rv_Data_NetworkAPI: Sendable {
       public init() {}
     }
 
-    public struct API_TwoStepTrigger: Sendable {
+    public nonisolated struct API_TwoStepTrigger: Sendable {
       // SwiftProtobuf.Message conformance is added in an extension below. See the
       // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
       // methods supported on all messages.
@@ -2050,7 +2050,7 @@ public struct Rv_Data_NetworkAPI: Sendable {
 
       public var unknownFields = SwiftProtobuf.UnknownStorage()
 
-      public enum OneOf_TriggerData: Equatable, Sendable {
+      public nonisolated enum OneOf_TriggerData: Equatable, Sendable {
         case presentation(Rv_Data_NetworkAPI.Action.API_Trigger.Presentation)
         case media(Rv_Data_NetworkAPI.Action.API_Trigger.Media)
         case videoInput(Rv_Data_NetworkAPI.Action.API_Trigger.VideoInput)
@@ -2060,7 +2060,7 @@ public struct Rv_Data_NetworkAPI: Sendable {
 
       }
 
-      public enum Operation: SwiftProtobuf.Enum, Swift.CaseIterable {
+      public nonisolated enum Operation: SwiftProtobuf.Enum, Swift.CaseIterable {
         public typealias RawValue = Int
         case preroll // = 0
         case activate // = 1
@@ -2097,7 +2097,7 @@ public struct Rv_Data_NetworkAPI: Sendable {
       public init() {}
     }
 
-    public struct API_PrerollComplete: Sendable {
+    public nonisolated struct API_PrerollComplete: Sendable {
       // SwiftProtobuf.Message conformance is added in an extension below. See the
       // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
       // methods supported on all messages.
@@ -2111,7 +2111,7 @@ public struct Rv_Data_NetworkAPI: Sendable {
       public init() {}
     }
 
-    public struct API_Trigger: Sendable {
+    public nonisolated struct API_Trigger: Sendable {
       // SwiftProtobuf.Message conformance is added in an extension below. See the
       // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
       // methods supported on all messages.
@@ -2152,7 +2152,7 @@ public struct Rv_Data_NetworkAPI: Sendable {
 
       public var unknownFields = SwiftProtobuf.UnknownStorage()
 
-      public enum OneOf_TriggerData: Equatable, Sendable {
+      public nonisolated enum OneOf_TriggerData: Equatable, Sendable {
         case presentation(Rv_Data_NetworkAPI.Action.API_Trigger.Presentation)
         case media(Rv_Data_NetworkAPI.Action.API_Trigger.Media)
         case videoInput(Rv_Data_NetworkAPI.Action.API_Trigger.VideoInput)
@@ -2160,7 +2160,7 @@ public struct Rv_Data_NetworkAPI: Sendable {
 
       }
 
-      public struct Presentation: Sendable {
+      public nonisolated struct Presentation: Sendable {
         // SwiftProtobuf.Message conformance is added in an extension below. See the
         // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
         // methods supported on all messages.
@@ -2193,14 +2193,14 @@ public struct Rv_Data_NetworkAPI: Sendable {
 
         public var unknownFields = SwiftProtobuf.UnknownStorage()
 
-        public enum OneOf_PresentationSource: Equatable, Sendable {
+        public nonisolated enum OneOf_PresentationSource: Equatable, Sendable {
           case cueIndex(Int32)
           case playlistIndexPath(Rv_Data_NetworkAPI.Action.API_Trigger.Presentation.PlaylistPresentation)
           case libraryIndexPath(Rv_Data_NetworkAPI.Action.API_Trigger.Presentation.LibraryPresentation)
 
         }
 
-        public struct PlaylistPresentation: Sendable {
+        public nonisolated struct PlaylistPresentation: Sendable {
           // SwiftProtobuf.Message conformance is added in an extension below. See the
           // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
           // methods supported on all messages.
@@ -2212,35 +2212,35 @@ public struct Rv_Data_NetworkAPI: Sendable {
           public init() {}
         }
 
-        public struct LibraryPresentation: Sendable {
+        public nonisolated struct LibraryPresentation: Sendable {
           // SwiftProtobuf.Message conformance is added in an extension below. See the
           // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
           // methods supported on all messages.
 
           public var libraryComponent: Rv_Data_NetworkAPI.IndexOrNameIdentifier {
-            get {return _libraryComponent ?? Rv_Data_NetworkAPI.IndexOrNameIdentifier()}
+            get {_libraryComponent ?? Rv_Data_NetworkAPI.IndexOrNameIdentifier()}
             set {_libraryComponent = newValue}
           }
           /// Returns true if `libraryComponent` has been explicitly set.
-          public var hasLibraryComponent: Bool {return self._libraryComponent != nil}
+          public var hasLibraryComponent: Bool {self._libraryComponent != nil}
           /// Clears the value of `libraryComponent`. Subsequent reads from it will return its default value.
           public mutating func clearLibraryComponent() {self._libraryComponent = nil}
 
           public var presentationComponent: Rv_Data_NetworkAPI.IndexOrNameIdentifier {
-            get {return _presentationComponent ?? Rv_Data_NetworkAPI.IndexOrNameIdentifier()}
+            get {_presentationComponent ?? Rv_Data_NetworkAPI.IndexOrNameIdentifier()}
             set {_presentationComponent = newValue}
           }
           /// Returns true if `presentationComponent` has been explicitly set.
-          public var hasPresentationComponent: Bool {return self._presentationComponent != nil}
+          public var hasPresentationComponent: Bool {self._presentationComponent != nil}
           /// Clears the value of `presentationComponent`. Subsequent reads from it will return its default value.
           public mutating func clearPresentationComponent() {self._presentationComponent = nil}
 
           public var cueComponent: Rv_Data_NetworkAPI.IndexOrNameIdentifier {
-            get {return _cueComponent ?? Rv_Data_NetworkAPI.IndexOrNameIdentifier()}
+            get {_cueComponent ?? Rv_Data_NetworkAPI.IndexOrNameIdentifier()}
             set {_cueComponent = newValue}
           }
           /// Returns true if `cueComponent` has been explicitly set.
-          public var hasCueComponent: Bool {return self._cueComponent != nil}
+          public var hasCueComponent: Bool {self._cueComponent != nil}
           /// Clears the value of `cueComponent`. Subsequent reads from it will return its default value.
           public mutating func clearCueComponent() {self._cueComponent = nil}
 
@@ -2256,7 +2256,7 @@ public struct Rv_Data_NetworkAPI: Sendable {
         public init() {}
       }
 
-      public struct Media: Sendable {
+      public nonisolated struct Media: Sendable {
         // SwiftProtobuf.Message conformance is added in an extension below. See the
         // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
         // methods supported on all messages.
@@ -2268,17 +2268,17 @@ public struct Rv_Data_NetworkAPI: Sendable {
         public init() {}
       }
 
-      public struct VideoInput: Sendable {
+      public nonisolated struct VideoInput: Sendable {
         // SwiftProtobuf.Message conformance is added in an extension below. See the
         // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
         // methods supported on all messages.
 
         public var videoInputID: Rv_Data_NetworkAPI.IndexOrNameIdentifier {
-          get {return _videoInputID ?? Rv_Data_NetworkAPI.IndexOrNameIdentifier()}
+          get {_videoInputID ?? Rv_Data_NetworkAPI.IndexOrNameIdentifier()}
           set {_videoInputID = newValue}
         }
         /// Returns true if `videoInputID` has been explicitly set.
-        public var hasVideoInputID: Bool {return self._videoInputID != nil}
+        public var hasVideoInputID: Bool {self._videoInputID != nil}
         /// Clears the value of `videoInputID`. Subsequent reads from it will return its default value.
         public mutating func clearVideoInputID() {self._videoInputID = nil}
 
@@ -2289,7 +2289,7 @@ public struct Rv_Data_NetworkAPI: Sendable {
         fileprivate var _videoInputID: Rv_Data_NetworkAPI.IndexOrNameIdentifier? = nil
       }
 
-      public struct Audio: Sendable {
+      public nonisolated struct Audio: Sendable {
         // SwiftProtobuf.Message conformance is added in an extension below. See the
         // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
         // methods supported on all messages.
@@ -2304,7 +2304,7 @@ public struct Rv_Data_NetworkAPI: Sendable {
       public init() {}
     }
 
-    public struct API_Transport: Sendable {
+    public nonisolated struct API_Transport: Sendable {
       // SwiftProtobuf.Message conformance is added in an extension below. See the
       // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
       // methods supported on all messages.
@@ -2355,7 +2355,7 @@ public struct Rv_Data_NetworkAPI: Sendable {
 
       public var unknownFields = SwiftProtobuf.UnknownStorage()
 
-      public enum OneOf_TransportAction: Equatable, Sendable {
+      public nonisolated enum OneOf_TransportAction: Equatable, Sendable {
         case play(Rv_Data_NetworkAPI.Action.API_Transport.Play)
         case pause(Rv_Data_NetworkAPI.Action.API_Transport.Pause)
         case skipBackward(Rv_Data_NetworkAPI.Action.API_Transport.SkipBackward)
@@ -2364,7 +2364,7 @@ public struct Rv_Data_NetworkAPI: Sendable {
 
       }
 
-      public enum TransportLayer: SwiftProtobuf.Enum, Swift.CaseIterable {
+      public nonisolated enum TransportLayer: SwiftProtobuf.Enum, Swift.CaseIterable {
         public typealias RawValue = Int
         case unknown // = 0
         case presentation // = 1
@@ -2406,7 +2406,7 @@ public struct Rv_Data_NetworkAPI: Sendable {
 
       }
 
-      public struct Play: Sendable {
+      public nonisolated struct Play: Sendable {
         // SwiftProtobuf.Message conformance is added in an extension below. See the
         // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
         // methods supported on all messages.
@@ -2416,7 +2416,7 @@ public struct Rv_Data_NetworkAPI: Sendable {
         public init() {}
       }
 
-      public struct Pause: Sendable {
+      public nonisolated struct Pause: Sendable {
         // SwiftProtobuf.Message conformance is added in an extension below. See the
         // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
         // methods supported on all messages.
@@ -2426,19 +2426,7 @@ public struct Rv_Data_NetworkAPI: Sendable {
         public init() {}
       }
 
-      public struct SkipBackward: Sendable {
-        // SwiftProtobuf.Message conformance is added in an extension below. See the
-        // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
-        // methods supported on all messages.
-
-        public var seconds: Int32 = 0
-
-        public var unknownFields = SwiftProtobuf.UnknownStorage()
-
-        public init() {}
-      }
-
-      public struct SkipForward: Sendable {
+      public nonisolated struct SkipBackward: Sendable {
         // SwiftProtobuf.Message conformance is added in an extension below. See the
         // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
         // methods supported on all messages.
@@ -2450,7 +2438,19 @@ public struct Rv_Data_NetworkAPI: Sendable {
         public init() {}
       }
 
-      public struct GoToEnd: Sendable {
+      public nonisolated struct SkipForward: Sendable {
+        // SwiftProtobuf.Message conformance is added in an extension below. See the
+        // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
+        // methods supported on all messages.
+
+        public var seconds: Int32 = 0
+
+        public var unknownFields = SwiftProtobuf.UnknownStorage()
+
+        public init() {}
+      }
+
+      public nonisolated struct GoToEnd: Sendable {
         // SwiftProtobuf.Message conformance is added in an extension below. See the
         // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
         // methods supported on all messages.
@@ -2465,7 +2465,7 @@ public struct Rv_Data_NetworkAPI: Sendable {
       public init() {}
     }
 
-    public struct API_Prop: Sendable {
+    public nonisolated struct API_Prop: Sendable {
       // SwiftProtobuf.Message conformance is added in an extension below. See the
       // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
       // methods supported on all messages.
@@ -2490,23 +2490,23 @@ public struct Rv_Data_NetworkAPI: Sendable {
 
       public var unknownFields = SwiftProtobuf.UnknownStorage()
 
-      public enum OneOf_PropAction: Equatable, Sendable {
+      public nonisolated enum OneOf_PropAction: Equatable, Sendable {
         case trigger(Rv_Data_NetworkAPI.Action.API_Prop.TriggerProp)
         case clear(Rv_Data_NetworkAPI.Action.API_Prop.ClearProp)
 
       }
 
-      public struct TriggerProp: Sendable {
+      public nonisolated struct TriggerProp: Sendable {
         // SwiftProtobuf.Message conformance is added in an extension below. See the
         // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
         // methods supported on all messages.
 
         public var identifier: Rv_Data_NetworkAPI.IndexOrNameIdentifier {
-          get {return _identifier ?? Rv_Data_NetworkAPI.IndexOrNameIdentifier()}
+          get {_identifier ?? Rv_Data_NetworkAPI.IndexOrNameIdentifier()}
           set {_identifier = newValue}
         }
         /// Returns true if `identifier` has been explicitly set.
-        public var hasIdentifier: Bool {return self._identifier != nil}
+        public var hasIdentifier: Bool {self._identifier != nil}
         /// Clears the value of `identifier`. Subsequent reads from it will return its default value.
         public mutating func clearIdentifier() {self._identifier = nil}
 
@@ -2517,17 +2517,17 @@ public struct Rv_Data_NetworkAPI: Sendable {
         fileprivate var _identifier: Rv_Data_NetworkAPI.IndexOrNameIdentifier? = nil
       }
 
-      public struct ClearProp: Sendable {
+      public nonisolated struct ClearProp: Sendable {
         // SwiftProtobuf.Message conformance is added in an extension below. See the
         // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
         // methods supported on all messages.
 
         public var identifier: Rv_Data_NetworkAPI.IndexOrNameIdentifier {
-          get {return _identifier ?? Rv_Data_NetworkAPI.IndexOrNameIdentifier()}
+          get {_identifier ?? Rv_Data_NetworkAPI.IndexOrNameIdentifier()}
           set {_identifier = newValue}
         }
         /// Returns true if `identifier` has been explicitly set.
-        public var hasIdentifier: Bool {return self._identifier != nil}
+        public var hasIdentifier: Bool {self._identifier != nil}
         /// Clears the value of `identifier`. Subsequent reads from it will return its default value.
         public mutating func clearIdentifier() {self._identifier = nil}
 
@@ -2541,7 +2541,7 @@ public struct Rv_Data_NetworkAPI: Sendable {
       public init() {}
     }
 
-    public struct API_Timer: Sendable {
+    public nonisolated struct API_Timer: Sendable {
       // SwiftProtobuf.Message conformance is added in an extension below. See the
       // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
       // methods supported on all messages.
@@ -2582,7 +2582,7 @@ public struct Rv_Data_NetworkAPI: Sendable {
 
       public var unknownFields = SwiftProtobuf.UnknownStorage()
 
-      public enum OneOf_TimerAction: Equatable, Sendable {
+      public nonisolated enum OneOf_TimerAction: Equatable, Sendable {
         case start(Rv_Data_NetworkAPI.Action.API_Timer.StartTimer)
         case stop(Rv_Data_NetworkAPI.Action.API_Timer.StopTimer)
         case reset(Rv_Data_NetworkAPI.Action.API_Timer.ResetTimer)
@@ -2590,17 +2590,17 @@ public struct Rv_Data_NetworkAPI: Sendable {
 
       }
 
-      public struct StartTimer: Sendable {
+      public nonisolated struct StartTimer: Sendable {
         // SwiftProtobuf.Message conformance is added in an extension below. See the
         // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
         // methods supported on all messages.
 
         public var identifier: Rv_Data_NetworkAPI.IndexOrNameIdentifier {
-          get {return _identifier ?? Rv_Data_NetworkAPI.IndexOrNameIdentifier()}
+          get {_identifier ?? Rv_Data_NetworkAPI.IndexOrNameIdentifier()}
           set {_identifier = newValue}
         }
         /// Returns true if `identifier` has been explicitly set.
-        public var hasIdentifier: Bool {return self._identifier != nil}
+        public var hasIdentifier: Bool {self._identifier != nil}
         /// Clears the value of `identifier`. Subsequent reads from it will return its default value.
         public mutating func clearIdentifier() {self._identifier = nil}
 
@@ -2611,17 +2611,17 @@ public struct Rv_Data_NetworkAPI: Sendable {
         fileprivate var _identifier: Rv_Data_NetworkAPI.IndexOrNameIdentifier? = nil
       }
 
-      public struct StopTimer: Sendable {
+      public nonisolated struct StopTimer: Sendable {
         // SwiftProtobuf.Message conformance is added in an extension below. See the
         // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
         // methods supported on all messages.
 
         public var identifier: Rv_Data_NetworkAPI.IndexOrNameIdentifier {
-          get {return _identifier ?? Rv_Data_NetworkAPI.IndexOrNameIdentifier()}
+          get {_identifier ?? Rv_Data_NetworkAPI.IndexOrNameIdentifier()}
           set {_identifier = newValue}
         }
         /// Returns true if `identifier` has been explicitly set.
-        public var hasIdentifier: Bool {return self._identifier != nil}
+        public var hasIdentifier: Bool {self._identifier != nil}
         /// Clears the value of `identifier`. Subsequent reads from it will return its default value.
         public mutating func clearIdentifier() {self._identifier = nil}
 
@@ -2632,17 +2632,17 @@ public struct Rv_Data_NetworkAPI: Sendable {
         fileprivate var _identifier: Rv_Data_NetworkAPI.IndexOrNameIdentifier? = nil
       }
 
-      public struct ResetTimer: Sendable {
+      public nonisolated struct ResetTimer: Sendable {
         // SwiftProtobuf.Message conformance is added in an extension below. See the
         // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
         // methods supported on all messages.
 
         public var identifier: Rv_Data_NetworkAPI.IndexOrNameIdentifier {
-          get {return _identifier ?? Rv_Data_NetworkAPI.IndexOrNameIdentifier()}
+          get {_identifier ?? Rv_Data_NetworkAPI.IndexOrNameIdentifier()}
           set {_identifier = newValue}
         }
         /// Returns true if `identifier` has been explicitly set.
-        public var hasIdentifier: Bool {return self._identifier != nil}
+        public var hasIdentifier: Bool {self._identifier != nil}
         /// Clears the value of `identifier`. Subsequent reads from it will return its default value.
         public mutating func clearIdentifier() {self._identifier = nil}
 
@@ -2653,26 +2653,26 @@ public struct Rv_Data_NetworkAPI: Sendable {
         fileprivate var _identifier: Rv_Data_NetworkAPI.IndexOrNameIdentifier? = nil
       }
 
-      public struct ConfigureTimer: Sendable {
+      public nonisolated struct ConfigureTimer: Sendable {
         // SwiftProtobuf.Message conformance is added in an extension below. See the
         // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
         // methods supported on all messages.
 
         public var identifier: Rv_Data_NetworkAPI.IndexOrNameIdentifier {
-          get {return _identifier ?? Rv_Data_NetworkAPI.IndexOrNameIdentifier()}
+          get {_identifier ?? Rv_Data_NetworkAPI.IndexOrNameIdentifier()}
           set {_identifier = newValue}
         }
         /// Returns true if `identifier` has been explicitly set.
-        public var hasIdentifier: Bool {return self._identifier != nil}
+        public var hasIdentifier: Bool {self._identifier != nil}
         /// Clears the value of `identifier`. Subsequent reads from it will return its default value.
         public mutating func clearIdentifier() {self._identifier = nil}
 
         public var configuration: Rv_Data_Timer.Configuration {
-          get {return _configuration ?? Rv_Data_Timer.Configuration()}
+          get {_configuration ?? Rv_Data_Timer.Configuration()}
           set {_configuration = newValue}
         }
         /// Returns true if `configuration` has been explicitly set.
-        public var hasConfiguration: Bool {return self._configuration != nil}
+        public var hasConfiguration: Bool {self._configuration != nil}
         /// Clears the value of `configuration`. Subsequent reads from it will return its default value.
         public mutating func clearConfiguration() {self._configuration = nil}
 
@@ -2687,7 +2687,7 @@ public struct Rv_Data_NetworkAPI: Sendable {
       public init() {}
     }
 
-    public struct API_Message: Sendable {
+    public nonisolated struct API_Message: Sendable {
       // SwiftProtobuf.Message conformance is added in an extension below. See the
       // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
       // methods supported on all messages.
@@ -2712,23 +2712,23 @@ public struct Rv_Data_NetworkAPI: Sendable {
 
       public var unknownFields = SwiftProtobuf.UnknownStorage()
 
-      public enum OneOf_MessageAction: Equatable, Sendable {
+      public nonisolated enum OneOf_MessageAction: Equatable, Sendable {
         case trigger(Rv_Data_NetworkAPI.Action.API_Message.TriggerMessage)
         case clear(Rv_Data_NetworkAPI.Action.API_Message.ClearMessage)
 
       }
 
-      public struct TriggerMessage: Sendable {
+      public nonisolated struct TriggerMessage: Sendable {
         // SwiftProtobuf.Message conformance is added in an extension below. See the
         // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
         // methods supported on all messages.
 
         public var identifier: Rv_Data_NetworkAPI.IndexOrNameIdentifier {
-          get {return _identifier ?? Rv_Data_NetworkAPI.IndexOrNameIdentifier()}
+          get {_identifier ?? Rv_Data_NetworkAPI.IndexOrNameIdentifier()}
           set {_identifier = newValue}
         }
         /// Returns true if `identifier` has been explicitly set.
-        public var hasIdentifier: Bool {return self._identifier != nil}
+        public var hasIdentifier: Bool {self._identifier != nil}
         /// Clears the value of `identifier`. Subsequent reads from it will return its default value.
         public mutating func clearIdentifier() {self._identifier = nil}
 
@@ -2741,17 +2741,17 @@ public struct Rv_Data_NetworkAPI: Sendable {
         fileprivate var _identifier: Rv_Data_NetworkAPI.IndexOrNameIdentifier? = nil
       }
 
-      public struct ClearMessage: Sendable {
+      public nonisolated struct ClearMessage: Sendable {
         // SwiftProtobuf.Message conformance is added in an extension below. See the
         // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
         // methods supported on all messages.
 
         public var identifier: Rv_Data_NetworkAPI.IndexOrNameIdentifier {
-          get {return _identifier ?? Rv_Data_NetworkAPI.IndexOrNameIdentifier()}
+          get {_identifier ?? Rv_Data_NetworkAPI.IndexOrNameIdentifier()}
           set {_identifier = newValue}
         }
         /// Returns true if `identifier` has been explicitly set.
-        public var hasIdentifier: Bool {return self._identifier != nil}
+        public var hasIdentifier: Bool {self._identifier != nil}
         /// Clears the value of `identifier`. Subsequent reads from it will return its default value.
         public mutating func clearIdentifier() {self._identifier = nil}
 
@@ -2765,17 +2765,17 @@ public struct Rv_Data_NetworkAPI: Sendable {
       public init() {}
     }
 
-    public struct API_Macro: Sendable {
+    public nonisolated struct API_Macro: Sendable {
       // SwiftProtobuf.Message conformance is added in an extension below. See the
       // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
       // methods supported on all messages.
 
       public var identifier: Rv_Data_NetworkAPI.IndexOrNameIdentifier {
-        get {return _identifier ?? Rv_Data_NetworkAPI.IndexOrNameIdentifier()}
+        get {_identifier ?? Rv_Data_NetworkAPI.IndexOrNameIdentifier()}
         set {_identifier = newValue}
       }
       /// Returns true if `identifier` has been explicitly set.
-      public var hasIdentifier: Bool {return self._identifier != nil}
+      public var hasIdentifier: Bool {self._identifier != nil}
       /// Clears the value of `identifier`. Subsequent reads from it will return its default value.
       public mutating func clearIdentifier() {self._identifier = nil}
 
@@ -2786,17 +2786,17 @@ public struct Rv_Data_NetworkAPI: Sendable {
       fileprivate var _identifier: Rv_Data_NetworkAPI.IndexOrNameIdentifier? = nil
     }
 
-    public struct API_Look: Sendable {
+    public nonisolated struct API_Look: Sendable {
       // SwiftProtobuf.Message conformance is added in an extension below. See the
       // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
       // methods supported on all messages.
 
       public var identifier: Rv_Data_NetworkAPI.IndexOrNameIdentifier {
-        get {return _identifier ?? Rv_Data_NetworkAPI.IndexOrNameIdentifier()}
+        get {_identifier ?? Rv_Data_NetworkAPI.IndexOrNameIdentifier()}
         set {_identifier = newValue}
       }
       /// Returns true if `identifier` has been explicitly set.
-      public var hasIdentifier: Bool {return self._identifier != nil}
+      public var hasIdentifier: Bool {self._identifier != nil}
       /// Clears the value of `identifier`. Subsequent reads from it will return its default value.
       public mutating func clearIdentifier() {self._identifier = nil}
 
@@ -2807,7 +2807,7 @@ public struct Rv_Data_NetworkAPI: Sendable {
       fileprivate var _identifier: Rv_Data_NetworkAPI.IndexOrNameIdentifier? = nil
     }
 
-    public struct API_Stage: Sendable {
+    public nonisolated struct API_Stage: Sendable {
       // SwiftProtobuf.Message conformance is added in an extension below. See the
       // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
       // methods supported on all messages.
@@ -2832,13 +2832,13 @@ public struct Rv_Data_NetworkAPI: Sendable {
 
       public var unknownFields = SwiftProtobuf.UnknownStorage()
 
-      public enum OneOf_StageAction: Equatable, Sendable {
+      public nonisolated enum OneOf_StageAction: Equatable, Sendable {
         case layouts(Rv_Data_NetworkAPI.Action.API_Stage.StageLayouts)
         case message(Rv_Data_NetworkAPI.Action.API_Stage.StageMessage)
 
       }
 
-      public struct StageLayouts: Sendable {
+      public nonisolated struct StageLayouts: Sendable {
         // SwiftProtobuf.Message conformance is added in an extension below. See the
         // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
         // methods supported on all messages.
@@ -2850,7 +2850,7 @@ public struct Rv_Data_NetworkAPI: Sendable {
         public init() {}
       }
 
-      public struct StageMessage: Sendable {
+      public nonisolated struct StageMessage: Sendable {
         // SwiftProtobuf.Message conformance is added in an extension below. See the
         // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
         // methods supported on all messages.
@@ -2883,14 +2883,14 @@ public struct Rv_Data_NetworkAPI: Sendable {
 
         public var unknownFields = SwiftProtobuf.UnknownStorage()
 
-        public enum OneOf_Action: Equatable, Sendable {
+        public nonisolated enum OneOf_Action: Equatable, Sendable {
           case showMessage(Rv_Data_NetworkAPI.Action.API_Stage.StageMessage.ShowMessage)
           case clearMessage_p(Rv_Data_NetworkAPI.Action.API_Stage.StageMessage.ClearMessage)
           case hideMessage(Rv_Data_NetworkAPI.Action.API_Stage.StageMessage.HideMessage)
 
         }
 
-        public struct ShowMessage: Sendable {
+        public nonisolated struct ShowMessage: Sendable {
           // SwiftProtobuf.Message conformance is added in an extension below. See the
           // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
           // methods supported on all messages.
@@ -2902,7 +2902,7 @@ public struct Rv_Data_NetworkAPI: Sendable {
           public init() {}
         }
 
-        public struct ClearMessage: Sendable {
+        public nonisolated struct ClearMessage: Sendable {
           // SwiftProtobuf.Message conformance is added in an extension below. See the
           // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
           // methods supported on all messages.
@@ -2912,7 +2912,7 @@ public struct Rv_Data_NetworkAPI: Sendable {
           public init() {}
         }
 
-        public struct HideMessage: Sendable {
+        public nonisolated struct HideMessage: Sendable {
           // SwiftProtobuf.Message conformance is added in an extension below. See the
           // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
           // methods supported on all messages.
@@ -2928,7 +2928,7 @@ public struct Rv_Data_NetworkAPI: Sendable {
       public init() {}
     }
 
-    public struct StatusRequest: Sendable {
+    public nonisolated struct StatusRequest: Sendable {
       // SwiftProtobuf.Message conformance is added in an extension below. See the
       // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
       // methods supported on all messages.
@@ -2938,7 +2938,7 @@ public struct Rv_Data_NetworkAPI: Sendable {
       public init() {}
     }
 
-    public struct API_Status: Sendable {
+    public nonisolated struct API_Status: Sendable {
       // SwiftProtobuf.Message conformance is added in an extension below. See the
       // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
       // methods supported on all messages.
@@ -2948,26 +2948,26 @@ public struct Rv_Data_NetworkAPI: Sendable {
       public init() {}
     }
 
-    public struct API_StatusResponse: Sendable {
+    public nonisolated struct API_StatusResponse: Sendable {
       // SwiftProtobuf.Message conformance is added in an extension below. See the
       // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
       // methods supported on all messages.
 
       public var groupDefinition: Rv_Data_ProLink.GroupDefinition {
-        get {return _groupDefinition ?? Rv_Data_ProLink.GroupDefinition()}
+        get {_groupDefinition ?? Rv_Data_ProLink.GroupDefinition()}
         set {_groupDefinition = newValue}
       }
       /// Returns true if `groupDefinition` has been explicitly set.
-      public var hasGroupDefinition: Bool {return self._groupDefinition != nil}
+      public var hasGroupDefinition: Bool {self._groupDefinition != nil}
       /// Clears the value of `groupDefinition`. Subsequent reads from it will return its default value.
       public mutating func clearGroupDefinition() {self._groupDefinition = nil}
 
       public var status: Rv_Data_ProLink.MemberStatus {
-        get {return _status ?? Rv_Data_ProLink.MemberStatus()}
+        get {_status ?? Rv_Data_ProLink.MemberStatus()}
         set {_status = newValue}
       }
       /// Returns true if `status` has been explicitly set.
-      public var hasStatus: Bool {return self._status != nil}
+      public var hasStatus: Bool {self._status != nil}
       /// Clears the value of `status`. Subsequent reads from it will return its default value.
       public mutating func clearStatus() {self._status = nil}
 
@@ -2982,7 +2982,7 @@ public struct Rv_Data_NetworkAPI: Sendable {
     public init() {}
   }
 
-  public struct IndexOrNameIdentifier: Sendable {
+  public nonisolated struct IndexOrNameIdentifier: Sendable {
     // SwiftProtobuf.Message conformance is added in an extension below. See the
     // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
     // methods supported on all messages.
@@ -3007,7 +3007,7 @@ public struct Rv_Data_NetworkAPI: Sendable {
 
     public var unknownFields = SwiftProtobuf.UnknownStorage()
 
-    public enum OneOf_Component: Equatable, Sendable {
+    public nonisolated enum OneOf_Component: Equatable, Sendable {
       case index(Int32)
       case name(String)
 
@@ -3016,26 +3016,26 @@ public struct Rv_Data_NetworkAPI: Sendable {
     public init() {}
   }
 
-  public struct IndexOrNameIdentifierPair: Sendable {
+  public nonisolated struct IndexOrNameIdentifierPair: Sendable {
     // SwiftProtobuf.Message conformance is added in an extension below. See the
     // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
     // methods supported on all messages.
 
     public var key: Rv_Data_NetworkAPI.IndexOrNameIdentifier {
-      get {return _key ?? Rv_Data_NetworkAPI.IndexOrNameIdentifier()}
+      get {_key ?? Rv_Data_NetworkAPI.IndexOrNameIdentifier()}
       set {_key = newValue}
     }
     /// Returns true if `key` has been explicitly set.
-    public var hasKey: Bool {return self._key != nil}
+    public var hasKey: Bool {self._key != nil}
     /// Clears the value of `key`. Subsequent reads from it will return its default value.
     public mutating func clearKey() {self._key = nil}
 
     public var value: Rv_Data_NetworkAPI.IndexOrNameIdentifier {
-      get {return _value ?? Rv_Data_NetworkAPI.IndexOrNameIdentifier()}
+      get {_value ?? Rv_Data_NetworkAPI.IndexOrNameIdentifier()}
       set {_value = newValue}
     }
     /// Returns true if `value` has been explicitly set.
-    public var hasValue: Bool {return self._value != nil}
+    public var hasValue: Bool {self._value != nil}
     /// Clears the value of `value`. Subsequent reads from it will return its default value.
     public mutating func clearValue() {self._value = nil}
 
@@ -3052,9 +3052,9 @@ public struct Rv_Data_NetworkAPI: Sendable {
 
 // MARK: - Code below here is support for the SwiftProtobuf runtime.
 
-fileprivate let _protobuf_package = "rv.data"
+fileprivate nonisolated let _protobuf_package = "rv.data"
 
-extension Rv_Data_ProApiIn: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+nonisolated extension Rv_Data_ProApiIn: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   public static let protoMessageName: String = _protobuf_package + ".ProApiIn"
   public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{3}handler_in\0\u{3}network_api\0\u{3}network_api_v1\0")
 
@@ -3138,7 +3138,7 @@ extension Rv_Data_ProApiIn: SwiftProtobuf.Message, SwiftProtobuf._MessageImpleme
   }
 }
 
-extension Rv_Data_ProApiOut: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+nonisolated extension Rv_Data_ProApiOut: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   public static let protoMessageName: String = _protobuf_package + ".ProApiOut"
   public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{3}handler_out\0\u{3}client_action\0\u{3}network_api\0\u{3}network_api_v1\0")
 
@@ -3239,7 +3239,7 @@ extension Rv_Data_ProApiOut: SwiftProtobuf.Message, SwiftProtobuf._MessageImplem
   }
 }
 
-extension Rv_Data_ProApiNetworkConfiguration: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+nonisolated extension Rv_Data_ProApiNetworkConfiguration: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   public static let protoMessageName: String = _protobuf_package + ".ProApiNetworkConfiguration"
   public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{3}enable_network\0\u{1}port\0\u{3}network_name\0\u{3}remote_enable\0\u{3}remote_control_enable\0\u{3}remote_control_password\0\u{3}remote_observe_enable\0\u{3}remote_observe_password\0\u{3}stage_enable\0\u{3}stage_password\0\u{3}link_enable\0\u{3}web_resource_root\0")
 
@@ -3324,7 +3324,7 @@ extension Rv_Data_ProApiNetworkConfiguration: SwiftProtobuf.Message, SwiftProtob
   }
 }
 
-extension Rv_Data_ProLink: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+nonisolated extension Rv_Data_ProLink: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   public static let protoMessageName: String = _protobuf_package + ".ProLink"
   public static let _protobuf_nameMap = SwiftProtobuf._NameMap()
 
@@ -3343,7 +3343,7 @@ extension Rv_Data_ProLink: SwiftProtobuf.Message, SwiftProtobuf._MessageImplemen
   }
 }
 
-extension Rv_Data_ProLink.GroupDefinition: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+nonisolated extension Rv_Data_ProLink.GroupDefinition: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   public static let protoMessageName: String = Rv_Data_ProLink.protoMessageName + ".GroupDefinition"
   public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{1}timestamp\0\u{1}secret\0\u{1}name\0\u{1}members\0\u{3}group_identifier\0")
 
@@ -3397,7 +3397,7 @@ extension Rv_Data_ProLink.GroupDefinition: SwiftProtobuf.Message, SwiftProtobuf.
   }
 }
 
-extension Rv_Data_ProLink.GroupDefinition.Member: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+nonisolated extension Rv_Data_ProLink.GroupDefinition.Member: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   public static let protoMessageName: String = Rv_Data_ProLink.GroupDefinition.protoMessageName + ".Member"
   public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{1}ip\0\u{1}port\0")
 
@@ -3432,7 +3432,7 @@ extension Rv_Data_ProLink.GroupDefinition.Member: SwiftProtobuf.Message, SwiftPr
   }
 }
 
-extension Rv_Data_ProLink.ZeroConfig: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+nonisolated extension Rv_Data_ProLink.ZeroConfig: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   public static let protoMessageName: String = Rv_Data_ProLink.protoMessageName + ".ZeroConfig"
   public static let _protobuf_nameMap = SwiftProtobuf._NameMap()
 
@@ -3451,7 +3451,7 @@ extension Rv_Data_ProLink.ZeroConfig: SwiftProtobuf.Message, SwiftProtobuf._Mess
   }
 }
 
-extension Rv_Data_ProLink.ZeroConfig.NetworkEnvironment: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+nonisolated extension Rv_Data_ProLink.ZeroConfig.NetworkEnvironment: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   public static let protoMessageName: String = Rv_Data_ProLink.ZeroConfig.protoMessageName + ".NetworkEnvironment"
   public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{3}available_groups\0\u{3}available_devices\0")
 
@@ -3486,7 +3486,7 @@ extension Rv_Data_ProLink.ZeroConfig.NetworkEnvironment: SwiftProtobuf.Message, 
   }
 }
 
-extension Rv_Data_ProLink.ZeroConfig.MulticastPacket: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+nonisolated extension Rv_Data_ProLink.ZeroConfig.MulticastPacket: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   public static let protoMessageName: String = Rv_Data_ProLink.ZeroConfig.protoMessageName + ".MulticastPacket"
   public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{1}group\0\u{1}device\0")
 
@@ -3525,7 +3525,7 @@ extension Rv_Data_ProLink.ZeroConfig.MulticastPacket: SwiftProtobuf.Message, Swi
   }
 }
 
-extension Rv_Data_ProLink.TowerMessage: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+nonisolated extension Rv_Data_ProLink.TowerMessage: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   public static let protoMessageName: String = Rv_Data_ProLink.protoMessageName + ".TowerMessage"
   public static let _protobuf_nameMap = SwiftProtobuf._NameMap()
 
@@ -3544,7 +3544,7 @@ extension Rv_Data_ProLink.TowerMessage: SwiftProtobuf.Message, SwiftProtobuf._Me
   }
 }
 
-extension Rv_Data_ProLink.TowerMessage.TowerStatusRequest: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+nonisolated extension Rv_Data_ProLink.TowerMessage.TowerStatusRequest: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   public static let protoMessageName: String = Rv_Data_ProLink.TowerMessage.protoMessageName + ".TowerStatusRequest"
   public static let _protobuf_nameMap = SwiftProtobuf._NameMap()
 
@@ -3563,7 +3563,7 @@ extension Rv_Data_ProLink.TowerMessage.TowerStatusRequest: SwiftProtobuf.Message
   }
 }
 
-extension Rv_Data_ProLink.TowerMessage.TowerStatusResponse: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+nonisolated extension Rv_Data_ProLink.TowerMessage.TowerStatusResponse: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   public static let protoMessageName: String = Rv_Data_ProLink.TowerMessage.protoMessageName + ".TowerStatusResponse"
   public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{3}group_definition\0\u{3}member_name\0")
 
@@ -3614,7 +3614,7 @@ extension Rv_Data_ProLink.TowerMessage.TowerStatusResponse: SwiftProtobuf.Messag
   }
 }
 
-extension Rv_Data_ProLink.TowerMessage.TowerAddMemberRequest: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+nonisolated extension Rv_Data_ProLink.TowerMessage.TowerAddMemberRequest: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   public static let protoMessageName: String = Rv_Data_ProLink.TowerMessage.protoMessageName + ".TowerAddMemberRequest"
   public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{3}group_definition\0\u{3}joining_member\0")
 
@@ -3681,7 +3681,7 @@ extension Rv_Data_ProLink.TowerMessage.TowerAddMemberRequest: SwiftProtobuf.Mess
   }
 }
 
-extension Rv_Data_ProLink.TowerMessage.TowerRemoveMemberRequest: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+nonisolated extension Rv_Data_ProLink.TowerMessage.TowerRemoveMemberRequest: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   public static let protoMessageName: String = Rv_Data_ProLink.TowerMessage.protoMessageName + ".TowerRemoveMemberRequest"
   public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{3}removing_member\0")
 
@@ -3715,7 +3715,7 @@ extension Rv_Data_ProLink.TowerMessage.TowerRemoveMemberRequest: SwiftProtobuf.M
   }
 }
 
-extension Rv_Data_ProLink.TowerMessage.TowerAddMemberResponse: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+nonisolated extension Rv_Data_ProLink.TowerMessage.TowerAddMemberResponse: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   public static let protoMessageName: String = Rv_Data_ProLink.TowerMessage.protoMessageName + ".TowerAddMemberResponse"
   public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{3}group_definition\0\u{1}accept\0\u{3}decline_reason\0")
 
@@ -3794,11 +3794,11 @@ extension Rv_Data_ProLink.TowerMessage.TowerAddMemberResponse: SwiftProtobuf.Mes
   }
 }
 
-extension Rv_Data_ProLink.TowerMessage.TowerAddMemberResponse.DeclineReason: SwiftProtobuf._ProtoNameProviding {
+nonisolated extension Rv_Data_ProLink.TowerMessage.TowerAddMemberResponse.DeclineReason: SwiftProtobuf._ProtoNameProviding {
   public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{2}\0ALREADY_IN_GROUP\0\u{1}USER_DECLINED\0")
 }
 
-extension Rv_Data_ProLink.TowerMessage.TowerAddMemberResponse.Accept: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+nonisolated extension Rv_Data_ProLink.TowerMessage.TowerAddMemberResponse.Accept: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   public static let protoMessageName: String = Rv_Data_ProLink.TowerMessage.TowerAddMemberResponse.protoMessageName + ".Accept"
   public static let _protobuf_nameMap = SwiftProtobuf._NameMap()
 
@@ -3817,7 +3817,7 @@ extension Rv_Data_ProLink.TowerMessage.TowerAddMemberResponse.Accept: SwiftProto
   }
 }
 
-extension Rv_Data_ProLink.TowerMessage.TowerHeartbeatRequest: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+nonisolated extension Rv_Data_ProLink.TowerMessage.TowerHeartbeatRequest: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   public static let protoMessageName: String = Rv_Data_ProLink.TowerMessage.protoMessageName + ".TowerHeartbeatRequest"
   public static let _protobuf_nameMap = SwiftProtobuf._NameMap()
 
@@ -3836,7 +3836,7 @@ extension Rv_Data_ProLink.TowerMessage.TowerHeartbeatRequest: SwiftProtobuf.Mess
   }
 }
 
-extension Rv_Data_ProLink.TowerMessage.TowerHeartbeatResponse: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+nonisolated extension Rv_Data_ProLink.TowerMessage.TowerHeartbeatResponse: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   public static let protoMessageName: String = Rv_Data_ProLink.TowerMessage.protoMessageName + ".TowerHeartbeatResponse"
   public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{3}group_definition\0")
 
@@ -3870,7 +3870,7 @@ extension Rv_Data_ProLink.TowerMessage.TowerHeartbeatResponse: SwiftProtobuf.Mes
   }
 }
 
-extension Rv_Data_ProLink.MemberStatus: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+nonisolated extension Rv_Data_ProLink.MemberStatus: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   public static let protoMessageName: String = Rv_Data_ProLink.protoMessageName + ".MemberStatus"
   public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{1}ip\0\u{1}port\0\u{1}name\0\u{1}platform\0\u{3}os_version\0\u{3}host_description\0\u{3}api_version\0\u{3}connection_status\0")
 
@@ -3935,15 +3935,15 @@ extension Rv_Data_ProLink.MemberStatus: SwiftProtobuf.Message, SwiftProtobuf._Me
   }
 }
 
-extension Rv_Data_ProLink.MemberStatus.Platform: SwiftProtobuf._ProtoNameProviding {
+nonisolated extension Rv_Data_ProLink.MemberStatus.Platform: SwiftProtobuf._ProtoNameProviding {
   public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{2}\0PLATFORM_UNDEFINED\0\u{1}PLATFORM_MACOS\0\u{1}PLATFORM_WINDOWS\0")
 }
 
-extension Rv_Data_ProLink.MemberStatus.ConnectionStatus: SwiftProtobuf._ProtoNameProviding {
+nonisolated extension Rv_Data_ProLink.MemberStatus.ConnectionStatus: SwiftProtobuf._ProtoNameProviding {
   public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{2}\0CONNECTION_STATUS_UNKNOWN\0\u{1}CONNECTION_STATUS_CONNECTED\0\u{1}CONNECTION_STATUS_DISCONNECTED\0")
 }
 
-extension Rv_Data_ProLink.ClientAction: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+nonisolated extension Rv_Data_ProLink.ClientAction: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   public static let protoMessageName: String = Rv_Data_ProLink.protoMessageName + ".ClientAction"
   public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{3}add_connection\0\u{3}remove_connection\0\u{3}cancel_action\0\u{3}render_time\0")
 
@@ -4044,7 +4044,7 @@ extension Rv_Data_ProLink.ClientAction: SwiftProtobuf.Message, SwiftProtobuf._Me
   }
 }
 
-extension Rv_Data_ProLink.ClientAction.AddConnection: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+nonisolated extension Rv_Data_ProLink.ClientAction.AddConnection: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   public static let protoMessageName: String = Rv_Data_ProLink.ClientAction.protoMessageName + ".AddConnection"
   public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{1}ip\0\u{1}port\0\u{3}group_name\0")
 
@@ -4084,7 +4084,7 @@ extension Rv_Data_ProLink.ClientAction.AddConnection: SwiftProtobuf.Message, Swi
   }
 }
 
-extension Rv_Data_ProLink.ClientAction.RemoveConnection: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+nonisolated extension Rv_Data_ProLink.ClientAction.RemoveConnection: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   public static let protoMessageName: String = Rv_Data_ProLink.ClientAction.protoMessageName + ".RemoveConnection"
   public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{1}ip\0\u{1}port\0")
 
@@ -4119,7 +4119,7 @@ extension Rv_Data_ProLink.ClientAction.RemoveConnection: SwiftProtobuf.Message, 
   }
 }
 
-extension Rv_Data_ProLink.ClientAction.CancelAction: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+nonisolated extension Rv_Data_ProLink.ClientAction.CancelAction: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   public static let protoMessageName: String = Rv_Data_ProLink.ClientAction.protoMessageName + ".CancelAction"
   public static let _protobuf_nameMap = SwiftProtobuf._NameMap()
 
@@ -4138,7 +4138,7 @@ extension Rv_Data_ProLink.ClientAction.CancelAction: SwiftProtobuf.Message, Swif
   }
 }
 
-extension Rv_Data_ProLink.ClientAction.RenderTime: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+nonisolated extension Rv_Data_ProLink.ClientAction.RenderTime: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   public static let protoMessageName: String = Rv_Data_ProLink.ClientAction.protoMessageName + ".RenderTime"
   public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{1}latency\0\u{3}render_time\0")
 
@@ -4173,7 +4173,7 @@ extension Rv_Data_ProLink.ClientAction.RenderTime: SwiftProtobuf.Message, SwiftP
   }
 }
 
-extension Rv_Data_ProLink.HandlerIn: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+nonisolated extension Rv_Data_ProLink.HandlerIn: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   public static let protoMessageName: String = Rv_Data_ProLink.protoMessageName + ".HandlerIn"
   public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{3}group_name\0\u{3}group_definition_request\0\u{3}group_join_confirmation\0\u{3}group_join_password\0\u{3}add_connection_result\0\u{3}group_update\0\u{3}member_status_change\0\u{3}propresenter_info\0\u{3}server_state\0\u{3}configuration_request\0\u{3}zeroconfig_network_environment_change\0\u{3}log_request\0")
 
@@ -4410,7 +4410,7 @@ extension Rv_Data_ProLink.HandlerIn: SwiftProtobuf.Message, SwiftProtobuf._Messa
   }
 }
 
-extension Rv_Data_ProLink.HandlerIn.GroupName: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+nonisolated extension Rv_Data_ProLink.HandlerIn.GroupName: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   public static let protoMessageName: String = Rv_Data_ProLink.HandlerIn.protoMessageName + ".GroupName"
   public static let _protobuf_nameMap = SwiftProtobuf._NameMap()
 
@@ -4429,7 +4429,7 @@ extension Rv_Data_ProLink.HandlerIn.GroupName: SwiftProtobuf.Message, SwiftProto
   }
 }
 
-extension Rv_Data_ProLink.HandlerIn.GroupDefinitionRequest: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+nonisolated extension Rv_Data_ProLink.HandlerIn.GroupDefinitionRequest: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   public static let protoMessageName: String = Rv_Data_ProLink.HandlerIn.protoMessageName + ".GroupDefinitionRequest"
   public static let _protobuf_nameMap = SwiftProtobuf._NameMap()
 
@@ -4448,7 +4448,7 @@ extension Rv_Data_ProLink.HandlerIn.GroupDefinitionRequest: SwiftProtobuf.Messag
   }
 }
 
-extension Rv_Data_ProLink.HandlerIn.GroupJoinConfirmation: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+nonisolated extension Rv_Data_ProLink.HandlerIn.GroupJoinConfirmation: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   public static let protoMessageName: String = Rv_Data_ProLink.HandlerIn.protoMessageName + ".GroupJoinConfirmation"
   public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{1}name\0")
 
@@ -4478,7 +4478,7 @@ extension Rv_Data_ProLink.HandlerIn.GroupJoinConfirmation: SwiftProtobuf.Message
   }
 }
 
-extension Rv_Data_ProLink.HandlerIn.GroupJoinPassword: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+nonisolated extension Rv_Data_ProLink.HandlerIn.GroupJoinPassword: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   public static let protoMessageName: String = Rv_Data_ProLink.HandlerIn.protoMessageName + ".GroupJoinPassword"
   public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{1}name\0")
 
@@ -4508,7 +4508,7 @@ extension Rv_Data_ProLink.HandlerIn.GroupJoinPassword: SwiftProtobuf.Message, Sw
   }
 }
 
-extension Rv_Data_ProLink.HandlerIn.AddConnectionResult: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+nonisolated extension Rv_Data_ProLink.HandlerIn.AddConnectionResult: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   public static let protoMessageName: String = Rv_Data_ProLink.HandlerIn.protoMessageName + ".AddConnectionResult"
   public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{1}success\0\u{1}failure\0")
 
@@ -4575,7 +4575,7 @@ extension Rv_Data_ProLink.HandlerIn.AddConnectionResult: SwiftProtobuf.Message, 
   }
 }
 
-extension Rv_Data_ProLink.HandlerIn.AddConnectionResult.Success: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+nonisolated extension Rv_Data_ProLink.HandlerIn.AddConnectionResult.Success: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   public static let protoMessageName: String = Rv_Data_ProLink.HandlerIn.AddConnectionResult.protoMessageName + ".Success"
   public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{3}new_group_definition\0")
 
@@ -4609,7 +4609,7 @@ extension Rv_Data_ProLink.HandlerIn.AddConnectionResult.Success: SwiftProtobuf.M
   }
 }
 
-extension Rv_Data_ProLink.HandlerIn.AddConnectionResult.Failure: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+nonisolated extension Rv_Data_ProLink.HandlerIn.AddConnectionResult.Failure: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   public static let protoMessageName: String = Rv_Data_ProLink.HandlerIn.AddConnectionResult.protoMessageName + ".Failure"
   public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{1}unexpected\0\u{1}declined\0\u{1}timeout\0\u{3}link_disabled\0\u{3}in_other_group\0\u{3}invalid_ip_address\0\u{3}already_in_group\0\u{3}could_not_add\0\u{3}could_not_join\0")
 
@@ -4795,7 +4795,7 @@ extension Rv_Data_ProLink.HandlerIn.AddConnectionResult.Failure: SwiftProtobuf.M
   }
 }
 
-extension Rv_Data_ProLink.HandlerIn.AddConnectionResult.Failure.Unexpected: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+nonisolated extension Rv_Data_ProLink.HandlerIn.AddConnectionResult.Failure.Unexpected: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   public static let protoMessageName: String = Rv_Data_ProLink.HandlerIn.AddConnectionResult.Failure.protoMessageName + ".Unexpected"
   public static let _protobuf_nameMap = SwiftProtobuf._NameMap()
 
@@ -4814,7 +4814,7 @@ extension Rv_Data_ProLink.HandlerIn.AddConnectionResult.Failure.Unexpected: Swif
   }
 }
 
-extension Rv_Data_ProLink.HandlerIn.AddConnectionResult.Failure.Declined: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+nonisolated extension Rv_Data_ProLink.HandlerIn.AddConnectionResult.Failure.Declined: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   public static let protoMessageName: String = Rv_Data_ProLink.HandlerIn.AddConnectionResult.Failure.protoMessageName + ".Declined"
   public static let _protobuf_nameMap = SwiftProtobuf._NameMap()
 
@@ -4833,7 +4833,7 @@ extension Rv_Data_ProLink.HandlerIn.AddConnectionResult.Failure.Declined: SwiftP
   }
 }
 
-extension Rv_Data_ProLink.HandlerIn.AddConnectionResult.Failure.Timeout: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+nonisolated extension Rv_Data_ProLink.HandlerIn.AddConnectionResult.Failure.Timeout: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   public static let protoMessageName: String = Rv_Data_ProLink.HandlerIn.AddConnectionResult.Failure.protoMessageName + ".Timeout"
   public static let _protobuf_nameMap = SwiftProtobuf._NameMap()
 
@@ -4852,7 +4852,7 @@ extension Rv_Data_ProLink.HandlerIn.AddConnectionResult.Failure.Timeout: SwiftPr
   }
 }
 
-extension Rv_Data_ProLink.HandlerIn.AddConnectionResult.Failure.LinkDisabled: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+nonisolated extension Rv_Data_ProLink.HandlerIn.AddConnectionResult.Failure.LinkDisabled: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   public static let protoMessageName: String = Rv_Data_ProLink.HandlerIn.AddConnectionResult.Failure.protoMessageName + ".LinkDisabled"
   public static let _protobuf_nameMap = SwiftProtobuf._NameMap()
 
@@ -4871,7 +4871,7 @@ extension Rv_Data_ProLink.HandlerIn.AddConnectionResult.Failure.LinkDisabled: Sw
   }
 }
 
-extension Rv_Data_ProLink.HandlerIn.AddConnectionResult.Failure.InOtherGroup: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+nonisolated extension Rv_Data_ProLink.HandlerIn.AddConnectionResult.Failure.InOtherGroup: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   public static let protoMessageName: String = Rv_Data_ProLink.HandlerIn.AddConnectionResult.Failure.protoMessageName + ".InOtherGroup"
   public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{3}member_name\0\u{3}group_name\0")
 
@@ -4906,7 +4906,7 @@ extension Rv_Data_ProLink.HandlerIn.AddConnectionResult.Failure.InOtherGroup: Sw
   }
 }
 
-extension Rv_Data_ProLink.HandlerIn.AddConnectionResult.Failure.InvalidIpAddress: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+nonisolated extension Rv_Data_ProLink.HandlerIn.AddConnectionResult.Failure.InvalidIpAddress: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   public static let protoMessageName: String = Rv_Data_ProLink.HandlerIn.AddConnectionResult.Failure.protoMessageName + ".InvalidIpAddress"
   public static let _protobuf_nameMap = SwiftProtobuf._NameMap()
 
@@ -4925,7 +4925,7 @@ extension Rv_Data_ProLink.HandlerIn.AddConnectionResult.Failure.InvalidIpAddress
   }
 }
 
-extension Rv_Data_ProLink.HandlerIn.AddConnectionResult.Failure.AlreadyInGroup: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+nonisolated extension Rv_Data_ProLink.HandlerIn.AddConnectionResult.Failure.AlreadyInGroup: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   public static let protoMessageName: String = Rv_Data_ProLink.HandlerIn.AddConnectionResult.Failure.protoMessageName + ".AlreadyInGroup"
   public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{3}member_name\0\u{3}group_name\0")
 
@@ -4960,7 +4960,7 @@ extension Rv_Data_ProLink.HandlerIn.AddConnectionResult.Failure.AlreadyInGroup: 
   }
 }
 
-extension Rv_Data_ProLink.HandlerIn.AddConnectionResult.Failure.CouldNotAdd: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+nonisolated extension Rv_Data_ProLink.HandlerIn.AddConnectionResult.Failure.CouldNotAdd: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   public static let protoMessageName: String = Rv_Data_ProLink.HandlerIn.AddConnectionResult.Failure.protoMessageName + ".CouldNotAdd"
   public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{3}member_name\0")
 
@@ -4990,7 +4990,7 @@ extension Rv_Data_ProLink.HandlerIn.AddConnectionResult.Failure.CouldNotAdd: Swi
   }
 }
 
-extension Rv_Data_ProLink.HandlerIn.AddConnectionResult.Failure.CouldNotJoin: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+nonisolated extension Rv_Data_ProLink.HandlerIn.AddConnectionResult.Failure.CouldNotJoin: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   public static let protoMessageName: String = Rv_Data_ProLink.HandlerIn.AddConnectionResult.Failure.protoMessageName + ".CouldNotJoin"
   public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{3}group_name\0")
 
@@ -5020,7 +5020,7 @@ extension Rv_Data_ProLink.HandlerIn.AddConnectionResult.Failure.CouldNotJoin: Sw
   }
 }
 
-extension Rv_Data_ProLink.HandlerIn.MemberStatusChange: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+nonisolated extension Rv_Data_ProLink.HandlerIn.MemberStatusChange: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   public static let protoMessageName: String = Rv_Data_ProLink.HandlerIn.protoMessageName + ".MemberStatusChange"
   public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{1}members\0")
 
@@ -5050,7 +5050,7 @@ extension Rv_Data_ProLink.HandlerIn.MemberStatusChange: SwiftProtobuf.Message, S
   }
 }
 
-extension Rv_Data_ProLink.HandlerIn.ProPresenterInfo: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+nonisolated extension Rv_Data_ProLink.HandlerIn.ProPresenterInfo: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   public static let protoMessageName: String = Rv_Data_ProLink.HandlerIn.protoMessageName + ".ProPresenterInfo"
   public static let _protobuf_nameMap = SwiftProtobuf._NameMap()
 
@@ -5069,7 +5069,7 @@ extension Rv_Data_ProLink.HandlerIn.ProPresenterInfo: SwiftProtobuf.Message, Swi
   }
 }
 
-extension Rv_Data_ProLink.HandlerIn.ServerState: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+nonisolated extension Rv_Data_ProLink.HandlerIn.ServerState: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   public static let protoMessageName: String = Rv_Data_ProLink.HandlerIn.protoMessageName + ".ServerState"
   public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{3}local_ip\0\u{3}public_ip\0\u{1}port\0\u{1}success\0")
 
@@ -5114,7 +5114,7 @@ extension Rv_Data_ProLink.HandlerIn.ServerState: SwiftProtobuf.Message, SwiftPro
   }
 }
 
-extension Rv_Data_ProLink.HandlerIn.ConfigurationRequest: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+nonisolated extension Rv_Data_ProLink.HandlerIn.ConfigurationRequest: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   public static let protoMessageName: String = Rv_Data_ProLink.HandlerIn.protoMessageName + ".ConfigurationRequest"
   public static let _protobuf_nameMap = SwiftProtobuf._NameMap()
 
@@ -5133,7 +5133,7 @@ extension Rv_Data_ProLink.HandlerIn.ConfigurationRequest: SwiftProtobuf.Message,
   }
 }
 
-extension Rv_Data_ProLink.HandlerIn.LogRequest: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+nonisolated extension Rv_Data_ProLink.HandlerIn.LogRequest: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   public static let protoMessageName: String = Rv_Data_ProLink.HandlerIn.protoMessageName + ".LogRequest"
   public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{1}severity\0\u{1}message\0")
 
@@ -5168,11 +5168,11 @@ extension Rv_Data_ProLink.HandlerIn.LogRequest: SwiftProtobuf.Message, SwiftProt
   }
 }
 
-extension Rv_Data_ProLink.HandlerIn.LogRequest.Severity: SwiftProtobuf._ProtoNameProviding {
+nonisolated extension Rv_Data_ProLink.HandlerIn.LogRequest.Severity: SwiftProtobuf._ProtoNameProviding {
   public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{2}\0SEVERITY_DEBUG\0\u{1}SEVERITY_DEBUG_WARNING\0\u{1}SEVERITY_INFO\0\u{1}SEVERITY_WARNING\0\u{1}SEVERITY_ERROR\0\u{1}SEVERITY_FATAL_ERROR\0")
 }
 
-extension Rv_Data_ProLink.HandlerOut: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+nonisolated extension Rv_Data_ProLink.HandlerOut: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   public static let protoMessageName: String = Rv_Data_ProLink.protoMessageName + ".HandlerOut"
   public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{3}group_name\0\u{3}group_definition\0\u{3}group_join_confirmation\0\u{3}group_join_password\0\u{3}propresenter_info\0\u{1}configuration\0")
 
@@ -5307,7 +5307,7 @@ extension Rv_Data_ProLink.HandlerOut: SwiftProtobuf.Message, SwiftProtobuf._Mess
   }
 }
 
-extension Rv_Data_ProLink.HandlerOut.GroupName: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+nonisolated extension Rv_Data_ProLink.HandlerOut.GroupName: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   public static let protoMessageName: String = Rv_Data_ProLink.HandlerOut.protoMessageName + ".GroupName"
   public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{1}name\0")
 
@@ -5337,7 +5337,7 @@ extension Rv_Data_ProLink.HandlerOut.GroupName: SwiftProtobuf.Message, SwiftProt
   }
 }
 
-extension Rv_Data_ProLink.HandlerOut.GroupJoinConfirmation: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+nonisolated extension Rv_Data_ProLink.HandlerOut.GroupJoinConfirmation: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   public static let protoMessageName: String = Rv_Data_ProLink.HandlerOut.protoMessageName + ".GroupJoinConfirmation"
   public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{1}accept\0")
 
@@ -5367,7 +5367,7 @@ extension Rv_Data_ProLink.HandlerOut.GroupJoinConfirmation: SwiftProtobuf.Messag
   }
 }
 
-extension Rv_Data_ProLink.HandlerOut.GroupJoinPassword: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+nonisolated extension Rv_Data_ProLink.HandlerOut.GroupJoinPassword: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   public static let protoMessageName: String = Rv_Data_ProLink.HandlerOut.protoMessageName + ".GroupJoinPassword"
   public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{1}password\0")
 
@@ -5397,7 +5397,7 @@ extension Rv_Data_ProLink.HandlerOut.GroupJoinPassword: SwiftProtobuf.Message, S
   }
 }
 
-extension Rv_Data_ProLink.HandlerOut.ProPresenterInfo: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+nonisolated extension Rv_Data_ProLink.HandlerOut.ProPresenterInfo: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   public static let protoMessageName: String = Rv_Data_ProLink.HandlerOut.protoMessageName + ".ProPresenterInfo"
   public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{1}platform\0\u{3}os_version\0\u{3}host_description\0")
 
@@ -5437,11 +5437,11 @@ extension Rv_Data_ProLink.HandlerOut.ProPresenterInfo: SwiftProtobuf.Message, Sw
   }
 }
 
-extension Rv_Data_ProLink.HandlerOut.ProPresenterInfo.Platform: SwiftProtobuf._ProtoNameProviding {
+nonisolated extension Rv_Data_ProLink.HandlerOut.ProPresenterInfo.Platform: SwiftProtobuf._ProtoNameProviding {
   public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{2}\0PLATFORM_UNDEFINED\0\u{1}PLATFORM_MACOS\0\u{1}PLATFORM_WINDOWS\0")
 }
 
-extension Rv_Data_NetworkAPI: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+nonisolated extension Rv_Data_NetworkAPI: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   public static let protoMessageName: String = _protobuf_package + ".NetworkAPI"
   public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{1}action\0\u{3}server_state\0\u{4}\u{3}group_change\0\u{3}group_response\0")
 
@@ -5542,7 +5542,7 @@ extension Rv_Data_NetworkAPI: SwiftProtobuf.Message, SwiftProtobuf._MessageImple
   }
 }
 
-extension Rv_Data_NetworkAPI.LinkStatus: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+nonisolated extension Rv_Data_NetworkAPI.LinkStatus: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   public static let protoMessageName: String = Rv_Data_NetworkAPI.protoMessageName + ".LinkStatus"
   public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{1}platform\0\u{3}os_version\0\u{1}version\0\u{1}description\0\u{3}group_info\0")
 
@@ -5596,11 +5596,11 @@ extension Rv_Data_NetworkAPI.LinkStatus: SwiftProtobuf.Message, SwiftProtobuf._M
   }
 }
 
-extension Rv_Data_NetworkAPI.LinkStatus.Platform: SwiftProtobuf._ProtoNameProviding {
+nonisolated extension Rv_Data_NetworkAPI.LinkStatus.Platform: SwiftProtobuf._ProtoNameProviding {
   public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{2}\0PLATFORM_UNDEFINED\0\u{1}PLATFORM_MACOS\0\u{1}PLATFORM_WINDOWS\0")
 }
 
-extension Rv_Data_NetworkAPI.Group: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+nonisolated extension Rv_Data_NetworkAPI.Group: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   public static let protoMessageName: String = Rv_Data_NetworkAPI.protoMessageName + ".Group"
   public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{1}name\0\u{1}members\0")
 
@@ -5635,7 +5635,7 @@ extension Rv_Data_NetworkAPI.Group: SwiftProtobuf.Message, SwiftProtobuf._Messag
   }
 }
 
-extension Rv_Data_NetworkAPI.Group.Member: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+nonisolated extension Rv_Data_NetworkAPI.Group.Member: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   public static let protoMessageName: String = Rv_Data_NetworkAPI.Group.protoMessageName + ".Member"
   public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{3}ip_address\0\u{1}port\0")
 
@@ -5670,7 +5670,7 @@ extension Rv_Data_NetworkAPI.Group.Member: SwiftProtobuf.Message, SwiftProtobuf.
   }
 }
 
-extension Rv_Data_NetworkAPI.GroupChange: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+nonisolated extension Rv_Data_NetworkAPI.GroupChange: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   public static let protoMessageName: String = Rv_Data_NetworkAPI.protoMessageName + ".GroupChange"
   public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{1}invite\0\u{1}join\0\u{1}kick\0\u{1}status\0")
 
@@ -5771,7 +5771,7 @@ extension Rv_Data_NetworkAPI.GroupChange: SwiftProtobuf.Message, SwiftProtobuf._
   }
 }
 
-extension Rv_Data_NetworkAPI.GroupResponse: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+nonisolated extension Rv_Data_NetworkAPI.GroupResponse: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   public static let protoMessageName: String = Rv_Data_NetworkAPI.protoMessageName + ".GroupResponse"
   public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{1}success\0\u{1}status\0")
 
@@ -5838,7 +5838,7 @@ extension Rv_Data_NetworkAPI.GroupResponse: SwiftProtobuf.Message, SwiftProtobuf
   }
 }
 
-extension Rv_Data_NetworkAPI.GroupResponse.Success: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+nonisolated extension Rv_Data_NetworkAPI.GroupResponse.Success: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   public static let protoMessageName: String = Rv_Data_NetworkAPI.GroupResponse.protoMessageName + ".Success"
   public static let _protobuf_nameMap = SwiftProtobuf._NameMap()
 
@@ -5857,7 +5857,7 @@ extension Rv_Data_NetworkAPI.GroupResponse.Success: SwiftProtobuf.Message, Swift
   }
 }
 
-extension Rv_Data_NetworkAPI.GroupResponse.Status: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+nonisolated extension Rv_Data_NetworkAPI.GroupResponse.Status: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   public static let protoMessageName: String = Rv_Data_NetworkAPI.GroupResponse.protoMessageName + ".Status"
   public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{3}member_name\0\u{3}group_name\0")
 
@@ -5892,7 +5892,7 @@ extension Rv_Data_NetworkAPI.GroupResponse.Status: SwiftProtobuf.Message, SwiftP
   }
 }
 
-extension Rv_Data_NetworkAPI.GroupStatus: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+nonisolated extension Rv_Data_NetworkAPI.GroupStatus: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   public static let protoMessageName: String = Rv_Data_NetworkAPI.protoMessageName + ".GroupStatus"
   public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{1}member\0")
 
@@ -5926,7 +5926,7 @@ extension Rv_Data_NetworkAPI.GroupStatus: SwiftProtobuf.Message, SwiftProtobuf._
   }
 }
 
-extension Rv_Data_NetworkAPI.GroupInvite: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+nonisolated extension Rv_Data_NetworkAPI.GroupInvite: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   public static let protoMessageName: String = Rv_Data_NetworkAPI.protoMessageName + ".GroupInvite"
   public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{3}group_info\0\u{1}secret\0\u{1}prospect\0")
 
@@ -5970,7 +5970,7 @@ extension Rv_Data_NetworkAPI.GroupInvite: SwiftProtobuf.Message, SwiftProtobuf._
   }
 }
 
-extension Rv_Data_NetworkAPI.GroupJoin: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+nonisolated extension Rv_Data_NetworkAPI.GroupJoin: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   public static let protoMessageName: String = Rv_Data_NetworkAPI.protoMessageName + ".GroupJoin"
   public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{1}sponsor\0\u{1}prospect\0")
 
@@ -6009,7 +6009,7 @@ extension Rv_Data_NetworkAPI.GroupJoin: SwiftProtobuf.Message, SwiftProtobuf._Me
   }
 }
 
-extension Rv_Data_NetworkAPI.GroupKick: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+nonisolated extension Rv_Data_NetworkAPI.GroupKick: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   public static let protoMessageName: String = Rv_Data_NetworkAPI.protoMessageName + ".GroupKick"
   public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{1}member\0")
 
@@ -6043,7 +6043,7 @@ extension Rv_Data_NetworkAPI.GroupKick: SwiftProtobuf.Message, SwiftProtobuf._Me
   }
 }
 
-extension Rv_Data_NetworkAPI.ServerState: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+nonisolated extension Rv_Data_NetworkAPI.ServerState: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   public static let protoMessageName: String = Rv_Data_NetworkAPI.protoMessageName + ".ServerState"
   public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{3}local_ip\0\u{3}public_ip\0\u{1}port\0")
 
@@ -6083,7 +6083,7 @@ extension Rv_Data_NetworkAPI.ServerState: SwiftProtobuf.Message, SwiftProtobuf._
   }
 }
 
-extension Rv_Data_NetworkAPI.Action: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+nonisolated extension Rv_Data_NetworkAPI.Action: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   public static let protoMessageName: String = Rv_Data_NetworkAPI.protoMessageName + ".Action"
   public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{1}clear\0\u{1}trigger\0\u{1}transport\0\u{1}prop\0\u{1}timer\0\u{3}message_\0\u{1}macro\0\u{1}look\0\u{1}stage\0\u{1}status\0\u{3}status_response\0\u{3}two_step_trigger\0\u{3}preroll_complete\0")
 
@@ -6337,7 +6337,7 @@ extension Rv_Data_NetworkAPI.Action: SwiftProtobuf.Message, SwiftProtobuf._Messa
   }
 }
 
-extension Rv_Data_NetworkAPI.Action.API_Clear: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+nonisolated extension Rv_Data_NetworkAPI.Action.API_Clear: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   public static let protoMessageName: String = Rv_Data_NetworkAPI.Action.protoMessageName + ".API_Clear"
   public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{1}layer\0\u{3}group_identifier\0")
 
@@ -6399,11 +6399,11 @@ extension Rv_Data_NetworkAPI.Action.API_Clear: SwiftProtobuf.Message, SwiftProto
   }
 }
 
-extension Rv_Data_NetworkAPI.Action.API_Clear.Layer: SwiftProtobuf._ProtoNameProviding {
+nonisolated extension Rv_Data_NetworkAPI.Action.API_Clear.Layer: SwiftProtobuf._ProtoNameProviding {
   public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{2}\0LAYER_UNKNOWN\0\u{1}LAYER_VIDEO_INPUT\0\u{1}LAYER_MEDIA\0\u{1}LAYER_PRESENTATION\0\u{1}LAYER_ANNOUNCEMENT\0\u{1}LAYER_PROP\0\u{1}LAYER_MESSAGE\0\u{1}LAYER_AUDIO\0")
 }
 
-extension Rv_Data_NetworkAPI.Action.API_TwoStepTrigger: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+nonisolated extension Rv_Data_NetworkAPI.Action.API_TwoStepTrigger: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   public static let protoMessageName: String = Rv_Data_NetworkAPI.Action.protoMessageName + ".API_TwoStepTrigger"
   public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{1}id\0\u{1}operation\0\u{3}render_time\0\u{1}presentation\0\u{1}media\0\u{3}video_input\0\u{1}audio\0\u{1}prop\0\u{1}message\0")
 
@@ -6553,11 +6553,11 @@ extension Rv_Data_NetworkAPI.Action.API_TwoStepTrigger: SwiftProtobuf.Message, S
   }
 }
 
-extension Rv_Data_NetworkAPI.Action.API_TwoStepTrigger.Operation: SwiftProtobuf._ProtoNameProviding {
+nonisolated extension Rv_Data_NetworkAPI.Action.API_TwoStepTrigger.Operation: SwiftProtobuf._ProtoNameProviding {
   public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{2}\0OPERATION_PREROLL\0\u{1}OPERATION_ACTIVATE\0")
 }
 
-extension Rv_Data_NetworkAPI.Action.API_PrerollComplete: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+nonisolated extension Rv_Data_NetworkAPI.Action.API_PrerollComplete: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   public static let protoMessageName: String = Rv_Data_NetworkAPI.Action.protoMessageName + ".API_PrerollComplete"
   public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{1}id\0\u{1}failed\0")
 
@@ -6592,7 +6592,7 @@ extension Rv_Data_NetworkAPI.Action.API_PrerollComplete: SwiftProtobuf.Message, 
   }
 }
 
-extension Rv_Data_NetworkAPI.Action.API_Trigger: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+nonisolated extension Rv_Data_NetworkAPI.Action.API_Trigger: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   public static let protoMessageName: String = Rv_Data_NetworkAPI.Action.protoMessageName + ".API_Trigger"
   public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{1}presentation\0\u{1}media\0\u{3}video_input\0\u{1}audio\0")
 
@@ -6693,7 +6693,7 @@ extension Rv_Data_NetworkAPI.Action.API_Trigger: SwiftProtobuf.Message, SwiftPro
   }
 }
 
-extension Rv_Data_NetworkAPI.Action.API_Trigger.Presentation: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+nonisolated extension Rv_Data_NetworkAPI.Action.API_Trigger.Presentation: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   public static let protoMessageName: String = Rv_Data_NetworkAPI.Action.API_Trigger.protoMessageName + ".Presentation"
   public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{3}cue_index\0\u{3}playlist_index_path\0\u{3}library_index_path\0")
 
@@ -6772,7 +6772,7 @@ extension Rv_Data_NetworkAPI.Action.API_Trigger.Presentation: SwiftProtobuf.Mess
   }
 }
 
-extension Rv_Data_NetworkAPI.Action.API_Trigger.Presentation.PlaylistPresentation: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+nonisolated extension Rv_Data_NetworkAPI.Action.API_Trigger.Presentation.PlaylistPresentation: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   public static let protoMessageName: String = Rv_Data_NetworkAPI.Action.API_Trigger.Presentation.protoMessageName + ".PlaylistPresentation"
   public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{3}index_path_components\0")
 
@@ -6802,7 +6802,7 @@ extension Rv_Data_NetworkAPI.Action.API_Trigger.Presentation.PlaylistPresentatio
   }
 }
 
-extension Rv_Data_NetworkAPI.Action.API_Trigger.Presentation.LibraryPresentation: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+nonisolated extension Rv_Data_NetworkAPI.Action.API_Trigger.Presentation.LibraryPresentation: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   public static let protoMessageName: String = Rv_Data_NetworkAPI.Action.API_Trigger.Presentation.protoMessageName + ".LibraryPresentation"
   public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{3}library_component\0\u{3}presentation_component\0\u{3}cue_component\0")
 
@@ -6846,7 +6846,7 @@ extension Rv_Data_NetworkAPI.Action.API_Trigger.Presentation.LibraryPresentation
   }
 }
 
-extension Rv_Data_NetworkAPI.Action.API_Trigger.Media: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+nonisolated extension Rv_Data_NetworkAPI.Action.API_Trigger.Media: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   public static let protoMessageName: String = Rv_Data_NetworkAPI.Action.API_Trigger.protoMessageName + ".Media"
   public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{3}index_path_components\0")
 
@@ -6876,7 +6876,7 @@ extension Rv_Data_NetworkAPI.Action.API_Trigger.Media: SwiftProtobuf.Message, Sw
   }
 }
 
-extension Rv_Data_NetworkAPI.Action.API_Trigger.VideoInput: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+nonisolated extension Rv_Data_NetworkAPI.Action.API_Trigger.VideoInput: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   public static let protoMessageName: String = Rv_Data_NetworkAPI.Action.API_Trigger.protoMessageName + ".VideoInput"
   public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{3}video_input_id\0")
 
@@ -6910,7 +6910,7 @@ extension Rv_Data_NetworkAPI.Action.API_Trigger.VideoInput: SwiftProtobuf.Messag
   }
 }
 
-extension Rv_Data_NetworkAPI.Action.API_Trigger.Audio: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+nonisolated extension Rv_Data_NetworkAPI.Action.API_Trigger.Audio: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   public static let protoMessageName: String = Rv_Data_NetworkAPI.Action.API_Trigger.protoMessageName + ".Audio"
   public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{3}index_path_components\0")
 
@@ -6940,7 +6940,7 @@ extension Rv_Data_NetworkAPI.Action.API_Trigger.Audio: SwiftProtobuf.Message, Sw
   }
 }
 
-extension Rv_Data_NetworkAPI.Action.API_Transport: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+nonisolated extension Rv_Data_NetworkAPI.Action.API_Transport: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   public static let protoMessageName: String = Rv_Data_NetworkAPI.Action.protoMessageName + ".API_Transport"
   public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{1}layer\0\u{1}play\0\u{1}pause\0\u{3}skip_backward\0\u{3}skip_forward\0\u{3}go_to_end\0")
 
@@ -7063,11 +7063,11 @@ extension Rv_Data_NetworkAPI.Action.API_Transport: SwiftProtobuf.Message, SwiftP
   }
 }
 
-extension Rv_Data_NetworkAPI.Action.API_Transport.TransportLayer: SwiftProtobuf._ProtoNameProviding {
+nonisolated extension Rv_Data_NetworkAPI.Action.API_Transport.TransportLayer: SwiftProtobuf._ProtoNameProviding {
   public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{2}\0TRANSPORT_LAYER_UNKNOWN\0\u{1}TRANSPORT_LAYER_PRESENTATION\0\u{1}TRANSPORT_LAYER_ANNOUNCEMENT\0\u{1}TRANSPORT_LAYER_AUDIO\0")
 }
 
-extension Rv_Data_NetworkAPI.Action.API_Transport.Play: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+nonisolated extension Rv_Data_NetworkAPI.Action.API_Transport.Play: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   public static let protoMessageName: String = Rv_Data_NetworkAPI.Action.API_Transport.protoMessageName + ".Play"
   public static let _protobuf_nameMap = SwiftProtobuf._NameMap()
 
@@ -7086,7 +7086,7 @@ extension Rv_Data_NetworkAPI.Action.API_Transport.Play: SwiftProtobuf.Message, S
   }
 }
 
-extension Rv_Data_NetworkAPI.Action.API_Transport.Pause: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+nonisolated extension Rv_Data_NetworkAPI.Action.API_Transport.Pause: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   public static let protoMessageName: String = Rv_Data_NetworkAPI.Action.API_Transport.protoMessageName + ".Pause"
   public static let _protobuf_nameMap = SwiftProtobuf._NameMap()
 
@@ -7105,7 +7105,7 @@ extension Rv_Data_NetworkAPI.Action.API_Transport.Pause: SwiftProtobuf.Message, 
   }
 }
 
-extension Rv_Data_NetworkAPI.Action.API_Transport.SkipBackward: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+nonisolated extension Rv_Data_NetworkAPI.Action.API_Transport.SkipBackward: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   public static let protoMessageName: String = Rv_Data_NetworkAPI.Action.API_Transport.protoMessageName + ".SkipBackward"
   public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{1}seconds\0")
 
@@ -7135,7 +7135,7 @@ extension Rv_Data_NetworkAPI.Action.API_Transport.SkipBackward: SwiftProtobuf.Me
   }
 }
 
-extension Rv_Data_NetworkAPI.Action.API_Transport.SkipForward: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+nonisolated extension Rv_Data_NetworkAPI.Action.API_Transport.SkipForward: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   public static let protoMessageName: String = Rv_Data_NetworkAPI.Action.API_Transport.protoMessageName + ".SkipForward"
   public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{1}seconds\0")
 
@@ -7165,7 +7165,7 @@ extension Rv_Data_NetworkAPI.Action.API_Transport.SkipForward: SwiftProtobuf.Mes
   }
 }
 
-extension Rv_Data_NetworkAPI.Action.API_Transport.GoToEnd: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+nonisolated extension Rv_Data_NetworkAPI.Action.API_Transport.GoToEnd: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   public static let protoMessageName: String = Rv_Data_NetworkAPI.Action.API_Transport.protoMessageName + ".GoToEnd"
   public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{3}seconds_to_end\0")
 
@@ -7195,7 +7195,7 @@ extension Rv_Data_NetworkAPI.Action.API_Transport.GoToEnd: SwiftProtobuf.Message
   }
 }
 
-extension Rv_Data_NetworkAPI.Action.API_Prop: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+nonisolated extension Rv_Data_NetworkAPI.Action.API_Prop: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   public static let protoMessageName: String = Rv_Data_NetworkAPI.Action.protoMessageName + ".API_Prop"
   public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{1}trigger\0\u{1}clear\0")
 
@@ -7262,7 +7262,7 @@ extension Rv_Data_NetworkAPI.Action.API_Prop: SwiftProtobuf.Message, SwiftProtob
   }
 }
 
-extension Rv_Data_NetworkAPI.Action.API_Prop.TriggerProp: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+nonisolated extension Rv_Data_NetworkAPI.Action.API_Prop.TriggerProp: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   public static let protoMessageName: String = Rv_Data_NetworkAPI.Action.API_Prop.protoMessageName + ".TriggerProp"
   public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{1}identifier\0")
 
@@ -7296,7 +7296,7 @@ extension Rv_Data_NetworkAPI.Action.API_Prop.TriggerProp: SwiftProtobuf.Message,
   }
 }
 
-extension Rv_Data_NetworkAPI.Action.API_Prop.ClearProp: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+nonisolated extension Rv_Data_NetworkAPI.Action.API_Prop.ClearProp: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   public static let protoMessageName: String = Rv_Data_NetworkAPI.Action.API_Prop.protoMessageName + ".ClearProp"
   public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{1}identifier\0")
 
@@ -7330,7 +7330,7 @@ extension Rv_Data_NetworkAPI.Action.API_Prop.ClearProp: SwiftProtobuf.Message, S
   }
 }
 
-extension Rv_Data_NetworkAPI.Action.API_Timer: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+nonisolated extension Rv_Data_NetworkAPI.Action.API_Timer: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   public static let protoMessageName: String = Rv_Data_NetworkAPI.Action.protoMessageName + ".API_Timer"
   public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{1}start\0\u{1}stop\0\u{1}reset\0\u{1}configure\0")
 
@@ -7431,7 +7431,7 @@ extension Rv_Data_NetworkAPI.Action.API_Timer: SwiftProtobuf.Message, SwiftProto
   }
 }
 
-extension Rv_Data_NetworkAPI.Action.API_Timer.StartTimer: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+nonisolated extension Rv_Data_NetworkAPI.Action.API_Timer.StartTimer: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   public static let protoMessageName: String = Rv_Data_NetworkAPI.Action.API_Timer.protoMessageName + ".StartTimer"
   public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{1}identifier\0")
 
@@ -7465,7 +7465,7 @@ extension Rv_Data_NetworkAPI.Action.API_Timer.StartTimer: SwiftProtobuf.Message,
   }
 }
 
-extension Rv_Data_NetworkAPI.Action.API_Timer.StopTimer: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+nonisolated extension Rv_Data_NetworkAPI.Action.API_Timer.StopTimer: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   public static let protoMessageName: String = Rv_Data_NetworkAPI.Action.API_Timer.protoMessageName + ".StopTimer"
   public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{1}identifier\0")
 
@@ -7499,7 +7499,7 @@ extension Rv_Data_NetworkAPI.Action.API_Timer.StopTimer: SwiftProtobuf.Message, 
   }
 }
 
-extension Rv_Data_NetworkAPI.Action.API_Timer.ResetTimer: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+nonisolated extension Rv_Data_NetworkAPI.Action.API_Timer.ResetTimer: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   public static let protoMessageName: String = Rv_Data_NetworkAPI.Action.API_Timer.protoMessageName + ".ResetTimer"
   public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{1}identifier\0")
 
@@ -7533,7 +7533,7 @@ extension Rv_Data_NetworkAPI.Action.API_Timer.ResetTimer: SwiftProtobuf.Message,
   }
 }
 
-extension Rv_Data_NetworkAPI.Action.API_Timer.ConfigureTimer: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+nonisolated extension Rv_Data_NetworkAPI.Action.API_Timer.ConfigureTimer: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   public static let protoMessageName: String = Rv_Data_NetworkAPI.Action.API_Timer.protoMessageName + ".ConfigureTimer"
   public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{1}identifier\0\u{1}configuration\0")
 
@@ -7572,7 +7572,7 @@ extension Rv_Data_NetworkAPI.Action.API_Timer.ConfigureTimer: SwiftProtobuf.Mess
   }
 }
 
-extension Rv_Data_NetworkAPI.Action.API_Message: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+nonisolated extension Rv_Data_NetworkAPI.Action.API_Message: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   public static let protoMessageName: String = Rv_Data_NetworkAPI.Action.protoMessageName + ".API_Message"
   public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{1}trigger\0\u{1}clear\0")
 
@@ -7639,7 +7639,7 @@ extension Rv_Data_NetworkAPI.Action.API_Message: SwiftProtobuf.Message, SwiftPro
   }
 }
 
-extension Rv_Data_NetworkAPI.Action.API_Message.TriggerMessage: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+nonisolated extension Rv_Data_NetworkAPI.Action.API_Message.TriggerMessage: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   public static let protoMessageName: String = Rv_Data_NetworkAPI.Action.API_Message.protoMessageName + ".TriggerMessage"
   public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{1}identifier\0\u{3}token_values\0")
 
@@ -7678,7 +7678,7 @@ extension Rv_Data_NetworkAPI.Action.API_Message.TriggerMessage: SwiftProtobuf.Me
   }
 }
 
-extension Rv_Data_NetworkAPI.Action.API_Message.ClearMessage: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+nonisolated extension Rv_Data_NetworkAPI.Action.API_Message.ClearMessage: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   public static let protoMessageName: String = Rv_Data_NetworkAPI.Action.API_Message.protoMessageName + ".ClearMessage"
   public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{1}identifier\0")
 
@@ -7712,7 +7712,7 @@ extension Rv_Data_NetworkAPI.Action.API_Message.ClearMessage: SwiftProtobuf.Mess
   }
 }
 
-extension Rv_Data_NetworkAPI.Action.API_Macro: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+nonisolated extension Rv_Data_NetworkAPI.Action.API_Macro: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   public static let protoMessageName: String = Rv_Data_NetworkAPI.Action.protoMessageName + ".API_Macro"
   public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{1}identifier\0")
 
@@ -7746,7 +7746,7 @@ extension Rv_Data_NetworkAPI.Action.API_Macro: SwiftProtobuf.Message, SwiftProto
   }
 }
 
-extension Rv_Data_NetworkAPI.Action.API_Look: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+nonisolated extension Rv_Data_NetworkAPI.Action.API_Look: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   public static let protoMessageName: String = Rv_Data_NetworkAPI.Action.protoMessageName + ".API_Look"
   public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{1}identifier\0")
 
@@ -7780,7 +7780,7 @@ extension Rv_Data_NetworkAPI.Action.API_Look: SwiftProtobuf.Message, SwiftProtob
   }
 }
 
-extension Rv_Data_NetworkAPI.Action.API_Stage: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+nonisolated extension Rv_Data_NetworkAPI.Action.API_Stage: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   public static let protoMessageName: String = Rv_Data_NetworkAPI.Action.protoMessageName + ".API_Stage"
   public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{1}layouts\0\u{1}message\0")
 
@@ -7847,7 +7847,7 @@ extension Rv_Data_NetworkAPI.Action.API_Stage: SwiftProtobuf.Message, SwiftProto
   }
 }
 
-extension Rv_Data_NetworkAPI.Action.API_Stage.StageLayouts: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+nonisolated extension Rv_Data_NetworkAPI.Action.API_Stage.StageLayouts: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   public static let protoMessageName: String = Rv_Data_NetworkAPI.Action.API_Stage.protoMessageName + ".StageLayouts"
   public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{1}layouts\0")
 
@@ -7877,7 +7877,7 @@ extension Rv_Data_NetworkAPI.Action.API_Stage.StageLayouts: SwiftProtobuf.Messag
   }
 }
 
-extension Rv_Data_NetworkAPI.Action.API_Stage.StageMessage: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+nonisolated extension Rv_Data_NetworkAPI.Action.API_Stage.StageMessage: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   public static let protoMessageName: String = Rv_Data_NetworkAPI.Action.API_Stage.protoMessageName + ".StageMessage"
   public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{3}show_message\0\u{3}clear_message\0\u{3}hide_message\0")
 
@@ -7961,7 +7961,7 @@ extension Rv_Data_NetworkAPI.Action.API_Stage.StageMessage: SwiftProtobuf.Messag
   }
 }
 
-extension Rv_Data_NetworkAPI.Action.API_Stage.StageMessage.ShowMessage: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+nonisolated extension Rv_Data_NetworkAPI.Action.API_Stage.StageMessage.ShowMessage: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   public static let protoMessageName: String = Rv_Data_NetworkAPI.Action.API_Stage.StageMessage.protoMessageName + ".ShowMessage"
   public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{1}message\0")
 
@@ -7991,7 +7991,7 @@ extension Rv_Data_NetworkAPI.Action.API_Stage.StageMessage.ShowMessage: SwiftPro
   }
 }
 
-extension Rv_Data_NetworkAPI.Action.API_Stage.StageMessage.ClearMessage: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+nonisolated extension Rv_Data_NetworkAPI.Action.API_Stage.StageMessage.ClearMessage: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   public static let protoMessageName: String = Rv_Data_NetworkAPI.Action.API_Stage.StageMessage.protoMessageName + ".ClearMessage"
   public static let _protobuf_nameMap = SwiftProtobuf._NameMap()
 
@@ -8010,7 +8010,7 @@ extension Rv_Data_NetworkAPI.Action.API_Stage.StageMessage.ClearMessage: SwiftPr
   }
 }
 
-extension Rv_Data_NetworkAPI.Action.API_Stage.StageMessage.HideMessage: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+nonisolated extension Rv_Data_NetworkAPI.Action.API_Stage.StageMessage.HideMessage: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   public static let protoMessageName: String = Rv_Data_NetworkAPI.Action.API_Stage.StageMessage.protoMessageName + ".HideMessage"
   public static let _protobuf_nameMap = SwiftProtobuf._NameMap()
 
@@ -8029,7 +8029,7 @@ extension Rv_Data_NetworkAPI.Action.API_Stage.StageMessage.HideMessage: SwiftPro
   }
 }
 
-extension Rv_Data_NetworkAPI.Action.StatusRequest: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+nonisolated extension Rv_Data_NetworkAPI.Action.StatusRequest: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   public static let protoMessageName: String = Rv_Data_NetworkAPI.Action.protoMessageName + ".StatusRequest"
   public static let _protobuf_nameMap = SwiftProtobuf._NameMap()
 
@@ -8048,7 +8048,7 @@ extension Rv_Data_NetworkAPI.Action.StatusRequest: SwiftProtobuf.Message, SwiftP
   }
 }
 
-extension Rv_Data_NetworkAPI.Action.API_Status: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+nonisolated extension Rv_Data_NetworkAPI.Action.API_Status: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   public static let protoMessageName: String = Rv_Data_NetworkAPI.Action.protoMessageName + ".API_Status"
   public static let _protobuf_nameMap = SwiftProtobuf._NameMap()
 
@@ -8067,7 +8067,7 @@ extension Rv_Data_NetworkAPI.Action.API_Status: SwiftProtobuf.Message, SwiftProt
   }
 }
 
-extension Rv_Data_NetworkAPI.Action.API_StatusResponse: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+nonisolated extension Rv_Data_NetworkAPI.Action.API_StatusResponse: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   public static let protoMessageName: String = Rv_Data_NetworkAPI.Action.protoMessageName + ".API_StatusResponse"
   public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{3}group_definition\0\u{1}status\0")
 
@@ -8106,7 +8106,7 @@ extension Rv_Data_NetworkAPI.Action.API_StatusResponse: SwiftProtobuf.Message, S
   }
 }
 
-extension Rv_Data_NetworkAPI.IndexOrNameIdentifier: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+nonisolated extension Rv_Data_NetworkAPI.IndexOrNameIdentifier: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   public static let protoMessageName: String = Rv_Data_NetworkAPI.protoMessageName + ".IndexOrNameIdentifier"
   public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{1}index\0\u{1}name\0")
 
@@ -8163,7 +8163,7 @@ extension Rv_Data_NetworkAPI.IndexOrNameIdentifier: SwiftProtobuf.Message, Swift
   }
 }
 
-extension Rv_Data_NetworkAPI.IndexOrNameIdentifierPair: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+nonisolated extension Rv_Data_NetworkAPI.IndexOrNameIdentifierPair: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   public static let protoMessageName: String = Rv_Data_NetworkAPI.protoMessageName + ".IndexOrNameIdentifierPair"
   public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{1}key\0\u{1}value\0")
 

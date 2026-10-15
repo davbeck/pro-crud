@@ -15,12 +15,12 @@ import SwiftProtobuf
 // incompatible with the version of SwiftProtobuf to which you are linking.
 // Please ensure that you are building against the same version of the API
 // that was used to generate this file.
-fileprivate struct _GeneratedWithProtocGenSwiftVersion: SwiftProtobuf.ProtobufAPIVersionCheck {
+fileprivate nonisolated struct _GeneratedWithProtocGenSwiftVersion: SwiftProtobuf.ProtobufAPIVersionCheck {
   struct _2: SwiftProtobuf.ProtobufAPIVersion_2 {}
   typealias Version = _2
 }
 
-public struct Rv_Data_URL: Sendable {
+public nonisolated struct Rv_Data_URL: Sendable {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
   // methods supported on all messages.
@@ -65,19 +65,19 @@ public struct Rv_Data_URL: Sendable {
 
   public var unknownFields = SwiftProtobuf.UnknownStorage()
 
-  public enum OneOf_Storage: Equatable, Sendable {
+  public nonisolated enum OneOf_Storage: Equatable, Sendable {
     case absoluteString(String)
     case relativePath(String)
 
   }
 
-  public enum OneOf_RelativeFilePath: Equatable, Sendable {
+  public nonisolated enum OneOf_RelativeFilePath: Equatable, Sendable {
     case local(Rv_Data_URL.LocalRelativePath)
     case external(Rv_Data_URL.ExternalRelativePath)
 
   }
 
-  public enum Platform: SwiftProtobuf.Enum, Swift.CaseIterable {
+  public nonisolated enum Platform: SwiftProtobuf.Enum, Swift.CaseIterable {
     public typealias RawValue = Int
     case unknown // = 0
     case macos // = 1
@@ -119,7 +119,7 @@ public struct Rv_Data_URL: Sendable {
 
   }
 
-  public struct LocalRelativePath: Sendable {
+  public nonisolated struct LocalRelativePath: Sendable {
     // SwiftProtobuf.Message conformance is added in an extension below. See the
     // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
     // methods supported on all messages.
@@ -130,7 +130,7 @@ public struct Rv_Data_URL: Sendable {
 
     public var unknownFields = SwiftProtobuf.UnknownStorage()
 
-    public enum Root: SwiftProtobuf.Enum, Swift.CaseIterable {
+    public nonisolated enum Root: SwiftProtobuf.Enum, Swift.CaseIterable {
       public typealias RawValue = Int
       case unknown // = 0
       case bootVolume // = 1
@@ -211,26 +211,26 @@ public struct Rv_Data_URL: Sendable {
     public init() {}
   }
 
-  public struct ExternalRelativePath: Sendable {
+  public nonisolated struct ExternalRelativePath: Sendable {
     // SwiftProtobuf.Message conformance is added in an extension below. See the
     // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
     // methods supported on all messages.
 
     public var macos: Rv_Data_URL.ExternalRelativePath.MacOSExternalVolume {
-      get {return _macos ?? Rv_Data_URL.ExternalRelativePath.MacOSExternalVolume()}
+      get {_macos ?? Rv_Data_URL.ExternalRelativePath.MacOSExternalVolume()}
       set {_macos = newValue}
     }
     /// Returns true if `macos` has been explicitly set.
-    public var hasMacos: Bool {return self._macos != nil}
+    public var hasMacos: Bool {self._macos != nil}
     /// Clears the value of `macos`. Subsequent reads from it will return its default value.
     public mutating func clearMacos() {self._macos = nil}
 
     public var win32: Rv_Data_URL.ExternalRelativePath.Win32ExternalVolume {
-      get {return _win32 ?? Rv_Data_URL.ExternalRelativePath.Win32ExternalVolume()}
+      get {_win32 ?? Rv_Data_URL.ExternalRelativePath.Win32ExternalVolume()}
       set {_win32 = newValue}
     }
     /// Returns true if `win32` has been explicitly set.
-    public var hasWin32: Bool {return self._win32 != nil}
+    public var hasWin32: Bool {self._win32 != nil}
     /// Clears the value of `win32`. Subsequent reads from it will return its default value.
     public mutating func clearWin32() {self._win32 = nil}
 
@@ -238,7 +238,7 @@ public struct Rv_Data_URL: Sendable {
 
     public var unknownFields = SwiftProtobuf.UnknownStorage()
 
-    public struct MacOSExternalVolume: Sendable {
+    public nonisolated struct MacOSExternalVolume: Sendable {
       // SwiftProtobuf.Message conformance is added in an extension below. See the
       // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
       // methods supported on all messages.
@@ -250,7 +250,7 @@ public struct Rv_Data_URL: Sendable {
       public init() {}
     }
 
-    public struct Win32ExternalVolume: Sendable {
+    public nonisolated struct Win32ExternalVolume: Sendable {
       // SwiftProtobuf.Message conformance is added in an extension below. See the
       // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
       // methods supported on all messages.
@@ -275,7 +275,7 @@ public struct Rv_Data_URL: Sendable {
   public init() {}
 }
 
-public struct Rv_Data_URLs: Sendable {
+public nonisolated struct Rv_Data_URLs: Sendable {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
   // methods supported on all messages.
@@ -287,7 +287,7 @@ public struct Rv_Data_URLs: Sendable {
   public init() {}
 }
 
-public struct Rv_Data_UUID: Sendable {
+public nonisolated struct Rv_Data_UUID: Sendable {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
   // methods supported on all messages.
@@ -299,7 +299,7 @@ public struct Rv_Data_UUID: Sendable {
   public init() {}
 }
 
-public struct Rv_Data_IntRange: Sendable {
+public nonisolated struct Rv_Data_IntRange: Sendable {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
   // methods supported on all messages.
@@ -313,7 +313,7 @@ public struct Rv_Data_IntRange: Sendable {
   public init() {}
 }
 
-public struct Rv_Data_Color: Sendable {
+public nonisolated struct Rv_Data_Color: Sendable {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
   // methods supported on all messages.
@@ -331,7 +331,7 @@ public struct Rv_Data_Color: Sendable {
   public init() {}
 }
 
-public struct Rv_Data_Version: Sendable {
+public nonisolated struct Rv_Data_Version: Sendable {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
   // methods supported on all messages.
@@ -349,7 +349,7 @@ public struct Rv_Data_Version: Sendable {
   public init() {}
 }
 
-public struct Rv_Data_ApplicationInfo: Sendable {
+public nonisolated struct Rv_Data_ApplicationInfo: Sendable {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
   // methods supported on all messages.
@@ -357,28 +357,28 @@ public struct Rv_Data_ApplicationInfo: Sendable {
   public var platform: Rv_Data_ApplicationInfo.Platform = .undefined
 
   public var platformVersion: Rv_Data_Version {
-    get {return _platformVersion ?? Rv_Data_Version()}
+    get {_platformVersion ?? Rv_Data_Version()}
     set {_platformVersion = newValue}
   }
   /// Returns true if `platformVersion` has been explicitly set.
-  public var hasPlatformVersion: Bool {return self._platformVersion != nil}
+  public var hasPlatformVersion: Bool {self._platformVersion != nil}
   /// Clears the value of `platformVersion`. Subsequent reads from it will return its default value.
   public mutating func clearPlatformVersion() {self._platformVersion = nil}
 
   public var application: Rv_Data_ApplicationInfo.Application = .undefined
 
   public var applicationVersion: Rv_Data_Version {
-    get {return _applicationVersion ?? Rv_Data_Version()}
+    get {_applicationVersion ?? Rv_Data_Version()}
     set {_applicationVersion = newValue}
   }
   /// Returns true if `applicationVersion` has been explicitly set.
-  public var hasApplicationVersion: Bool {return self._applicationVersion != nil}
+  public var hasApplicationVersion: Bool {self._applicationVersion != nil}
   /// Clears the value of `applicationVersion`. Subsequent reads from it will return its default value.
   public mutating func clearApplicationVersion() {self._applicationVersion = nil}
 
   public var unknownFields = SwiftProtobuf.UnknownStorage()
 
-  public enum Platform: SwiftProtobuf.Enum, Swift.CaseIterable {
+  public nonisolated enum Platform: SwiftProtobuf.Enum, Swift.CaseIterable {
     public typealias RawValue = Int
     case undefined // = 0
     case macos // = 1
@@ -416,7 +416,7 @@ public struct Rv_Data_ApplicationInfo: Sendable {
 
   }
 
-  public enum Application: SwiftProtobuf.Enum, Swift.CaseIterable {
+  public nonisolated enum Application: SwiftProtobuf.Enum, Swift.CaseIterable {
     public typealias RawValue = Int
     case undefined // = 0
     case propresenter // = 1
@@ -468,17 +468,17 @@ public struct Rv_Data_ApplicationInfo: Sendable {
   fileprivate var _applicationVersion: Rv_Data_Version? = nil
 }
 
-public struct Rv_Data_CollectionElementType: Sendable {
+public nonisolated struct Rv_Data_CollectionElementType: Sendable {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
   // methods supported on all messages.
 
   public var parameterUuid: Rv_Data_UUID {
-    get {return _parameterUuid ?? Rv_Data_UUID()}
+    get {_parameterUuid ?? Rv_Data_UUID()}
     set {_parameterUuid = newValue}
   }
   /// Returns true if `parameterUuid` has been explicitly set.
-  public var hasParameterUuid: Bool {return self._parameterUuid != nil}
+  public var hasParameterUuid: Bool {self._parameterUuid != nil}
   /// Clears the value of `parameterUuid`. Subsequent reads from it will return its default value.
   public mutating func clearParameterUuid() {self._parameterUuid = nil}
 
@@ -491,7 +491,7 @@ public struct Rv_Data_CollectionElementType: Sendable {
   fileprivate var _parameterUuid: Rv_Data_UUID? = nil
 }
 
-public struct Rv_Data_MusicKeyScale: Sendable {
+public nonisolated struct Rv_Data_MusicKeyScale: Sendable {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
   // methods supported on all messages.
@@ -502,7 +502,7 @@ public struct Rv_Data_MusicKeyScale: Sendable {
 
   public var unknownFields = SwiftProtobuf.UnknownStorage()
 
-  public enum MusicKey: SwiftProtobuf.Enum, Swift.CaseIterable {
+  public nonisolated enum MusicKey: SwiftProtobuf.Enum, Swift.CaseIterable {
     public typealias RawValue = Int
     case aFlat // = 0
     case a // = 1
@@ -612,7 +612,7 @@ public struct Rv_Data_MusicKeyScale: Sendable {
 
   }
 
-  public enum MusicScale: SwiftProtobuf.Enum, Swift.CaseIterable {
+  public nonisolated enum MusicScale: SwiftProtobuf.Enum, Swift.CaseIterable {
     public typealias RawValue = Int
     case major // = 0
     case minor // = 1
@@ -651,9 +651,9 @@ public struct Rv_Data_MusicKeyScale: Sendable {
 
 // MARK: - Code below here is support for the SwiftProtobuf runtime.
 
-fileprivate let _protobuf_package = "rv.data"
+fileprivate nonisolated let _protobuf_package = "rv.data"
 
-extension Rv_Data_URL: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+nonisolated extension Rv_Data_URL: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   public static let protoMessageName: String = _protobuf_package + ".URL"
   public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{3}absolute_string\0\u{3}relative_path\0\u{1}platform\0\u{1}local\0\u{1}external\0")
 
@@ -753,11 +753,11 @@ extension Rv_Data_URL: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementati
   }
 }
 
-extension Rv_Data_URL.Platform: SwiftProtobuf._ProtoNameProviding {
+nonisolated extension Rv_Data_URL.Platform: SwiftProtobuf._ProtoNameProviding {
   public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{2}\0PLATFORM_UNKNOWN\0\u{1}PLATFORM_MACOS\0\u{1}PLATFORM_WIN32\0\u{1}PLATFORM_WEB\0")
 }
 
-extension Rv_Data_URL.LocalRelativePath: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+nonisolated extension Rv_Data_URL.LocalRelativePath: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   public static let protoMessageName: String = Rv_Data_URL.protoMessageName + ".LocalRelativePath"
   public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{1}root\0\u{1}path\0")
 
@@ -792,11 +792,11 @@ extension Rv_Data_URL.LocalRelativePath: SwiftProtobuf.Message, SwiftProtobuf._M
   }
 }
 
-extension Rv_Data_URL.LocalRelativePath.Root: SwiftProtobuf._ProtoNameProviding {
+nonisolated extension Rv_Data_URL.LocalRelativePath.Root: SwiftProtobuf._ProtoNameProviding {
   public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{2}\0ROOT_UNKNOWN\0\u{1}ROOT_BOOT_VOLUME\0\u{1}ROOT_USER_HOME\0\u{1}ROOT_USER_DOCUMENTS\0\u{1}ROOT_USER_DOWNLOADS\0\u{1}ROOT_USER_MUSIC\0\u{1}ROOT_USER_PICTURES\0\u{1}ROOT_USER_VIDEOS\0\u{1}ROOT_USER_APP_SUPPORT\0\u{1}ROOT_SHARED\0\u{1}ROOT_SHOW\0\u{1}ROOT_USER_DESKTOP\0\u{1}ROOT_CURRENT_RESOURCE\0")
 }
 
-extension Rv_Data_URL.ExternalRelativePath: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+nonisolated extension Rv_Data_URL.ExternalRelativePath: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   public static let protoMessageName: String = Rv_Data_URL.protoMessageName + ".ExternalRelativePath"
   public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{1}macos\0\u{1}win32\0\u{1}path\0")
 
@@ -840,7 +840,7 @@ extension Rv_Data_URL.ExternalRelativePath: SwiftProtobuf.Message, SwiftProtobuf
   }
 }
 
-extension Rv_Data_URL.ExternalRelativePath.MacOSExternalVolume: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+nonisolated extension Rv_Data_URL.ExternalRelativePath.MacOSExternalVolume: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   public static let protoMessageName: String = Rv_Data_URL.ExternalRelativePath.protoMessageName + ".MacOSExternalVolume"
   public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{3}volume_name\0")
 
@@ -870,7 +870,7 @@ extension Rv_Data_URL.ExternalRelativePath.MacOSExternalVolume: SwiftProtobuf.Me
   }
 }
 
-extension Rv_Data_URL.ExternalRelativePath.Win32ExternalVolume: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+nonisolated extension Rv_Data_URL.ExternalRelativePath.Win32ExternalVolume: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   public static let protoMessageName: String = Rv_Data_URL.ExternalRelativePath.protoMessageName + ".Win32ExternalVolume"
   public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{3}drive_letter\0\u{3}volume_name\0\u{3}network_share\0")
 
@@ -910,7 +910,7 @@ extension Rv_Data_URL.ExternalRelativePath.Win32ExternalVolume: SwiftProtobuf.Me
   }
 }
 
-extension Rv_Data_URLs: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+nonisolated extension Rv_Data_URLs: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   public static let protoMessageName: String = _protobuf_package + ".URLs"
   public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{1}urls\0")
 
@@ -940,7 +940,7 @@ extension Rv_Data_URLs: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementat
   }
 }
 
-extension Rv_Data_UUID: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+nonisolated extension Rv_Data_UUID: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   public static let protoMessageName: String = _protobuf_package + ".UUID"
   public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{1}string\0")
 
@@ -970,7 +970,7 @@ extension Rv_Data_UUID: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementat
   }
 }
 
-extension Rv_Data_IntRange: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+nonisolated extension Rv_Data_IntRange: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   public static let protoMessageName: String = _protobuf_package + ".IntRange"
   public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{1}start\0\u{1}end\0")
 
@@ -1005,7 +1005,7 @@ extension Rv_Data_IntRange: SwiftProtobuf.Message, SwiftProtobuf._MessageImpleme
   }
 }
 
-extension Rv_Data_Color: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+nonisolated extension Rv_Data_Color: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   public static let protoMessageName: String = _protobuf_package + ".Color"
   public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{1}red\0\u{1}green\0\u{1}blue\0\u{1}alpha\0")
 
@@ -1050,7 +1050,7 @@ extension Rv_Data_Color: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementa
   }
 }
 
-extension Rv_Data_Version: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+nonisolated extension Rv_Data_Version: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   public static let protoMessageName: String = _protobuf_package + ".Version"
   public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{3}major_version\0\u{3}minor_version\0\u{3}patch_version\0\u{1}build\0")
 
@@ -1095,7 +1095,7 @@ extension Rv_Data_Version: SwiftProtobuf.Message, SwiftProtobuf._MessageImplemen
   }
 }
 
-extension Rv_Data_ApplicationInfo: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+nonisolated extension Rv_Data_ApplicationInfo: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   public static let protoMessageName: String = _protobuf_package + ".ApplicationInfo"
   public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{1}platform\0\u{3}platform_version\0\u{1}application\0\u{3}application_version\0")
 
@@ -1144,15 +1144,15 @@ extension Rv_Data_ApplicationInfo: SwiftProtobuf.Message, SwiftProtobuf._Message
   }
 }
 
-extension Rv_Data_ApplicationInfo.Platform: SwiftProtobuf._ProtoNameProviding {
+nonisolated extension Rv_Data_ApplicationInfo.Platform: SwiftProtobuf._ProtoNameProviding {
   public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{2}\0PLATFORM_UNDEFINED\0\u{1}PLATFORM_MACOS\0\u{1}PLATFORM_WINDOWS\0")
 }
 
-extension Rv_Data_ApplicationInfo.Application: SwiftProtobuf._ProtoNameProviding {
+nonisolated extension Rv_Data_ApplicationInfo.Application: SwiftProtobuf._ProtoNameProviding {
   public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{2}\0APPLICATION_UNDEFINED\0\u{1}APPLICATION_PROPRESENTER\0\u{1}APPLICATION_PVP\0\u{1}APPLICATION_PROVIDEOSERVER\0\u{1}APPLICATION_SCOREBOARD\0")
 }
 
-extension Rv_Data_CollectionElementType: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+nonisolated extension Rv_Data_CollectionElementType: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   public static let protoMessageName: String = _protobuf_package + ".CollectionElementType"
   public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{3}parameter_uuid\0\u{3}parameter_name\0")
 
@@ -1191,7 +1191,7 @@ extension Rv_Data_CollectionElementType: SwiftProtobuf.Message, SwiftProtobuf._M
   }
 }
 
-extension Rv_Data_MusicKeyScale: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+nonisolated extension Rv_Data_MusicKeyScale: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   public static let protoMessageName: String = _protobuf_package + ".MusicKeyScale"
   public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{3}music_key\0\u{3}music_scale\0")
 
@@ -1226,10 +1226,10 @@ extension Rv_Data_MusicKeyScale: SwiftProtobuf.Message, SwiftProtobuf._MessageIm
   }
 }
 
-extension Rv_Data_MusicKeyScale.MusicKey: SwiftProtobuf._ProtoNameProviding {
+nonisolated extension Rv_Data_MusicKeyScale.MusicKey: SwiftProtobuf._ProtoNameProviding {
   public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{2}\0MUSIC_KEY_A_FLAT\0\u{1}MUSIC_KEY_A\0\u{1}MUSIC_KEY_A_SHARP\0\u{1}MUSIC_KEY_B_FLAT\0\u{1}MUSIC_KEY_B\0\u{1}MUSIC_KEY_B_SHARP\0\u{1}MUSIC_KEY_C_FLAT\0\u{1}MUSIC_KEY_C\0\u{1}MUSIC_KEY_C_SHARP\0\u{1}MUSIC_KEY_D_FLAT\0\u{1}MUSIC_KEY_D\0\u{1}MUSIC_KEY_D_SHARP\0\u{1}MUSIC_KEY_E_FLAT\0\u{1}MUSIC_KEY_E\0\u{1}MUSIC_KEY_E_SHARP\0\u{1}MUSIC_KEY_F_FLAT\0\u{1}MUSIC_KEY_F\0\u{1}MUSIC_KEY_F_SHARP\0\u{1}MUSIC_KEY_G_FLAT\0\u{1}MUSIC_KEY_G\0\u{1}MUSIC_KEY_G_SHARP\0")
 }
 
-extension Rv_Data_MusicKeyScale.MusicScale: SwiftProtobuf._ProtoNameProviding {
+nonisolated extension Rv_Data_MusicKeyScale.MusicScale: SwiftProtobuf._ProtoNameProviding {
   public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{2}\0MUSIC_SCALE_MAJOR\0\u{1}MUSIC_SCALE_MINOR\0")
 }

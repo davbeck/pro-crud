@@ -15,12 +15,12 @@ import SwiftProtobuf
 // incompatible with the version of SwiftProtobuf to which you are linking.
 // Please ensure that you are building against the same version of the API
 // that was used to generate this file.
-fileprivate struct _GeneratedWithProtocGenSwiftVersion: SwiftProtobuf.ProtobufAPIVersionCheck {
+fileprivate nonisolated struct _GeneratedWithProtocGenSwiftVersion: SwiftProtobuf.ProtobufAPIVersionCheck {
   struct _2: SwiftProtobuf.ProtobufAPIVersion_2 {}
   typealias Version = _2
 }
 
-public struct Rv_Data_PlanningCenterPlan: Sendable {
+public nonisolated struct Rv_Data_PlanningCenterPlan: Sendable {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
   // methods supported on all messages.
@@ -36,29 +36,29 @@ public struct Rv_Data_PlanningCenterPlan: Sendable {
   public var dateList: String = String()
 
   public var createdDate: Rv_Data_Timestamp {
-    get {return _createdDate ?? Rv_Data_Timestamp()}
+    get {_createdDate ?? Rv_Data_Timestamp()}
     set {_createdDate = newValue}
   }
   /// Returns true if `createdDate` has been explicitly set.
-  public var hasCreatedDate: Bool {return self._createdDate != nil}
+  public var hasCreatedDate: Bool {self._createdDate != nil}
   /// Clears the value of `createdDate`. Subsequent reads from it will return its default value.
   public mutating func clearCreatedDate() {self._createdDate = nil}
 
   public var updateDate: Rv_Data_Timestamp {
-    get {return _updateDate ?? Rv_Data_Timestamp()}
+    get {_updateDate ?? Rv_Data_Timestamp()}
     set {_updateDate = newValue}
   }
   /// Returns true if `updateDate` has been explicitly set.
-  public var hasUpdateDate: Bool {return self._updateDate != nil}
+  public var hasUpdateDate: Bool {self._updateDate != nil}
   /// Clears the value of `updateDate`. Subsequent reads from it will return its default value.
   public mutating func clearUpdateDate() {self._updateDate = nil}
 
   public var lastUpdateCheckDate: Rv_Data_Timestamp {
-    get {return _lastUpdateCheckDate ?? Rv_Data_Timestamp()}
+    get {_lastUpdateCheckDate ?? Rv_Data_Timestamp()}
     set {_lastUpdateCheckDate = newValue}
   }
   /// Returns true if `lastUpdateCheckDate` has been explicitly set.
-  public var hasLastUpdateCheckDate: Bool {return self._lastUpdateCheckDate != nil}
+  public var hasLastUpdateCheckDate: Bool {self._lastUpdateCheckDate != nil}
   /// Clears the value of `lastUpdateCheckDate`. Subsequent reads from it will return its default value.
   public mutating func clearLastUpdateCheckDate() {self._lastUpdateCheckDate = nil}
 
@@ -68,7 +68,7 @@ public struct Rv_Data_PlanningCenterPlan: Sendable {
 
   public var unknownFields = SwiftProtobuf.UnknownStorage()
 
-  public struct PlanItem: Sendable {
+  public nonisolated struct PlanItem: Sendable {
     // SwiftProtobuf.Message conformance is added in an extension below. See the
     // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
     // methods supported on all messages.
@@ -86,20 +86,20 @@ public struct Rv_Data_PlanningCenterPlan: Sendable {
     public var attachments: [Rv_Data_PlanningCenterPlan.PlanItem.Attachment] = []
 
     public var updateDate: Rv_Data_Timestamp {
-      get {return _updateDate ?? Rv_Data_Timestamp()}
+      get {_updateDate ?? Rv_Data_Timestamp()}
       set {_updateDate = newValue}
     }
     /// Returns true if `updateDate` has been explicitly set.
-    public var hasUpdateDate: Bool {return self._updateDate != nil}
+    public var hasUpdateDate: Bool {self._updateDate != nil}
     /// Clears the value of `updateDate`. Subsequent reads from it will return its default value.
     public mutating func clearUpdateDate() {self._updateDate = nil}
 
     public var linkedSong: Rv_Data_PlanningCenterPlan.PlanItem.SongItem {
-      get {return _linkedSong ?? Rv_Data_PlanningCenterPlan.PlanItem.SongItem()}
+      get {_linkedSong ?? Rv_Data_PlanningCenterPlan.PlanItem.SongItem()}
       set {_linkedSong = newValue}
     }
     /// Returns true if `linkedSong` has been explicitly set.
-    public var hasLinkedSong: Bool {return self._linkedSong != nil}
+    public var hasLinkedSong: Bool {self._linkedSong != nil}
     /// Clears the value of `linkedSong`. Subsequent reads from it will return its default value.
     public mutating func clearLinkedSong() {self._linkedSong = nil}
 
@@ -111,7 +111,7 @@ public struct Rv_Data_PlanningCenterPlan: Sendable {
 
     public var unknownFields = SwiftProtobuf.UnknownStorage()
 
-    public enum PlanItemType: SwiftProtobuf.Enum, Swift.CaseIterable {
+    public nonisolated enum PlanItemType: SwiftProtobuf.Enum, Swift.CaseIterable {
       public typealias RawValue = Int
       case item // = 0
       case song // = 1
@@ -153,64 +153,64 @@ public struct Rv_Data_PlanningCenterPlan: Sendable {
 
     }
 
-    public struct Attachment: @unchecked Sendable {
+    public nonisolated struct Attachment: @unchecked Sendable {
       // SwiftProtobuf.Message conformance is added in an extension below. See the
       // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
       // methods supported on all messages.
 
       public var name: String {
-        get {return _storage._name}
+        get {_storage._name}
         set {_uniqueStorage()._name = newValue}
       }
 
       public var url: Rv_Data_URL {
-        get {return _storage._url ?? Rv_Data_URL()}
+        get {_storage._url ?? Rv_Data_URL()}
         set {_uniqueStorage()._url = newValue}
       }
       /// Returns true if `url` has been explicitly set.
-      public var hasURL: Bool {return _storage._url != nil}
+      public var hasURL: Bool {_storage._url != nil}
       /// Clears the value of `url`. Subsequent reads from it will return its default value.
       public mutating func clearURL() {_uniqueStorage()._url = nil}
 
       public var createdDate: Rv_Data_Timestamp {
-        get {return _storage._createdDate ?? Rv_Data_Timestamp()}
+        get {_storage._createdDate ?? Rv_Data_Timestamp()}
         set {_uniqueStorage()._createdDate = newValue}
       }
       /// Returns true if `createdDate` has been explicitly set.
-      public var hasCreatedDate: Bool {return _storage._createdDate != nil}
+      public var hasCreatedDate: Bool {_storage._createdDate != nil}
       /// Clears the value of `createdDate`. Subsequent reads from it will return its default value.
       public mutating func clearCreatedDate() {_uniqueStorage()._createdDate = nil}
 
       public var linkedPath: Rv_Data_URL {
-        get {return _storage._linkedPath ?? Rv_Data_URL()}
+        get {_storage._linkedPath ?? Rv_Data_URL()}
         set {_uniqueStorage()._linkedPath = newValue}
       }
       /// Returns true if `linkedPath` has been explicitly set.
-      public var hasLinkedPath: Bool {return _storage._linkedPath != nil}
+      public var hasLinkedPath: Bool {_storage._linkedPath != nil}
       /// Clears the value of `linkedPath`. Subsequent reads from it will return its default value.
       public mutating func clearLinkedPath() {_uniqueStorage()._linkedPath = nil}
 
       public var pcoIDNum: UInt32 {
-        get {return _storage._pcoIDNum}
+        get {_storage._pcoIDNum}
         set {_uniqueStorage()._pcoIDNum = newValue}
       }
 
       public var needsUpdate: Bool {
-        get {return _storage._needsUpdate}
+        get {_storage._needsUpdate}
         set {_uniqueStorage()._needsUpdate = newValue}
       }
 
       public var updateDate: Rv_Data_Timestamp {
-        get {return _storage._updateDate ?? Rv_Data_Timestamp()}
+        get {_storage._updateDate ?? Rv_Data_Timestamp()}
         set {_uniqueStorage()._updateDate = newValue}
       }
       /// Returns true if `updateDate` has been explicitly set.
-      public var hasUpdateDate: Bool {return _storage._updateDate != nil}
+      public var hasUpdateDate: Bool {_storage._updateDate != nil}
       /// Clears the value of `updateDate`. Subsequent reads from it will return its default value.
       public mutating func clearUpdateDate() {_uniqueStorage()._updateDate = nil}
 
       public var pcoIDStr: String {
-        get {return _storage._pcoIDStr}
+        get {_storage._pcoIDStr}
         set {_uniqueStorage()._pcoIDStr = newValue}
       }
 
@@ -221,52 +221,52 @@ public struct Rv_Data_PlanningCenterPlan: Sendable {
       fileprivate var _storage = _StorageClass.defaultInstance
     }
 
-    public struct SongItem: @unchecked Sendable {
+    public nonisolated struct SongItem: @unchecked Sendable {
       // SwiftProtobuf.Message conformance is added in an extension below. See the
       // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
       // methods supported on all messages.
 
       public var pcoIDNum: UInt32 {
-        get {return _storage._pcoIDNum}
+        get {_storage._pcoIDNum}
         set {_uniqueStorage()._pcoIDNum = newValue}
       }
 
       public var arrangementIDNum: UInt32 {
-        get {return _storage._arrangementIDNum}
+        get {_storage._arrangementIDNum}
         set {_uniqueStorage()._arrangementIDNum = newValue}
       }
 
       public var ccli: Rv_Data_Presentation.CCLI {
-        get {return _storage._ccli ?? Rv_Data_Presentation.CCLI()}
+        get {_storage._ccli ?? Rv_Data_Presentation.CCLI()}
         set {_uniqueStorage()._ccli = newValue}
       }
       /// Returns true if `ccli` has been explicitly set.
-      public var hasCcli: Bool {return _storage._ccli != nil}
+      public var hasCcli: Bool {_storage._ccli != nil}
       /// Clears the value of `ccli`. Subsequent reads from it will return its default value.
       public mutating func clearCcli() {_uniqueStorage()._ccli = nil}
 
       public var sequence: Rv_Data_PlanningCenterPlan.PlanItem.SongItem.Sequence {
-        get {return _storage._sequence ?? Rv_Data_PlanningCenterPlan.PlanItem.SongItem.Sequence()}
+        get {_storage._sequence ?? Rv_Data_PlanningCenterPlan.PlanItem.SongItem.Sequence()}
         set {_uniqueStorage()._sequence = newValue}
       }
       /// Returns true if `sequence` has been explicitly set.
-      public var hasSequence: Bool {return _storage._sequence != nil}
+      public var hasSequence: Bool {_storage._sequence != nil}
       /// Clears the value of `sequence`. Subsequent reads from it will return its default value.
       public mutating func clearSequence() {_uniqueStorage()._sequence = nil}
 
       public var pcoIDStr: String {
-        get {return _storage._pcoIDStr}
+        get {_storage._pcoIDStr}
         set {_uniqueStorage()._pcoIDStr = newValue}
       }
 
       public var arrangementIDStr: String {
-        get {return _storage._arrangementIDStr}
+        get {_storage._arrangementIDStr}
         set {_uniqueStorage()._arrangementIDStr = newValue}
       }
 
       public var unknownFields = SwiftProtobuf.UnknownStorage()
 
-      public struct Sequence: Sendable {
+      public nonisolated struct Sequence: Sendable {
         // SwiftProtobuf.Message conformance is added in an extension below. See the
         // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
         // methods supported on all messages.
@@ -304,9 +304,9 @@ public struct Rv_Data_PlanningCenterPlan: Sendable {
 
 // MARK: - Code below here is support for the SwiftProtobuf runtime.
 
-fileprivate let _protobuf_package = "rv.data"
+fileprivate nonisolated let _protobuf_package = "rv.data"
 
-extension Rv_Data_PlanningCenterPlan: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+nonisolated extension Rv_Data_PlanningCenterPlan: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   public static let protoMessageName: String = _protobuf_package + ".PlanningCenterPlan"
   public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{3}plan_id_num\0\u{3}parent_id_num\0\u{3}series_title\0\u{3}plan_title\0\u{3}date_list\0\u{3}created_date\0\u{3}update_date\0\u{3}last_update_check_date\0\u{3}plan_id_str\0\u{3}parent_id_str\0")
 
@@ -385,7 +385,7 @@ extension Rv_Data_PlanningCenterPlan: SwiftProtobuf.Message, SwiftProtobuf._Mess
   }
 }
 
-extension Rv_Data_PlanningCenterPlan.PlanItem: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+nonisolated extension Rv_Data_PlanningCenterPlan.PlanItem: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   public static let protoMessageName: String = Rv_Data_PlanningCenterPlan.protoMessageName + ".PlanItem"
   public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{3}item_type\0\u{3}pco_id_num\0\u{3}service_id_num\0\u{3}parent_id_num\0\u{1}name\0\u{1}attachments\0\u{3}update_date\0\u{3}linked_song\0\u{3}pco_id_str\0\u{3}service_id_str\0\u{3}parent_id_str\0")
 
@@ -469,11 +469,11 @@ extension Rv_Data_PlanningCenterPlan.PlanItem: SwiftProtobuf.Message, SwiftProto
   }
 }
 
-extension Rv_Data_PlanningCenterPlan.PlanItem.PlanItemType: SwiftProtobuf._ProtoNameProviding {
+nonisolated extension Rv_Data_PlanningCenterPlan.PlanItem.PlanItemType: SwiftProtobuf._ProtoNameProviding {
   public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{2}\0PLAN_ITEM_TYPE_ITEM\0\u{1}PLAN_ITEM_TYPE_SONG\0\u{1}PLAN_ITEM_TYPE_MEDIA\0\u{1}PLAN_ITEM_TYPE_HEADER\0")
 }
 
-extension Rv_Data_PlanningCenterPlan.PlanItem.Attachment: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+nonisolated extension Rv_Data_PlanningCenterPlan.PlanItem.Attachment: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   public static let protoMessageName: String = Rv_Data_PlanningCenterPlan.PlanItem.protoMessageName + ".Attachment"
   public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{1}name\0\u{1}url\0\u{3}created_date\0\u{3}linked_path\0\u{3}pco_id_num\0\u{3}needs_update\0\u{3}update_date\0\u{3}pco_id_str\0")
 
@@ -592,7 +592,7 @@ extension Rv_Data_PlanningCenterPlan.PlanItem.Attachment: SwiftProtobuf.Message,
   }
 }
 
-extension Rv_Data_PlanningCenterPlan.PlanItem.SongItem: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+nonisolated extension Rv_Data_PlanningCenterPlan.PlanItem.SongItem: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   public static let protoMessageName: String = Rv_Data_PlanningCenterPlan.PlanItem.protoMessageName + ".SongItem"
   public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{3}pco_id_num\0\u{3}arrangement_id_num\0\u{1}ccli\0\u{1}sequence\0\u{3}pco_id_str\0\u{3}arrangement_id_str\0")
 
@@ -697,7 +697,7 @@ extension Rv_Data_PlanningCenterPlan.PlanItem.SongItem: SwiftProtobuf.Message, S
   }
 }
 
-extension Rv_Data_PlanningCenterPlan.PlanItem.SongItem.Sequence: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+nonisolated extension Rv_Data_PlanningCenterPlan.PlanItem.SongItem.Sequence: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   public static let protoMessageName: String = Rv_Data_PlanningCenterPlan.PlanItem.SongItem.protoMessageName + ".Sequence"
   public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{3}pco_id_num\0\u{1}name\0\u{3}group_names\0\u{3}pco_id_str\0")
 

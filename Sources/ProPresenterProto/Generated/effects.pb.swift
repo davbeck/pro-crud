@@ -15,22 +15,22 @@ import SwiftProtobuf
 // incompatible with the version of SwiftProtobuf to which you are linking.
 // Please ensure that you are building against the same version of the API
 // that was used to generate this file.
-fileprivate struct _GeneratedWithProtocGenSwiftVersion: SwiftProtobuf.ProtobufAPIVersionCheck {
+fileprivate nonisolated struct _GeneratedWithProtocGenSwiftVersion: SwiftProtobuf.ProtobufAPIVersionCheck {
   struct _2: SwiftProtobuf.ProtobufAPIVersion_2 {}
   typealias Version = _2
 }
 
-public struct Rv_Data_Effect: Sendable {
+public nonisolated struct Rv_Data_Effect: Sendable {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
   // methods supported on all messages.
 
   public var uuid: Rv_Data_UUID {
-    get {return _uuid ?? Rv_Data_UUID()}
+    get {_uuid ?? Rv_Data_UUID()}
     set {_uuid = newValue}
   }
   /// Returns true if `uuid` has been explicitly set.
-  public var hasUuid: Bool {return self._uuid != nil}
+  public var hasUuid: Bool {self._uuid != nil}
   /// Clears the value of `uuid`. Subsequent reads from it will return its default value.
   public mutating func clearUuid() {self._uuid = nil}
 
@@ -48,7 +48,7 @@ public struct Rv_Data_Effect: Sendable {
 
   public var unknownFields = SwiftProtobuf.UnknownStorage()
 
-  public struct EffectVariable: Sendable {
+  public nonisolated struct EffectVariable: Sendable {
     // SwiftProtobuf.Message conformance is added in an extension below. See the
     // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
     // methods supported on all messages.
@@ -101,7 +101,7 @@ public struct Rv_Data_Effect: Sendable {
 
     public var unknownFields = SwiftProtobuf.UnknownStorage()
 
-    public enum OneOf_Type: Equatable, Sendable {
+    public nonisolated enum OneOf_Type: Equatable, Sendable {
       case int(Rv_Data_Effect.EffectVariable.EffectInt)
       case float(Rv_Data_Effect.EffectVariable.EffectFloat)
       case color(Rv_Data_Effect.EffectVariable.EffectColor)
@@ -110,7 +110,7 @@ public struct Rv_Data_Effect: Sendable {
 
     }
 
-    public struct EffectInt: Sendable {
+    public nonisolated struct EffectInt: Sendable {
       // SwiftProtobuf.Message conformance is added in an extension below. See the
       // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
       // methods supported on all messages.
@@ -128,7 +128,7 @@ public struct Rv_Data_Effect: Sendable {
       public init() {}
     }
 
-    public struct EffectFloat: Sendable {
+    public nonisolated struct EffectFloat: Sendable {
       // SwiftProtobuf.Message conformance is added in an extension below. See the
       // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
       // methods supported on all messages.
@@ -146,7 +146,7 @@ public struct Rv_Data_Effect: Sendable {
       public init() {}
     }
 
-    public struct EffectDouble: Sendable {
+    public nonisolated struct EffectDouble: Sendable {
       // SwiftProtobuf.Message conformance is added in an extension below. See the
       // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
       // methods supported on all messages.
@@ -164,26 +164,26 @@ public struct Rv_Data_Effect: Sendable {
       public init() {}
     }
 
-    public struct EffectColor: Sendable {
+    public nonisolated struct EffectColor: Sendable {
       // SwiftProtobuf.Message conformance is added in an extension below. See the
       // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
       // methods supported on all messages.
 
       public var color: Rv_Data_Color {
-        get {return _color ?? Rv_Data_Color()}
+        get {_color ?? Rv_Data_Color()}
         set {_color = newValue}
       }
       /// Returns true if `color` has been explicitly set.
-      public var hasColor: Bool {return self._color != nil}
+      public var hasColor: Bool {self._color != nil}
       /// Clears the value of `color`. Subsequent reads from it will return its default value.
       public mutating func clearColor() {self._color = nil}
 
       public var defaultColor: Rv_Data_Color {
-        get {return _defaultColor ?? Rv_Data_Color()}
+        get {_defaultColor ?? Rv_Data_Color()}
         set {_defaultColor = newValue}
       }
       /// Returns true if `defaultColor` has been explicitly set.
-      public var hasDefaultColor: Bool {return self._defaultColor != nil}
+      public var hasDefaultColor: Bool {self._defaultColor != nil}
       /// Clears the value of `defaultColor`. Subsequent reads from it will return its default value.
       public mutating func clearDefaultColor() {self._defaultColor = nil}
 
@@ -195,7 +195,7 @@ public struct Rv_Data_Effect: Sendable {
       fileprivate var _defaultColor: Rv_Data_Color? = nil
     }
 
-    public struct EffectDirection: Sendable {
+    public nonisolated struct EffectDirection: Sendable {
       // SwiftProtobuf.Message conformance is added in an extension below. See the
       // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
       // methods supported on all messages.
@@ -208,7 +208,7 @@ public struct Rv_Data_Effect: Sendable {
 
       public var unknownFields = SwiftProtobuf.UnknownStorage()
 
-      public enum EffectDirection: SwiftProtobuf.Enum, Swift.CaseIterable {
+      public nonisolated enum EffectDirection: SwiftProtobuf.Enum, Swift.CaseIterable {
         public typealias RawValue = Int
         case none // = 0
         case topLeft // = 1
@@ -280,17 +280,17 @@ public struct Rv_Data_Effect: Sendable {
     public init() {}
   }
 
-  public struct Preset: Sendable {
+  public nonisolated struct Preset: Sendable {
     // SwiftProtobuf.Message conformance is added in an extension below. See the
     // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
     // methods supported on all messages.
 
     public var uuid: Rv_Data_UUID {
-      get {return _uuid ?? Rv_Data_UUID()}
+      get {_uuid ?? Rv_Data_UUID()}
       set {_uuid = newValue}
     }
     /// Returns true if `uuid` has been explicitly set.
-    public var hasUuid: Bool {return self._uuid != nil}
+    public var hasUuid: Bool {self._uuid != nil}
     /// Clears the value of `uuid`. Subsequent reads from it will return its default value.
     public mutating func clearUuid() {self._uuid = nil}
 
@@ -310,7 +310,7 @@ public struct Rv_Data_Effect: Sendable {
   fileprivate var _uuid: Rv_Data_UUID? = nil
 }
 
-public struct Rv_Data_Transition: Sendable {
+public nonisolated struct Rv_Data_Transition: Sendable {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
   // methods supported on all messages.
@@ -318,47 +318,47 @@ public struct Rv_Data_Transition: Sendable {
   public var duration: Double = 0
 
   public var favoriteUuid: Rv_Data_UUID {
-    get {return _favoriteUuid ?? Rv_Data_UUID()}
+    get {_favoriteUuid ?? Rv_Data_UUID()}
     set {_favoriteUuid = newValue}
   }
   /// Returns true if `favoriteUuid` has been explicitly set.
-  public var hasFavoriteUuid: Bool {return self._favoriteUuid != nil}
+  public var hasFavoriteUuid: Bool {self._favoriteUuid != nil}
   /// Clears the value of `favoriteUuid`. Subsequent reads from it will return its default value.
   public mutating func clearFavoriteUuid() {self._favoriteUuid = nil}
 
   public var effect: Rv_Data_Effect {
-    get {return _effect ?? Rv_Data_Effect()}
+    get {_effect ?? Rv_Data_Effect()}
     set {_effect = newValue}
   }
   /// Returns true if `effect` has been explicitly set.
-  public var hasEffect: Bool {return self._effect != nil}
+  public var hasEffect: Bool {self._effect != nil}
   /// Clears the value of `effect`. Subsequent reads from it will return its default value.
   public mutating func clearEffect() {self._effect = nil}
 
   public var unknownFields = SwiftProtobuf.UnknownStorage()
 
-  public struct Preset: Sendable {
+  public nonisolated struct Preset: Sendable {
     // SwiftProtobuf.Message conformance is added in an extension below. See the
     // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
     // methods supported on all messages.
 
     public var uuid: Rv_Data_UUID {
-      get {return _uuid ?? Rv_Data_UUID()}
+      get {_uuid ?? Rv_Data_UUID()}
       set {_uuid = newValue}
     }
     /// Returns true if `uuid` has been explicitly set.
-    public var hasUuid: Bool {return self._uuid != nil}
+    public var hasUuid: Bool {self._uuid != nil}
     /// Clears the value of `uuid`. Subsequent reads from it will return its default value.
     public mutating func clearUuid() {self._uuid = nil}
 
     public var name: String = String()
 
     public var transition: Rv_Data_Transition {
-      get {return _transition ?? Rv_Data_Transition()}
+      get {_transition ?? Rv_Data_Transition()}
       set {_transition = newValue}
     }
     /// Returns true if `transition` has been explicitly set.
-    public var hasTransition: Bool {return self._transition != nil}
+    public var hasTransition: Bool {self._transition != nil}
     /// Clears the value of `transition`. Subsequent reads from it will return its default value.
     public mutating func clearTransition() {self._transition = nil}
 
@@ -378,9 +378,9 @@ public struct Rv_Data_Transition: Sendable {
 
 // MARK: - Code below here is support for the SwiftProtobuf runtime.
 
-fileprivate let _protobuf_package = "rv.data"
+fileprivate nonisolated let _protobuf_package = "rv.data"
 
-extension Rv_Data_Effect: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+nonisolated extension Rv_Data_Effect: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   public static let protoMessageName: String = _protobuf_package + ".Effect"
   public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{1}uuid\0\u{1}enabled\0\u{1}name\0\u{3}render_id\0\u{3}behavior_description\0\u{1}category\0\u{1}variables\0")
 
@@ -444,7 +444,7 @@ extension Rv_Data_Effect: SwiftProtobuf.Message, SwiftProtobuf._MessageImplement
   }
 }
 
-extension Rv_Data_Effect.EffectVariable: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+nonisolated extension Rv_Data_Effect.EffectVariable: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   public static let protoMessageName: String = Rv_Data_Effect.protoMessageName + ".EffectVariable"
   public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{1}name\0\u{1}description\0\u{1}int\0\u{1}float\0\u{1}color\0\u{1}direction\0\u{1}double\0")
 
@@ -572,7 +572,7 @@ extension Rv_Data_Effect.EffectVariable: SwiftProtobuf.Message, SwiftProtobuf._M
   }
 }
 
-extension Rv_Data_Effect.EffectVariable.EffectInt: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+nonisolated extension Rv_Data_Effect.EffectVariable.EffectInt: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   public static let protoMessageName: String = Rv_Data_Effect.EffectVariable.protoMessageName + ".EffectInt"
   public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{1}value\0\u{3}default_value\0\u{1}min\0\u{1}max\0")
 
@@ -617,7 +617,7 @@ extension Rv_Data_Effect.EffectVariable.EffectInt: SwiftProtobuf.Message, SwiftP
   }
 }
 
-extension Rv_Data_Effect.EffectVariable.EffectFloat: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+nonisolated extension Rv_Data_Effect.EffectVariable.EffectFloat: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   public static let protoMessageName: String = Rv_Data_Effect.EffectVariable.protoMessageName + ".EffectFloat"
   public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{1}value\0\u{3}default_value\0\u{1}min\0\u{1}max\0")
 
@@ -662,7 +662,7 @@ extension Rv_Data_Effect.EffectVariable.EffectFloat: SwiftProtobuf.Message, Swif
   }
 }
 
-extension Rv_Data_Effect.EffectVariable.EffectDouble: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+nonisolated extension Rv_Data_Effect.EffectVariable.EffectDouble: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   public static let protoMessageName: String = Rv_Data_Effect.EffectVariable.protoMessageName + ".EffectDouble"
   public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{1}value\0\u{3}default_value\0\u{1}min\0\u{1}max\0")
 
@@ -707,7 +707,7 @@ extension Rv_Data_Effect.EffectVariable.EffectDouble: SwiftProtobuf.Message, Swi
   }
 }
 
-extension Rv_Data_Effect.EffectVariable.EffectColor: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+nonisolated extension Rv_Data_Effect.EffectVariable.EffectColor: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   public static let protoMessageName: String = Rv_Data_Effect.EffectVariable.protoMessageName + ".EffectColor"
   public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{1}color\0\u{3}default_color\0")
 
@@ -746,7 +746,7 @@ extension Rv_Data_Effect.EffectVariable.EffectColor: SwiftProtobuf.Message, Swif
   }
 }
 
-extension Rv_Data_Effect.EffectVariable.EffectDirection: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+nonisolated extension Rv_Data_Effect.EffectVariable.EffectDirection: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   public static let protoMessageName: String = Rv_Data_Effect.EffectVariable.protoMessageName + ".EffectDirection"
   public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{1}direction\0\u{3}default_direction\0\u{3}available_directions\0")
 
@@ -786,11 +786,11 @@ extension Rv_Data_Effect.EffectVariable.EffectDirection: SwiftProtobuf.Message, 
   }
 }
 
-extension Rv_Data_Effect.EffectVariable.EffectDirection.EffectDirection: SwiftProtobuf._ProtoNameProviding {
+nonisolated extension Rv_Data_Effect.EffectVariable.EffectDirection.EffectDirection: SwiftProtobuf._ProtoNameProviding {
   public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{2}\0EFFECT_DIRECTION_NONE\0\u{1}EFFECT_DIRECTION_TOP_LEFT\0\u{1}EFFECT_DIRECTION_TOP\0\u{2}\u{2}EFFECT_DIRECTION_TOP_RIGHT\0\u{2}\u{4}EFFECT_DIRECTION_LEFT\0\u{2}\u{8}EFFECT_DIRECTION_CENTER\0\u{2}\u{10}EFFECT_DIRECTION_RIGHT\0\u{2} EFFECT_DIRECTION_BOTTOM_LEFT\0\u{2}@\u{1}EFFECT_DIRECTION_BOTTOM\0\u{2}@\u{2}EFFECT_DIRECTION_BOTTOM_RIGHT\0")
 }
 
-extension Rv_Data_Effect.Preset: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+nonisolated extension Rv_Data_Effect.Preset: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   public static let protoMessageName: String = Rv_Data_Effect.protoMessageName + ".Preset"
   public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{1}uuid\0\u{1}name\0\u{1}effects\0")
 
@@ -834,7 +834,7 @@ extension Rv_Data_Effect.Preset: SwiftProtobuf.Message, SwiftProtobuf._MessageIm
   }
 }
 
-extension Rv_Data_Transition: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+nonisolated extension Rv_Data_Transition: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   public static let protoMessageName: String = _protobuf_package + ".Transition"
   public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{1}duration\0\u{3}favorite_uuid\0\u{1}effect\0")
 
@@ -878,7 +878,7 @@ extension Rv_Data_Transition: SwiftProtobuf.Message, SwiftProtobuf._MessageImple
   }
 }
 
-extension Rv_Data_Transition.Preset: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+nonisolated extension Rv_Data_Transition.Preset: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   public static let protoMessageName: String = Rv_Data_Transition.protoMessageName + ".Preset"
   public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{1}uuid\0\u{1}name\0\u{1}transition\0")
 

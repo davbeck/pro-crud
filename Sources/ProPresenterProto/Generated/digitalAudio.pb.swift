@@ -15,67 +15,67 @@ import SwiftProtobuf
 // incompatible with the version of SwiftProtobuf to which you are linking.
 // Please ensure that you are building against the same version of the API
 // that was used to generate this file.
-fileprivate struct _GeneratedWithProtocGenSwiftVersion: SwiftProtobuf.ProtobufAPIVersionCheck {
+fileprivate nonisolated struct _GeneratedWithProtocGenSwiftVersion: SwiftProtobuf.ProtobufAPIVersionCheck {
   struct _2: SwiftProtobuf.ProtobufAPIVersion_2 {}
   typealias Version = _2
 }
 
-public struct Rv_Data_DigitalAudio: Sendable {
+public nonisolated struct Rv_Data_DigitalAudio: Sendable {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
   // methods supported on all messages.
 
   public var unknownFields = SwiftProtobuf.UnknownStorage()
 
-  public struct Setup: @unchecked Sendable {
+  public nonisolated struct Setup: @unchecked Sendable {
     // SwiftProtobuf.Message conformance is added in an extension below. See the
     // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
     // methods supported on all messages.
 
     public var buses: [Rv_Data_DigitalAudio.Bus] {
-      get {return _storage._buses}
+      get {_storage._buses}
       set {_uniqueStorage()._buses = newValue}
     }
 
     public var monitorDevice: Rv_Data_DigitalAudio.Device {
-      get {return _storage._monitorDevice ?? Rv_Data_DigitalAudio.Device()}
+      get {_storage._monitorDevice ?? Rv_Data_DigitalAudio.Device()}
       set {_uniqueStorage()._monitorDevice = newValue}
     }
     /// Returns true if `monitorDevice` has been explicitly set.
-    public var hasMonitorDevice: Bool {return _storage._monitorDevice != nil}
+    public var hasMonitorDevice: Bool {_storage._monitorDevice != nil}
     /// Clears the value of `monitorDevice`. Subsequent reads from it will return its default value.
     public mutating func clearMonitorDevice() {_uniqueStorage()._monitorDevice = nil}
 
     public var mainOutputDevice: Rv_Data_DigitalAudio.Device {
-      get {return _storage._mainOutputDevice ?? Rv_Data_DigitalAudio.Device()}
+      get {_storage._mainOutputDevice ?? Rv_Data_DigitalAudio.Device()}
       set {_uniqueStorage()._mainOutputDevice = newValue}
     }
     /// Returns true if `mainOutputDevice` has been explicitly set.
-    public var hasMainOutputDevice: Bool {return _storage._mainOutputDevice != nil}
+    public var hasMainOutputDevice: Bool {_storage._mainOutputDevice != nil}
     /// Clears the value of `mainOutputDevice`. Subsequent reads from it will return its default value.
     public mutating func clearMainOutputDevice() {_uniqueStorage()._mainOutputDevice = nil}
 
     public var enableSdiNdiDevice: Bool {
-      get {return _storage._enableSdiNdiDevice}
+      get {_storage._enableSdiNdiDevice}
       set {_uniqueStorage()._enableSdiNdiDevice = newValue}
     }
 
     public var sdiNdiDevice: Rv_Data_DigitalAudio.Device {
-      get {return _storage._sdiNdiDevice ?? Rv_Data_DigitalAudio.Device()}
+      get {_storage._sdiNdiDevice ?? Rv_Data_DigitalAudio.Device()}
       set {_uniqueStorage()._sdiNdiDevice = newValue}
     }
     /// Returns true if `sdiNdiDevice` has been explicitly set.
-    public var hasSdiNdiDevice: Bool {return _storage._sdiNdiDevice != nil}
+    public var hasSdiNdiDevice: Bool {_storage._sdiNdiDevice != nil}
     /// Clears the value of `sdiNdiDevice`. Subsequent reads from it will return its default value.
     public mutating func clearSdiNdiDevice() {_uniqueStorage()._sdiNdiDevice = nil}
 
     public var monitorOnMains: Bool {
-      get {return _storage._monitorOnMains}
+      get {_storage._monitorOnMains}
       set {_uniqueStorage()._monitorOnMains = newValue}
     }
 
     public var disableMainOutputDevice: Bool {
-      get {return _storage._disableMainOutputDevice}
+      get {_storage._disableMainOutputDevice}
       set {_uniqueStorage()._disableMainOutputDevice = newValue}
     }
 
@@ -86,7 +86,7 @@ public struct Rv_Data_DigitalAudio: Sendable {
     fileprivate var _storage = _StorageClass.defaultInstance
   }
 
-  public struct Bus: Sendable {
+  public nonisolated struct Bus: Sendable {
     // SwiftProtobuf.Message conformance is added in an extension below. See the
     // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
     // methods supported on all messages.
@@ -106,7 +106,7 @@ public struct Rv_Data_DigitalAudio: Sendable {
     public init() {}
   }
 
-  public struct Device: Sendable {
+  public nonisolated struct Device: Sendable {
     // SwiftProtobuf.Message conformance is added in an extension below. See the
     // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
     // methods supported on all messages.
@@ -118,17 +118,17 @@ public struct Rv_Data_DigitalAudio: Sendable {
     public var formats: [Rv_Data_DigitalAudio.Device.Format] = []
 
     public var routing: Rv_Data_DigitalAudio.Device.Routing {
-      get {return _routing ?? Rv_Data_DigitalAudio.Device.Routing()}
+      get {_routing ?? Rv_Data_DigitalAudio.Device.Routing()}
       set {_routing = newValue}
     }
     /// Returns true if `routing` has been explicitly set.
-    public var hasRouting: Bool {return self._routing != nil}
+    public var hasRouting: Bool {self._routing != nil}
     /// Clears the value of `routing`. Subsequent reads from it will return its default value.
     public mutating func clearRouting() {self._routing = nil}
 
     public var unknownFields = SwiftProtobuf.UnknownStorage()
 
-    public struct Format: Sendable {
+    public nonisolated struct Format: Sendable {
       // SwiftProtobuf.Message conformance is added in an extension below. See the
       // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
       // methods supported on all messages.
@@ -141,7 +141,7 @@ public struct Rv_Data_DigitalAudio: Sendable {
 
       public var unknownFields = SwiftProtobuf.UnknownStorage()
 
-      public enum TypeEnum: SwiftProtobuf.Enum, Swift.CaseIterable {
+      public nonisolated enum TypeEnum: SwiftProtobuf.Enum, Swift.CaseIterable {
         public typealias RawValue = Int
         case int // = 0
         case float // = 1
@@ -178,7 +178,7 @@ public struct Rv_Data_DigitalAudio: Sendable {
       public init() {}
     }
 
-    public struct Map: Sendable {
+    public nonisolated struct Map: Sendable {
       // SwiftProtobuf.Message conformance is added in an extension below. See the
       // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
       // methods supported on all messages.
@@ -192,7 +192,7 @@ public struct Rv_Data_DigitalAudio: Sendable {
       public init() {}
     }
 
-    public struct Channel: Sendable {
+    public nonisolated struct Channel: Sendable {
       // SwiftProtobuf.Message conformance is added in an extension below. See the
       // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
       // methods supported on all messages.
@@ -212,7 +212,7 @@ public struct Rv_Data_DigitalAudio: Sendable {
       public init() {}
     }
 
-    public struct Routing: Sendable {
+    public nonisolated struct Routing: Sendable {
       // SwiftProtobuf.Message conformance is added in an extension below. See the
       // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
       // methods supported on all messages.
@@ -224,11 +224,11 @@ public struct Rv_Data_DigitalAudio: Sendable {
       public var isCustomMap: Bool = false
 
       public var masterChannel: Rv_Data_DigitalAudio.Device.Channel {
-        get {return _masterChannel ?? Rv_Data_DigitalAudio.Device.Channel()}
+        get {_masterChannel ?? Rv_Data_DigitalAudio.Device.Channel()}
         set {_masterChannel = newValue}
       }
       /// Returns true if `masterChannel` has been explicitly set.
-      public var hasMasterChannel: Bool {return self._masterChannel != nil}
+      public var hasMasterChannel: Bool {self._masterChannel != nil}
       /// Clears the value of `masterChannel`. Subsequent reads from it will return its default value.
       public mutating func clearMasterChannel() {self._masterChannel = nil}
 
@@ -249,9 +249,9 @@ public struct Rv_Data_DigitalAudio: Sendable {
 
 // MARK: - Code below here is support for the SwiftProtobuf runtime.
 
-fileprivate let _protobuf_package = "rv.data"
+fileprivate nonisolated let _protobuf_package = "rv.data"
 
-extension Rv_Data_DigitalAudio: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+nonisolated extension Rv_Data_DigitalAudio: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   public static let protoMessageName: String = _protobuf_package + ".DigitalAudio"
   public static let _protobuf_nameMap = SwiftProtobuf._NameMap()
 
@@ -270,7 +270,7 @@ extension Rv_Data_DigitalAudio: SwiftProtobuf.Message, SwiftProtobuf._MessageImp
   }
 }
 
-extension Rv_Data_DigitalAudio.Setup: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+nonisolated extension Rv_Data_DigitalAudio.Setup: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   public static let protoMessageName: String = Rv_Data_DigitalAudio.protoMessageName + ".Setup"
   public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{1}buses\0\u{3}monitor_device\0\u{3}main_output_device\0\u{3}enable_sdi_ndi_device\0\u{3}sdi_ndi_device\0\u{3}monitor_on_mains\0\u{3}disable_main_output_device\0")
 
@@ -382,7 +382,7 @@ extension Rv_Data_DigitalAudio.Setup: SwiftProtobuf.Message, SwiftProtobuf._Mess
   }
 }
 
-extension Rv_Data_DigitalAudio.Bus: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+nonisolated extension Rv_Data_DigitalAudio.Bus: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   public static let protoMessageName: String = Rv_Data_DigitalAudio.protoMessageName + ".Bus"
   public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{1}name\0\u{1}muted\0\u{1}solo\0\u{3}test_tone\0\u{3}master_level\0")
 
@@ -432,7 +432,7 @@ extension Rv_Data_DigitalAudio.Bus: SwiftProtobuf.Message, SwiftProtobuf._Messag
   }
 }
 
-extension Rv_Data_DigitalAudio.Device: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+nonisolated extension Rv_Data_DigitalAudio.Device: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   public static let protoMessageName: String = Rv_Data_DigitalAudio.protoMessageName + ".Device"
   public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{1}name\0\u{1}renderID\0\u{1}formats\0\u{1}routing\0")
 
@@ -481,7 +481,7 @@ extension Rv_Data_DigitalAudio.Device: SwiftProtobuf.Message, SwiftProtobuf._Mes
   }
 }
 
-extension Rv_Data_DigitalAudio.Device.Format: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+nonisolated extension Rv_Data_DigitalAudio.Device.Format: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   public static let protoMessageName: String = Rv_Data_DigitalAudio.Device.protoMessageName + ".Format"
   public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{3}sample_rate\0\u{3}bit_depth\0\u{1}type\0")
 
@@ -521,11 +521,11 @@ extension Rv_Data_DigitalAudio.Device.Format: SwiftProtobuf.Message, SwiftProtob
   }
 }
 
-extension Rv_Data_DigitalAudio.Device.Format.TypeEnum: SwiftProtobuf._ProtoNameProviding {
+nonisolated extension Rv_Data_DigitalAudio.Device.Format.TypeEnum: SwiftProtobuf._ProtoNameProviding {
   public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{2}\0TYPE_INT\0\u{1}TYPE_FLOAT\0")
 }
 
-extension Rv_Data_DigitalAudio.Device.Map: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+nonisolated extension Rv_Data_DigitalAudio.Device.Map: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   public static let protoMessageName: String = Rv_Data_DigitalAudio.Device.protoMessageName + ".Map"
   public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{3}channel_index\0\u{3}mapped_indices\0")
 
@@ -560,7 +560,7 @@ extension Rv_Data_DigitalAudio.Device.Map: SwiftProtobuf.Message, SwiftProtobuf.
   }
 }
 
-extension Rv_Data_DigitalAudio.Device.Channel: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+nonisolated extension Rv_Data_DigitalAudio.Device.Channel: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   public static let protoMessageName: String = Rv_Data_DigitalAudio.Device.protoMessageName + ".Channel"
   public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{3}mute_enable\0\u{3}solo_enable\0\u{3}tone_enable\0\u{3}audio_delay\0\u{1}level\0")
 
@@ -610,7 +610,7 @@ extension Rv_Data_DigitalAudio.Device.Channel: SwiftProtobuf.Message, SwiftProto
   }
 }
 
-extension Rv_Data_DigitalAudio.Device.Routing: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+nonisolated extension Rv_Data_DigitalAudio.Device.Routing: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   public static let protoMessageName: String = Rv_Data_DigitalAudio.Device.protoMessageName + ".Routing"
   public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{1}channels\0\u{1}map\0\u{3}is_custom_map\0\u{3}master_channel\0")
 

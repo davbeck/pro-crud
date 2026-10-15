@@ -15,12 +15,12 @@ import SwiftProtobuf
 // incompatible with the version of SwiftProtobuf to which you are linking.
 // Please ensure that you are building against the same version of the API
 // that was used to generate this file.
-fileprivate struct _GeneratedWithProtocGenSwiftVersion: SwiftProtobuf.ProtobufAPIVersionCheck {
+fileprivate nonisolated struct _GeneratedWithProtocGenSwiftVersion: SwiftProtobuf.ProtobufAPIVersionCheck {
   struct _2: SwiftProtobuf.ProtobufAPIVersion_2 {}
   typealias Version = _2
 }
 
-public struct Rv_Data_ProPresenterScreen: Sendable {
+public nonisolated struct Rv_Data_ProPresenterScreen: Sendable {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
   // methods supported on all messages.
@@ -30,20 +30,20 @@ public struct Rv_Data_ProPresenterScreen: Sendable {
   public var screenType: Rv_Data_ProPresenterScreen.ScreenType = .unknown
 
   public var backgroundColor: Rv_Data_Color {
-    get {return _backgroundColor ?? Rv_Data_Color()}
+    get {_backgroundColor ?? Rv_Data_Color()}
     set {_backgroundColor = newValue}
   }
   /// Returns true if `backgroundColor` has been explicitly set.
-  public var hasBackgroundColor: Bool {return self._backgroundColor != nil}
+  public var hasBackgroundColor: Bool {self._backgroundColor != nil}
   /// Clears the value of `backgroundColor`. Subsequent reads from it will return its default value.
   public mutating func clearBackgroundColor() {self._backgroundColor = nil}
 
   public var uuid: Rv_Data_UUID {
-    get {return _uuid ?? Rv_Data_UUID()}
+    get {_uuid ?? Rv_Data_UUID()}
     set {_uuid = newValue}
   }
   /// Returns true if `uuid` has been explicitly set.
-  public var hasUuid: Bool {return self._uuid != nil}
+  public var hasUuid: Bool {self._uuid != nil}
   /// Clears the value of `uuid`. Subsequent reads from it will return its default value.
   public mutating func clearUuid() {self._uuid = nil}
 
@@ -77,14 +77,14 @@ public struct Rv_Data_ProPresenterScreen: Sendable {
 
   public var unknownFields = SwiftProtobuf.UnknownStorage()
 
-  public enum OneOf_Arrangement: Equatable, Sendable {
+  public nonisolated enum OneOf_Arrangement: Equatable, Sendable {
     case arrangementSingle(Rv_Data_ProPresenterScreen.SingleArrangement)
     case arrangementCombined(Rv_Data_ProPresenterScreen.CombinedArrangement)
     case arrangementEdgeBlend(Rv_Data_ProPresenterScreen.EdgeBlendArrangement)
 
   }
 
-  public enum ScreenType: SwiftProtobuf.Enum, Swift.CaseIterable {
+  public nonisolated enum ScreenType: SwiftProtobuf.Enum, Swift.CaseIterable {
     public typealias RawValue = Int
     case unknown // = 0
     case audience // = 1
@@ -122,7 +122,7 @@ public struct Rv_Data_ProPresenterScreen: Sendable {
 
   }
 
-  public struct SingleArrangement: Sendable {
+  public nonisolated struct SingleArrangement: Sendable {
     // SwiftProtobuf.Message conformance is added in an extension below. See the
     // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
     // methods supported on all messages.
@@ -134,7 +134,7 @@ public struct Rv_Data_ProPresenterScreen: Sendable {
     public init() {}
   }
 
-  public struct CombinedArrangement: Sendable {
+  public nonisolated struct CombinedArrangement: Sendable {
     // SwiftProtobuf.Message conformance is added in an extension below. See the
     // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
     // methods supported on all messages.
@@ -150,7 +150,7 @@ public struct Rv_Data_ProPresenterScreen: Sendable {
     public init() {}
   }
 
-  public struct EdgeBlendArrangement: Sendable {
+  public nonisolated struct EdgeBlendArrangement: Sendable {
     // SwiftProtobuf.Message conformance is added in an extension below. See the
     // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
     // methods supported on all messages.
@@ -174,9 +174,9 @@ public struct Rv_Data_ProPresenterScreen: Sendable {
 
 // MARK: - Code below here is support for the SwiftProtobuf runtime.
 
-fileprivate let _protobuf_package = "rv.data"
+fileprivate nonisolated let _protobuf_package = "rv.data"
 
-extension Rv_Data_ProPresenterScreen: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+nonisolated extension Rv_Data_ProPresenterScreen: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   public static let protoMessageName: String = _protobuf_package + ".ProPresenterScreen"
   public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{1}name\0\u{3}screen_type\0\u{3}arrangement_single\0\u{3}arrangement_combined\0\u{3}arrangement_edge_blend\0\u{3}background_color\0\u{1}uuid\0\u{3}background_color_enabled\0")
 
@@ -285,11 +285,11 @@ extension Rv_Data_ProPresenterScreen: SwiftProtobuf.Message, SwiftProtobuf._Mess
   }
 }
 
-extension Rv_Data_ProPresenterScreen.ScreenType: SwiftProtobuf._ProtoNameProviding {
+nonisolated extension Rv_Data_ProPresenterScreen.ScreenType: SwiftProtobuf._ProtoNameProviding {
   public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{2}\0SCREEN_TYPE_UNKNOWN\0\u{1}SCREEN_TYPE_AUDIENCE\0\u{1}SCREEN_TYPE_STAGE\0")
 }
 
-extension Rv_Data_ProPresenterScreen.SingleArrangement: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+nonisolated extension Rv_Data_ProPresenterScreen.SingleArrangement: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   public static let protoMessageName: String = Rv_Data_ProPresenterScreen.protoMessageName + ".SingleArrangement"
   public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{1}screens\0")
 
@@ -319,7 +319,7 @@ extension Rv_Data_ProPresenterScreen.SingleArrangement: SwiftProtobuf.Message, S
   }
 }
 
-extension Rv_Data_ProPresenterScreen.CombinedArrangement: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+nonisolated extension Rv_Data_ProPresenterScreen.CombinedArrangement: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   public static let protoMessageName: String = Rv_Data_ProPresenterScreen.protoMessageName + ".CombinedArrangement"
   public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{1}screens\0\u{1}rows\0\u{1}columns\0")
 
@@ -359,7 +359,7 @@ extension Rv_Data_ProPresenterScreen.CombinedArrangement: SwiftProtobuf.Message,
   }
 }
 
-extension Rv_Data_ProPresenterScreen.EdgeBlendArrangement: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+nonisolated extension Rv_Data_ProPresenterScreen.EdgeBlendArrangement: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   public static let protoMessageName: String = Rv_Data_ProPresenterScreen.protoMessageName + ".EdgeBlendArrangement"
   public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{3}screen_count\0\u{1}screens\0\u{3}edge_blends\0")
 

@@ -15,22 +15,22 @@ import SwiftProtobuf
 // incompatible with the version of SwiftProtobuf to which you are linking.
 // Please ensure that you are building against the same version of the API
 // that was used to generate this file.
-fileprivate struct _GeneratedWithProtocGenSwiftVersion: SwiftProtobuf.ProtobufAPIVersionCheck {
+fileprivate nonisolated struct _GeneratedWithProtocGenSwiftVersion: SwiftProtobuf.ProtobufAPIVersionCheck {
   struct _2: SwiftProtobuf.ProtobufAPIVersion_2 {}
   typealias Version = _2
 }
 
-public struct Rv_Data_MacrosDocument: Sendable {
+public nonisolated struct Rv_Data_MacrosDocument: Sendable {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
   // methods supported on all messages.
 
   public var applicationInfo: Rv_Data_ApplicationInfo {
-    get {return _applicationInfo ?? Rv_Data_ApplicationInfo()}
+    get {_applicationInfo ?? Rv_Data_ApplicationInfo()}
     set {_applicationInfo = newValue}
   }
   /// Returns true if `applicationInfo` has been explicitly set.
-  public var hasApplicationInfo: Bool {return self._applicationInfo != nil}
+  public var hasApplicationInfo: Bool {self._applicationInfo != nil}
   /// Clears the value of `applicationInfo`. Subsequent reads from it will return its default value.
   public mutating func clearApplicationInfo() {self._applicationInfo = nil}
 
@@ -38,28 +38,28 @@ public struct Rv_Data_MacrosDocument: Sendable {
 
   public var unknownFields = SwiftProtobuf.UnknownStorage()
 
-  public struct Macro: Sendable {
+  public nonisolated struct Macro: Sendable {
     // SwiftProtobuf.Message conformance is added in an extension below. See the
     // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
     // methods supported on all messages.
 
     public var uuid: Rv_Data_UUID {
-      get {return _uuid ?? Rv_Data_UUID()}
+      get {_uuid ?? Rv_Data_UUID()}
       set {_uuid = newValue}
     }
     /// Returns true if `uuid` has been explicitly set.
-    public var hasUuid: Bool {return self._uuid != nil}
+    public var hasUuid: Bool {self._uuid != nil}
     /// Clears the value of `uuid`. Subsequent reads from it will return its default value.
     public mutating func clearUuid() {self._uuid = nil}
 
     public var name: String = String()
 
     public var color: Rv_Data_Color {
-      get {return _color ?? Rv_Data_Color()}
+      get {_color ?? Rv_Data_Color()}
       set {_color = newValue}
     }
     /// Returns true if `color` has been explicitly set.
-    public var hasColor: Bool {return self._color != nil}
+    public var hasColor: Bool {self._color != nil}
     /// Clears the value of `color`. Subsequent reads from it will return its default value.
     public mutating func clearColor() {self._color = nil}
 
@@ -82,9 +82,9 @@ public struct Rv_Data_MacrosDocument: Sendable {
 
 // MARK: - Code below here is support for the SwiftProtobuf runtime.
 
-fileprivate let _protobuf_package = "rv.data"
+fileprivate nonisolated let _protobuf_package = "rv.data"
 
-extension Rv_Data_MacrosDocument: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+nonisolated extension Rv_Data_MacrosDocument: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   public static let protoMessageName: String = _protobuf_package + ".MacrosDocument"
   public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{3}application_info\0\u{1}macros\0")
 
@@ -123,7 +123,7 @@ extension Rv_Data_MacrosDocument: SwiftProtobuf.Message, SwiftProtobuf._MessageI
   }
 }
 
-extension Rv_Data_MacrosDocument.Macro: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+nonisolated extension Rv_Data_MacrosDocument.Macro: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   public static let protoMessageName: String = Rv_Data_MacrosDocument.protoMessageName + ".Macro"
   public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{1}uuid\0\u{1}name\0\u{1}color\0\u{1}actions\0\u{3}trigger_on_startup\0")
 

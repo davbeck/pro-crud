@@ -15,22 +15,22 @@ import SwiftProtobuf
 // incompatible with the version of SwiftProtobuf to which you are linking.
 // Please ensure that you are building against the same version of the API
 // that was used to generate this file.
-fileprivate struct _GeneratedWithProtocGenSwiftVersion: SwiftProtobuf.ProtobufAPIVersionCheck {
+fileprivate nonisolated struct _GeneratedWithProtocGenSwiftVersion: SwiftProtobuf.ProtobufAPIVersionCheck {
   struct _2: SwiftProtobuf.ProtobufAPIVersion_2 {}
   typealias Version = _2
 }
 
-public struct Rv_Data_Message: Sendable {
+public nonisolated struct Rv_Data_Message: Sendable {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
   // methods supported on all messages.
 
   public var uuid: Rv_Data_UUID {
-    get {return _uuid ?? Rv_Data_UUID()}
+    get {_uuid ?? Rv_Data_UUID()}
     set {_uuid = newValue}
   }
   /// Returns true if `uuid` has been explicitly set.
-  public var hasUuid: Bool {return self._uuid != nil}
+  public var hasUuid: Bool {self._uuid != nil}
   /// Clears the value of `uuid`. Subsequent reads from it will return its default value.
   public mutating func clearUuid() {self._uuid = nil}
 
@@ -41,11 +41,11 @@ public struct Rv_Data_Message: Sendable {
   public var visibleOnNetwork: Bool = false
 
   public var template: Rv_Data_TemplateIdentification {
-    get {return _template ?? Rv_Data_TemplateIdentification()}
+    get {_template ?? Rv_Data_TemplateIdentification()}
     set {_template = newValue}
   }
   /// Returns true if `template` has been explicitly set.
-  public var hasTemplate: Bool {return self._template != nil}
+  public var hasTemplate: Bool {self._template != nil}
   /// Clears the value of `template`. Subsequent reads from it will return its default value.
   public mutating func clearTemplate() {self._template = nil}
 
@@ -59,7 +59,7 @@ public struct Rv_Data_Message: Sendable {
 
   public var unknownFields = SwiftProtobuf.UnknownStorage()
 
-  public enum ClearType: SwiftProtobuf.Enum, Swift.CaseIterable {
+  public nonisolated enum ClearType: SwiftProtobuf.Enum, Swift.CaseIterable {
     public typealias RawValue = Int
     case manual // = 0
     case afterTime // = 1
@@ -97,17 +97,17 @@ public struct Rv_Data_Message: Sendable {
 
   }
 
-  public struct Token: Sendable {
+  public nonisolated struct Token: Sendable {
     // SwiftProtobuf.Message conformance is added in an extension below. See the
     // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
     // methods supported on all messages.
 
     public var uuid: Rv_Data_UUID {
-      get {return _uuid ?? Rv_Data_UUID()}
+      get {_uuid ?? Rv_Data_UUID()}
       set {_uuid = newValue}
     }
     /// Returns true if `uuid` has been explicitly set.
-    public var hasUuid: Bool {return self._uuid != nil}
+    public var hasUuid: Bool {self._uuid != nil}
     /// Clears the value of `uuid`. Subsequent reads from it will return its default value.
     public mutating func clearUuid() {self._uuid = nil}
 
@@ -139,14 +139,14 @@ public struct Rv_Data_Message: Sendable {
 
     public var unknownFields = SwiftProtobuf.UnknownStorage()
 
-    public enum OneOf_TokenType: Equatable, Sendable {
+    public nonisolated enum OneOf_TokenType: Equatable, Sendable {
       case text(Rv_Data_Message.Token.TokenTypeText)
       case timer(Rv_Data_Message.Token.TokenTypeTimer)
       case clock(Rv_Data_Message.Token.TokenTypeClock)
 
     }
 
-    public struct TokenTypeText: Sendable {
+    public nonisolated struct TokenTypeText: Sendable {
       // SwiftProtobuf.Message conformance is added in an extension below. See the
       // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
       // methods supported on all messages.
@@ -158,7 +158,7 @@ public struct Rv_Data_Message: Sendable {
       public init() {}
     }
 
-    public struct TokenTypeTimer: Sendable {
+    public nonisolated struct TokenTypeTimer: Sendable {
       // SwiftProtobuf.Message conformance is added in an extension below. See the
       // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
       // methods supported on all messages.
@@ -166,11 +166,11 @@ public struct Rv_Data_Message: Sendable {
       public var name: String = String()
 
       public var timerUuid: Rv_Data_UUID {
-        get {return _timerUuid ?? Rv_Data_UUID()}
+        get {_timerUuid ?? Rv_Data_UUID()}
         set {_timerUuid = newValue}
       }
       /// Returns true if `timerUuid` has been explicitly set.
-      public var hasTimerUuid: Bool {return self._timerUuid != nil}
+      public var hasTimerUuid: Bool {self._timerUuid != nil}
       /// Clears the value of `timerUuid`. Subsequent reads from it will return its default value.
       public mutating func clearTimerUuid() {self._timerUuid = nil}
 
@@ -181,7 +181,7 @@ public struct Rv_Data_Message: Sendable {
       fileprivate var _timerUuid: Rv_Data_UUID? = nil
     }
 
-    public struct TokenTypeClock: Sendable {
+    public nonisolated struct TokenTypeClock: Sendable {
       // SwiftProtobuf.Message conformance is added in an extension below. See the
       // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
       // methods supported on all messages.
@@ -196,17 +196,17 @@ public struct Rv_Data_Message: Sendable {
     fileprivate var _uuid: Rv_Data_UUID? = nil
   }
 
-  public struct TokenValue: Sendable {
+  public nonisolated struct TokenValue: Sendable {
     // SwiftProtobuf.Message conformance is added in an extension below. See the
     // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
     // methods supported on all messages.
 
     public var tokenID: Rv_Data_UUID {
-      get {return _tokenID ?? Rv_Data_UUID()}
+      get {_tokenID ?? Rv_Data_UUID()}
       set {_tokenID = newValue}
     }
     /// Returns true if `tokenID` has been explicitly set.
-    public var hasTokenID: Bool {return self._tokenID != nil}
+    public var hasTokenID: Bool {self._tokenID != nil}
     /// Clears the value of `tokenID`. Subsequent reads from it will return its default value.
     public mutating func clearTokenID() {self._tokenID = nil}
 
@@ -240,14 +240,14 @@ public struct Rv_Data_Message: Sendable {
 
     public var unknownFields = SwiftProtobuf.UnknownStorage()
 
-    public enum OneOf_TokenValueType: Equatable, Sendable {
+    public nonisolated enum OneOf_TokenValueType: Equatable, Sendable {
       case text(Rv_Data_Message.TokenValue.TokenValueText)
       case timer(Rv_Data_Message.TokenValue.TokenValueTimer)
       case clock(Rv_Data_Message.TokenValue.TokenValueClock)
 
     }
 
-    public struct TokenValueText: Sendable {
+    public nonisolated struct TokenValueText: Sendable {
       // SwiftProtobuf.Message conformance is added in an extension below. See the
       // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
       // methods supported on all messages.
@@ -259,26 +259,26 @@ public struct Rv_Data_Message: Sendable {
       public init() {}
     }
 
-    public struct TokenValueTimer: Sendable {
+    public nonisolated struct TokenValueTimer: Sendable {
       // SwiftProtobuf.Message conformance is added in an extension below. See the
       // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
       // methods supported on all messages.
 
       public var configuration: Rv_Data_Timer.Configuration {
-        get {return _configuration ?? Rv_Data_Timer.Configuration()}
+        get {_configuration ?? Rv_Data_Timer.Configuration()}
         set {_configuration = newValue}
       }
       /// Returns true if `configuration` has been explicitly set.
-      public var hasConfiguration: Bool {return self._configuration != nil}
+      public var hasConfiguration: Bool {self._configuration != nil}
       /// Clears the value of `configuration`. Subsequent reads from it will return its default value.
       public mutating func clearConfiguration() {self._configuration = nil}
 
       public var format: Rv_Data_Timer.Format {
-        get {return _format ?? Rv_Data_Timer.Format()}
+        get {_format ?? Rv_Data_Timer.Format()}
         set {_format = newValue}
       }
       /// Returns true if `format` has been explicitly set.
-      public var hasFormat: Bool {return self._format != nil}
+      public var hasFormat: Bool {self._format != nil}
       /// Clears the value of `format`. Subsequent reads from it will return its default value.
       public mutating func clearFormat() {self._format = nil}
 
@@ -290,17 +290,17 @@ public struct Rv_Data_Message: Sendable {
       fileprivate var _format: Rv_Data_Timer.Format? = nil
     }
 
-    public struct TokenValueClock: Sendable {
+    public nonisolated struct TokenValueClock: Sendable {
       // SwiftProtobuf.Message conformance is added in an extension below. See the
       // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
       // methods supported on all messages.
 
       public var format: Rv_Data_Clock.Format {
-        get {return _format ?? Rv_Data_Clock.Format()}
+        get {_format ?? Rv_Data_Clock.Format()}
         set {_format = newValue}
       }
       /// Returns true if `format` has been explicitly set.
-      public var hasFormat: Bool {return self._format != nil}
+      public var hasFormat: Bool {self._format != nil}
       /// Clears the value of `format`. Subsequent reads from it will return its default value.
       public mutating func clearFormat() {self._format = nil}
 
@@ -322,17 +322,17 @@ public struct Rv_Data_Message: Sendable {
   fileprivate var _template: Rv_Data_TemplateIdentification? = nil
 }
 
-public struct Rv_Data_MessageDocument: Sendable {
+public nonisolated struct Rv_Data_MessageDocument: Sendable {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
   // methods supported on all messages.
 
   public var applicationInfo: Rv_Data_ApplicationInfo {
-    get {return _applicationInfo ?? Rv_Data_ApplicationInfo()}
+    get {_applicationInfo ?? Rv_Data_ApplicationInfo()}
     set {_applicationInfo = newValue}
   }
   /// Returns true if `applicationInfo` has been explicitly set.
-  public var hasApplicationInfo: Bool {return self._applicationInfo != nil}
+  public var hasApplicationInfo: Bool {self._applicationInfo != nil}
   /// Clears the value of `applicationInfo`. Subsequent reads from it will return its default value.
   public mutating func clearApplicationInfo() {self._applicationInfo = nil}
 
@@ -347,9 +347,9 @@ public struct Rv_Data_MessageDocument: Sendable {
 
 // MARK: - Code below here is support for the SwiftProtobuf runtime.
 
-fileprivate let _protobuf_package = "rv.data"
+fileprivate nonisolated let _protobuf_package = "rv.data"
 
-extension Rv_Data_Message: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+nonisolated extension Rv_Data_Message: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   public static let protoMessageName: String = _protobuf_package + ".Message"
   public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{1}uuid\0\u{1}title\0\u{3}time_to_remove\0\u{3}visible_on_network\0\u{2}\u{2}template\0\u{4}\u{3}clear_type\0\u{3}message_text\0\u{1}tokens\0\u{3}token_values\0")
 
@@ -423,11 +423,11 @@ extension Rv_Data_Message: SwiftProtobuf.Message, SwiftProtobuf._MessageImplemen
   }
 }
 
-extension Rv_Data_Message.ClearType: SwiftProtobuf._ProtoNameProviding {
+nonisolated extension Rv_Data_Message.ClearType: SwiftProtobuf._ProtoNameProviding {
   public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{2}\0CLEAR_TYPE_MANUAL\0\u{1}CLEAR_TYPE_AFTER_TIME\0\u{1}CLEAR_TYPE_AFTER_TIMERS\0")
 }
 
-extension Rv_Data_Message.Token: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+nonisolated extension Rv_Data_Message.Token: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   public static let protoMessageName: String = Rv_Data_Message.protoMessageName + ".Token"
   public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{1}uuid\0\u{1}text\0\u{1}timer\0\u{1}clock\0")
 
@@ -516,7 +516,7 @@ extension Rv_Data_Message.Token: SwiftProtobuf.Message, SwiftProtobuf._MessageIm
   }
 }
 
-extension Rv_Data_Message.Token.TokenTypeText: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+nonisolated extension Rv_Data_Message.Token.TokenTypeText: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   public static let protoMessageName: String = Rv_Data_Message.Token.protoMessageName + ".TokenTypeText"
   public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{1}name\0")
 
@@ -546,7 +546,7 @@ extension Rv_Data_Message.Token.TokenTypeText: SwiftProtobuf.Message, SwiftProto
   }
 }
 
-extension Rv_Data_Message.Token.TokenTypeTimer: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+nonisolated extension Rv_Data_Message.Token.TokenTypeTimer: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   public static let protoMessageName: String = Rv_Data_Message.Token.protoMessageName + ".TokenTypeTimer"
   public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{1}name\0\u{3}timer_uuid\0")
 
@@ -585,7 +585,7 @@ extension Rv_Data_Message.Token.TokenTypeTimer: SwiftProtobuf.Message, SwiftProt
   }
 }
 
-extension Rv_Data_Message.Token.TokenTypeClock: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+nonisolated extension Rv_Data_Message.Token.TokenTypeClock: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   public static let protoMessageName: String = Rv_Data_Message.Token.protoMessageName + ".TokenTypeClock"
   public static let _protobuf_nameMap = SwiftProtobuf._NameMap()
 
@@ -604,7 +604,7 @@ extension Rv_Data_Message.Token.TokenTypeClock: SwiftProtobuf.Message, SwiftProt
   }
 }
 
-extension Rv_Data_Message.TokenValue: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+nonisolated extension Rv_Data_Message.TokenValue: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   public static let protoMessageName: String = Rv_Data_Message.protoMessageName + ".TokenValue"
   public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{3}token_id\0\u{1}text\0\u{1}timer\0\u{1}clock\0\u{3}token_name\0")
 
@@ -698,7 +698,7 @@ extension Rv_Data_Message.TokenValue: SwiftProtobuf.Message, SwiftProtobuf._Mess
   }
 }
 
-extension Rv_Data_Message.TokenValue.TokenValueText: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+nonisolated extension Rv_Data_Message.TokenValue.TokenValueText: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   public static let protoMessageName: String = Rv_Data_Message.TokenValue.protoMessageName + ".TokenValueText"
   public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{1}value\0")
 
@@ -728,7 +728,7 @@ extension Rv_Data_Message.TokenValue.TokenValueText: SwiftProtobuf.Message, Swif
   }
 }
 
-extension Rv_Data_Message.TokenValue.TokenValueTimer: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+nonisolated extension Rv_Data_Message.TokenValue.TokenValueTimer: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   public static let protoMessageName: String = Rv_Data_Message.TokenValue.protoMessageName + ".TokenValueTimer"
   public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{1}configuration\0\u{1}format\0")
 
@@ -767,7 +767,7 @@ extension Rv_Data_Message.TokenValue.TokenValueTimer: SwiftProtobuf.Message, Swi
   }
 }
 
-extension Rv_Data_Message.TokenValue.TokenValueClock: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+nonisolated extension Rv_Data_Message.TokenValue.TokenValueClock: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   public static let protoMessageName: String = Rv_Data_Message.TokenValue.protoMessageName + ".TokenValueClock"
   public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{1}format\0")
 
@@ -801,7 +801,7 @@ extension Rv_Data_Message.TokenValue.TokenValueClock: SwiftProtobuf.Message, Swi
   }
 }
 
-extension Rv_Data_MessageDocument: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+nonisolated extension Rv_Data_MessageDocument: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   public static let protoMessageName: String = _protobuf_package + ".MessageDocument"
   public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{3}application_info\0\u{1}messages\0")
 

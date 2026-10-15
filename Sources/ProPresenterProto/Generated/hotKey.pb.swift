@@ -15,12 +15,12 @@ import SwiftProtobuf
 // incompatible with the version of SwiftProtobuf to which you are linking.
 // Please ensure that you are building against the same version of the API
 // that was used to generate this file.
-fileprivate struct _GeneratedWithProtocGenSwiftVersion: SwiftProtobuf.ProtobufAPIVersionCheck {
+fileprivate nonisolated struct _GeneratedWithProtocGenSwiftVersion: SwiftProtobuf.ProtobufAPIVersionCheck {
   struct _2: SwiftProtobuf.ProtobufAPIVersion_2 {}
   typealias Version = _2
 }
 
-public struct Rv_Data_HotKey: Sendable {
+public nonisolated struct Rv_Data_HotKey: Sendable {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
   // methods supported on all messages.
@@ -31,7 +31,7 @@ public struct Rv_Data_HotKey: Sendable {
 
   public var unknownFields = SwiftProtobuf.UnknownStorage()
 
-  public enum KeyCode: SwiftProtobuf.Enum, Swift.CaseIterable {
+  public nonisolated enum KeyCode: SwiftProtobuf.Enum, Swift.CaseIterable {
     public typealias RawValue = Int
     case unknown // = 0
     case ansiA // = 1
@@ -534,9 +534,9 @@ public struct Rv_Data_HotKey: Sendable {
 
 // MARK: - Code below here is support for the SwiftProtobuf runtime.
 
-fileprivate let _protobuf_package = "rv.data"
+fileprivate nonisolated let _protobuf_package = "rv.data"
 
-extension Rv_Data_HotKey: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+nonisolated extension Rv_Data_HotKey: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   public static let protoMessageName: String = _protobuf_package + ".HotKey"
   public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{1}code\0\u{3}control_identifier\0")
 
@@ -571,6 +571,6 @@ extension Rv_Data_HotKey: SwiftProtobuf.Message, SwiftProtobuf._MessageImplement
   }
 }
 
-extension Rv_Data_HotKey.KeyCode: SwiftProtobuf._ProtoNameProviding {
+nonisolated extension Rv_Data_HotKey.KeyCode: SwiftProtobuf._ProtoNameProviding {
   public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{2}\0KEY_CODE_UNKNOWN\0\u{1}KEY_CODE_ANSI_A\0\u{1}KEY_CODE_ANSI_B\0\u{1}KEY_CODE_ANSI_C\0\u{1}KEY_CODE_ANSI_D\0\u{1}KEY_CODE_ANSI_E\0\u{1}KEY_CODE_ANSI_F\0\u{1}KEY_CODE_ANSI_G\0\u{1}KEY_CODE_ANSI_H\0\u{1}KEY_CODE_ANSI_I\0\u{1}KEY_CODE_ANSI_J\0\u{1}KEY_CODE_ANSI_K\0\u{1}KEY_CODE_ANSI_L\0\u{1}KEY_CODE_ANSI_M\0\u{1}KEY_CODE_ANSI_N\0\u{1}KEY_CODE_ANSI_O\0\u{1}KEY_CODE_ANSI_P\0\u{1}KEY_CODE_ANSI_Q\0\u{1}KEY_CODE_ANSI_R\0\u{1}KEY_CODE_ANSI_S\0\u{1}KEY_CODE_ANSI_T\0\u{1}KEY_CODE_ANSI_U\0\u{1}KEY_CODE_ANSI_V\0\u{1}KEY_CODE_ANSI_W\0\u{1}KEY_CODE_ANSI_X\0\u{1}KEY_CODE_ANSI_Y\0\u{1}KEY_CODE_ANSI_Z\0\u{1}KEY_CODE_ANSI_0\0\u{1}KEY_CODE_ANSI_1\0\u{1}KEY_CODE_ANSI_2\0\u{1}KEY_CODE_ANSI_3\0\u{1}KEY_CODE_ANSI_4\0\u{1}KEY_CODE_ANSI_5\0\u{1}KEY_CODE_ANSI_6\0\u{1}KEY_CODE_ANSI_7\0\u{1}KEY_CODE_ANSI_8\0\u{1}KEY_CODE_ANSI_9\0\u{1}KEY_CODE_ANSI_EQUAL\0\u{1}KEY_CODE_ANSI_MINUS\0\u{1}KEY_CODE_ANSI_RIGHT_BRACKET\0\u{1}KEY_CODE_ANSI_LEFT_BRACKET\0\u{1}KEY_CODE_ANSI_QUOTE\0\u{1}KEY_CODE_ANSI_SEMICOLON\0\u{1}KEY_CODE_ANSI_BACKSLASH\0\u{1}KEY_CODE_ANSI_COMMA\0\u{1}KEY_CODE_ANSI_SLASH\0\u{1}KEY_CODE_ANSI_PERIOD\0\u{1}KEY_CODE_ANSI_GRAVE\0\u{1}KEY_CODE_ANSI_KEYPAD_DECIMAL\0\u{1}KEY_CODE_ANSI_KEYPAD_PLUS\0\u{1}KEY_CODE_ANSI_KEYPAD_CLEAR\0\u{1}KEY_CODE_ANSI_KEYPAD_DIVIDE\0\u{1}KEY_CODE_ANSI_KEYPAD_ENTER\0\u{1}KEY_CODE_ANSI_KEYPAD_MINUS\0\u{1}KEY_CODE_ANSI_KEYPAD_EQUALS\0\u{1}KEY_CODE_ANSI_KEYPAD_0\0\u{1}KEY_CODE_ANSI_KEYPAD_1\0\u{1}KEY_CODE_ANSI_KEYPAD_2\0\u{1}KEY_CODE_ANSI_KEYPAD_3\0\u{1}KEY_CODE_ANSI_KEYPAD_4\0\u{1}KEY_CODE_ANSI_KEYPAD_5\0\u{1}KEY_CODE_ANSI_KEYPAD_6\0\u{1}KEY_CODE_ANSI_KEYPAD_7\0\u{1}KEY_CODE_ANSI_KEYPAD_8\0\u{1}KEY_CODE_ANSI_KEYPAD_9\0\u{1}KEY_CODE_F1\0\u{1}KEY_CODE_F2\0\u{1}KEY_CODE_F3\0\u{1}KEY_CODE_F4\0\u{1}KEY_CODE_F5\0\u{1}KEY_CODE_F6\0\u{1}KEY_CODE_F7\0\u{1}KEY_CODE_F8\0\u{1}KEY_CODE_F9\0\u{1}KEY_CODE_F10\0\u{1}KEY_CODE_F11\0\u{1}KEY_CODE_F12\0\u{1}KEY_CODE_F13\0\u{1}KEY_CODE_F14\0\u{1}KEY_CODE_F15\0\u{1}KEY_CODE_F16\0\u{1}KEY_CODE_F17\0\u{1}KEY_CODE_F18\0\u{1}KEY_CODE_F19\0\u{1}KEY_CODE_F20\0\u{1}KEY_CODE_FUNCTION\0\u{1}KEY_CODE_RETURN\0\u{1}KEY_CODE_TAB\0\u{1}KEY_CODE_SPACE\0\u{1}KEY_CODE_DELETE\0\u{1}KEY_CODE_ESCAPE\0\u{1}KEY_CODE_COMMAND\0\u{1}KEY_CODE_SHIFT\0\u{1}KEY_CODE_CAPS_LOCK\0\u{1}KEY_CODE_OPTION\0\u{1}KEY_CODE_CONTROL\0\u{1}KEY_CODE_RIGHT_SHIFT\0\u{1}KEY_CODE_RIGHT_OPTION\0\u{1}KEY_CODE_RIGHT_CONTROL\0\u{1}KEY_CODE_VOLUME_UP\0\u{1}KEY_CODE_VOLUME_DOWN\0\u{1}KEY_CODE_MUTE\0\u{1}KEY_CODE_HELP\0\u{1}KEY_CODE_HOME\0\u{1}KEY_CODE_PAGE_UP\0\u{1}KEY_CODE_FORWARD_DELETE\0\u{1}KEY_CODE_END\0\u{1}KEY_CODE_PAGE_DOWN\0\u{1}KEY_CODE_LEFT_ARROW\0\u{1}KEY_CODE_RIGHT_ARROW\0\u{1}KEY_CODE_DOWN_ARROW\0\u{1}KEY_CODE_UP_ARROW\0\u{1}KEY_CODE_ISO_SELECTION\0\u{1}KEY_CODE_JIS_YEN\0\u{1}KEY_CODE_JIS_UNDERSCORE\0\u{1}KEY_CODE_JIS_KEYPAD_COMMA\0\u{1}KEY_CODE_JIS_EISU\0\u{1}KEY_CODE_JIS_KANA\0")
 }

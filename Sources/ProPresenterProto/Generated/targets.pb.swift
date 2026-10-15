@@ -15,68 +15,68 @@ import SwiftProtobuf
 // incompatible with the version of SwiftProtobuf to which you are linking.
 // Please ensure that you are building against the same version of the API
 // that was used to generate this file.
-fileprivate struct _GeneratedWithProtocGenSwiftVersion: SwiftProtobuf.ProtobufAPIVersionCheck {
+fileprivate nonisolated struct _GeneratedWithProtocGenSwiftVersion: SwiftProtobuf.ProtobufAPIVersionCheck {
   struct _2: SwiftProtobuf.ProtobufAPIVersion_2 {}
   typealias Version = _2
 }
 
-public struct Rv_Data_TargetSet: @unchecked Sendable {
+public nonisolated struct Rv_Data_TargetSet: @unchecked Sendable {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
   // methods supported on all messages.
 
   public var uuid: Rv_Data_UUID {
-    get {return _storage._uuid ?? Rv_Data_UUID()}
+    get {_storage._uuid ?? Rv_Data_UUID()}
     set {_uniqueStorage()._uuid = newValue}
   }
   /// Returns true if `uuid` has been explicitly set.
-  public var hasUuid: Bool {return _storage._uuid != nil}
+  public var hasUuid: Bool {_storage._uuid != nil}
   /// Clears the value of `uuid`. Subsequent reads from it will return its default value.
   public mutating func clearUuid() {_uniqueStorage()._uuid = nil}
 
   public var name: String {
-    get {return _storage._name}
+    get {_storage._name}
     set {_uniqueStorage()._name = newValue}
   }
 
   public var color: Rv_Data_Color {
-    get {return _storage._color ?? Rv_Data_Color()}
+    get {_storage._color ?? Rv_Data_Color()}
     set {_uniqueStorage()._color = newValue}
   }
   /// Returns true if `color` has been explicitly set.
-  public var hasColor: Bool {return _storage._color != nil}
+  public var hasColor: Bool {_storage._color != nil}
   /// Clears the value of `color`. Subsequent reads from it will return its default value.
   public mutating func clearColor() {_uniqueStorage()._color = nil}
 
   public var testImagePath: Rv_Data_URL {
-    get {return _storage._testImagePath ?? Rv_Data_URL()}
+    get {_storage._testImagePath ?? Rv_Data_URL()}
     set {_uniqueStorage()._testImagePath = newValue}
   }
   /// Returns true if `testImagePath` has been explicitly set.
-  public var hasTestImagePath: Bool {return _storage._testImagePath != nil}
+  public var hasTestImagePath: Bool {_storage._testImagePath != nil}
   /// Clears the value of `testImagePath`. Subsequent reads from it will return its default value.
   public mutating func clearTestImagePath() {_uniqueStorage()._testImagePath = nil}
 
   public var sourceSize: Rv_Data_Graphics.Size {
-    get {return _storage._sourceSize ?? Rv_Data_Graphics.Size()}
+    get {_storage._sourceSize ?? Rv_Data_Graphics.Size()}
     set {_uniqueStorage()._sourceSize = newValue}
   }
   /// Returns true if `sourceSize` has been explicitly set.
-  public var hasSourceSize: Bool {return _storage._sourceSize != nil}
+  public var hasSourceSize: Bool {_storage._sourceSize != nil}
   /// Clears the value of `sourceSize`. Subsequent reads from it will return its default value.
   public mutating func clearSourceSize() {_uniqueStorage()._sourceSize = nil}
 
   public var targets: [Rv_Data_Target] {
-    get {return _storage._targets}
+    get {_storage._targets}
     set {_uniqueStorage()._targets = newValue}
   }
 
   public var testPattern: Rv_Data_TestPattern {
-    get {return _storage._testPattern ?? Rv_Data_TestPattern()}
+    get {_storage._testPattern ?? Rv_Data_TestPattern()}
     set {_uniqueStorage()._testPattern = newValue}
   }
   /// Returns true if `testPattern` has been explicitly set.
-  public var hasTestPattern: Bool {return _storage._testPattern != nil}
+  public var hasTestPattern: Bool {_storage._testPattern != nil}
   /// Clears the value of `testPattern`. Subsequent reads from it will return its default value.
   public mutating func clearTestPattern() {_uniqueStorage()._testPattern = nil}
 
@@ -87,46 +87,46 @@ public struct Rv_Data_TargetSet: @unchecked Sendable {
   fileprivate var _storage = _StorageClass.defaultInstance
 }
 
-public struct Rv_Data_Target: Sendable {
+public nonisolated struct Rv_Data_Target: Sendable {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
   // methods supported on all messages.
 
   public var uuid: Rv_Data_UUID {
-    get {return _uuid ?? Rv_Data_UUID()}
+    get {_uuid ?? Rv_Data_UUID()}
     set {_uuid = newValue}
   }
   /// Returns true if `uuid` has been explicitly set.
-  public var hasUuid: Bool {return self._uuid != nil}
+  public var hasUuid: Bool {self._uuid != nil}
   /// Clears the value of `uuid`. Subsequent reads from it will return its default value.
   public mutating func clearUuid() {self._uuid = nil}
 
   public var name: String = String()
 
   public var sourceUnitRect: Rv_Data_Graphics.Rect {
-    get {return _sourceUnitRect ?? Rv_Data_Graphics.Rect()}
+    get {_sourceUnitRect ?? Rv_Data_Graphics.Rect()}
     set {_sourceUnitRect = newValue}
   }
   /// Returns true if `sourceUnitRect` has been explicitly set.
-  public var hasSourceUnitRect: Bool {return self._sourceUnitRect != nil}
+  public var hasSourceUnitRect: Bool {self._sourceUnitRect != nil}
   /// Clears the value of `sourceUnitRect`. Subsequent reads from it will return its default value.
   public mutating func clearSourceUnitRect() {self._sourceUnitRect = nil}
 
   public var testImageFill: Rv_Data_Media {
-    get {return _testImageFill ?? Rv_Data_Media()}
+    get {_testImageFill ?? Rv_Data_Media()}
     set {_testImageFill = newValue}
   }
   /// Returns true if `testImageFill` has been explicitly set.
-  public var hasTestImageFill: Bool {return self._testImageFill != nil}
+  public var hasTestImageFill: Bool {self._testImageFill != nil}
   /// Clears the value of `testImageFill`. Subsequent reads from it will return its default value.
   public mutating func clearTestImageFill() {self._testImageFill = nil}
 
   public var shape: Rv_Data_Graphics.Element {
-    get {return _shape ?? Rv_Data_Graphics.Element()}
+    get {_shape ?? Rv_Data_Graphics.Element()}
     set {_shape = newValue}
   }
   /// Returns true if `shape` has been explicitly set.
-  public var hasShape: Bool {return self._shape != nil}
+  public var hasShape: Bool {self._shape != nil}
   /// Clears the value of `shape`. Subsequent reads from it will return its default value.
   public mutating func clearShape() {self._shape = nil}
 
@@ -134,7 +134,7 @@ public struct Rv_Data_Target: Sendable {
 
   public var unknownFields = SwiftProtobuf.UnknownStorage()
 
-  public enum FlipMode: SwiftProtobuf.Enum, Swift.CaseIterable {
+  public nonisolated enum FlipMode: SwiftProtobuf.Enum, Swift.CaseIterable {
     public typealias RawValue = Int
     case none // = 0
     case vertical // = 1
@@ -186,9 +186,9 @@ public struct Rv_Data_Target: Sendable {
 
 // MARK: - Code below here is support for the SwiftProtobuf runtime.
 
-fileprivate let _protobuf_package = "rv.data"
+fileprivate nonisolated let _protobuf_package = "rv.data"
 
-extension Rv_Data_TargetSet: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+nonisolated extension Rv_Data_TargetSet: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   public static let protoMessageName: String = _protobuf_package + ".TargetSet"
   public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{1}uuid\0\u{1}name\0\u{1}color\0\u{3}test_image_path\0\u{3}source_size\0\u{1}targets\0\u{3}test_pattern\0")
 
@@ -300,7 +300,7 @@ extension Rv_Data_TargetSet: SwiftProtobuf.Message, SwiftProtobuf._MessageImplem
   }
 }
 
-extension Rv_Data_Target: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+nonisolated extension Rv_Data_Target: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   public static let protoMessageName: String = _protobuf_package + ".Target"
   public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{1}uuid\0\u{1}name\0\u{3}source_unit_rect\0\u{3}test_image_fill\0\u{1}shape\0\u{1}flipMode\0")
 
@@ -359,6 +359,6 @@ extension Rv_Data_Target: SwiftProtobuf.Message, SwiftProtobuf._MessageImplement
   }
 }
 
-extension Rv_Data_Target.FlipMode: SwiftProtobuf._ProtoNameProviding {
+nonisolated extension Rv_Data_Target.FlipMode: SwiftProtobuf._ProtoNameProviding {
   public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{2}\0FLIP_MODE_NONE\0\u{1}FLIP_MODE_VERTICAL\0\u{1}FLIP_MODE_HORIZONTAL\0\u{1}FLIP_MODE_BOTH\0")
 }

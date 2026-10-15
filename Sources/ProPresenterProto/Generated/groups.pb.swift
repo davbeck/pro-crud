@@ -15,51 +15,51 @@ import SwiftProtobuf
 // incompatible with the version of SwiftProtobuf to which you are linking.
 // Please ensure that you are building against the same version of the API
 // that was used to generate this file.
-fileprivate struct _GeneratedWithProtocGenSwiftVersion: SwiftProtobuf.ProtobufAPIVersionCheck {
+fileprivate nonisolated struct _GeneratedWithProtocGenSwiftVersion: SwiftProtobuf.ProtobufAPIVersionCheck {
   struct _2: SwiftProtobuf.ProtobufAPIVersion_2 {}
   typealias Version = _2
 }
 
-public struct Rv_Data_Group: Sendable {
+public nonisolated struct Rv_Data_Group: Sendable {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
   // methods supported on all messages.
 
   public var uuid: Rv_Data_UUID {
-    get {return _uuid ?? Rv_Data_UUID()}
+    get {_uuid ?? Rv_Data_UUID()}
     set {_uuid = newValue}
   }
   /// Returns true if `uuid` has been explicitly set.
-  public var hasUuid: Bool {return self._uuid != nil}
+  public var hasUuid: Bool {self._uuid != nil}
   /// Clears the value of `uuid`. Subsequent reads from it will return its default value.
   public mutating func clearUuid() {self._uuid = nil}
 
   public var name: String = String()
 
   public var color: Rv_Data_Color {
-    get {return _color ?? Rv_Data_Color()}
+    get {_color ?? Rv_Data_Color()}
     set {_color = newValue}
   }
   /// Returns true if `color` has been explicitly set.
-  public var hasColor: Bool {return self._color != nil}
+  public var hasColor: Bool {self._color != nil}
   /// Clears the value of `color`. Subsequent reads from it will return its default value.
   public mutating func clearColor() {self._color = nil}
 
   public var hotKey: Rv_Data_HotKey {
-    get {return _hotKey ?? Rv_Data_HotKey()}
+    get {_hotKey ?? Rv_Data_HotKey()}
     set {_hotKey = newValue}
   }
   /// Returns true if `hotKey` has been explicitly set.
-  public var hasHotKey: Bool {return self._hotKey != nil}
+  public var hasHotKey: Bool {self._hotKey != nil}
   /// Clears the value of `hotKey`. Subsequent reads from it will return its default value.
   public mutating func clearHotKey() {self._hotKey = nil}
 
   public var applicationGroupIdentifier: Rv_Data_UUID {
-    get {return _applicationGroupIdentifier ?? Rv_Data_UUID()}
+    get {_applicationGroupIdentifier ?? Rv_Data_UUID()}
     set {_applicationGroupIdentifier = newValue}
   }
   /// Returns true if `applicationGroupIdentifier` has been explicitly set.
-  public var hasApplicationGroupIdentifier: Bool {return self._applicationGroupIdentifier != nil}
+  public var hasApplicationGroupIdentifier: Bool {self._applicationGroupIdentifier != nil}
   /// Clears the value of `applicationGroupIdentifier`. Subsequent reads from it will return its default value.
   public mutating func clearApplicationGroupIdentifier() {self._applicationGroupIdentifier = nil}
 
@@ -75,7 +75,7 @@ public struct Rv_Data_Group: Sendable {
   fileprivate var _applicationGroupIdentifier: Rv_Data_UUID? = nil
 }
 
-public struct Rv_Data_ProGroupsDocument: Sendable {
+public nonisolated struct Rv_Data_ProGroupsDocument: Sendable {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
   // methods supported on all messages.
@@ -89,9 +89,9 @@ public struct Rv_Data_ProGroupsDocument: Sendable {
 
 // MARK: - Code below here is support for the SwiftProtobuf runtime.
 
-fileprivate let _protobuf_package = "rv.data"
+fileprivate nonisolated let _protobuf_package = "rv.data"
 
-extension Rv_Data_Group: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+nonisolated extension Rv_Data_Group: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   public static let protoMessageName: String = _protobuf_package + ".Group"
   public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{1}uuid\0\u{1}name\0\u{1}color\0\u{1}hotKey\0\u{3}application_group_identifier\0\u{3}application_group_name\0")
 
@@ -150,7 +150,7 @@ extension Rv_Data_Group: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementa
   }
 }
 
-extension Rv_Data_ProGroupsDocument: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+nonisolated extension Rv_Data_ProGroupsDocument: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   public static let protoMessageName: String = _protobuf_package + ".ProGroupsDocument"
   public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{1}groups\0")
 
