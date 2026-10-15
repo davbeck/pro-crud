@@ -108,9 +108,24 @@ pro-crud workspace move-cue /exact/native/root \
 
 This moves the existing placement-tree node and retains cue content, identities,
 group metadata and arrangements. Selecting itself or its current predecessor
-makes no change. Cross-group moves are unsupported. The same offline/local
+makes no change. For ownership transfers use `transfer-cue` below. The same offline/local
 transaction rules apply. Structural edits reject parallel legacy arrays that
 would become stale.
+
+Transfer an existing cue into a destination group with:
+
+```sh
+pro-crud workspace transfer-cue /exact/native/root \
+  --stream PRESENTATION_STREAM_UUID --cue CUE_UUID --group GROUP_UUID \
+  --after DESTINATION_CUE_UUID --registry /exact/path/registry-v1.sqlite3
+```
+
+Omit `--after` to append. The cue and placement identities and complete cue
+content are retained. Following native 22 behavior, moving the last cue out of
+a group removes that emptied group and every arrangement occurrence referencing
+it. Other group occurrences retain their order and identities. Unmapped native
+content blocks this deletion before publication. Matching placements make no
+change; unresolved destinations/anchors fail. The same local transaction rules apply.
 
 Rename an existing group with `workspace rename-cue-group ROOT --stream UUID
 --group GROUP_UUID --name TEXT --registry PATH`. This preserves group identity,
@@ -157,6 +172,7 @@ of the application version. The same stopped-writer/local-registration rules app
 | `set-notes` | `text` string for plain Presentation Operator Notes |
 | `set-slide-notes` | `action` UUID and exactly one of `text` or `rtfFile`; RTF paths are relative to the manifest directory |
 | `move-cue` | `cue` and `after` UUIDs in the same group |
+| `transfer-cue` | `cue` and destination `group` UUIDs; optional `after` UUID, otherwise append |
 | `rename-cue-group` | `group` UUID and nonempty `name` |
 | `set-arrangement-groups` | `arrangement` UUID and ordered `groups` UUID array, including repeats or an empty array |
 

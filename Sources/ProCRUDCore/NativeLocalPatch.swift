@@ -10,6 +10,7 @@ public enum NativePresentationEdit: Codable, Sendable, Equatable {
 	case copyrightTitle(String)
 	case slideNotes(actionID: UUID, content: NativeSlideNotesContent)
 	case moveCue(UUID, after: UUID)
+	case transferCue(UUID, to: UUID, after: UUID?)
 	case cueGroupName(UUID, String)
 	case arrangementGroups(UUID, [UUID])
 }
@@ -129,6 +130,12 @@ public struct NativeLocalPatch: Sendable {
 			let original = layout.arrangements[index].groupIDs
 			guard original != groups else { return }
 			try NativeStructuralEditing.setGroups(groups, replacing: original, at: index, root: root)
+		case let .transferCue(cueID, to: groupID, after: anchorID):
+			try NativeStructuralEditing.transfer(cue: cueID, to: groupID, after: anchorID, layout: layout, root: root) {
+				// Removing an emptied group also removes its arrangement references.
+				// Unknown native fields must be qualified before that deletion.
+				_ = try NativeProtobufProjection.read(identity: identity, source: value).presentation()
+			}
 		case let .moveCue(cueID, after: anchorID):
 			try NativeStructuralEditing.requireNativePlacements(root)
 			let nodes = layout.placements.flatMap(\.children)

@@ -61,3 +61,33 @@ struct WorkspaceSetArrangementGroups: ParsableCommand {
 		let receipts: [NativeLocalCommitReceipt]
 	}
 }
+
+struct WorkspaceTransferCue: ParsableCommand {
+	static let configuration = CommandConfiguration(commandName: "transfer-cue", abstract: "Move an existing cue into a native group, preserving cue/placement identity. An emptied source group and its arrangement occurrences are removed. Quit ProPresenter and stop workspace helpers first.")
+	@Argument(help: "Exact registered local native workspace root.") var input: String
+	@Option(help: "Shared Presentation stream UUID.") var stream: String
+	@Option(help: "Existing cue UUID.") var cue: String
+	@Option(help: "Destination cue-group UUID.") var group: String
+	@Option(help: "Cue UUID in the destination group to insert after. Omit to append.") var after: String?
+	@Option(help: "Exact local registry-v1.sqlite3 path.") var registry: String
+
+	func validate() throws {
+		guard [stream, cue, group].allSatisfy({ UUID(uuidString: $0) != nil }), after.map({ UUID(uuidString: $0) != nil }) ?? true else { throw ValidationError("--stream, --cue, --group and --after require UUIDs.") }
+	}
+
+	func run() throws {
+		guard let streamID = UUID(uuidString: stream), let cueID = UUID(uuidString: cue), let groupID = UUID(uuidString: group) else { throw ValidationError("--stream, --cue and --group require UUIDs.") }
+		let anchor = after.flatMap(UUID.init(uuidString:))
+		let receipts = try NativeLocalWorkspaceWriter.edit(.transferCue(cueID, to: groupID, after: anchor), documentID: streamID, in: URL(fileURLWithPath: input), registry: URL(fileURLWithPath: registry))
+		try print(prettyJSON(Result(documentID: streamID, cueID: cueID, groupID: groupID, afterCueID: anchor, changed: !receipts.isEmpty, receipts: receipts)))
+	}
+
+	private struct Result: Encodable {
+		let documentID: UUID
+		let cueID: UUID
+		let groupID: UUID
+		let afterCueID: UUID?
+		let changed: Bool
+		let receipts: [NativeLocalCommitReceipt]
+	}
+}

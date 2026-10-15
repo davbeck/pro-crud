@@ -95,6 +95,9 @@ enum NativeEditManifest {
 			case .moveCue:
 				fields = ["cue", "after"]
 				payload = try .edit(.moveCue(container.decode(UUID.self, forKey: .cue), after: container.decode(UUID.self, forKey: .after)))
+			case .transferCue:
+				fields = ["cue", "group", "after"]
+				payload = try .edit(.transferCue(container.decode(UUID.self, forKey: .cue), to: container.decode(UUID.self, forKey: .group), after: container.decodeIfPresent(UUID.self, forKey: .after)))
 			case .renameCueGroup:
 				fields = ["group", "name"]
 				payload = try .edit(.cueGroupName(container.decode(UUID.self, forKey: .group), container.decode(String.self, forKey: .name)))
@@ -111,6 +114,7 @@ enum NativeEditManifest {
 		case setNotes = "set-notes"
 		case setSlideNotes = "set-slide-notes"
 		case moveCue = "move-cue"
+		case transferCue = "transfer-cue"
 		case renameCueGroup = "rename-cue-group"
 		case setArrangementGroups = "set-arrangement-groups"
 	}

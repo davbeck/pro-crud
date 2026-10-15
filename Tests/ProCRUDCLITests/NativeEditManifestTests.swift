@@ -13,13 +13,14 @@ struct NativeEditManifestTests {
 			["stream": stream.uuidString, "op": "set-notes", "text": "Operator notes"],
 			["stream": stream.uuidString, "op": "set-slide-notes", "action": action.uuidString, "text": "Rich notes"],
 			["stream": stream.uuidString, "op": "move-cue", "cue": cue.uuidString, "after": anchor.uuidString],
+			["stream": stream.uuidString, "op": "transfer-cue", "cue": cue.uuidString, "group": group.uuidString],
 			["stream": stream.uuidString, "op": "rename-cue-group", "group": group.uuidString, "name": "Verse"],
 			["stream": stream.uuidString, "op": "set-arrangement-groups", "arrangement": arrangement.uuidString, "groups": [group.uuidString, group.uuidString]],
 			["stream": stream.uuidString, "op": "set-arrangement-groups", "arrangement": arrangement.uuidString, "groups": []],
 		]
 		let operations = try decode(instructions)
 		#expect(operations.map(\.documentID) == Array(repeating: stream, count: instructions.count))
-		#expect(operations.map(\.edit) == [.copyrightTitle(""), .notes("Operator notes"), .slideNotes(actionID: action, content: .text("Rich notes")), .moveCue(cue, after: anchor), .cueGroupName(group, "Verse"), .arrangementGroups(arrangement, [group, group]), .arrangementGroups(arrangement, [])])
+		#expect(operations.map(\.edit) == [.copyrightTitle(""), .notes("Operator notes"), .slideNotes(actionID: action, content: .text("Rich notes")), .moveCue(cue, after: anchor), .transferCue(cue, to: group, after: nil), .cueGroupName(group, "Verse"), .arrangementGroups(arrangement, [group, group]), .arrangementGroups(arrangement, [])])
 		let base = ["/tmp/Exact", "--file", "/tmp/native-edits.json", "--registry", "/tmp/registry-v1.sqlite3"]
 		#expect(try ProCRUD.parseAsRoot(["workspace", "apply"] + base) is WorkspaceApply)
 		#expect(throws: (any Error).self) { try WorkspaceApply.parse(base + ["--target-version", "21"]) }

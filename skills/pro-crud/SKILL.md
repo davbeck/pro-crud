@@ -77,8 +77,13 @@ with explicit `stream` UUID and `op` fields; see the installed format reference
 for operation-specific fields. All operations prepare before one atomic commit,
 with ordered edits within each Presentation, one receipt per changed document
 and no changes if any operation fails. RTF paths are relative to the manifest.
-The same offline/local checks apply. Cross-group moves, Cloud editing and other
-native edit families remain unsupported.
+Use `workspace transfer-cue ROOT --stream UUID --cue CUE_UUID --group GROUP_UUID
+--registry PATH` to transfer ownership into an existing group. Omit `--after` to
+append or name a cue in the destination group. Cue and placement identities are
+retained. Moving the last cue removes the emptied group and its arrangement
+occurrences, matching native 22 behavior; unmapped content blocks that deletion.
+The same offline/local checks apply. Cloud editing and other native edit families
+remain unsupported.
 
 New creation and bundle exports default to target 22. Use `--target-version 21`
 on `create presentation`, `create theme`, `create playlist`, or `bundle` for a

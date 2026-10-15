@@ -76,4 +76,11 @@ struct CompatibilityCommandTests {
 		#expect(throws: (any Error).self) { try WorkspaceSetArrangementGroups.parse(sequence + ["--clear", "--group", id]) }
 		#expect(throws: (any Error).self) { try WorkspaceRenameCueGroup.parse(base + ["--group", id, "--name", ""]) }
 	}
+
+	@Test func transferRequiresDestinationGroupAndAnOptionalExactAnchor() throws {
+		let base = ["/tmp/Exact", "--stream", UUID().uuidString, "--cue", UUID().uuidString, "--group", UUID().uuidString, "--registry", "/tmp/registry-v1.sqlite3"]
+		#expect(try ProCRUD.parseAsRoot(["workspace", "transfer-cue"] + base) is WorkspaceTransferCue)
+		#expect(try WorkspaceTransferCue.parse(base).after == nil)
+		#expect(throws: (any Error).self) { try WorkspaceTransferCue.parse(base + ["--after", "bad"]) }
+	}
 }
