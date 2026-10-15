@@ -68,13 +68,22 @@ exercise traversal, not native playlist mutation acceptance.
 The retained 385-stream SQLite snapshot enumerates **927** occurrences: 828 in
 Presentations, 75 in Themes and 24 in PlaylistMedia. PlaylistLibrary/PlaylistAudio
 and all three client playlist streams inspect successfully with no occurrences.
-All 927 reference IDs are distinct; there are 385 asset IDs. An independent
+All 927 reference IDs are distinct; there are 384 asset UUIDs. Five live-device
+references correctly have no file asset association. An independent
 recursive scan of the previously captured official WASM projections matches the
 complete `(document, reference, asset, schema)` multiset exactly, with zero
 missing/extra occurrences. Twenty-one remaining stream scopes/kinds are explicit
 as uninspected (including PlaylistTemplates and Workspace); this is not complete
 workspace dependency validation. The retained snapshot has no copied media tree,
 so that comparison qualifies identity enumeration, not file availability there.
+
+The original local workspace's current scan confirms those same five
+`live_video` references have schema `"1"` and no asset/file locator. They are
+reported as live-device sources, not missing files or missing asset UUIDs.
+Remote HLS and web content receive separate runtime-source states; the reader
+retains their URLs without downloading or requiring a file asset. Constructed
+Loro cases test those distinctions with hashing enabled to ensure runtime URLs
+never enter the local-file hashing path. No runtime playback claim is made.
 
 The command reports each occurrence, exact local
 files and optional SHA-256 agreement, diagnostics, and every uninspected stream.

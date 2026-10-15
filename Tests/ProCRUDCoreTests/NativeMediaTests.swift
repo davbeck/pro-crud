@@ -8,6 +8,36 @@ import Testing
 
 @Suite("Native media identities and file locators")
 struct NativeMediaTests {
+	@Test func liveDeviceAndRemoteSourcesDoNotRequireFileAssetsOrReportMissingFiles() throws {
+		let sources: [(String, NativeWorkspaceValue, NativeMediaInventory.Occurrence.State)] = [
+			("live_video", .map([:]), .liveDevice),
+			("hls_stream", .map(["url": .string("https://example.invalid/live.m3u8")]), .remoteSource),
+			("web_content", .map(["url": .map(["Storage": .map(["__tag": .string("absolute_string"), "absolute_string": .string("https://example.invalid/page")])])]), .webContent),
+		]
+		for (kind, properties, state) in sources {
+			let media: NativeWorkspaceValue = .map(["uuid": .string(UUID().uuidString), "identity_schema_version": .string("1"), "TypeProperties": .map(["__tag": .string(kind), kind: properties])])
+			let action: NativeWorkspaceValue = .map(["uuid": .string(UUID().uuidString), "type": .integer(13), "ActionTypeData": .map(["__tag": .string("media"), "media": .map(["element": media])])])
+			let document = LoroDoc()
+			let root = document.getMap(id: "root")
+			try root.insert(key: "type", v: 2)
+			let tree = try root.insertContainer(key: "playlists", child: LoroTree())
+			let node = try tree.create(parent: .root)
+			try metadata(tree.getMeta(target: node), kind: "item", value: itemValue(action: action))
+			_ = try root.insertContainer(key: "live_video_playlist_nodes", child: LoroTree())
+			let stream = try playlistStream(document, scope: .shared)
+			let result = try NativeMediaInventory(snapshot: .init(root: interchange, workspaceID: UUID(), metadata: [:], streams: [stream]), hashFiles: true)
+			let occurrence = try #require(result.occurrences.first)
+			#expect(occurrence.state == state)
+			#expect(occurrence.diagnostics.isEmpty)
+			#expect(occurrence.files.isEmpty)
+			#expect(occurrence.reference.assetID == nil)
+			#expect(!occurrence.localFilesAvailable)
+			if kind != "live_video" {
+				#expect(occurrence.reference.locators.count == 1)
+			}
+		}
+	}
+
 	@Test func playlistTreesInspectNestedItemsAndLiveVideoNodesInResolvedOrder() throws {
 		let source = try #require(snapshot(root: interchange).streams.first)
 		let nativeRoot = try source.decodedValue().object(at: "/").required("root", at: "/").object(at: "/root")
@@ -138,6 +168,7 @@ struct NativeMediaTests {
 		let reference = try MediaReference(media: Rv_Data_Media(serializedBytes: media))
 		#expect(reference.identitySchemaVersion == "2")
 		#expect(reference.kind == "video")
+		#expect(reference.dependencyKind == .remoteStream)
 		let locator = try #require(reference.locators.first)
 		#expect(locator.remote == "https://example.invalid/live.m3u8")
 		#expect(throws: NativeSemanticError.self) { try NativeMediaInventory.resolve(locator, workspaceRoot: interchange) }

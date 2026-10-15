@@ -5,6 +5,10 @@ import SwiftProtobuf
 /// A document occurrence and its asset association are separate in 22. This
 /// view reads the pinned wire schema without replacing the original message.
 public struct MediaReference: Codable, Sendable, Equatable {
+	public enum DependencyKind: String, Codable, Sendable {
+		case file, liveDevice = "live-device", remoteStream = "remote-stream", remoteResource = "remote-resource", webContent = "web-content", unknown
+	}
+
 	public struct Locator: Codable, Sendable, Equatable {
 		public let field: String
 		public let absolute: String?
@@ -51,6 +55,7 @@ public struct MediaReference: Codable, Sendable, Equatable {
 	public let containerID: String?
 	public let identitySchemaVersion: String?
 	public let kind: String?
+	public let dependencyKind: DependencyKind
 	public let locators: [Locator]
 	public let hasProvider: Bool
 
@@ -94,8 +99,29 @@ public struct MediaReference: Codable, Sendable, Equatable {
 			if type.protoName == "hls_stream", let url = try properties.string(5) {
 				locators.append(.init(field: "hls_stream/url", remote: url))
 			}
+			if type.protoName == "web_content", let url = try properties.message(2) {
+				try locators.append(.init(field: "web_content/url", url: Rv_Data_URL(serializedBytes: url.data)))
+			}
 		}
 		self.locators = locators
+		if kind == "live_video" {
+			dependencyKind = .liveDevice
+		} else if kind == "hls_stream" || locators.contains(where: { $0.remote != nil }) {
+			dependencyKind = .remoteStream
+		} else if kind == "web_content" {
+			dependencyKind = .webContent
+		} else if locators.contains(where: { locator in
+			guard locator.localPath == nil, locator.relative == nil,
+			      let string = locator.absolute, let url = URL(string: string), url.scheme != nil
+			else { return false }
+			return !url.isFileURL
+		}) {
+			dependencyKind = .remoteResource
+		} else if kind == "image" || kind == "audio" || kind == "video" {
+			dependencyKind = .file
+		} else {
+			dependencyKind = .unknown
+		}
 	}
 
 	/// Visits the actual document bytes, including media in nested actions and

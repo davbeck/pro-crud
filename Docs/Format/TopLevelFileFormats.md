@@ -287,6 +287,8 @@ container identities, identity schema strings, and each stored locator. Exact
 ROOT_SHOW paths resolve against the selected workspace; a same-basename file
 does not substitute for a missing asset. Optional hashing checks local content
 agreement within a 30-second budget. Remote/live URLs are reported without
-downloading. Every unavailable or uninspected stream remains explicit. File
+downloading. Live devices, remote streams/resources and web content have separate
+source states; file and asset UUID requirements do not apply to live devices.
+Runtime availability remains unverified. Every unavailable or uninspected stream remains explicit. File
 availability does not establish native asset-store membership, and this report
 does not qualify native media writes or replace strict legacy media validation.

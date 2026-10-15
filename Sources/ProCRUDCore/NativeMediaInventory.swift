@@ -11,11 +11,13 @@ public struct NativeMediaInventory: Encodable, Sendable {
 	}
 
 	public struct Occurrence: Codable, Sendable, Equatable {
+		public enum State: String, Codable, Sendable { case availableFiles = "available-files", unresolvedFiles = "unresolved-files", liveDevice = "live-device", remoteSource = "remote-source", webContent = "web-content", unqualified }
 		public let documentID: UUID
 		public let reference: MediaReference
 		public let files: [File]
 		public let diagnostics: [String]
 		public let localFilesAvailable: Bool
+		public let state: State
 
 		init(documentID: UUID, reference: MediaReference, files: [File], diagnostics: [String]) {
 			self.documentID = documentID
@@ -23,6 +25,13 @@ public struct NativeMediaInventory: Encodable, Sendable {
 			self.files = files
 			self.diagnostics = diagnostics
 			localFilesAvailable = !files.isEmpty && diagnostics.isEmpty
+			switch reference.dependencyKind {
+			case .file: state = localFilesAvailable ? .availableFiles : .unresolvedFiles
+			case .liveDevice: state = .liveDevice
+			case .remoteStream, .remoteResource: state = .remoteSource
+			case .webContent: state = .webContent
+			case .unknown: state = .unqualified
+			}
 		}
 	}
 
@@ -35,6 +44,7 @@ public struct NativeMediaInventory: Encodable, Sendable {
 	public let occurrences: [Occurrence]
 	public let uninspected: [Uninspected]
 	public let assetStoreMembership = "unverified"
+	public let runtimeSourceAvailability = "unverified"
 
 	public init(snapshot: NativeWorkspaceSnapshot, hashFiles: Bool = false) throws {
 		workspaceID = snapshot.workspaceID
@@ -55,10 +65,13 @@ public struct NativeMediaInventory: Encodable, Sendable {
 				for reference in try stream.mediaReferences() {
 					var files: [File] = []
 					var diagnostics = Self.identityDiagnostics(reference)
-					if reference.locators.isEmpty {
+					if reference.locators.isEmpty, reference.dependencyKind == .file {
 						diagnostics.append("No file locator in the document occurrence.")
 					}
-					for locator in reference.locators {
+					if reference.locators.isEmpty, [.remoteStream, .webContent].contains(reference.dependencyKind) {
+						diagnostics.append("No URL in the stored runtime source.")
+					}
+					for locator in reference.locators where reference.dependencyKind == .file {
 						do {
 							let url = try Self.resolve(locator, workspaceRoot: snapshot.root)
 							let file: File
@@ -114,7 +127,7 @@ public struct NativeMediaInventory: Encodable, Sendable {
 		if UUID(uuidString: reference.referenceID) == nil {
 			issues.append("Invalid occurrence reference UUID.")
 		}
-		if reference.assetID.flatMap(UUID.init(uuidString:)) == nil {
+		if reference.dependencyKind == .file || reference.assetID != nil, reference.assetID.flatMap(UUID.init(uuidString:)) == nil {
 			issues.append("Missing or invalid native asset UUID.")
 		}
 		if reference.hasProvider {
