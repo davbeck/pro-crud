@@ -47,9 +47,10 @@ public enum NativeLocalWorkspaceWriter {
 		}
 	}
 
-	/// Local/offline metadata edits only. No media files, placement/location,
-	/// client streams or shared-version bookkeeping are replaced.
-	public static func edit(_ edit: NativeMetadataEdit, documentID: UUID, in root: URL, registry: URL) throws -> [NativeLocalCommitReceipt] {
+	/// Qualified local/offline Presentation operations retain existing history.
+	/// Media files, library locations, client streams and shared-version
+	/// bookkeeping are not replaced.
+	public static func edit(_ edit: NativePresentationEdit, documentID: UUID, in root: URL, registry: URL) throws -> [NativeLocalCommitReceipt] {
 		try withOfflineWriteAccess(to: root, registry: registry) { snapshot in
 			guard let stream = snapshot.streams.first(where: { $0.identity.documentID == documentID && $0.identity.scope == .shared }) else { throw NativeSemanticError.missingReference(path: "/streams", identity: documentID.uuidString) }
 			guard let patch = try NativeLocalPatch.prepare(stream: stream, edit: edit) else { return [] }

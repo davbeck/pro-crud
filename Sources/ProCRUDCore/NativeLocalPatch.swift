@@ -4,11 +4,12 @@ import Foundation
 import Loro
 import ProPresenterProto
 
-public enum NativeMetadataEdit: Codable, Sendable, Equatable {
+public enum NativePresentationEdit: Codable, Sendable, Equatable {
 	case presentationName(String)
 	case notes(String)
 	case copyrightTitle(String)
 	case slideNotes(actionID: UUID, content: NativeSlideNotesContent)
+	case moveCue(UUID, after: UUID)
 }
 
 public enum NativeSlideNotesContent: Codable, Sendable, Equatable {
@@ -44,11 +45,11 @@ public struct NativeLocalPatch: Sendable {
 	public let sha256: Data
 	public let timestampMilliseconds: Int64
 
-	public static func prepare(stream: NativeWorkspaceStream, edit: NativeMetadataEdit, operationID: UUID = UUID(), date: Date = Date()) throws -> Self? {
+	public static func prepare(stream: NativeWorkspaceStream, edit: NativePresentationEdit, operationID: UUID = UUID(), date: Date = Date()) throws -> Self? {
 		guard stream.identity.kind == "Presentation", stream.identity.scope == .shared else {
 			throw NativeSemanticError.invalidValue(path: stream.identity.documentID.uuidString, expected: "shared Presentation stream")
 		}
-		_ = try stream.presentationLayout()
+		let layout = try stream.presentationLayout()
 		guard let original = stream.snapshot, let vector = stream.versionVector else { throw NativeWorkspaceError.unavailableStream(stream.identity.documentID.uuidString) }
 		let document = LoroDoc()
 		_ = try document.import(bytes: original)
@@ -85,6 +86,28 @@ public struct NativeLocalPatch: Sendable {
 				notes = try slide.insertContainer(key: "notes", child: LoroMap())
 			}
 			try notes.insert(key: "rtf_data", v: LoroValue.binary(value: rtf))
+		case let .moveCue(cueID, after: anchorID):
+			let nodes = layout.placements.flatMap(\.children)
+			func node(_ id: UUID) throws -> NativePlacementNode {
+				guard let node = try nodes.first(where: { try $0.metadata.object(at: "/placement").required("uuid", at: "/placement").uuid(at: "/placement/uuid") == id }) else {
+					throw NativeSemanticError.missingReference(path: "/cue_group_placements", identity: id.uuidString)
+				}
+				return node
+			}
+			let source = try node(cueID)
+			let anchor = try node(anchorID)
+			guard source.parentID == anchor.parentID else { throw NativeSemanticError.invalidValue(path: "/cue_group_placements", expected: "cue and anchor in the same group") }
+			if cueID == anchorID || source.index == anchor.index + 1 {
+				return nil
+			}
+			guard let tree = root.get(key: "cue_group_placements")?.asLoroTree() else { throw NativeSemanticError.invalidValue(path: "/cue_group_placements", expected: "native Loro tree") }
+			func treeID(_ value: String) throws -> TreeId {
+				let parts = value.split(separator: "@", omittingEmptySubsequences: false)
+				guard parts.count == 2, let counter = Int32(parts[0]), counter >= 0, let peer = UInt64(parts[1]) else { throw NativeSemanticError.invalidValue(path: "/cue_group_placements/\(value)", expected: "Loro counter@peer node identity") }
+				return TreeId(peer: peer, counter: counter)
+			}
+			tree.enableFractionalIndex(jitter: 0)
+			try tree.movAfter(target: treeID(source.nodeID), after: treeID(anchor.nodeID))
 		}
 		let timestamp = Int64(date.timeIntervalSince1970 * 1000)
 		guard timestamp >= 0 else { throw NativeSemanticError.invalidValue(path: "/commit/timestamp", expected: "nonnegative timestamp") }
@@ -92,7 +115,12 @@ public struct NativeLocalPatch: Sendable {
 		guard !document.oplogVv().eq(other: originalVersion) else { return nil }
 		let update = try document.exportUpdates(vv: originalVersion)
 		let snapshot = try document.exportSnapshot()
-		let version = document.oplogVv().encode()
+		// ProPresenter validates the encoded state vector of a freshly imported
+		// snapshot byte for byte. The equivalent oplog vector can use a different
+		// map iteration order, so it is not a substitute for this stored value.
+		let stored = LoroDoc()
+		_ = try stored.import(bytes: snapshot)
+		let version = stored.stateVv().encode()
 		return .init(operationID: operationID, identity: stream.identity, originalSnapshot: original, originalVersionVector: vector,
 		             snapshot: snapshot, versionVector: version, update: update, payloadFingerprint: Data(SHA256.hash(data: update)),
 		             sha256: Data(SHA256.hash(data: snapshot)), timestampMilliseconds: timestamp)

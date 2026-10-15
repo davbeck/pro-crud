@@ -57,4 +57,11 @@ struct CompatibilityCommandTests {
 		#expect(throws: (any Error).self) { try WorkspaceSetSlideNotes.parse(base + ["--text", "X", "--target-version", "21"]) }
 		#expect(try ProCRUD.parseAsRoot(["workspace", "set-slide-notes"] + base + ["--text", "Notes"]) is WorkspaceSetSlideNotes)
 	}
+
+	@Test func nativeCueMoveRequiresExactCueAnchorAndLocalRegistration() throws {
+		let base = ["/tmp/Exact", "--stream", UUID().uuidString, "--cue", UUID().uuidString, "--after", UUID().uuidString, "--registry", "/tmp/registry-v1.sqlite3"]
+		#expect(try ProCRUD.parseAsRoot(["workspace", "move-cue"] + base) is WorkspaceMoveCue)
+		#expect(throws: (any Error).self) { try WorkspaceMoveCue.parse(base + ["--target-version", "21"]) }
+		#expect(throws: (any Error).self) { try WorkspaceMoveCue.parse(Array(base.dropLast(2))) }
+	}
 }

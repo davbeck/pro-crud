@@ -96,8 +96,20 @@ for complete rich-text replacement. Plain text retains the first existing
 character's formatting; new notes use Helvetica Neue at 24 points (system font
 fallback) and white text. Matching plain text preserves formatting and makes no
 change; empty text clears the notes. The same stopped-writer, registration,
-history, transaction and conflict rules apply. Other native edits still use
-native export/import.
+history, transaction and conflict rules apply.
+
+Move an existing native cue after another cue in the same group with:
+
+```sh
+pro-crud workspace move-cue /exact/native/root \
+  --stream PRESENTATION_STREAM_UUID --cue CUE_UUID --after ANCHOR_CUE_UUID \
+  --registry /exact/path/registry-v1.sqlite3
+```
+
+This moves the existing placement-tree node and retains cue content, identities,
+group metadata and arrangements. Selecting itself or its current predecessor
+makes no change. Cross-group moves are unsupported. The same offline/local
+transaction rules apply. Other native edits still use native export/import.
 
 Valid 22 interchange payloads can omit `application_info`. Loading and editing
 preserve its absence. Root recognition instead checks presentation identities,

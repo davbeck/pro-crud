@@ -59,8 +59,12 @@ Use `workspace set-slide-notes ROOT --stream UUID --action SLIDE_ACTION_UUID
 --registry PATH --text TEXT` for native Slide Notes, or `--rtf FILE` for rich
 text. The action UUID identifies the Presentation slide action, distinct from
 the cue and base-slide UUIDs. Matching text is a no-op; empty text clears notes.
-The same offline/local checks apply. Cloud editing and other native edit
-families remain unsupported.
+The same offline/local checks apply.
+Use `workspace move-cue ROOT --stream UUID --cue CUE_UUID --after ANCHOR_CUE_UUID
+--registry PATH` to move an existing cue after another in the same group. This
+retains the existing cue and placement identities, content and arrangements.
+The same offline/local checks apply; self/already-after moves make no change.
+Cross-group moves, Cloud editing and other native edit families remain unsupported.
 
 New creation and bundle exports default to target 22. Use `--target-version 21`
 on `create presentation`, `create theme`, `create playlist`, or `bundle` for a

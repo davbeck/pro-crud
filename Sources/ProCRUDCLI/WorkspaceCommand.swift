@@ -5,8 +5,35 @@ import ProCRUDCore
 struct WorkspaceCommand: ParsableCommand {
 	static let configuration = CommandConfiguration(
 		commandName: "workspace", abstract: "Inspect, export, and apply supported local edits to an explicitly selected ProPresenter workspace.",
-		subcommands: [WorkspaceInspect.self, WorkspaceInventory.self, WorkspaceContents.self, WorkspaceConfiguration.self, WorkspaceMedia.self, WorkspaceExport.self, WorkspaceExportPlaylist.self, WorkspaceSetCopyrightTitle.self, WorkspaceSetSlideNotes.self, WorkspaceDump.self, WorkspaceDiscover.self],
+		subcommands: [WorkspaceInspect.self, WorkspaceInventory.self, WorkspaceContents.self, WorkspaceConfiguration.self, WorkspaceMedia.self, WorkspaceExport.self, WorkspaceExportPlaylist.self, WorkspaceSetCopyrightTitle.self, WorkspaceSetSlideNotes.self, WorkspaceMoveCue.self, WorkspaceDump.self, WorkspaceDiscover.self],
 	)
+}
+
+struct WorkspaceMoveCue: ParsableCommand {
+	static let configuration = CommandConfiguration(commandName: "move-cue", abstract: "Move an existing native cue after another cue in the same group. Quit ProPresenter and stop workspace helpers first.")
+	@Argument(help: "Exact registered local native workspace root.") var input: String
+	@Option(help: "Shared Presentation stream UUID.") var stream: String
+	@Option(help: "Cue UUID from workspace contents.") var cue: String
+	@Option(help: "Anchor cue UUID in the same group.") var after: String
+	@Option(help: "Exact local registry-v1.sqlite3 path.") var registry: String
+
+	func validate() throws {
+		guard [stream, cue, after].allSatisfy({ UUID(uuidString: $0) != nil }) else { throw ValidationError("--stream, --cue and --after require UUIDs.") }
+	}
+
+	func run() throws {
+		guard let streamID = UUID(uuidString: stream), let cueID = UUID(uuidString: cue), let anchorID = UUID(uuidString: after) else { throw ValidationError("--stream, --cue and --after require UUIDs.") }
+		let receipts = try NativeLocalWorkspaceWriter.edit(.moveCue(cueID, after: anchorID), documentID: streamID, in: URL(fileURLWithPath: input), registry: URL(fileURLWithPath: registry))
+		try print(prettyJSON(Result(documentID: streamID, cueID: cueID, afterCueID: anchorID, changed: !receipts.isEmpty, receipts: receipts)))
+	}
+
+	private struct Result: Encodable {
+		let documentID: UUID
+		let cueID: UUID
+		let afterCueID: UUID
+		let changed: Bool
+		let receipts: [NativeLocalCommitReceipt]
+	}
 }
 
 struct WorkspaceSetSlideNotes: ParsableCommand {
