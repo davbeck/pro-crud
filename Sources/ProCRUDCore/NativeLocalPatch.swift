@@ -48,14 +48,42 @@ public struct NativeLocalPatch: Sendable {
 	public let timestampMilliseconds: Int64
 
 	public static func prepare(stream: NativeWorkspaceStream, edit: NativePresentationEdit, operationID: UUID = UUID(), date: Date = Date()) throws -> Self? {
+		try prepare(stream: stream, edits: [edit], operationID: operationID, date: date)
+	}
+
+	public static func prepare(stream: NativeWorkspaceStream, edits: [NativePresentationEdit], operationID: UUID = UUID(), date: Date = Date()) throws -> Self? {
 		guard stream.identity.kind == "Presentation", stream.identity.scope == .shared else {
 			throw NativeSemanticError.invalidValue(path: stream.identity.documentID.uuidString, expected: "shared Presentation stream")
 		}
-		let layout = try stream.presentationLayout()
+		_ = try stream.presentationLayout()
 		guard let original = stream.snapshot, let vector = stream.versionVector else { throw NativeWorkspaceError.unavailableStream(stream.identity.documentID.uuidString) }
 		let document = LoroDoc()
 		_ = try document.import(bytes: original)
 		let originalVersion = try VersionVector.decode(bytes: vector)
+		for edit in edits {
+			let value = try NativeWorkspaceValue(document.getDeepValue())
+			let root = try value.object(at: "/").required("root", at: "/")
+			let layout = try NativePresentationLayout(root: root)
+			try apply(edit, document: document, identity: stream.identity, value: value, layout: layout)
+		}
+		let timestamp = Int64(date.timeIntervalSince1970 * 1000)
+		guard timestamp >= 0 else { throw NativeSemanticError.invalidValue(path: "/commit/timestamp", expected: "nonnegative timestamp") }
+		document.commitWith(options: .init(origin: "pro-crud", immediateRenew: true, timestamp: timestamp / 1000, commitMsg: nil))
+		guard !document.oplogVv().eq(other: originalVersion) else { return nil }
+		let update = try document.exportUpdates(vv: originalVersion)
+		let snapshot = try document.exportSnapshot()
+		// ProPresenter validates the encoded state vector of a freshly imported
+		// snapshot byte for byte. The equivalent oplog vector can use a different
+		// map iteration order, so it is not a substitute for this stored value.
+		let stored = LoroDoc()
+		_ = try stored.import(bytes: snapshot)
+		let version = stored.stateVv().encode()
+		return .init(operationID: operationID, identity: stream.identity, originalSnapshot: original, originalVersionVector: vector,
+		             snapshot: snapshot, versionVector: version, update: update, payloadFingerprint: Data(SHA256.hash(data: update)),
+		             sha256: Data(SHA256.hash(data: snapshot)), timestampMilliseconds: timestamp)
+	}
+
+	private static func apply(_ edit: NativePresentationEdit, document: LoroDoc, identity: NativeWorkspaceStream.Identity, value: NativeWorkspaceValue, layout: NativePresentationLayout) throws {
 		let root = document.getMap(id: "root")
 		switch edit {
 		case let .presentationName(name):
@@ -66,12 +94,12 @@ public struct NativeLocalPatch: Sendable {
 			guard let ccli = root.get(key: "ccli")?.asLoroMap() else { throw NativeSemanticError.invalidValue(path: "/root/ccli", expected: "existing native CCLI map") }
 			try ccli.insert(key: "song_title", v: title)
 		case let .slideNotes(actionID, content):
-			let presentation = try stream.protobufProjection().presentation()
+			let presentation = try NativeProtobufProjection.read(identity: identity, source: value).presentation()
 			let matches = presentation.cues.flatMap { cue in cue.actions.enumerated().compactMap { index, action in UUID(uuidString: action.uuid.string) == actionID ? (cue.uuid.string, index, action) : nil } }
 			guard matches.count == 1, let (cueID, index, action) = matches.first, action.type == .presentationSlide, case .presentation? = action.slide.slide else {
 				throw NativeSemanticError.invalidValue(path: "/actions/\(actionID)", expected: "one Presentation slide action")
 			}
-			guard let rtf = try content.encoded(replacing: action.slide.presentation.notes.rtfData) else { return nil }
+			guard let rtf = try content.encoded(replacing: action.slide.presentation.notes.rtfData) else { return }
 			guard let cues = root.get(key: "cues")?.asLoroMap(), let cue = cues.get(key: cueID)?.asLoroMap(),
 			      let actions = cue.get(key: "actions")?.asLoroMovableList(), let storedAction = actions.get(index: UInt32(index))?.asLoroMap()
 			else { throw NativeSemanticError.invalidValue(path: "/actions/\(actionID)", expected: "native cue map and movable action list") }
@@ -91,7 +119,7 @@ public struct NativeLocalPatch: Sendable {
 		case let .cueGroupName(groupID, name):
 			guard !name.isEmpty else { throw NativeSemanticError.invalidValue(path: "/cue_group_placements/\(groupID)/name", expected: "nonempty group name") }
 			guard let group = layout.groups.first(where: { $0.id == groupID }) else { throw NativeSemanticError.missingReference(path: "/cue_group_placements", identity: groupID.uuidString) }
-			guard group.name != name else { return nil }
+			guard group.name != name else { return }
 			try NativeStructuralEditing.rename(group: group, to: name, root: root)
 		case let .arrangementGroups(arrangementID, groups):
 			guard let index = layout.arrangements.firstIndex(where: { $0.id == arrangementID }) else { throw NativeSemanticError.missingReference(path: "/arrangements", identity: arrangementID.uuidString) }
@@ -99,7 +127,7 @@ public struct NativeLocalPatch: Sendable {
 				throw NativeSemanticError.missingReference(path: "/arrangements/\(arrangementID)", identity: id.uuidString)
 			}
 			let original = layout.arrangements[index].groupIDs
-			guard original != groups else { return nil }
+			guard original != groups else { return }
 			try NativeStructuralEditing.setGroups(groups, replacing: original, at: index, root: root)
 		case let .moveCue(cueID, after: anchorID):
 			try NativeStructuralEditing.requireNativePlacements(root)
@@ -114,26 +142,11 @@ public struct NativeLocalPatch: Sendable {
 			let anchor = try node(anchorID)
 			guard source.parentID == anchor.parentID else { throw NativeSemanticError.invalidValue(path: "/cue_group_placements", expected: "cue and anchor in the same group") }
 			if cueID == anchorID || source.index == anchor.index + 1 {
-				return nil
+				return
 			}
 			guard let tree = root.get(key: "cue_group_placements")?.asLoroTree() else { throw NativeSemanticError.invalidValue(path: "/cue_group_placements", expected: "native Loro tree") }
 			tree.enableFractionalIndex(jitter: 0)
 			try tree.movAfter(target: NativeStructuralEditing.treeID(source.nodeID), after: NativeStructuralEditing.treeID(anchor.nodeID))
 		}
-		let timestamp = Int64(date.timeIntervalSince1970 * 1000)
-		guard timestamp >= 0 else { throw NativeSemanticError.invalidValue(path: "/commit/timestamp", expected: "nonnegative timestamp") }
-		document.commitWith(options: .init(origin: "pro-crud", immediateRenew: true, timestamp: timestamp / 1000, commitMsg: nil))
-		guard !document.oplogVv().eq(other: originalVersion) else { return nil }
-		let update = try document.exportUpdates(vv: originalVersion)
-		let snapshot = try document.exportSnapshot()
-		// ProPresenter validates the encoded state vector of a freshly imported
-		// snapshot byte for byte. The equivalent oplog vector can use a different
-		// map iteration order, so it is not a substitute for this stored value.
-		let stored = LoroDoc()
-		_ = try stored.import(bytes: snapshot)
-		let version = stored.stateVv().encode()
-		return .init(operationID: operationID, identity: stream.identity, originalSnapshot: original, originalVersionVector: vector,
-		             snapshot: snapshot, versionVector: version, update: update, payloadFingerprint: Data(SHA256.hash(data: update)),
-		             sha256: Data(SHA256.hash(data: snapshot)), timestampMilliseconds: timestamp)
 	}
 }

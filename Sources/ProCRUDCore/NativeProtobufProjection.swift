@@ -52,8 +52,13 @@ public struct NativeProjectionError: Error, CustomStringConvertible, Sendable {
 
 public extension NativeWorkspaceStream {
 	func protobufProjection() throws -> NativeProtobufProjection {
+		try NativeProtobufProjection.read(identity: identity, source: decodedValue())
+	}
+}
+
+extension NativeProtobufProjection {
+	static func read(identity: NativeWorkspaceStream.Identity, source: NativeWorkspaceValue) throws -> Self {
 		guard identity.scope == .shared else { throw NativeSemanticError.invalidValue(path: identity.documentID.uuidString, expected: "shared content stream; client state is not an interchange document") }
-		let source = try decodedValue()
 		let root = try source.object(at: "/").required("root", at: "/")
 		let message: String
 		let adapted: NativeWorkspaceValue

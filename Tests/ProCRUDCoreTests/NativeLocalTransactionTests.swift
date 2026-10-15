@@ -48,6 +48,30 @@ struct NativeLocalTransactionTests {
 		}
 	}
 
+	@Test func batchPreparationGroupsDocumentsAndFailsBeforeAnyPublication() throws {
+		try withDatabase { url, database, streams in
+			let workspace = NativeWorkspaceSnapshot(root: url.deletingLastPathComponent(), workspaceID: UUID(), metadata: [:], streams: streams)
+			let operations: [NativePresentationOperation] = [
+				.init(documentID: streams[0].identity.documentID, edit: .notes("First notes")),
+				.init(documentID: streams[1].identity.documentID, edit: .copyrightTitle("Second title")),
+				.init(documentID: streams[0].identity.documentID, edit: .copyrightTitle("First title")),
+			]
+			let invalid = operations + [.init(documentID: UUID(), edit: .notes("Missing"))]
+			#expect(throws: NativeSemanticError.self) { try NativeLocalWorkspaceWriter.prepare(invalid, in: workspace) }
+			#expect(try snapshot(database, id: streams[0].identity.documentID) == streams[0].snapshot)
+			#expect(try snapshot(database, id: streams[1].identity.documentID) == streams[1].snapshot)
+			#expect(try scalar(database, "SELECT count(*) FROM workspace_operation_receipts") == 0)
+			let patches = try NativeLocalWorkspaceWriter.prepare(operations, in: workspace)
+			#expect(patches.map(\.identity.documentID) == streams.map(\.identity.documentID))
+			let receipts = try NativeLocalWorkspaceWriter.commitPrepared(patches, database: url)
+			#expect(receipts.count == 2)
+			let first = NativeWorkspaceStream(identity: streams[0].identity, snapshot: patches[0].snapshot, versionVector: patches[0].versionVector, lastSharedVersionVector: nil)
+			#expect(try first.protobufProjection().presentation().notes == "First notes")
+			#expect(try first.protobufProjection().presentation().ccli.songTitle == "First title")
+			#expect(try scalar(database, "SELECT count(*) FROM workspace_operation_receipts") == 2)
+		}
+	}
+
 	@Test func finalEnvironmentFailureRollsBackTheWholeCommit() throws {
 		try withDatabase { url, database, streams in
 			let patch = try #require(try NativeLocalPatch.prepare(stream: streams[0], edit: .notes("Changed")))

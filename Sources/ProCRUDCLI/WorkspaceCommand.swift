@@ -5,7 +5,7 @@ import ProCRUDCore
 struct WorkspaceCommand: ParsableCommand {
 	static let configuration = CommandConfiguration(
 		commandName: "workspace", abstract: "Inspect, export, and apply supported local edits to an explicitly selected ProPresenter workspace.",
-		subcommands: [WorkspaceInspect.self, WorkspaceInventory.self, WorkspaceContents.self, WorkspaceConfiguration.self, WorkspaceMedia.self, WorkspaceExport.self, WorkspaceExportPlaylist.self, WorkspaceSetCopyrightTitle.self, WorkspaceSetSlideNotes.self, WorkspaceMoveCue.self, WorkspaceRenameCueGroup.self, WorkspaceSetArrangementGroups.self, WorkspaceDump.self, WorkspaceDiscover.self],
+		subcommands: [WorkspaceApply.self, WorkspaceInspect.self, WorkspaceInventory.self, WorkspaceContents.self, WorkspaceConfiguration.self, WorkspaceMedia.self, WorkspaceExport.self, WorkspaceExportPlaylist.self, WorkspaceSetCopyrightTitle.self, WorkspaceSetSlideNotes.self, WorkspaceMoveCue.self, WorkspaceRenameCueGroup.self, WorkspaceSetArrangementGroups.self, WorkspaceDump.self, WorkspaceDiscover.self],
 	)
 }
 

@@ -28,6 +28,16 @@ public struct NativeLocalCommitReceipt: Codable, Sendable, Equatable {
 	public let alreadyApplied: Bool
 }
 
+public struct NativePresentationOperation: Sendable, Equatable {
+	public let documentID: UUID
+	public let edit: NativePresentationEdit
+
+	public init(documentID: UUID, edit: NativePresentationEdit) {
+		self.documentID = documentID
+		self.edit = edit
+	}
+}
+
 public enum NativeLocalWorkspaceWriter {
 	/// Explicit offline writer setup. SQLite may initialize its normal WAL
 	/// sidecars; ordinary read-only inspection never takes this path. The normal
@@ -51,12 +61,32 @@ public enum NativeLocalWorkspaceWriter {
 	/// Media files, library locations, client streams and shared-version
 	/// bookkeeping are not replaced.
 	public static func edit(_ edit: NativePresentationEdit, documentID: UUID, in root: URL, registry: URL) throws -> [NativeLocalCommitReceipt] {
+		try apply([.init(documentID: documentID, edit: edit)], in: root, registry: registry)
+	}
+
+	/// Prepare every operation against one consistent snapshot, then publish all
+	/// changed documents and their receipts in one transaction.
+	public static func apply(_ operations: [NativePresentationOperation], in root: URL, registry: URL) throws -> [NativeLocalCommitReceipt] {
 		try withOfflineWriteAccess(to: root, registry: registry) { snapshot in
-			guard let stream = snapshot.streams.first(where: { $0.identity.documentID == documentID && $0.identity.scope == .shared }) else { throw NativeSemanticError.missingReference(path: "/streams", identity: documentID.uuidString) }
-			guard let patch = try NativeLocalPatch.prepare(stream: stream, edit: edit) else { return [] }
-			return try commitPrepared([patch], database: root.appendingPathComponent("DocumentStore/workspace-v1.sqlite3")) {
+			let patches = try prepare(operations, in: snapshot)
+			return try commitPrepared(patches, database: root.appendingPathComponent("DocumentStore/workspace-v1.sqlite3")) {
 				try verifyLocalWorkspace(root.resolvingSymlinksInPath(), registry: registry)
 			}
+		}
+	}
+
+	static func prepare(_ operations: [NativePresentationOperation], in snapshot: NativeWorkspaceSnapshot) throws -> [NativeLocalPatch] {
+		var order: [UUID] = []
+		var grouped: [UUID: [NativePresentationEdit]] = [:]
+		for operation in operations {
+			if grouped[operation.documentID] == nil {
+				order.append(operation.documentID)
+			}
+			grouped[operation.documentID, default: []].append(operation.edit)
+		}
+		return try order.compactMap { id in
+			guard let stream = snapshot.streams.first(where: { $0.identity.documentID == id && $0.identity.scope == .shared }) else { throw NativeSemanticError.missingReference(path: "/streams", identity: id.uuidString) }
+			return try NativeLocalPatch.prepare(stream: stream, edits: grouped[id] ?? [])
 		}
 	}
 

@@ -125,6 +125,45 @@ Existing occurrence identities are reused during moves; the arrangement's name,
 identity and selected state are preserved. These commands use the same local,
 stopped-writer transaction rules. Other native edits still use native export/import.
 
+Apply supported edits across existing native Presentations atomically with:
+
+```sh
+pro-crud workspace apply /exact/native/root --file native-edits.json \
+  --registry /exact/path/registry-v1.sqlite3
+```
+
+For example, `native-edits.json` can contain:
+
+```json
+{
+  "version": 1,
+  "operations": [
+    {"stream": "PRESENTATION_UUID", "op": "set-copyright-title", "title": "Song title"},
+    {"stream": "PRESENTATION_UUID", "op": "rename-cue-group", "group": "GROUP_UUID", "name": "Verse"}
+  ]
+}
+```
+
+Use actual UUIDs from workspace inspection. Manifest operations run in order
+within each Presentation and share one Loro commit; all changed Presentations
+and receipts publish in one transaction. Any invalid operation prevents the
+entire batch from publishing, and conflicts roll back every affected stream.
+An entirely matching batch makes no change. The manifest version is independent
+of the application version. The same stopped-writer/local-registration rules apply.
+
+| `op` | Additional fields |
+| --- | --- |
+| `set-copyright-title` | `title` string; empty clears |
+| `set-notes` | `text` string for plain Presentation Operator Notes |
+| `set-slide-notes` | `action` UUID and exactly one of `text` or `rtfFile`; RTF paths are relative to the manifest directory |
+| `move-cue` | `cue` and `after` UUIDs in the same group |
+| `rename-cue-group` | `group` UUID and nonempty `name` |
+| `set-arrangement-groups` | `arrangement` UUID and ordered `groups` UUID array, including repeats or an empty array |
+
+Every operation requires `stream` and `op`. Unknown keys, operations and manifest
+versions fail. Native editing preserves the source storage generation; target
+conversion options are unavailable on this command.
+
 Valid 22 interchange payloads can omit `application_info`. Loading and editing
 preserve its absence. Root recognition instead checks presentation identities,
 cues and groups; playlist type and root identity; or Theme template structure.

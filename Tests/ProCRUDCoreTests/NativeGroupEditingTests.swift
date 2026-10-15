@@ -1,3 +1,4 @@
+import AppKit
 import Foundation
 import Loro
 import ProPresenterProto
@@ -83,6 +84,41 @@ struct NativeGroupEditingTests {
 		_ = try replay.import(bytes: native.exportUpdates(vv: replay.oplogVv()))
 		#expect(replay.oplogVv().eq(other: native.oplogVv()))
 		#expect(try NativeWorkspaceValue(replay.getDeepValue()) == continued.decodedValue())
+	}
+
+	@Test func batchOperationsObserveEarlierChangesAndUseOneHistoryCommit() throws {
+		let source = try stream("native-repeated")
+		let layout = try source.presentationLayout()
+		let presentation = try source.protobufProjection().presentation()
+		let action = try #require(presentation.cues.flatMap(\.actions).first { $0.uuid.string == "B6F1DA61-C874-42C1-B4E9-7FE1148715B3" })
+		let originalText = try NSAttributedString(data: action.slide.presentation.notes.rtfData, options: [.documentType: NSAttributedString.DocumentType.rtf], documentAttributes: nil).string
+		let actionID = try #require(UUID(uuidString: action.uuid.string))
+		let group = layout.groups[0]
+		let arrangement = layout.arrangements[0]
+		let edits: [NativePresentationEdit] = [
+			.cueGroupName(group.id, "Intermediate"), .cueGroupName(group.id, group.name),
+			.arrangementGroups(arrangement.id, [group.id]), .arrangementGroups(arrangement.id, arrangement.groupIDs),
+			.slideNotes(actionID: actionID, content: .text("Intermediate notes")), .slideNotes(actionID: actionID, content: .text(originalText)),
+			.notes("Batch notes"), .copyrightTitle("Batch title"),
+		]
+		let patch = try #require(try NativeLocalPatch.prepare(stream: source, edits: edits))
+		let updated = reloaded(source, patch)
+		let result = try updated.protobufProjection().presentation()
+		#expect(try updated.presentationLayout().groups == layout.groups)
+		#expect(try updated.presentationLayout().arrangements == layout.arrangements)
+		#expect(result.notes == "Batch notes")
+		#expect(result.ccli.songTitle == "Batch title")
+		let notes = try #require(result.cues.flatMap(\.actions).first { $0.uuid == action.uuid }).slide.presentation.notes.rtfData
+		#expect(try NSAttributedString(data: notes, options: [.documentType: NSAttributedString.DocumentType.rtf], documentAttributes: nil).string == originalText)
+		let history = LoroDoc()
+		_ = try history.import(bytes: patch.snapshot)
+		let original = try VersionVector.decode(bytes: #require(source.versionVector))
+		let json = history.exportJsonUpdates(startVv: original, endVv: history.oplogVv())
+		let object = try #require(try JSONSerialization.jsonObject(with: Data(json.utf8)) as? [String: Any])
+		#expect((object["changes"] as? [[String: Any]])?.count == 1)
+		try assertReplay(source, patch: patch)
+		#expect(try NativeLocalPatch.prepare(stream: source, edits: []) == nil)
+		#expect(try NativeLocalPatch.prepare(stream: source, edits: [.cueGroupName(group.id, group.name), .arrangementGroups(arrangement.id, arrangement.groupIDs)]) == nil)
 	}
 
 	@Test func sequenceReordersUsingOneMoveOfAnExistingOccurrence() throws {

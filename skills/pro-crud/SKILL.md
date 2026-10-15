@@ -71,7 +71,14 @@ Use `workspace set-arrangement-groups ROOT --stream UUID --arrangement UUID
 --group GROUP_UUID --group GROUP_UUID --registry PATH` to set explicit ordered
 group occurrences; repeat `--group` for each occurrence or use `--clear` for an
 empty arrangement. Both use the same offline/local checks and retain native
-history. Cross-group moves, Cloud editing and other native edit families remain unsupported.
+history. For several supported operations, use `workspace apply ROOT --file
+NATIVE_EDITS.json --registry PATH`. Its version-1 manifest contains `operations`
+with explicit `stream` UUID and `op` fields; see the installed format reference
+for operation-specific fields. All operations prepare before one atomic commit,
+with ordered edits within each Presentation, one receipt per changed document
+and no changes if any operation fails. RTF paths are relative to the manifest.
+The same offline/local checks apply. Cross-group moves, Cloud editing and other
+native edit families remain unsupported.
 
 New creation and bundle exports default to target 22. Use `--target-version 21`
 on `create presentation`, `create theme`, `create playlist`, or `bundle` for a
