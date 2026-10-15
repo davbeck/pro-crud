@@ -28,6 +28,8 @@ struct CompatibilityCommandTests {
 		#expect(try WorkspaceInspect.parse(["/tmp/Exact"]).input == "/tmp/Exact")
 		#expect(throws: (any Error).self) { try WorkspaceDiscover.parse([]) }
 		#expect(try WorkspaceDiscover.parse(["--registry", "/tmp/registry-v1.sqlite3"]).registry == "/tmp/registry-v1.sqlite3")
+		#expect(try WorkspaceDiscover.parse(["--preferences", "/tmp/ProPresenter.plist"]).preferences == "/tmp/ProPresenter.plist")
+		#expect(throws: (any Error).self) { try WorkspaceDiscover.parse(["--registry", "/tmp/registry-v1.sqlite3", "--preferences", "/tmp/ProPresenter.plist"]) }
 		let playlist = try WorkspaceExportPlaylist.parse(["/tmp/Exact", "--playlist", UUID().uuidString, "--output", "/tmp/Export.proPlaylist", "--target-version", "21"])
 		#expect(playlist.target.targetVersion == .v21)
 	}

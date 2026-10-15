@@ -6,7 +6,7 @@ Do not describe the entire ProPresenter 22 feature set or native writes as suppo
 
 | Plan area | Implemented | Remaining gate/work |
 | --- | --- | --- |
-| Storage boundary | Explicit-root storage inspection; native markers take precedence over leftovers; expanded exports distinguished; native access rejected in legacy readers/writers/Look/media/batch paths | Registered legacy preference discovery, broader ambiguous/mixed fixture matrix |
+| Storage boundary | Explicit-root storage inspection and explicit macOS userWorkspaces preference discovery with active/minimum-version hints kept separate from actual storage; native markers take precedence over leftovers; expanded exports distinguished; native access rejected in legacy readers/writers/Look/media/batch paths | Broader ambiguous/mixed fixture matrix |
 | Export compatibility | Optional application metadata; independent 22 raw/Theme/empty-playlist fixtures; empty playlist expand/rebundle; multi-Presentation bundle collection loading, media-free collection edit/rebundle/native re-import acceptance; absent metadata and unknown-field preservation | Connected playlists, populated/media bundle and native edit/reimport acceptance across every export path |
 | Targets and conversion | Typed 21/22 profiles; default 22 construction/export; retained 21 construction; JSON results; recursive wire/enum issues; known v2/media gates; atomic failed export | Complete versioned schemas/adapters; dependency/feature conversions and receiving-app 21.4/22 qualification; no lossy fallback is currently qualified |
 | Schema | Existing generated decoder names retained, with verified 21.4 ligature/character-size/original-font fields and optional rendering-enabled state and playlist arrangement names; exact upstream 21.4 baseline with 146 pinned source files and separate descriptor; independently pinned 58-file 22 descriptor set with binary provenance, CRDT map/tree/atomic annotations and versioned binary materialization; repeated timeline preservation through known-field edits, singular-merge negative control and common/scoped KeyMapping wire tests and structured cross-target parent-scope, multi-Presentation timeline and per-item reference gates; schema resources and generated Swift freshness pass using the generator from the resolved SwiftProtobuf 1.38.1 package | Integrate remaining 21.4 fields into editable views and receiving-app KeyMapping/timeline behavior and any deliberate fallback conversions |
@@ -27,7 +27,7 @@ and 22-profile bundles importing successfully into the pinned 22 build, a
 committed native metadata edit, and native re-export with retained nested IDs.
 The two generated MISC test presentations remain available for review.
 
-Local validation: full Swift suite (442 core + 95 CLI + one harness test; nine known rendering issues, including the fresh native 22 text-layout comparison), CLI acceptance, SwiftFormat/SwiftLint, protobuf generation/resource
+Local validation: full Swift suite (444 core + 95 CLI + one harness test; nine known rendering issues, including the fresh native 22 text-layout comparison), CLI acceptance, SwiftFormat/SwiftLint, protobuf generation/resource
 freshness, and bundled four-document/99-variation Theme freshness pass. The Theme
 generator now fixes only AppKit's informational RTF writer-version header: all
 140 host-generated differences were exactly that header; the shipped asset and
@@ -139,3 +139,9 @@ client streams; all 946 media identities still match WASM with zero uninspected
 streams. Typed Timestamp map keys fix the demonstrated Calendar failure.
 Populated oneof-keyed KeyMappings, configuration export/editing and non-Media
 dependency roles remain explicitly unqualified.
+
+`../Research/Format/ProPresenter22WorkspacePreferences.md` records the native
+legacy registration shape and read-only preference discovery. Active/minimum-
+version hints can still point at retained copies, so no automatic workspace
+selection is introduced. It also records an unresolved native keyboard-mapping
+persistence experiment; populated map-key support remains gated.

@@ -66,6 +66,10 @@ stored native streams without an app/API connection. A disabled-screen warning
 does not enable that output.
 Use `workspace discover --registry PATH` to list registered identities without
 selecting an active workspace.
+Use `workspace discover --preferences PLIST_PATH` for legacy macOS registration
+hints, including custom or unavailable roots. Inspect the chosen root explicitly:
+an active preference or minimum-version hint can still describe a retained copy
+after upgrade. Pass one discovery source at a time.
 For a registered local native workspace, `workspace set-copyright-title ROOT
 --stream UUID --registry PATH --title TEXT` atomically edits the existing
 Presentation's CCLI song title. Select the shared Presentation stream UUID;

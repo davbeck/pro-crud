@@ -25,6 +25,14 @@ values preserve binary data as base64. They are not protobuf JSON and cannot
 be used to rebuild native documents. Retained migration patches are not replayed.
 `workspace discover --registry /exact/path/registry-v1.sqlite3` reports registry
 metadata without selecting an active workspace or consulting account data.
+For legacy macOS registrations, use `workspace discover --preferences
+/exact/path/com.renewedvision.propresenter.plist`. It reads only `userWorkspaces`
+metadata and reports roots, names, active hints and minimum-version hints.
+Unavailable/custom roots and duplicate names remain visible. These preferences
+can still refer to retained copies after upgrade; their active flag and minimum
+version do not establish current storage or source application version. Inspect
+the explicitly chosen root before operating on it. Supply exactly one metadata
+source; neither discovery command selects a workspace.
 
 Inspection is bounded to 512 MiB. Active WAL databases use an in-memory SQLite
 backup. A database with no journal/sidecars uses a stable main-file image,

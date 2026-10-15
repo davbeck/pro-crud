@@ -274,10 +274,19 @@ private struct NativeStreamContent: Encodable {
 
 struct WorkspaceDiscover: ParsableCommand {
 	static let configuration = CommandConfiguration(commandName: "discover", abstract: "Read registered workspace identities without selecting an active workspace.")
-	@Option(help: "Exact registry-v1.sqlite3 path. Only workspace metadata is read.") var registry: String
+	@Option(help: "Exact native registry-v1.sqlite3 path. Only workspace metadata is read.") var registry: String?
+	@Option(help: "Exact macOS ProPresenter preference plist path. Read legacy userWorkspaces hints; active/minimum-version hints do not establish current storage or source version.") var preferences: String?
+
+	func validate() throws {
+		guard (registry != nil) != (preferences != nil) else { throw ValidationError("Provide exactly one of --registry or --preferences.") }
+	}
 
 	func run() throws {
-		try print(prettyJSON(WorkspaceRegistry.read(from: URL(fileURLWithPath: registry))))
+		if let registry {
+			try print(prettyJSON(WorkspaceRegistry.read(from: URL(fileURLWithPath: registry))))
+		} else if let preferences {
+			try print(prettyJSON(WorkspacePreferences.read(from: URL(fileURLWithPath: preferences))))
+		}
 	}
 }
 
