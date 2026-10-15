@@ -147,17 +147,30 @@ public struct NativeWorkspaceContents: Encodable, Sendable {
 /// ROOT_SHOW-relative library link rather than a stale pre-migration absolute URL.
 public struct NativeWorkspaceReferenceResolver: Sendable {
 	private let presentations: [String: NativeWorkspaceStream.Identity]
+	private let themes: [String: NativeWorkspaceStream.Identity]
 
 	public init(streams: [NativeWorkspaceStream]) throws {
-		var presentations: [String: NativeWorkspaceStream.Identity] = [:]
-		for stream in streams where stream.identity.kind == "Presentation" && stream.identity.scope == .shared {
-			guard let path = stream.identity.corePath else { continue }
-			guard presentations.updateValue(stream.identity, forKey: path) == nil else { throw NativeSemanticError.duplicateIdentity(path: path, identity: "Presentation core path") }
+		func index(_ kind: String) throws -> [String: NativeWorkspaceStream.Identity] {
+			var result: [String: NativeWorkspaceStream.Identity] = [:]
+			for stream in streams where stream.identity.kind == kind && stream.identity.scope == .shared {
+				guard let path = stream.identity.corePath else { continue }
+				guard result.updateValue(stream.identity, forKey: path) == nil else { throw NativeSemanticError.duplicateIdentity(path: path, identity: "\(kind) core path") }
+			}
+			return result
 		}
-		self.presentations = presentations
+		presentations = try index("Presentation")
+		themes = try index("Theme")
 	}
 
 	public func presentation(_ url: NativeWorkspaceValue) throws -> NativeWorkspaceContents.Reference {
+		try resolve(url, prefix: "Libraries", suffix: ".pro", index: presentations)
+	}
+
+	public func theme(_ url: NativeWorkspaceValue) throws -> NativeWorkspaceContents.Reference {
+		try resolve(url, prefix: "Themes", suffix: "", index: themes)
+	}
+
+	private func resolve(_ url: NativeWorkspaceValue, prefix: String, suffix: String, index: [String: NativeWorkspaceStream.Identity]) throws -> NativeWorkspaceContents.Reference {
 		let object = try url.object(at: "/url")
 		guard let relative = object.optional("RelativeFilePath"), case let .map(relativeObject) = relative,
 		      relativeObject["__tag"] == .string("local"),
@@ -166,11 +179,13 @@ public struct NativeWorkspaceReferenceResolver: Sendable {
 		else { return .init(source: url, logicalPath: nil, documentID: nil, availability: nil) }
 		let raw = try path.text(at: "/url/local/path")
 		let parts = raw.split(separator: "/", omittingEmptySubsequences: false)
-		guard parts.first == "Libraries", parts.count > 1, !parts.contains(".."), !parts.contains("."), !parts.contains(""), raw.hasSuffix(".pro") else {
+		guard parts.first == Substring(prefix), parts.count > 1, !parts.contains(".."), !parts.contains("."), !parts.contains(""),
+		      raw.hasSuffix(suffix), prefix != "Themes" || parts.last == "Theme"
+		else {
 			return .init(source: url, logicalPath: nil, documentID: nil, availability: nil)
 		}
-		let logical = String(raw.dropFirst("Libraries/".count).dropLast(".pro".count))
-		let stream = presentations[logical]
+		let logical = String(raw.dropFirst(prefix.count + 1).dropLast(suffix.count))
+		let stream = index[logical]
 		return .init(source: url, logicalPath: logical, documentID: stream?.documentID, availability: stream?.availability)
 	}
 }

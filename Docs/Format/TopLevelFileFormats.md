@@ -263,6 +263,13 @@ repeated group references. Library links resolve through workspace-relative
 logical paths rather than stale pre-migration absolute paths. This inspection
 does not write native content or perform Cloud synchronization.
 
+`workspace configuration ROOT` reports saved Looks, the separate client live
+Look, ordered screen mappings/layer switches, logical and local screens, stored
+rendering flags, and referenced native Theme identities. Missing client outputs
+and missing/unavailable Themes remain explicit. Other configuration fields are
+listed as uninspected by name. This selected read-only view does not export or
+edit the whole Workspace document or configure physical outputs.
+
 `workspace inventory ROOT --projections` additionally checks Presentation and
 Theme interchange materialization and lists unmapped fields. `workspace export
 ROOT --stream UUID --output PATH [--target-version 21|22]` writes a supported

@@ -4,6 +4,22 @@ import Testing
 
 @Suite("Native workspace contents")
 struct NativeWorkspaceContentsTests {
+	@Test func themeLinksKeepSameBasenameThemesDistinctAndIgnoreStaleAbsolutePaths() throws {
+		let id = UUID()
+		let resolver = try NativeWorkspaceReferenceResolver(streams: [stream(id: id, path: "Owned/Theme", scope: .shared, kind: "Theme"), stream(id: UUID(), path: "Other/Theme", scope: .shared, kind: "Theme")])
+		let source = reference(path: "Themes/Owned/Theme")
+		let result = try resolver.theme(source)
+		#expect(result.documentID == id)
+		#expect(result.logicalPath == "Owned/Theme")
+		#expect(result.source == source)
+	}
+
+	@Test(arguments: ["Themes/../Theme", "Themes//Theme", "Themes/Owned", "Libraries/Owned/Theme", "/Themes/Owned/Theme"])
+	func unsafeOrWrongKindThemeLinksStayUnresolved(path: String) throws {
+		let resolver = try NativeWorkspaceReferenceResolver(streams: [])
+		#expect(try resolver.theme(reference(path: path)).logicalPath == nil)
+	}
+
 	@Test func nestedPlaylistTreeRetainsWrappersAndVisibility() throws {
 		let itemID = UUID()
 		let item = placement(id: itemID, node: "3@1", parent: "2@1", kind: "item", name: "Remote wrapper", data: .map(["is_hidden": .boolean(true), "ItemType": .map(["__tag": .string("planning_center"), "planning_center": .map(["linked_data": .map(["uuid": .string(UUID().uuidString)])])])]))
@@ -59,8 +75,8 @@ struct NativeWorkspaceContentsTests {
 		.map(["RelativeFilePath": .map(["__tag": .string("local"), "local": .map(["root": .integer(10), "path": .string(path)])]), "Storage": .map(["__tag": .string("absolute_string"), "absolute_string": .string("file:///stale/old/workspace/Other.pro")])])
 	}
 
-	private func stream(id: UUID, path: String, scope: NativeWorkspaceStream.Scope) -> NativeWorkspaceStream {
-		.init(identity: .init(documentID: id, scope: scope, kind: "Presentation", corePath: path, availability: .unavailable, byteCount: 0, sha256: nil, updatedAtMilliseconds: 0), snapshot: nil, versionVector: nil, lastSharedVersionVector: nil)
+	private func stream(id: UUID, path: String, scope: NativeWorkspaceStream.Scope, kind: String = "Presentation") -> NativeWorkspaceStream {
+		.init(identity: .init(documentID: id, scope: scope, kind: kind, corePath: path, availability: .unavailable, byteCount: 0, sha256: nil, updatedAtMilliseconds: 0), snapshot: nil, versionVector: nil, lastSharedVersionVector: nil)
 	}
 
 	private func placement(id: UUID, node: String, parent: String?, kind: String, name: String, data: NativeWorkspaceValue = .map([:]), children: [NativeWorkspaceValue] = []) -> NativeWorkspaceValue {
