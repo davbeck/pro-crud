@@ -1,6 +1,15 @@
 {
-  "originHash" : "65aba1d5b8b478e996d256616a6ce9e42d662595d9253305aa9a71fb4298431f",
+  "originHash" : "5c4b319148d28e3d0f9a912f6889a5784811de84e2be3d49c7e7ad09ce0fb3c8",
   "pins" : [
+    {
+      "identity" : "loro-swift",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/loro-dev/loro-swift.git",
+      "state" : {
+        "revision" : "625f3e696fca4be3ae77de8b3404fa6753554f21",
+        "version" : "1.13.3"
+      }
+    },
     {
       "identity" : "swift-argument-parser",
       "kind" : "remoteSourceControl",

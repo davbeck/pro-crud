@@ -296,6 +296,14 @@ fi
 cp "$swift_protobuf_license" \
 	"$staging_directory/LICENSE-SwiftProtobuf.txt"
 
+loro_license=$(find "$arm_scratch_path/checkouts" \
+	-path '*/loro-swift/LICENSE' -print -quit)
+if [[ -z "$loro_license" ]]; then
+	echo "Could not locate the Loro Swift license." >&2
+	exit 1
+fi
+cp "$loro_license" "$staging_directory/LICENSE-Loro.txt"
+
 if [[ "$($binary --version)" != "$version" ]]; then
 	echo "Built binary did not report version $version." >&2
 	exit 1
@@ -360,6 +368,7 @@ install -m 644 \
 	"$staging_directory/LICENSE" \
 	"$staging_directory/LICENSE-SwiftArgumentParser.txt" \
 	"$staging_directory/LICENSE-SwiftProtobuf.txt" \
+	"$staging_directory/LICENSE-Loro.txt" \
 	"$package_license_directory/"
 mkdir -p "$package_scripts"
 install -m 755 "$project_root/Packaging/Scripts/preinstall" \
@@ -405,6 +414,7 @@ required_package_files=(
 	"usr/local/share/doc/pro-crud/LICENSE"
 	"usr/local/share/doc/pro-crud/LICENSE-SwiftArgumentParser.txt"
 	"usr/local/share/doc/pro-crud/LICENSE-SwiftProtobuf.txt"
+	"usr/local/share/doc/pro-crud/LICENSE-Loro.txt"
 )
 for required_resource_bundle_path in "${required_resource_bundle_paths[@]}"; do
 	required_package_files+=(

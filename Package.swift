@@ -12,6 +12,7 @@ let package = Package(
 		.library(name: "ProCRUDCore", targets: ["ProCRUDCore"]),
 	],
 	dependencies: [
+		.package(url: "https://github.com/loro-dev/loro-swift.git", exact: "1.13.3"),
 		.package(url: "https://github.com/apple/swift-protobuf.git", from: "1.30.0"),
 		.package(url: "https://github.com/apple/swift-argument-parser.git", from: "1.5.0"),
 		.package(url: "https://github.com/pointfreeco/swift-custom-dump.git", from: "1.6.1"),
@@ -20,6 +21,7 @@ let package = Package(
 		.package(url: "https://github.com/nicklockwood/SwiftFormat", from: "0.62.1"),
 	],
 	targets: [
+		.systemLibrary(name: "CSQLite"),
 		.target(
 			name: "ProPresenterProto",
 			dependencies: [
@@ -30,6 +32,8 @@ let package = Package(
 			name: "ProCRUDCore",
 			dependencies: [
 				"ProPresenterProto",
+				"CSQLite",
+				.product(name: "Loro", package: "loro-swift"),
 			],
 			resources: [
 				.copy("Resources/Protobuf"),
@@ -66,6 +70,7 @@ let package = Package(
 			name: "ProCRUDCoreTests",
 			dependencies: [
 				"ProCRUDCore",
+				"CSQLite",
 				.product(name: "CustomDump", package: "swift-custom-dump"),
 				.product(name: "SnapshotTesting", package: "swift-snapshot-testing"),
 			],
@@ -84,7 +89,7 @@ let package = Package(
 )
 
 for target in package.targets {
-	guard target.type != .plugin else { continue }
+	guard target.type != .plugin, target.type != .system else { continue }
 	var settings = target.swiftSettings ?? []
 	settings.append(contentsOf: [
 		.enableUpcomingFeature("NonisolatedNonsendingByDefault"),

@@ -20,6 +20,13 @@ point-in-time snapshots. The retained older workspace is independent; editing
 it does not update the active native workspace. Select a document inside a
 legacy workspace rather than treating the whole workspace as one archive.
 
+For native storage, use `workspace inventory ROOT` for stream identities and
+availability, and `workspace dump ROOT` for typed diagnostic Loro content.
+Shared and client streams are separate. Diagnostic output is not editable
+protobuf JSON; use native export/import for edits, media validation, and renders.
+Use `workspace discover --registry PATH` to list registered identities without
+selecting an active workspace.
+
 1. Before editing a live ProPresenter library, confirm ProPresenter is not
    running; if it is, ask the user to quit it. Use a copied or disposable
    document for experiments.

@@ -8,8 +8,9 @@ It works directly with documents on disk using a reverse-engineered implementati
 
 ProPresenter 21 protobuf documents and selected ProPresenter 22 beta exports
 are supported. Run `pro-crud workspace inspect /exact/root` before choosing
-workspace paths. Native 22 SQLite/Loro document operations require ProPresenter's
-export/import workflow; see the [storage compatibility reference](Docs/Format/TopLevelFileFormats.md).
+workspace paths. Native 22 SQLite/Loro inventory and diagnostic dumps are available;
+native document editing and rendering require ProPresenter's export/import workflow.
+See the [storage compatibility reference](Docs/Format/TopLevelFileFormats.md).
 
 ProPresenter is a trademark of Renewed Vision, LLC. pro-crud is an independent, unofficial project and is not affiliated with, endorsed by, or supported by Renewed Vision.
 
@@ -483,6 +484,10 @@ pro-crud skill install --agent codex --agent cursor
 ## License
 
 `pro-crud` is available under the [MIT License](LICENSE).
+
+Native workspace inspection uses the official [Loro Swift binding](https://github.com/loro-dev/loro-swift)
+and its [MIT license](https://github.com/loro-dev/loro-swift/blob/1.13.3/LICENSE).
+The pinned binary includes macOS arm64 and x86_64 slices. SQLite is supplied by macOS.
 
 The vendored ProPresenter Protocol Buffer definitions retain their upstream
 [MIT license and attribution](Vendor/ProPresenter7Proto/LICENSE).

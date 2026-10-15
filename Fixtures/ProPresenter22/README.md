@@ -18,3 +18,11 @@ DocumentFactory. Collection details are in
 `Internal/Research/Format/ProPresenter22NativeExperiments.md`. These fixtures
 qualify these interchange cases only; they do not qualify native workspace
 writes, Cloud, animation, or connected playlist delivery.
+
+`Native/Presentation.loro` and `Presentation.version-vector` are the original
+shared stream snapshot and version vector of the same disposable ProCRUD22Probe,
+read from a consistent SQLite backup before the native test presentation was
+deleted. No other workspace streams or registry/account data are included.
+Its native root identity is `48e32307-7a5a-56cc-8cca-0bc82d6079c1`. Tests use
+this independent native snapshot to validate the official Swift Loro binding,
+then construct disposable SQLite envelopes for integrity and transaction cases.
