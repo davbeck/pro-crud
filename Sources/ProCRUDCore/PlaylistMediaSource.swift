@@ -72,6 +72,7 @@ public enum PlaylistMediaSource {
 	/// database directly, its containing `Playlists` directory, or a complete
 	/// live ProPresenter workspace.
 	private static func playlistDocumentURL(for sourceURL: URL) throws -> URL {
+		try WorkspaceInspector.requireLegacyAccess(at: sourceURL)
 		let values = try sourceURL.resourceValues(forKeys: [.isDirectoryKey])
 		guard values.isDirectory == true else { return sourceURL }
 

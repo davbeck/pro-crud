@@ -1,6 +1,32 @@
 # Top-Level ProPresenter File Formats
 
-ProPresenter stores editable library data primarily as raw protobuf files. User-facing import/export formats are ZIP archives whose payloads are those same protobuf documents plus optional media assets.
+ProPresenter 21 stores editable library documents as raw protobuf files.
+ProPresenter 22 beta build 369098875 uses a native SQLite/Loro workspace store;
+its Presentation, Presentation Bundle, Playlist, Theme, and Legacy Workspace
+exports use protobuf interchange documents. Support for an interchange document
+does not imply support for the native workspace store.
+
+Run `pro-crud workspace inspect /exact/workspace/root` to report storage
+evidence, supported operations, and Legacy Workspace export manifest counts.
+Discovery does not consult the running app or silently select a preserved old
+workspace. An explicitly selected legacy workspace remains usable.
+
+Native workspaces contain `DocumentStore/workspace-v1.sqlite3` and storage/ID
+markers. Direct native document edits, rendering, and strict media validation
+are currently rejected with export instructions. Use **File → Export → Legacy
+Workspace** or export an individual bundle in ProPresenter, then select the
+exported documents. A Legacy Workspace export is a point-in-time snapshot;
+later native edits do not update it. The preserved `UserWorkspaces` copy is a
+separate branch of content and writing there does not update the native store.
+
+Valid 22 interchange payloads can omit `application_info`. Loading and editing
+preserve its absence. Root recognition instead checks presentation identities,
+cues and groups; playlist type and root identity; or Theme template structure.
+A metadata-free Theme needs template slides as root evidence. Missing metadata
+does not identify the originating application version.
+
+User-facing import/export containers are ZIP archives with protobuf documents
+and optional media assets.
 
 Archive extensions identify the export workflow. The extension is part of the user-facing format contract; the payload files inside still need to be identified and decoded by entry name and protobuf root type.
 
@@ -25,7 +51,7 @@ imports of a root `Theme` entry targeted the workspace path `Themes/Theme`,
 collided independently of the archive filename, and did not appear as a normal
 named theme in the API inventory.
 
-## Live Workspace Layout
+## Legacy Workspace Layout
 
 A ProPresenter user workspace is organized around these top-level folders:
 
@@ -39,7 +65,13 @@ Presets/
 Themes/
 ```
 
-The primary editable document model lives in `Libraries/`, `Playlists/`, `Themes/`, and `Configuration/`. `Media/` stores referenced assets. Runtime databases, generated thumbnails, caches, and downloaded support data are derived state unless a specific workflow proves otherwise.
+For legacy storage, editable documents live in `Libraries/`, `Playlists/`,
+`Themes/`, and `Configuration/`; `Media/` stores referenced assets. Native 22
+database and media stores must not be treated as disposable derived state.
+An expanded single-document export is distinct from a whole workspace: select
+a raw document within a legacy workspace for dump/edit/render/bundle commands.
+Strict media validation reports incomplete context if `Playlists/Media` is
+missing; absence of that registry is not successful validation.
 
 ## Raw Document Files
 

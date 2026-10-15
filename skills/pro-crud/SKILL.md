@@ -11,6 +11,15 @@ or component paths.
 
 ## Workflow
 
+Resolve the exact workspace storage before using workspace paths:
+`pro-crud workspace inspect /exact/root`. ProPresenter 22 native workspaces
+use SQLite/Loro and require native export/import for document edits. Use
+**File → Export → Legacy Workspace**, or export a Presentation Bundle,
+Playlist, or Theme, and work on those exports. Legacy Workspace exports are
+point-in-time snapshots. The retained older workspace is independent; editing
+it does not update the active native workspace. Select a document inside a
+legacy workspace rather than treating the whole workspace as one archive.
+
 1. Before editing a live ProPresenter library, confirm ProPresenter is not
    running; if it is, ask the user to quit it. Use a copied or disposable
    document for experiments.

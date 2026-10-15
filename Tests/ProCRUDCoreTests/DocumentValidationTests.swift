@@ -168,7 +168,6 @@ struct DocumentValidationTests {
 		))
 		let presentationCodes = Set(presentationReport.diagnostics.map(\.code))
 		#expect(presentationCodes.isSuperset(of: [
-			"structure.missing-application-info",
 			"structure.missing-presentation-uuid",
 			"structure.missing-presentation-name",
 			"structure.missing-presentation-cues",
@@ -181,7 +180,6 @@ struct DocumentValidationTests {
 		))
 		let playlistCodes = Set(playlistReport.diagnostics.map(\.code))
 		#expect(playlistCodes.isSuperset(of: [
-			"structure.missing-application-info",
 			"structure.missing-playlist-type",
 			"structure.missing-playlist-root",
 		]))
@@ -241,11 +239,7 @@ struct DocumentValidationTests {
 		let report = DocumentValidator.validate(document)
 
 		#expect(!report.valid)
-		#expect(report.diagnostics.contains {
-			$0.code == "structure.missing-application-info" &&
-				$0.documentPath == "Invalid/Theme" &&
-				$0.componentPath == "/"
-		})
+		#expect(!report.diagnostics.contains { $0.code == "structure.missing-application-info" })
 		#expect(report.diagnostics.contains {
 			$0.code == "structure.missing-template-slide-uuid" &&
 				$0.documentPath == "Invalid/Theme" &&

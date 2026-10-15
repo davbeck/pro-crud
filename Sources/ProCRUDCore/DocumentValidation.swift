@@ -131,13 +131,6 @@ public enum DocumentValidator {
 		_ presentation: Rv_Data_Presentation,
 	) -> [DocumentValidationDiagnostic] {
 		var diagnostics: [DocumentValidationDiagnostic] = []
-		if !presentation.hasApplicationInfo {
-			diagnostics.append(error(
-				code: "structure.missing-application-info",
-				path: "/",
-				message: "Presentation is missing application info.",
-			))
-		}
 		if !presentation.hasUuid || presentation.uuid.string.isEmpty {
 			diagnostics.append(error(
 				code: "structure.missing-presentation-uuid",
@@ -365,11 +358,10 @@ public enum DocumentValidator {
 		_ theme: Rv_Data_Template.Document,
 	) -> [DocumentValidationDiagnostic] {
 		var diagnostics: [DocumentValidationDiagnostic] = []
-		if !theme.hasApplicationInfo {
+		if !theme.hasApplicationInfo && theme.slides.isEmpty {
 			diagnostics.append(error(
-				code: "structure.missing-application-info",
-				path: "/",
-				message: "Theme is missing application info.",
+				code: "structure.missing-theme-evidence", path: "/",
+				message: "Theme has neither application metadata nor template slides to identify its root.",
 			))
 		}
 		var seenSlideIDs = Set<String>()
@@ -448,13 +440,6 @@ public enum DocumentValidator {
 		_ document: Rv_Data_PlaylistDocument,
 	) -> [DocumentValidationDiagnostic] {
 		var diagnostics: [DocumentValidationDiagnostic] = []
-		if !document.hasApplicationInfo {
-			diagnostics.append(error(
-				code: "structure.missing-application-info",
-				path: "/",
-				message: "Playlist document is missing application info.",
-			))
-		}
 		if document.type == .unknown {
 			diagnostics.append(error(
 				code: "structure.missing-playlist-type",

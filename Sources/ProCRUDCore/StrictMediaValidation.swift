@@ -11,6 +11,8 @@ public enum StrictMediaDiagnosticKind: String, Sendable {
 	case conflictingUUID = "conflicting-uuid"
 	case workspaceRegistryConflict = "workspace-registry-conflict"
 	case labelMismatch = "label-mismatch"
+	case unsupportedWorkspace = "unsupported-workspace"
+	case missingRegistry = "missing-registry"
 }
 
 public struct StrictMediaDiagnostic: CustomStringConvertible, Sendable {
@@ -58,6 +60,13 @@ public enum StrictMediaValidator {
 		workspaceURL: URL,
 		fileManager: FileManager = .default,
 	) throws -> StrictMediaValidationReport {
+		do {
+			try WorkspaceInspector.requireLegacyAccess(at: workspaceURL)
+		} catch let error as WorkspaceInspectionError {
+			return StrictMediaValidationReport(diagnostics: [StrictMediaDiagnostic(
+				kind: .unsupportedWorkspace, componentPath: "/", message: error.description,
+			)])
+		}
 		let documentReferences = references(in: document, scope: .document)
 		let registryReferences = try workspaceRegistryReferences(
 			workspaceURL: workspaceURL,
@@ -65,6 +74,12 @@ public enum StrictMediaValidator {
 		)
 		var diagnostics = documentReferences.flatMap {
 			validate($0, workspaceURL: workspaceURL, fileManager: fileManager)
+		}
+		if !fileManager.fileExists(atPath: workspaceURL.appendingPathComponent("Playlists/Media").path) {
+			diagnostics.append(StrictMediaDiagnostic(
+				kind: .missingRegistry, componentPath: "/",
+				message: "Strict media validation is incomplete: Playlists/Media is missing beneath \(workspaceURL.path). Supply a complete legacy workspace or Legacy Workspace export.",
+			))
 		}
 		diagnostics.append(contentsOf: uuidDiagnostics(
 			documentReferences: documentReferences,

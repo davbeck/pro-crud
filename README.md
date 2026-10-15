@@ -6,6 +6,11 @@ files.
 
 It works directly with documents on disk using a reverse-engineered implementation.
 
+ProPresenter 21 protobuf documents and selected ProPresenter 22 beta exports
+are supported. Run `pro-crud workspace inspect /exact/root` before choosing
+workspace paths. Native 22 SQLite/Loro document operations require ProPresenter's
+export/import workflow; see the [storage compatibility reference](Docs/Format/TopLevelFileFormats.md).
+
 ProPresenter is a trademark of Renewed Vision, LLC. pro-crud is an independent, unofficial project and is not affiliated with, endorsed by, or supported by Renewed Vision.
 
 ## Features

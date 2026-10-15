@@ -407,6 +407,7 @@ public enum DocumentArchive {
 			throw ArchiveError.unsupportedEntryType(entry: inputURL.path)
 		}
 		if values.isDirectory != true {
+			try WorkspaceInspector.requireLegacyAccess(at: inputURL)
 			guard inputURL.pathExtension.lowercased() == "pro" else { throw DocumentLoadError.expectedRawDocument(inputURL) }
 			try validateWorkspacePath(inputURL.lastPathComponent, limits: limits)
 			let validationBudget = ArchiveCopyBudget(limits: limits, deadline: deadline)
@@ -414,6 +415,7 @@ public enum DocumentArchive {
 			_ = try DocumentLoader.loadRaw(inputURL, kind: .presentation)
 			return Layout(kind: .presentation)
 		}
+		try WorkspaceInspector.requireSingleDocumentDirectory(inputURL)
 		let validationBudget = ArchiveCopyBudget(limits: limits, deadline: deadline)
 		let files = try DocumentLoader.recursiveFiles(in: inputURL)
 		var paths: [(url: URL, relative: String)] = []
@@ -431,7 +433,7 @@ public enum DocumentArchive {
 		let themes = paths.filter { $0.url.lastPathComponent == "Theme" }.map(\.url)
 		let matches = [
 			rootPresentations.count == 1 && playlistURL == nil && themes.isEmpty ? DocumentKind.presentation : nil,
-			!rootPresentations.isEmpty && playlistURL != nil && themes.isEmpty ? .playlist : nil,
+			playlistURL != nil && themes.isEmpty ? .playlist : nil,
 			rootPresentations.isEmpty && playlistURL == nil && !themes.isEmpty ? .theme : nil,
 		].compactMap(\.self)
 		guard matches.count == 1, let kind = matches.first else {

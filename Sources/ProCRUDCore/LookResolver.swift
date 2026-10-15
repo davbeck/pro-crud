@@ -117,6 +117,7 @@ public enum LookResolver {
 	}
 
 	private static func workspacePaths(from input: URL) throws -> (root: URL, file: URL) {
+		try WorkspaceInspector.requireLegacyAccess(at: input)
 		var isDirectory: ObjCBool = false
 		if FileManager.default.fileExists(atPath: input.path, isDirectory: &isDirectory), !isDirectory.boolValue,
 		   input.lastPathComponent == "Workspace"

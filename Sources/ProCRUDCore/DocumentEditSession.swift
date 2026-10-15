@@ -59,6 +59,7 @@ public final class DocumentEditSession {
 		replace: Bool = false,
 		materializingTemplateMediaURLs: Set<String> = [],
 	) throws {
+		try WorkspaceInspector.requireLegacyAccess(at: outputURL)
 		guard let archiveWorkspace, let archiveSourceURL, let payloadRelativePath else {
 			try document.kind.validate(rawURL: outputURL)
 			guard replace || !FileManager.default.fileExists(atPath: outputURL.path) else {
