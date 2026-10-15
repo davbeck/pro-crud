@@ -64,7 +64,14 @@ Use `workspace move-cue ROOT --stream UUID --cue CUE_UUID --after ANCHOR_CUE_UUI
 --registry PATH` to move an existing cue after another in the same group. This
 retains the existing cue and placement identities, content and arrangements.
 The same offline/local checks apply; self/already-after moves make no change.
-Cross-group moves, Cloud editing and other native edit families remain unsupported.
+Use `workspace rename-cue-group ROOT --stream UUID --group GROUP_UUID --name TEXT
+--registry PATH` to rename an existing group while preserving its identity,
+color, hotkey and arrangements.
+Use `workspace set-arrangement-groups ROOT --stream UUID --arrangement UUID
+--group GROUP_UUID --group GROUP_UUID --registry PATH` to set explicit ordered
+group occurrences; repeat `--group` for each occurrence or use `--clear` for an
+empty arrangement. Both use the same offline/local checks and retain native
+history. Cross-group moves, Cloud editing and other native edit families remain unsupported.
 
 New creation and bundle exports default to target 22. Use `--target-version 21`
 on `create presentation`, `create theme`, `create playlist`, or `bundle` for a

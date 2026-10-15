@@ -64,4 +64,16 @@ struct CompatibilityCommandTests {
 		#expect(throws: (any Error).self) { try WorkspaceMoveCue.parse(base + ["--target-version", "21"]) }
 		#expect(throws: (any Error).self) { try WorkspaceMoveCue.parse(Array(base.dropLast(2))) }
 	}
+
+	@Test func nativeGroupAndArrangementCommandsRequireExplicitSelections() throws {
+		let base = ["/tmp/Exact", "--stream", UUID().uuidString, "--registry", "/tmp/registry-v1.sqlite3"]
+		let id = UUID().uuidString
+		#expect(try ProCRUD.parseAsRoot(["workspace", "rename-cue-group"] + base + ["--group", id, "--name", "Verse"]) is WorkspaceRenameCueGroup)
+		let sequence = base + ["--arrangement", UUID().uuidString]
+		#expect(try WorkspaceSetArrangementGroups.parse(sequence + ["--group", id, "--group", id]).groups == [id, id])
+		#expect(try WorkspaceSetArrangementGroups.parse(sequence + ["--clear"]).groups.isEmpty)
+		#expect(throws: (any Error).self) { try WorkspaceSetArrangementGroups.parse(sequence) }
+		#expect(throws: (any Error).self) { try WorkspaceSetArrangementGroups.parse(sequence + ["--clear", "--group", id]) }
+		#expect(throws: (any Error).self) { try WorkspaceRenameCueGroup.parse(base + ["--group", id, "--name", ""]) }
+	}
 }

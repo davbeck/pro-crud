@@ -10,6 +10,8 @@ public enum NativePresentationEdit: Codable, Sendable, Equatable {
 	case copyrightTitle(String)
 	case slideNotes(actionID: UUID, content: NativeSlideNotesContent)
 	case moveCue(UUID, after: UUID)
+	case cueGroupName(UUID, String)
+	case arrangementGroups(UUID, [UUID])
 }
 
 public enum NativeSlideNotesContent: Codable, Sendable, Equatable {
@@ -86,7 +88,21 @@ public struct NativeLocalPatch: Sendable {
 				notes = try slide.insertContainer(key: "notes", child: LoroMap())
 			}
 			try notes.insert(key: "rtf_data", v: LoroValue.binary(value: rtf))
+		case let .cueGroupName(groupID, name):
+			guard !name.isEmpty else { throw NativeSemanticError.invalidValue(path: "/cue_group_placements/\(groupID)/name", expected: "nonempty group name") }
+			guard let group = layout.groups.first(where: { $0.id == groupID }) else { throw NativeSemanticError.missingReference(path: "/cue_group_placements", identity: groupID.uuidString) }
+			guard group.name != name else { return nil }
+			try NativeStructuralEditing.rename(group: group, to: name, root: root)
+		case let .arrangementGroups(arrangementID, groups):
+			guard let index = layout.arrangements.firstIndex(where: { $0.id == arrangementID }) else { throw NativeSemanticError.missingReference(path: "/arrangements", identity: arrangementID.uuidString) }
+			for id in groups where !layout.groups.contains(where: { $0.id == id }) {
+				throw NativeSemanticError.missingReference(path: "/arrangements/\(arrangementID)", identity: id.uuidString)
+			}
+			let original = layout.arrangements[index].groupIDs
+			guard original != groups else { return nil }
+			try NativeStructuralEditing.setGroups(groups, replacing: original, at: index, root: root)
 		case let .moveCue(cueID, after: anchorID):
+			try NativeStructuralEditing.requireNativePlacements(root)
 			let nodes = layout.placements.flatMap(\.children)
 			func node(_ id: UUID) throws -> NativePlacementNode {
 				guard let node = try nodes.first(where: { try $0.metadata.object(at: "/placement").required("uuid", at: "/placement").uuid(at: "/placement/uuid") == id }) else {
@@ -101,13 +117,8 @@ public struct NativeLocalPatch: Sendable {
 				return nil
 			}
 			guard let tree = root.get(key: "cue_group_placements")?.asLoroTree() else { throw NativeSemanticError.invalidValue(path: "/cue_group_placements", expected: "native Loro tree") }
-			func treeID(_ value: String) throws -> TreeId {
-				let parts = value.split(separator: "@", omittingEmptySubsequences: false)
-				guard parts.count == 2, let counter = Int32(parts[0]), counter >= 0, let peer = UInt64(parts[1]) else { throw NativeSemanticError.invalidValue(path: "/cue_group_placements/\(value)", expected: "Loro counter@peer node identity") }
-				return TreeId(peer: peer, counter: counter)
-			}
 			tree.enableFractionalIndex(jitter: 0)
-			try tree.movAfter(target: treeID(source.nodeID), after: treeID(anchor.nodeID))
+			try tree.movAfter(target: NativeStructuralEditing.treeID(source.nodeID), after: NativeStructuralEditing.treeID(anchor.nodeID))
 		}
 		let timestamp = Int64(date.timeIntervalSince1970 * 1000)
 		guard timestamp >= 0 else { throw NativeSemanticError.invalidValue(path: "/commit/timestamp", expected: "nonnegative timestamp") }

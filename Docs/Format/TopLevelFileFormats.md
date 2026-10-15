@@ -109,7 +109,21 @@ pro-crud workspace move-cue /exact/native/root \
 This moves the existing placement-tree node and retains cue content, identities,
 group metadata and arrangements. Selecting itself or its current predecessor
 makes no change. Cross-group moves are unsupported. The same offline/local
-transaction rules apply. Other native edits still use native export/import.
+transaction rules apply. Structural edits reject parallel legacy arrays that
+would become stale.
+
+Rename an existing group with `workspace rename-cue-group ROOT --stream UUID
+--group GROUP_UUID --name TEXT --registry PATH`. This preserves group identity,
+application-group link, color, hotkey, membership and arrangements. Matching
+names make no change; names must be nonempty.
+
+Set an existing arrangement's sequence with `workspace set-arrangement-groups
+ROOT --stream UUID --arrangement ARRANGEMENT_UUID --group GROUP_UUID
+--group GROUP_UUID --registry PATH`. Supply `--group` once for each ordered
+occurrence, including repeats, or use `--clear` for an empty arrangement.
+Existing occurrence identities are reused during moves; the arrangement's name,
+identity and selected state are preserved. These commands use the same local,
+stopped-writer transaction rules. Other native edits still use native export/import.
 
 Valid 22 interchange payloads can omit `application_info`. Loading and editing
 preserve its absence. Root recognition instead checks presentation identities,
