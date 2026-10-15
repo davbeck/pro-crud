@@ -19,6 +19,10 @@ With `--projections`, inventory checks the mapped document/configuration roots
 and reports each document ID and scope independently, including client state.
 Unknown fields and unavailable content prevent a complete projection. This
 diagnostic view does not enable configuration export or editing.
+Native menu key-mapping projections retain command identifiers and stored
+keyboard/MIDI fields. Other mapping-key categories remain gated. Group and cue
+hotkeys are separate stored fields; an empty KeyMappings stream does not imply
+that the workspace has no shortcuts.
 `workspace dump ROOT [--stream UUID] [--scope shared|client]` decodes native
 snapshots with the pinned official Loro Swift binding. Its typed diagnostic
 values preserve binary data as base64. They are not protobuf JSON and cannot

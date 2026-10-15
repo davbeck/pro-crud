@@ -29,7 +29,7 @@ registrations, malformed metadata, non-file/relative/remote-host URLs and
 unrelated preference fields. Source preference bytes remain unchanged. No
 actual user preference file is committed.
 
-## Key-mapping experiment: unresolved persistence authority
+## Distinct group hotkeys and menu mappings
 
 Native Key Mappings → Show initially displays no customized mappings. Recording
 K for default **Chorus 4**, then leaving the field, displays a customization.
@@ -38,12 +38,11 @@ in the selected test workspace remains exactly the empty map. The other
 registered native workspace also has an empty KeyMappings map. Neither retained
 legacy `Configuration/KeyMappings` file has a fresh modification timestamp.
 
-This does not qualify a populated native map-key identity adapter. The keyboard
-mapping's actual persistence source remains unresolved; do not infer it from
-the descriptor's `TargetIdentifier` annotation or claim the empty stream is the
-app's complete effective mapping state. Native mapping export/editing remains
-unsupported. Diagnostic empty-stream captures stay in ignored investigation
-output, since checking in repeated empty roots would add no behavioral fixture.
+Follow-up inspection finds the exact value in the shared **Groups** stream:
+Chorus 4 retains `hotKey.code = 11` (ANSI K). Thus the Key Mappings UI edits
+different storage for group hotkeys and menu shortcuts. Its display alone cannot
+prove the KeyMappings stream contains every effective shortcut. The subsequent
+menu mapping experiment is recorded in `ProPresenter22KeyMappings.md`.
 
 An attempted broad Reset Key Mappings was rejected by automatic approval
 review because it could discard unrelated shortcuts. It was not executed or

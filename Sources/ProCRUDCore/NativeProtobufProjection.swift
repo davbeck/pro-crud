@@ -138,9 +138,13 @@ struct NativeProtobufEncoder {
 			object["element_build_order"] = .list(ids.map { .string($0.uuidString) })
 		}
 		let descriptor = try schema.message(named: message)
-		for oneof in descriptor.oneofNames {
+		for (oneofIndex, oneof) in descriptor.oneofNames.enumerated() {
 			guard let wrapper = object.removeValue(forKey: oneof), wrapper != .null else { continue }
 			let choices = try wrapper.object(at: "\(path)/\(oneof)")
+			let knownChoices = Set(descriptor.fields.filter { $0.oneof == oneofIndex }.map(\.protoName))
+			for key in choices.keys.sorted() where key != "__tag" && !knownChoices.contains(key) {
+				issues.append(.init(path: "\(path)/\(oneof)/\(key)", message: "Unknown native oneof member in \(message).\(oneof); original value retained."))
+			}
 			guard choices.optional("__tag") != nil else { continue }
 			let selected = try wrapper.tagged(at: "\(path)/\(oneof)")
 			guard let field = descriptor.fieldsByName[selected.tag], let index = field.oneof, descriptor.oneofNames[index] == oneof else {
@@ -170,17 +174,21 @@ struct NativeProtobufEncoder {
 					issues.append(.init(path: fieldPath, message: "A native tree requires a hierarchy adapter before interchange export."))
 					continue
 				} else if case let .map(entries) = value, let mapKey = descriptor.nativeMapKey {
-					values = try entries.keys.sorted().map { key in
-						guard let nested = descriptor.typeName, let keyDescriptor = try schema.message(named: nested).fieldsByName[mapKey] else { throw NativeSemanticError.unsupportedNode(path: fieldPath, kind: "native map key \(mapKey) requires a qualified identity adapter") }
-						var entry = try entries.required(key, at: fieldPath).object(at: "\(fieldPath)/\(key)")
-						let encodedKey = try encodeField(.string(key), descriptor: keyDescriptor, path: "\(fieldPath)/\(key)")
-						if let stored = entry.optional(mapKey), try encodeField(stored, descriptor: keyDescriptor, path: "\(fieldPath)/\(key)/\(mapKey)") != encodedKey {
-							throw NativeSemanticError.invalidValue(path: "\(fieldPath)/\(key)", expected: "map key matching \(mapKey)")
+					if message == "rv.data.KeyMappingDocument", descriptor.protoName == "keymappings", mapKey == "TargetIdentifier" {
+						values = try NativeKeyMappingProjection.menuEntries(entries, path: fieldPath)
+					} else {
+						values = try entries.keys.sorted().map { key in
+							guard let nested = descriptor.typeName, let keyDescriptor = try schema.message(named: nested).fieldsByName[mapKey] else { throw NativeSemanticError.unsupportedNode(path: fieldPath, kind: "native map key \(mapKey) requires a qualified identity adapter") }
+							var entry = try entries.required(key, at: fieldPath).object(at: "\(fieldPath)/\(key)")
+							let encodedKey = try encodeField(.string(key), descriptor: keyDescriptor, path: "\(fieldPath)/\(key)")
+							if let stored = entry.optional(mapKey), try encodeField(stored, descriptor: keyDescriptor, path: "\(fieldPath)/\(key)/\(mapKey)") != encodedKey {
+								throw NativeSemanticError.invalidValue(path: "\(fieldPath)/\(key)", expected: "map key matching \(mapKey)")
+							}
+							if entry.optional(mapKey) == nil {
+								entry[mapKey] = .string(key)
+							}
+							return .map(entry)
 						}
-						if entry.optional(mapKey) == nil {
-							entry[mapKey] = .string(key)
-						}
-						return .map(entry)
 					}
 				} else if case let .map(entries) = value, let nested = descriptor.typeName, try schema.message(named: nested).isMapEntry {
 					values = entries.keys.sorted().map { .map(["key": .string($0), "value": entries[$0] ?? .null]) }

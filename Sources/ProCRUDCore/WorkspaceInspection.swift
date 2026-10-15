@@ -61,7 +61,7 @@ public enum WorkspaceInspectionError: Error, CustomStringConvertible, Sendable {
 	public var description: String {
 		switch self {
 		case let .nativeWorkspace(root):
-			"\(root.path) uses native ProPresenter workspace storage (SQLite/Loro). Direct document editing, rendering, and media validation are not qualified for this storage. In ProPresenter use File → Export → Legacy Workspace, or export a Presentation Bundle, Playlist, or Theme, then operate on that separate export. The preserved UserWorkspaces copy does not update this workspace."
+			"\(root.path) uses native ProPresenter workspace storage (SQLite/Loro). This file-based workflow cannot access it. Use workspace --help for native inspection, export and supported local edits, or render ROOT --native-stream UUID for a native Presentation preview. To use file-based workflows, export a separate Legacy Workspace, Presentation Bundle, Playlist or Theme from ProPresenter. The preserved UserWorkspaces copy does not update this workspace."
 		case let .wholeWorkspace(root):
 			"\(root.path) is a whole legacy workspace, not an expanded single-document archive. Use workspace inspect for storage evidence, or select a document under Libraries, Playlists, or Themes."
 		case let .invalidManifest(url):

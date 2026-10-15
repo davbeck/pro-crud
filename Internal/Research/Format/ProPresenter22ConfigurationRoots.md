@@ -61,6 +61,9 @@ field. An empty map is valid and has no entries to resolve. A populated map
 requires its own identity adapter and fails explicitly; no synthetic field is
 injected and no unqualified key is discarded. The retained corpus contains an
 empty map, so its success does not establish populated KeyMapping support.
+The subsequent native menu control and its scoped adapter are recorded in
+[ProPresenter22KeyMappings.md](ProPresenter22KeyMappings.md); other mapping-key
+categories remain gated.
 
 Constructed owned Loro cases cover all thirteen newly mapped configuration
 scopes, unknown-field completeness failures, unsupported client/future scopes,

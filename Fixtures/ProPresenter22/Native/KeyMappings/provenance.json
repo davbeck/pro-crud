@@ -1,0 +1,35 @@
+{
+  "application": "ProPresenter",
+  "version": "22",
+  "build": "369098875",
+  "osVersion": "27.0.1",
+  "date": "2026-10-15",
+  "documentID": "e17451e8-5d76-5dfc-92ed-166f636dac6d",
+  "source": "Native Key Mappings > Menu; assigned Control-Shift-Command-K to About ProPresenter in the authorized local test workspace; normal app restart retains the snapshot/vector exactly. Before snapshot is the empty native stream.",
+  "files": [
+    {
+      "path": "native-before.loro",
+      "sha256": "44ed8e335bf6295866e81dff92d0a7451bfefeac546a024eb9cfb949e2dc8db8"
+    },
+    {
+      "path": "native-before.vector",
+      "sha256": "5e98aaa886032724db1ffd795b2f63b93a1d90f236e77eabfcc2913e4dd6e1d6"
+    },
+    {
+      "path": "native-menu-key.loro",
+      "sha256": "54e5b134bee61cb388afec5d67c75eb7047d9b07a3aa5b97943d942d2050d491"
+    },
+    {
+      "path": "native-menu-key.vector",
+      "sha256": "1881f40d47cb01b0b81077bdea8150df83dfc9fc78f34652e34dc3531ca53f24"
+    },
+    {
+      "path": "native-reopened.loro",
+      "sha256": "54e5b134bee61cb388afec5d67c75eb7047d9b07a3aa5b97943d942d2050d491"
+    },
+    {
+      "path": "native-reopened.vector",
+      "sha256": "1881f40d47cb01b0b81077bdea8150df83dfc9fc78f34652e34dc3531ca53f24"
+    }
+  ]
+}

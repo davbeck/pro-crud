@@ -179,7 +179,7 @@ struct WorkspaceContents: ParsableCommand {
 struct WorkspaceInventory: ParsableCommand {
 	static let configuration = CommandConfiguration(commandName: "inventory", abstract: "Read a consistent native SQLite inventory and verify snapshot checksums.")
 	@Argument(help: "Exact native workspace root.") var input: String
-	@Flag(help: "Also check native Presentation, Theme and playlist protobuf views and list unmapped fields. Playlist views do not export dependencies.") var projections = false
+	@Flag(help: "Also check mapped native document and configuration protobuf views and list unmapped fields. Projection does not enable configuration export or editing.") var projections = false
 
 	func run() throws {
 		let snapshot = try NativeWorkspaceSnapshot.read(from: URL(fileURLWithPath: input))
@@ -195,7 +195,7 @@ private struct NativeInventory: Encodable {
 	var loroBindingVersion = NativeWorkspaceSnapshot.loroBindingVersion
 	var streams: [NativeWorkspaceStream.Identity]
 	var projections: [ProjectionStatus]?
-	var unresolvedCapabilities = ["remaining-configuration-materialization", "native-document-write", "native-media-registry", "cloud-merge"]
+	var unresolvedCapabilities = ["non-menu-key-mapping-identities", "configuration-export-and-editing", "remaining-native-edit-families", "native-media-store-transactions", "cloud-merge"]
 
 	init(_ snapshot: NativeWorkspaceSnapshot, includeProjections: Bool) throws {
 		root = snapshot.root.path
