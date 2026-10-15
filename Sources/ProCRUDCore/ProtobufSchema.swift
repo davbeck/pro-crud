@@ -42,6 +42,16 @@ struct ProtobufSchema: Sendable {
 
 	private static let legacy = Result { try load(.v21) }
 	private static let native = Result { try load(.v22) }
+	/// Exact upstream 21.4 evidence, independent of the retained generated model.
+	/// Do not substitute this for the patcher's descriptor: its Swift view still
+	/// deliberately leaves newer fields opaque, including timeline field 3.
+	static func baseline21() throws -> Self {
+		try baseline.get()
+	}
+
+	private static let baseline = Result {
+		try Self(descriptorSet: Google_Protobuf_FileDescriptorSet(serializedBytes: BundledProtobufSchema.baseline21()))
+	}
 
 	private static func load(_ version: ProPresenterTargetVersion) throws -> Self {
 		try Self(descriptorSet: Google_Protobuf_FileDescriptorSet(serializedBytes: BundledProtobufSchema.data(version: version)))

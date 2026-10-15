@@ -37,6 +37,7 @@ let package = Package(
 			],
 			resources: [
 				.copy("Resources/Protobuf"),
+				.copy("Resources/Protobuf21"),
 				.copy("Resources/Protobuf22"),
 			],
 			linkerSettings: [

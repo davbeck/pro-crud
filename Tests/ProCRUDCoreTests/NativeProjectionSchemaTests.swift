@@ -52,6 +52,61 @@ struct NativeProjectionSchemaTests {
 		#expect(try fields.compactMap(\.payload).map { try Rv_Data_Presentation(serializedBytes: $0).name } == ["First", "Second"])
 	}
 
+	@Test func exact21BaselineSeparatesStaleVendorFieldsFrom22Changes() throws {
+		let baseline = try ProtobufSchema.baseline21()
+		let native = try ProtobufSchema.bundled(version: .v22)
+		#expect(try baseline.message(named: "rv.data.ProPresenterScreen").fieldsByName["rendering_enabled"]?.number == 9)
+		#expect(try baseline.message(named: "rv.data.TimedPlayback.Sequence").fieldsByName["presentation"]?.isRepeated == false)
+		#expect(try native.message(named: "rv.data.TimedPlayback.Sequence").fieldsByName["presentations"]?.isRepeated == true)
+		#expect(try baseline.message(named: "rv.data.TimedPlayback.Sequence.SequenceItem").fieldsByName["presentation_uuid"] == nil)
+		#expect(try native.message(named: "rv.data.TimedPlayback.Sequence.SequenceItem").fieldsByName["presentation_uuid"]?.number == 8)
+		#expect(try baseline.message(named: "rv.data.Presentation").fieldsByName["cue_group_placements"] == nil)
+	}
+
+	@Test func keyMappingCommonFieldsRemainWireCompatibleWithoutInventedUUIDConversion() throws {
+		let baseline = try ProtobufSchema.baseline21()
+		let native = try ProtobufSchema.bundled(version: .v22)
+		let old = try baseline.message(named: "rv.data.CollectionElementType")
+		let new = try native.message(named: "rv.data.KeyMapping.CollectionElementTypeKey")
+		for descriptor in [old, new] {
+			#expect(descriptor.fieldsByName["parameter_uuid"]?.number == 1)
+			#expect(descriptor.fieldsByName["parameter_uuid"]?.typeName == "rv.data.UUID")
+			#expect(descriptor.fieldsByName["parameter_name"]?.number == 2)
+			#expect(descriptor.fieldsByName["parameter_name"]?.type == .string)
+		}
+		#expect(old.fieldsByName["parent_collection"]?.number == 3)
+		#expect(new.fieldsByName["parent_collection"] == nil)
+		let id = UUID().uuidString
+		let key: NativeWorkspaceValue = .map(["parameter_uuid": .string(id), "parameter_name": .string("Opening cue")])
+		var legacyEncoder = NativeProtobufEncoder(schema: baseline)
+		var nativeEncoder = NativeProtobufEncoder(schema: native)
+		let legacy = try legacyEncoder.encode(key, message: old.name, path: "/key")
+		let current = try nativeEncoder.encode(key, message: new.name, path: "/key")
+		#expect(legacy == current)
+		let decoded = try Rv_Data_CollectionElementType(serializedBytes: current)
+		#expect(decoded.parameterUuid.string == id)
+		#expect(decoded.parameterName == "Opening cue")
+	}
+
+	@Test func retainedDecoderPreservesRepeatedTimelineMessagesThroughKnownFieldEdits() throws {
+		var encoder = try NativeProtobufEncoder(schema: .bundled(version: .v22))
+		let bytes = try encoder.encode(.map(["presentations": .list([
+			.map(["name": .string("First"), "notes": .string("First notes")]),
+			.map(["name": .string("Second")]),
+		])]), message: "rv.data.TimedPlayback.Sequence", path: "/timeline")
+		let before = try ProtobufJSONPatcher.WireField.parse(bytes).filter { $0.number == 3 }.map(\.raw)
+		var sequence = try Rv_Data_TimedPlayback.Sequence(serializedBytes: bytes)
+		sequence.contentDestination = .announcements
+		let after = try ProtobufJSONPatcher.WireField.parse(sequence.serializedData()).filter { $0.number == 3 }
+		#expect(after.map(\.raw) == before)
+		#expect(try after.compactMap(\.payload).map { try Rv_Data_Presentation(serializedBytes: $0).name } == ["First", "Second"])
+		// A singular-message decoder would merge the payloads and silently retain
+		// the last name plus fields from the first presentation.
+		let merged = try Rv_Data_Presentation(serializedBytes: after.compactMap(\.payload).reduce(into: Data()) { $0.append($1) })
+		#expect(merged.name == "Second")
+		#expect(merged.notes == "First notes")
+	}
+
 	@Test func keyedMapsValidateTheirEmbeddedIdentity() throws {
 		var encoder = try NativeProtobufEncoder(schema: .bundled(version: .v22))
 		let value: NativeWorkspaceValue = .map(["alternate_texts": .map(["screen": .map(["key": .string("other")])])])

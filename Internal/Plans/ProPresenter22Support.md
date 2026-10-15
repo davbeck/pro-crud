@@ -254,7 +254,7 @@ not a completeness claim or a count of persisted feature formats.
 | Media | `container_id=9`, `asset_id=10`, `identity_schema_version=11`, `hls_stream=12`, `provider=13` | Separate media occurrence/container/asset identity; do not carry forward the old single-UUID asset rule |
 | Text animation | Effect variables `grouping=8`, `motion=9`, `motion_style=10` | Preserve and interpret effects/build parameters; runtime texture-atlas messages do not define saved slide storage |
 | Provider linkage | `ProviderInfo` in media, presentations, slides, playlists and playlist items | Preserve rendition/version/parent relationship and native refresh ownership |
-| Key mappings | Fields 101–106 now reference `CollectionElementTypeKey`; nested field 2 is string name instead of UUID message | Explicit version/shape adapter; a regenerated type alone does not qualify old files |
+| Key mappings | Fields 101–106 now reference `CollectionElementTypeKey`; both versions use UUID field 1 and string name field 2; 21.4 also defines recursive parent scope at field 3 | Explicit version/shape adapter; a regenerated type alone does not qualify old files |
 | Timelines | `TimedPlayback.Sequence` field 3 becomes repeated `presentations`; item `presentation_uuid=8` | Avoid singular decoding that silently merges multiple messages; preserve cross-presentation references |
 | Other v2 arrays | `CopyrightLayout.tokens_v2=3`, `Calendar.Event.recurrence_excluded_dates_v2=10` | Preserve order/recurrence semantics and validate legacy/native conversion |
 | Workspace/local state | Media schema version/Theme rollout metadata, client recording settings and preset/stream roots | Keep machine-local recording destinations separate from shared content |

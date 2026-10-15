@@ -233,7 +233,8 @@ qualification for all rendering or templates.
 - Reconcile installed 22 schema descriptors with the vendored and exact
   upstream 21.4 definitions before regeneration. Explicitly test changed
   existing field semantics as well as additions: the schema audit found
-  KeyMapping fields 101–106 changing nested field 2 to a name string, and
+  KeyMapping fields 101–106 switching to a nested key type without the 21.4
+  recursive parent scope (both versions retain a string name at field 2), and
   `TimedPlayback.Sequence` field 3 changing from a singular presentation to
   repeated presentations. Those changes can remain wire-decodable while
   changing meaning or dropping repeated values in an older generated type.
