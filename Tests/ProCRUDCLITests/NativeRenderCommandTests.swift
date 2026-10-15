@@ -19,7 +19,8 @@ struct NativeRenderCommandTests {
 			var expected = try PresentationRenderer.effectiveRendering(documents: [exported])
 			let actualPresentation = try #require(actual.presentations.first)
 			let expectedPresentation = try #require(expected.presentations.first)
-			#expect(try #require(UUID(uuidString: actualPresentation.uuid)) == UUID(uuidString: expectedPresentation.uuid))
+			let actualID = try #require(UUID(uuidString: actualPresentation.uuid))
+			#expect(actualID == UUID(uuidString: expectedPresentation.uuid))
 			// Native root UUID strings are lowercase; the independent export uses
 			// uppercase. Compare identity before ignoring that spelling difference.
 			expected.presentations[0].uuid = actualPresentation.uuid

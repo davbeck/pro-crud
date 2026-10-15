@@ -65,3 +65,25 @@ that preset's native Theme URL value, as a typed diagnostic projection. The app
 authored it with ROOT_CURRENT_RESOURCE relative to the Workspace. No full
 Workspace configuration/history, hardware data or recording/account settings
 are included. See `Internal/Research/Format/ProPresenter22WorkspaceConfiguration.md`.
+
+`Interchange/NonemptyPlaylist.proPlaylist` is an unmodified native export from
+22 beta 369098875, macOS 27.0.1, collected October 15, 2026. The separately created
+**ProCRUD Native Playlist Acceptance** playlist contains an owned colored header
+and two occurrences of the owned ProCRUDTarget22Acceptance Presentation; the
+second occurrence is hidden. Include media within presentations was enabled.
+The archive contains only `data` and the owned Presentation; no private export
+manifest is included. Native export assigns fresh playlist/item UUIDs while
+retaining item semantics and the referenced Presentation.
+
+`Native/Playlist/` contains that disposable workspace's unmodified shared
+PlaylistLibrary snapshot/vector (`f1d34fe9-54bc-5cce-aa9b-975968deaeae`), its
+matching client node expansion state, and the owned referenced Presentation
+snapshot/vector (`bfa7b647-93ab-5ee6-b397-ec61b08bcfee`). Shared history contains
+only the initial default empty playlist and the owned acceptance playlist,
+including its earlier one-item state. No private library content or account
+state is included. The shared snapshot SHA-256 is
+`81e9442492e3477b590dc406dc4bcc8d4b33f87faebb2088b7b79f3c0131c9db`.
+The client snapshot SHA-256 is
+`03abe6b4735627840bc50d6c3a3c7726fb260f2fb350f0658adccb483de2544c`.
+These fixtures qualify standard playlist materialization and client expansion
+joining, not connected-plan overlays or native playlist edits.

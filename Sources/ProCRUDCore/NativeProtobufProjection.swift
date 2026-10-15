@@ -5,6 +5,11 @@ import SwiftProtobuf
 public struct NativeProjectionIssue: Codable, Sendable, Equatable {
 	public let path: String
 	public let message: String
+
+	public init(path: String, message: String) {
+		self.path = path
+		self.message = message
+	}
 }
 
 /// A read-only interchange view. It is never a replacement for the native

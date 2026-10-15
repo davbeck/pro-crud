@@ -31,6 +31,10 @@ times. Inspection does not migrate, repair, or write the source database. An
 incomplete WAL/shared-memory pair requires a coherent SQLite backup or native
 open before inspection.
 Other database schemas and storage markers are rejected explicitly.
+`workspace inventory ROOT --projections` checks native Presentation, Theme and
+playlist protobuf views. Playlist views preserve the shared tree and matching
+client node expansion state separately; they do not export Presentation/media
+dependencies or qualify connected-playlist local overlays.
 
 General native document edits and strict media validation require their native
 adapters. Render a supported shared Presentation directly with
