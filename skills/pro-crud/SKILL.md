@@ -59,6 +59,14 @@ identities and local file availability, with uninspected streams explicit.
 It includes macro/prop collections, stage layouts, playlist templates and
 shared/client Workspace graphs alongside Presentations, Themes and playlists.
 Use each occurrence's document ID and scope to identify its source.
+Add `--asset-store` to inspect native Asset/Reference records and distinguish
+declared asset IDs from materialized associations. File availability remains a
+separate result; an association difference does not authorize rewriting IDs.
+Add `--hash-files` when local content hashes are needed.
+Qualified schema-1 video-source HLS actions can be preserved in target-22 raw
+edits, exports and bundles. Streams are never downloaded by these workflows;
+static rendering reports an unsupported runtime source. Other native media
+editing/packaging gates still apply.
 `workspace configuration ROOT` lists saved/live Looks, screens and Theme links.
 For a selected Theme slide without media, preview a native Look with
 `render PRESENTATION --workspace ROOT --look UUID --screen UUID`. This reads

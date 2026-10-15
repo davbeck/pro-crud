@@ -75,11 +75,56 @@ artwork, thumbnail or other media resource is included.
 
 ## Remaining implementation and acceptance
 
-Production media inspection still reports asset-store membership unverified.
-A backend needs bounded, coherent reads of the active manifest/tables/WAL,
-unsupported-format and concurrent-writer handling, and explicit distinction
-between declared and materialized asset IDs. A WAL-only reader would be
-incomplete. Native-controlled replacement/deletion/reopen experiments must
+Production inspection now offers explicit `workspace media --asset-store`.
+The reader captures the active manifest, tables and WAL without opening RocksDB
+or creating any files, checks file identity/size/nanosecond timestamps before,
+after and across the capture, and retries a changed source at most three times.
+It verifies XXH3 and masked CRC32C checksums, record counts, sequence precedence
+and point tombstones. Unknown column families, required manifest extensions,
+table metadata/layout/compression, asset/reference namespaces, bad UUIDs and
+future schema markers fail explicitly. Budgets are 64 MiB per file, 512 MiB
+total, 16 MiB per logical log record, one million records and 30 seconds.
+
+Asset and Reference models are typed; all raw values remain available internally
+and other model-family counts remain explicitly uninspected. The report joins
+file occurrences by Reference UUID, keeping declared/materialized asset IDs,
+native availability and stored paths separate from file-availability results.
+Runtime HLS sources are excluded from missing-file/asset membership comparisons.
+Independent document and MediaStore captures are not presented as a cross-store
+transaction. Native checksums remain opaque.
+
+The unmodified active manifest/three tables/WAL are retained in
+`Fixtures/ProPresenter22/Native/MediaStoreSnapshot`, with original byte hashes.
+Ten core tests cover the independent 343-model/19-asset/90-reference oracle,
+all twelve earlier selected JSON values, the actual Theme association difference,
+table/WAL/manifest corruption, future format/path traversal, missing/symlinked
+tables, tombstone precedence, concurrent append retry and bounded instability,
+byte/record budgets, fragmented logs and incomplete/unknown write batches.
+A CLI test exercises `--asset-store` with a native document database and proves
+both stores' source bytes/directory entries stay unchanged. The native corpus
+caught and corrected an index-versus-file bounds error in the initial reader.
+
+The command also succeeds against the running test instance after native media
+controls: 358 models, 19 assets, 95 Reference records, 232 verified table blocks
+and 81 file occurrences. Eighty associations match and the same single Theme
+difference remains explicit. All 85 occurrences are retained, including four
+HLS runtime sources. xxHash 0.8.2 is vendored unchanged behind a small C bridge
+for its checksum algorithm; its BSD notice is included in release and installer
+packaging. The Rust/RocksDB database engine is not linked.
+
+With native writers stopped, the production command inspects those same 81
+associations with local hashing enabled while preserving all **40** document,
+media-store, managed-asset and registry files and their directory entries.
+The full suite passes **470 core, 98 CLI and one harness** tests with the same
+nine known rendering issues. SwiftFormat, SwiftLint, schema-resource freshness
+and release-script syntax checks pass. The CLI test checks the actual report
+route and encoded membership field, keeps raw unrelated models out of JSON,
+and verifies that omitting the flag retains the previous unverified behavior.
+The final CLI acceptance script also passes with refreshed embedded user docs
+and skill guidance.
+
+Without the flag, asset-store membership remains unverified. MediaStore writes
+remain unsupported. Native-controlled replacement/deletion/reopen experiments must
 establish which records are canonical, derived or recreated before writes,
 relocation or cross-store transactions can be implemented safely. No fresh
 ProPresenter 21 host or Cloud connection is required for this local work.

@@ -22,6 +22,7 @@ let package = Package(
 	],
 	targets: [
 		.systemLibrary(name: "CSQLite"),
+		.target(name: "CXXHash", exclude: ["README.md", "LICENSE.txt"]),
 		.target(
 			name: "ProPresenterProto",
 			dependencies: [
@@ -33,6 +34,7 @@ let package = Package(
 			dependencies: [
 				"ProPresenterProto",
 				"CSQLite",
+				"CXXHash",
 				.product(name: "Loro", package: "loro-swift"),
 			],
 			resources: [
@@ -107,7 +109,7 @@ let package = Package(
 )
 
 for target in package.targets {
-	guard target.type != .plugin, target.type != .system else { continue }
+	guard target.type != .plugin, target.type != .system, target.name != "CXXHash" else { continue }
 	var settings = target.swiftSettings ?? []
 	settings.append(contentsOf: [
 		.enableUpcomingFeature("NonisolatedNonsendingByDefault"),

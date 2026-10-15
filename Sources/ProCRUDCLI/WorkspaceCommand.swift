@@ -131,10 +131,15 @@ struct WorkspaceMedia: ParsableCommand {
 	static let configuration = CommandConfiguration(commandName: "media", abstract: "Inspect native document, playlist and Workspace media identities and local file availability; report uninspected streams explicitly.")
 	@Argument(help: "Exact native workspace root.") var input: String
 	@Flag(help: "Hash regular files to check locator and shared-asset content agreement (30-second total hashing budget).") var hashFiles = false
+	@Flag(help: "Also inspect checksum-verified native MediaStore asset/reference models and report materialized associations separately from file availability.") var assetStore = false
 
 	func run() throws {
+		try print(prettyJSON(report()))
+	}
+
+	func report() throws -> NativeMediaInventory {
 		let snapshot = try NativeWorkspaceSnapshot.read(from: URL(fileURLWithPath: input))
-		try print(prettyJSON(NativeMediaInventory(snapshot: snapshot, hashFiles: hashFiles)))
+		return try NativeMediaInventory(snapshot: snapshot, hashFiles: hashFiles, inspectAssetStore: assetStore)
 	}
 }
 

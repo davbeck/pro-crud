@@ -2,7 +2,8 @@ import Foundation
 
 /// File availability is established from current document locators and regular
 /// files, never from the derived MediaStore projection/thumbnail caches. This
-/// does not assert membership in the native asset store or Cloud availability.
+/// Optional native asset/reference inspection is reported separately and does
+/// not assert a transaction spanning the document and media stores.
 public struct NativeMediaInventory: Encodable, Sendable {
 	public struct File: Codable, Sendable, Equatable {
 		public let path: String
@@ -45,10 +46,12 @@ public struct NativeMediaInventory: Encodable, Sendable {
 	public let workspaceID: UUID
 	public let occurrences: [Occurrence]
 	public let uninspected: [Uninspected]
-	public let assetStoreMembership = "unverified"
+	public let assetStore: NativeMediaStoreSnapshot?
+	public let assetAssociations: [NativeMediaStoreAssociation]?
+	public let assetStoreMembership: String
 	public let runtimeSourceAvailability = "unverified"
 
-	public init(snapshot: NativeWorkspaceSnapshot, hashFiles: Bool = false) throws {
+	public init(snapshot: NativeWorkspaceSnapshot, hashFiles: Bool = false, inspectAssetStore: Bool = false) throws {
 		workspaceID = snapshot.workspaceID
 		let deadline = ArchiveDeadline(timeout: .seconds(30))
 		var occurrences: [Occurrence] = []
@@ -114,6 +117,9 @@ public struct NativeMediaInventory: Encodable, Sendable {
 		}
 		self.occurrences = occurrences
 		self.uninspected = uninspected
+		assetStore = try inspectAssetStore ? NativeMediaStoreSnapshot.read(at: snapshot.root.appendingPathComponent("MediaStore")) : nil
+		assetAssociations = assetStore.map { NativeMediaStoreAssociation.inspect(occurrences, in: $0) }
+		assetStoreMembership = assetStore == nil ? "unverified" : "inspected"
 	}
 
 	private static func supports(_ identity: NativeWorkspaceStream.Identity) -> Bool {

@@ -495,7 +495,7 @@ identity conversions before publishing output; it does not copy media assets.
 Existing output requires `--replace`, and native workspace destinations are
 rejected. The source Loro history and client state remain untouched.
 
-`workspace media ROOT [--hash-files]` inspects media occurrences in available
+`workspace media ROOT [--hash-files] [--asset-store]` inspects media occurrences in available
 shared Presentation/Theme streams and presentation/media/audio playlist trees,
 including nested items and the separate live-video tree. Client playlist state
 is checked independently. Traversal also covers shared macros, props, stage
@@ -505,7 +505,7 @@ and prop collections and media inside Workspace masks; it does not export those
 configuration documents. Other mapped roots include calendar, CCLI, clear
 groups, communication devices, groups/labels, key mappings, library data, test
 patterns and shared/client timers. Non-Media URL/reference roles are not file
-assets in this report. Populated oneof-keyed KeyMappings remain unqualified.
+assets in this report. Non-menu oneof-keyed KeyMappings remain unqualified.
 Every occurrence reports its document ID and stream scope. It distinguishes reference, asset and
 container identities, identity schema strings, and each stored locator.
 `activeLocators` identifies the selected source: a selected `SourceInfo` file or
@@ -521,3 +521,27 @@ source states; file and asset UUID requirements do not apply to live devices.
 Runtime availability remains unverified. Every unavailable or uninspected stream remains explicit. File
 availability does not establish native asset-store membership, and this report
 does not qualify native media writes or replace strict legacy media validation.
+
+`--asset-store` additionally reads the selected workspace's native MediaStore
+and reports its Asset and Reference models and each file occurrence's
+materialized association. The declared asset UUID and the Reference model's
+asset UUID remain separate. `different-asset-association` identifies a difference
+in those records; it does not change the file-availability result or imply a
+repair. `matched` confirms the association, not current file availability.
+Runtime streams are excluded from file-asset membership comparisons.
+
+The native schema-1 reader verifies current manifest/table/WAL records,
+XXH3 table-block and CRC32C log checksums, sequence precedence and tombstones.
+It supports uncompressed block-format-5 tables with the qualified index layout
+and default column family. Other layouts, corrupt or incomplete records and
+future asset/reference namespaces fail explicitly. Reads have a 64 MiB per-file,
+512 MiB total, one-million-record and 30-second budget, with up to three attempts
+when source files change. It never opens RocksDB for writing or initializes a
+missing store. Without the flag, asset-store membership remains unverified.
+
+Document and MediaStore snapshots are captured independently. The report does
+not claim a transaction across both stores; native helper updates can lag
+document edits. Other model families remain listed as uninspected. Native
+checksums are retained as opaque metadata and are not compared to the optional
+SHA-256 file hashes. MediaStore writes and native media transactions remain
+unsupported.

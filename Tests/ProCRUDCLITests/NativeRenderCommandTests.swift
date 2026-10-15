@@ -89,6 +89,29 @@ struct NativeRenderCommandTests {
 		}
 	}
 
+	@Test func mediaCommandExplicitlyReadsTheNativeStoreWithoutChangingItsFilesOrDatabase() throws {
+		try withWorkspace(media: true) { root, _ in
+			let store = root.appendingPathComponent("MediaStore")
+			try FileManager.default.copyItem(at: fixtures.appendingPathComponent("Native/MediaStoreSnapshot"), to: store)
+			let database = root.appendingPathComponent("DocumentStore/workspace-v1.sqlite3"), before = try Data(contentsOf: database)
+			let files = try FileManager.default.contentsOfDirectory(atPath: store.path)
+			let hashes = try files.map { try Data(SHA256.hash(data: Data(contentsOf: store.appendingPathComponent($0)))) }
+			let command = try WorkspaceMedia.parse([root.path, "--asset-store"])
+			#expect(command.assetStore)
+			let report = try command.report()
+			#expect(report.assetStoreMembership == "inspected" && report.assetStore?.references.count == 90)
+			#expect(report.assetAssociations?.count == 2 && report.assetAssociations?.allSatisfy { $0.status == .matched } == true)
+			let encoded = try JSONSerialization.jsonObject(with: JSONEncoder().encode(report)) as? [String: Any]
+			#expect(encoded?["assetStoreMembership"] as? String == "inspected")
+			#expect((encoded?["assetStore"] as? [String: Any])?["rawModels"] == nil)
+			let original = try WorkspaceMedia.parse([root.path]).report()
+			#expect(original.assetStore == nil && original.assetStoreMembership == "unverified")
+			#expect(try Data(contentsOf: database) == before)
+			#expect(try files.map { try Data(SHA256.hash(data: Data(contentsOf: store.appendingPathComponent($0)))) } == hashes)
+			#expect(try FileManager.default.contentsOfDirectory(atPath: store.path).sorted() == files.sorted())
+		}
+	}
+
 	private func withWorkspace(media: Bool, _ body: (URL, String) throws -> Void) throws {
 		let directory = FileManager.default.temporaryDirectory.appendingPathComponent(UUID().uuidString)
 		let root = directory.appendingPathComponent("Native")

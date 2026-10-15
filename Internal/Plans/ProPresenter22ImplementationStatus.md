@@ -19,8 +19,11 @@ Cloud work remains deferred by the user.
 native MediaStore from its manifest, checksum-verified SST tables and WAL, and
 retains selected native model evidence. All 78 current file occurrences have
 Reference models; one actual Theme occurrence's declared asset ID differs from
-its materialized association. Production asset-store reads/writes still require
-a bounded coherent backend and controlled native mutation qualification.
+its materialized association. `workspace media --asset-store` now reads these
+models with bounded coherent manifest/table/WAL capture, checksum, sequence and
+tombstone validation, and explicit declared-versus-materialized associations.
+File availability stays independent. Production asset-store writes still
+require controlled native mutation qualification.
 
 | Plan area | Implemented | Remaining gate/work |
 | --- | --- | --- |
