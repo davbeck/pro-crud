@@ -1,8 +1,8 @@
 import Foundation
 import SwiftProtobuf
 
-struct ProtobufSchema {
-	struct MessageDescriptor {
+struct ProtobufSchema: Sendable {
+	struct MessageDescriptor: Sendable {
 		var name: String
 		var fields: [FieldDescriptor]
 		var oneofNames: [String] = []
@@ -19,7 +19,7 @@ struct ProtobufSchema {
 		}
 	}
 
-	struct FieldDescriptor: Equatable {
+	struct FieldDescriptor: Equatable, Sendable {
 		var protoName: String
 		var jsonName: String
 		var number: Int
@@ -37,8 +37,14 @@ struct ProtobufSchema {
 	}
 
 	static func bundled(version: ProPresenterTargetVersion = .v21) throws -> ProtobufSchema {
-		let data = try BundledProtobufSchema.data(version: version)
-		return try ProtobufSchema(descriptorSet: Google_Protobuf_FileDescriptorSet(serializedBytes: data))
+		try (version == .v21 ? legacy : native).get()
+	}
+
+	private static let legacy = Result { try load(.v21) }
+	private static let native = Result { try load(.v22) }
+
+	private static func load(_ version: ProPresenterTargetVersion) throws -> Self {
+		try Self(descriptorSet: Google_Protobuf_FileDescriptorSet(serializedBytes: BundledProtobufSchema.data(version: version)))
 	}
 
 	var descriptorSet: Google_Protobuf_FileDescriptorSet

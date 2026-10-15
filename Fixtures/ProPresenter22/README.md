@@ -44,3 +44,13 @@ hash must agree with its receipt, and the native continuation must extend the
 CLI-authored version vector. See
 `Internal/Research/Format/ProPresenter22LocalPersistence.md` for exact provenance
 and the deliberately limited metadata-write acceptance scope.
+
+`Native/MediaIdentity/` contains an unmodified owned two-cue presentation snapshot
+and vector. `Interchange/MediaIdentity/NativeBundle.pro` is its unmodified native
+Presentation Bundle payload, with the one owned PNG under Media/Assets. The
+native standalone export is retained separately as NativeStandalone.pro: that
+export omits both media payloads, whereas the bundle preserves them. The two
+native occurrences have distinct reference UUIDs and share one asset UUID with
+identity schema string `"1"`. No private manifest or default stock media is
+included. Exact provenance and scope are in
+`Internal/Research/Format/ProPresenter22MediaIdentity.md`.

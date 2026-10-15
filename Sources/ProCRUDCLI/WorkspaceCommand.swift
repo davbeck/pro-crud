@@ -5,8 +5,19 @@ import ProCRUDCore
 struct WorkspaceCommand: ParsableCommand {
 	static let configuration = CommandConfiguration(
 		commandName: "workspace", abstract: "Inspect explicitly selected ProPresenter workspace storage.",
-		subcommands: [WorkspaceInspect.self, WorkspaceInventory.self, WorkspaceContents.self, WorkspaceExport.self, WorkspaceDump.self, WorkspaceDiscover.self],
+		subcommands: [WorkspaceInspect.self, WorkspaceInventory.self, WorkspaceContents.self, WorkspaceMedia.self, WorkspaceExport.self, WorkspaceDump.self, WorkspaceDiscover.self],
 	)
+}
+
+struct WorkspaceMedia: ParsableCommand {
+	static let configuration = CommandConfiguration(commandName: "media", abstract: "Inspect native Presentation/Theme media identities and actual local file availability; report uninspected streams explicitly.")
+	@Argument(help: "Exact native workspace root.") var input: String
+	@Flag(help: "Hash regular files to check locator and shared-asset content agreement (30-second total hashing budget).") var hashFiles = false
+
+	func run() throws {
+		let snapshot = try NativeWorkspaceSnapshot.read(from: URL(fileURLWithPath: input))
+		try print(prettyJSON(NativeMediaInventory(snapshot: snapshot, hashFiles: hashFiles)))
+	}
 }
 
 struct WorkspaceExport: ParsableCommand {

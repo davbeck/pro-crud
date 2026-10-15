@@ -266,3 +266,13 @@ exports default to target 22. It rejects unmapped content and unsupported media
 identity conversions before publishing output; it does not copy media assets.
 Existing output requires `--replace`, and native workspace destinations are
 rejected. The source Loro history and client state remain untouched.
+
+`workspace media ROOT [--hash-files]` inspects media occurrences in available
+shared Presentation/Theme streams. It distinguishes reference, asset and
+container identities, identity schema strings, and each stored locator. Exact
+ROOT_SHOW paths resolve against the selected workspace; a same-basename file
+does not substitute for a missing asset. Optional hashing checks local content
+agreement within a 30-second budget. Remote/live URLs are reported without
+downloading. Every unavailable or uninspected stream remains explicit. File
+availability does not establish native asset-store membership, and this report
+does not qualify native media writes or replace strict legacy media validation.
