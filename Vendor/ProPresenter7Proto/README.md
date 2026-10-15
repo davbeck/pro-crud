@@ -14,7 +14,8 @@ created, endorsed, or supported by Renewed Vision.
 The compatibility view retains its historical Swift type names and older fields.
 Verified 21.4 additions are reconciled against the separately pinned exact
 baseline in `../ProPresenter21Proto`: ligature style, character size mode,
-original font custom metadata, and optional screen rendering state. The old
+original font custom metadata, optional screen rendering state, and playlist
+Presentation arrangement names (field 5). The old
 nested `Graphics.Text.Attributes.Font` and 21.4's top-level `Font` have identical
 six-field wire layouts; the compatibility view retains the nested type when
 adding `original_font=12`. TimedPlayback field 3 remains opaque here so the

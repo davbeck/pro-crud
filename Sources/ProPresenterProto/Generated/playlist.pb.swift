@@ -518,6 +518,8 @@ public nonisolated struct Rv_Data_PlaylistItem: @unchecked Sendable {
     /// Clears the value of `userMusicKey`. Subsequent reads from it will return its default value.
     public mutating func clearUserMusicKey() {self._userMusicKey = nil}
 
+    public var arrangementName: String = String()
+
     public var unknownFields = SwiftProtobuf.UnknownStorage()
 
     public nonisolated enum ContentDestination: SwiftProtobuf.Enum, Swift.CaseIterable {
@@ -1255,7 +1257,7 @@ nonisolated extension Rv_Data_PlaylistItem.Header: SwiftProtobuf.Message, SwiftP
 
 nonisolated extension Rv_Data_PlaylistItem.Presentation: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   public static let protoMessageName: String = Rv_Data_PlaylistItem.protoMessageName + ".Presentation"
-  public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{3}document_path\0\u{1}arrangement\0\u{3}content_destination\0\u{3}user_music_key\0")
+  public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{3}document_path\0\u{1}arrangement\0\u{3}content_destination\0\u{3}user_music_key\0\u{3}arrangement_name\0")
 
   public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
     while let fieldNumber = try decoder.nextFieldNumber() {
@@ -1267,6 +1269,7 @@ nonisolated extension Rv_Data_PlaylistItem.Presentation: SwiftProtobuf.Message, 
       case 2: try { try decoder.decodeSingularMessageField(value: &self._arrangement) }()
       case 3: try { try decoder.decodeSingularEnumField(value: &self.contentDestination) }()
       case 4: try { try decoder.decodeSingularMessageField(value: &self._userMusicKey) }()
+      case 5: try { try decoder.decodeSingularStringField(value: &self.arrangementName) }()
       default: break
       }
     }
@@ -1289,6 +1292,9 @@ nonisolated extension Rv_Data_PlaylistItem.Presentation: SwiftProtobuf.Message, 
     try { if let v = self._userMusicKey {
       try visitor.visitSingularMessageField(value: v, fieldNumber: 4)
     } }()
+    if !self.arrangementName.isEmpty {
+      try visitor.visitSingularStringField(value: self.arrangementName, fieldNumber: 5)
+    }
     try unknownFields.traverse(visitor: &visitor)
   }
 
@@ -1297,6 +1303,7 @@ nonisolated extension Rv_Data_PlaylistItem.Presentation: SwiftProtobuf.Message, 
     if lhs._arrangement != rhs._arrangement {return false}
     if lhs.contentDestination != rhs.contentDestination {return false}
     if lhs._userMusicKey != rhs._userMusicKey {return false}
+    if lhs.arrangementName != rhs.arrangementName {return false}
     if lhs.unknownFields != rhs.unknownFields {return false}
     return true
   }

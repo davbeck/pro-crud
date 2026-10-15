@@ -52,7 +52,46 @@ Presentations and Themes. All three retained original corpus playlist streams
 fields. That corpus check is decoding/materialization evidence; it does not
 claim complete native application acceptance of exported dependencies.
 
-This does not implement connected-plan local overlays, portable dependency
-export, native playlist edits, provider refresh ownership or media registry
-writes. Those remain local implementation work. The owned acceptance playlist
+This materialization does not implement connected-plan local overlays, native
+playlist edits, provider refresh ownership or media registry writes. Those remain local implementation work. The owned acceptance playlist
 is retained in the disposable workspace for subsequent export/import testing.
+
+## Portable media-free export acceptance
+
+`workspace export-playlist ROOT --playlist UUID --output PATH` selects one
+standard playlist node and resolves direct Presentation links by exact native
+logical path in one consistent snapshot. Repeated occurrences, hidden state,
+headers, arrangement selection and tags are retained; each distinct dependency
+is embedded once. Connected wrappers, provider relationships, media and
+non-slide action dependencies remain explicit unsupported issues before output
+publication. Output cannot overlap the native source root.
+
+The first actual CLI archive used UUID-only filenames. Native import succeeded
+but renamed the Presentation to that UUID, proving this layout was lossy. It was
+replaced with `Presentations/<source document UUID>/<original library name>.pro`,
+with both URL storage and ROOT_CURRENT_RESOURCE local path rebased coherently.
+This retains names and gives distinct archive paths to equal basenames. Native
+22 imported the nested layout successfully; it did not reuse the original
+Presentation UUID or fall back to the old library link. Its newly created
+Presentation UUID was `900d3c21-55ae-4446-8f44-1563b0dbbb1c`. The existing name
+in the receiving library caused ProPresenter's normal `-1` suffix. Both visible
+and hidden occurrences resolve to that one new document. Header color/order
+and the second occurrence's hidden flag survive.
+
+Native File → Export → Playlist re-export is retained unmodified as
+`Interchange/PortablePlaylistNativeReexport.proPlaylist`. It contains `data` and
+`ProCRUDTarget22Acceptance-1.pro`, retaining the original cue/group and CCLI
+data with a new root document identity. As in the earlier native export probe,
+ProPresenter initializes inactive text defaults on the rectangle, its empty line
+mask and an empty macOS chord chart. The test accounts for those specific native
+normalizations and compares the remaining complete cue data. Generated input archive SHA-256:
+`c0a1fb31af987542283c9058eb596abde07919c1dc4a5653cd30df707f8afe73`.
+The original acceptance playlist and both test imports remain in the disposable
+workspace. No live Look or slide was triggered.
+
+The retained decoder now types `PlaylistItem.Presentation.arrangement_name=5`,
+already present in the pinned 21.4 baseline. Independent baseline wire encoding
+is tested; empty native values no longer become spurious opaque-field downgrade
+failures. Both output profiles pass automated archive/load tests. Native import
+was performed in 22; the existing 21 fixtures remain the 21 baseline and fresh
+21 receiving-app acceptance is unavailable.

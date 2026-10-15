@@ -5,8 +5,24 @@ import ProCRUDCore
 struct WorkspaceCommand: ParsableCommand {
 	static let configuration = CommandConfiguration(
 		commandName: "workspace", abstract: "Inspect, export, and apply supported local edits to an explicitly selected ProPresenter workspace.",
-		subcommands: [WorkspaceInspect.self, WorkspaceInventory.self, WorkspaceContents.self, WorkspaceConfiguration.self, WorkspaceMedia.self, WorkspaceExport.self, WorkspaceSetCopyrightTitle.self, WorkspaceDump.self, WorkspaceDiscover.self],
+		subcommands: [WorkspaceInspect.self, WorkspaceInventory.self, WorkspaceContents.self, WorkspaceConfiguration.self, WorkspaceMedia.self, WorkspaceExport.self, WorkspaceExportPlaylist.self, WorkspaceSetCopyrightTitle.self, WorkspaceDump.self, WorkspaceDiscover.self],
 	)
+}
+
+struct WorkspaceExportPlaylist: ParsableCommand {
+	static let configuration = CommandConfiguration(commandName: "export-playlist", abstract: "Export one standard native playlist with its media-free Presentation dependencies to a separate .proPlaylist archive.")
+	@Argument(help: "Exact native workspace root.") var input: String
+	@Option(help: "Exact standard playlist UUID from workspace contents; this is a tree node, not the PlaylistLibrary stream UUID.") var playlist: String
+	@Option(help: "Separate .proPlaylist output path.") var output: String
+	@OptionGroup var target: TargetVersionOptions
+	@Flag(help: "Replace an existing archive atomically.") var replace = false
+
+	func run() throws {
+		guard let id = UUID(uuidString: playlist) else { throw ValidationError("--playlist requires a UUID.") }
+		let snapshot = try NativeWorkspaceSnapshot.read(from: URL(fileURLWithPath: input))
+		let result = try NativePlaylistExporter.bundle(from: snapshot, playlistID: id, to: URL(fileURLWithPath: output), replace: replace, targetVersion: target.targetVersion)
+		try print(prettyJSON(result))
+	}
 }
 
 struct WorkspaceSetCopyrightTitle: ParsableCommand {

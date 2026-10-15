@@ -93,6 +93,15 @@ struct NativeProjectionSchemaTests {
 		#expect(try screen.serializedData() == bytes)
 	}
 
+	@Test func playlistArrangementNameMatchesThe21Baseline() throws {
+		var encoder = try NativeProtobufEncoder(schema: .baseline21())
+		let bytes = try encoder.encode(.map(["arrangement_name": .string("Verse and Chorus")]), message: "rv.data.PlaylistItem.Presentation", path: "/presentation")
+		let link = try Rv_Data_PlaylistItem.Presentation(serializedBytes: bytes)
+		#expect(link.arrangementName == "Verse and Chorus")
+		#expect(try link.serializedData() == bytes)
+		#expect(encoder.issues.isEmpty)
+	}
+
 	@Test func keyMappingCommonFieldsRemainWireCompatibleWithoutInventedUUIDConversion() throws {
 		let baseline = try ProtobufSchema.baseline21()
 		let native = try ProtobufSchema.bundled(version: .v22)

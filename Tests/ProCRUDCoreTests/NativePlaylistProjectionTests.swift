@@ -6,6 +6,98 @@ import Testing
 
 @Suite("Native playlist materialization")
 struct NativePlaylistProjectionTests {
+	@Test(arguments: ProPresenterTargetVersion.allCases)
+	func portableExportRetainsRepeatedItemsAndEmbedsTheSharedDependencyOnce(target: ProPresenterTargetVersion) throws {
+		try withExportSnapshot { snapshot, output in
+			let id = try #require(UUID(uuidString: "d0ab014c-0771-4441-9de5-c61098ca8f3c"))
+			let result = try NativePlaylistExporter.bundle(from: snapshot, playlistID: id, to: output, targetVersion: target)
+			#expect(result.compatibility.canWrite)
+			#expect(result.compatibility.profile.targetVersion == target)
+			#expect(result.dependencies.count == 1)
+			#expect(result.dependencies[0].archivePath == "Presentations/bfa7b647-93ab-5ee6-b397-ec61b08bcfee/ProCRUDTarget22Acceptance.pro")
+			let loaded = try DocumentLoader.load(from: output)
+			guard case let .playlist(document) = loaded.payload else { Issue.record("Expected playlist archive"); return }
+			let items = try #require(document.rootNode.playlists.playlists.first).items.items
+			#expect(items.map(\.isHidden) == [false, false, true])
+			#expect(items[1].uuid != items[2].uuid)
+			#expect(items[1].presentation.documentPath == items[2].presentation.documentPath)
+			#expect(items[1].presentation.documentPath.relativePath == result.dependencies[0].archivePath)
+			#expect(items[1].presentation.documentPath.local.root == .currentResource)
+			#expect(items[1].presentation.documentPath.local.path == result.dependencies[0].archivePath)
+			// The hidden occurrence is retained in the file but ordinary playlist
+			// rendering continues to select only the visible occurrence.
+			#expect(try PresentationLoader.loadPresentations(from: output).count == 1)
+			#expect(loaded.archiveEntries.filter { $0.hasSuffix(".pro") }.count == 1)
+		}
+	}
+
+	@Test func missingNativeDependencyLeavesExistingArchiveUntouched() throws {
+		try withExportSnapshot { snapshot, output in
+			let incomplete = NativeWorkspaceSnapshot(root: snapshot.root, workspaceID: snapshot.workspaceID, metadata: [:], streams: snapshot.streams.filter { $0.identity.kind != "Presentation" })
+			let sentinel = Data("existing archive".utf8)
+			try sentinel.write(to: output)
+			#expect(throws: NativeSemanticError.self) {
+				try NativePlaylistExporter.bundle(from: incomplete, playlistID: #require(UUID(uuidString: "d0ab014c-0771-4441-9de5-c61098ca8f3c")), to: output, replace: true)
+			}
+			#expect(try Data(contentsOf: output) == sentinel)
+		}
+	}
+
+	@Test func portableArchiveImportRetainsOccurrencesAndPresentationContentInNativeReexport() throws {
+		let result = try DocumentLoader.load(from: fixtures.appendingPathComponent("Interchange/PortablePlaylistNativeReexport.proPlaylist"))
+		guard case let .playlist(playlist) = result.payload else { Issue.record("Expected native playlist"); return }
+		let items = try #require(playlist.rootNode.playlists.playlists.first).items.items
+		#expect(items.map(\.isHidden) == [false, false, true])
+		#expect(items[0].name == "Owned section")
+		#expect(items[1].presentation.documentPath == items[2].presentation.documentPath)
+		#expect(items[1].presentation.documentPath.local.path == "Libraries/Default/ProCRUDTarget22Acceptance-1.pro")
+		#expect(result.archiveEntries.filter { $0.hasSuffix(".pro") } == ["ProCRUDTarget22Acceptance-1.pro"])
+		let embedded = try PresentationLoader.loadPresentations(from: fixtures.appendingPathComponent("Interchange/PortablePlaylistNativeReexport.proPlaylist"))
+		let presentation = try #require(embedded.first).document.presentation
+		try withExportSnapshot { snapshot, _ in
+			let source = try #require(snapshot.streams.first { $0.identity.kind == "Presentation" }).protobufProjection().presentation()
+			#expect(presentation.uuid != source.uuid)
+			// Native import initializes default text metadata on this graphic
+			// rectangle and an empty macOS chord chart. Compare the entire cue
+			// after accounting for those independently observed normalizations.
+			var normalized = presentation.cues
+			let originalElement = source.cues[0].actions[0].slide.presentation.baseSlide.elements[0]
+			#expect(originalElement.element.text.rtfData.isEmpty)
+			#expect(!normalized[0].actions[0].slide.presentation.baseSlide.elements[0].element.text.rtfData.isEmpty)
+			normalized[0].actions[0].slide.presentation.baseSlide.elements[0].element.text = originalElement.element.text
+			normalized[0].actions[0].slide.presentation.baseSlide.elements[0].element.mask = originalElement.element.mask
+			normalized[0].actions[0].slide.presentation.clearChordChart()
+			#expect(normalized == source.cues)
+			#expect(presentation.cueGroups == source.cueGroups)
+			#expect(presentation.ccli == source.ccli)
+		}
+	}
+
+	@Test func nativeMediaDependencyFailsWithStructuredIssueBeforePublishing() throws {
+		try withExportSnapshot(media: true) { snapshot, output in
+			let sentinel = Data("existing archive".utf8)
+			try sentinel.write(to: output)
+			do {
+				_ = try NativePlaylistExporter.bundle(from: snapshot, playlistID: #require(UUID(uuidString: "d0ab014c-0771-4441-9de5-c61098ca8f3c")), to: output, replace: true)
+				Issue.record("Unqualified media was exported.")
+			} catch let error as DocumentCompatibilityError {
+				#expect(error.report.issues.map(\.feature) == ["native-media-dependency"])
+				#expect(!error.report.canWrite)
+			}
+			#expect(try Data(contentsOf: output) == sentinel)
+		}
+	}
+
+	@Test func exportCannotReplaceSourceOrPublishInsideIt() throws {
+		try withExportSnapshot { snapshot, _ in
+			let id = try #require(UUID(uuidString: "d0ab014c-0771-4441-9de5-c61098ca8f3c"))
+			for output in [snapshot.root, snapshot.root.deletingLastPathComponent(), snapshot.root.appendingPathComponent("Output.proPlaylist")] {
+				#expect(throws: DocumentArchiveError.self) { try NativePlaylistExporter.bundle(from: snapshot, playlistID: id, to: output, replace: true) }
+			}
+			#expect(try FileManager.default.contentsOfDirectory(atPath: snapshot.root.path).isEmpty)
+		}
+	}
+
 	@Test func nativeTreeMatchesIndependentExportOrderVisibilityAndReferences() throws {
 		let shared = try fixture("shared", scope: .shared)
 		let client = try fixture("client", scope: .client)
@@ -107,6 +199,20 @@ struct NativePlaylistProjectionTests {
 		case let .list(value): .list(value: value.map(loro))
 		case let .map(value): .map(value: value.mapValues(loro))
 		}
+	}
+
+	private func withExportSnapshot(media: Bool = false, _ body: (NativeWorkspaceSnapshot, URL) throws -> Void) throws {
+		let directory = FileManager.default.temporaryDirectory.appendingPathComponent(UUID().uuidString)
+		let root = directory.appendingPathComponent("Source")
+		try FileManager.default.createDirectory(at: root, withIntermediateDirectories: true)
+		defer { try? FileManager.default.removeItem(at: directory) }
+		let prefix = media ? "MediaIdentity/Presentation" : "Playlist/presentation"
+		let data = try Data(contentsOf: fixtures.appendingPathComponent("Native/\(prefix).loro"))
+		let vector = try Data(contentsOf: fixtures.appendingPathComponent("Native/\(prefix).vector"))
+		let id = try #require(UUID(uuidString: media ? "12080506-ffda-5a60-9e6d-4c99a9a8f82f" : "bfa7b647-93ab-5ee6-b397-ec61b08bcfee"))
+		let presentation = NativeWorkspaceStream(identity: .init(documentID: id, scope: .shared, kind: "Presentation", corePath: "Default/ProCRUDTarget22Acceptance", availability: .available, byteCount: Int64(data.count), sha256: nil, updatedAtMilliseconds: 0), snapshot: data, versionVector: vector, lastSharedVersionVector: nil)
+		let snapshot = try NativeWorkspaceSnapshot(root: root, workspaceID: UUID(), metadata: [:], streams: [fixture("shared", scope: .shared), fixture("client", scope: .client), presentation])
+		try body(snapshot, directory.appendingPathComponent("Export.proPlaylist"))
 	}
 
 	private func fixture(_ name: String, scope: NativeWorkspaceStream.Scope) throws -> NativeWorkspaceStream {

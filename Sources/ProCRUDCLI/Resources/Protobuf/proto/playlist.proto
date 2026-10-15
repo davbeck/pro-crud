@@ -100,6 +100,7 @@ message PlaylistItem {
     }
     ContentDestination content_destination = 3;
     rv.data.MusicKeyScale user_music_key = 4;
+    string arrangement_name = 5;
 
   }
   message PlanningCenter {

@@ -87,3 +87,15 @@ The client snapshot SHA-256 is
 `03abe6b4735627840bc50d6c3a3c7726fb260f2fb350f0658adccb483de2544c`.
 These fixtures qualify standard playlist materialization and client expansion
 joining, not connected-plan overlays or native playlist edits.
+
+`Interchange/PortablePlaylistNativeReexport.proPlaylist` is the unmodified
+native re-export after importing a CLI-generated media-free playlist with
+`Presentations/<document UUID>/<original name>.pro` dependencies into that same
+disposable local workspace. Collected October 15, 2026, same pinned app/OS.
+ProPresenter created a new Presentation identity, retained both occurrences and
+hidden state, and applied its normal `-1` receiving-library name collision
+suffix. Both links point to that one new document. Cue/group data and CCLI
+metadata survive, with native initialization of inactive empty-text/chord-chart
+defaults as documented in the playlist research. SHA-256:
+`301bf3c06bee3e1ab4a722ec6c24b5697172166445258c982b4a559766754d9b`.
+See the playlist research for the rejected UUID-only filename experiment.

@@ -33,8 +33,24 @@ open before inspection.
 Other database schemas and storage markers are rejected explicitly.
 `workspace inventory ROOT --projections` checks native Presentation, Theme and
 playlist protobuf views. Playlist views preserve the shared tree and matching
-client node expansion state separately; they do not export Presentation/media
-dependencies or qualify connected-playlist local overlays.
+client node expansion state separately. Connected-playlist local overlays remain
+unsupported. Export one standard playlist with media-free Presentation
+dependencies using:
+
+```sh
+pro-crud workspace export-playlist /exact/native/root --playlist PLAYLIST_UUID \
+  --output /separate/path/Service.proPlaylist --target-version 22
+```
+
+Select the playlist tree node UUID from `workspace contents`, rather than the
+PlaylistLibrary stream UUID. Both profiles (21 and 22) preserve ordered repeated
+links, hidden items, headers and arrangements. Each shared Presentation is
+embedded once under a UUID directory with its original filename; both URL
+representations point into the archive. ProPresenter may add its normal name
+collision suffix on import into a populated library. Connected/provider items,
+media, header actions and other action dependencies currently return structured
+compatibility errors before output publication. Source and output paths must
+remain separate.
 
 General native document edits and strict media validation require their native
 adapters. Render a supported shared Presentation directly with
@@ -117,7 +133,7 @@ Archive extensions identify the export workflow. The extension is part of the us
 | Extension | Container | Typical entries | Primary payloads | Purpose |
 | --- | --- | --- | --- | --- |
 | `.probundle` | ZIP | One root `.pro` file; optional media files | `rv.data.Presentation` in the `.pro` file | Presentation bundle export/import. A media-free presentation can contain only the `.pro`; a bundle with media can include images, videos, or audio alongside it. |
-| `.proPlaylist` | ZIP | One root `data` file plus one or more root `.pro` files | `rv.data.PlaylistDocument` in `data`; `rv.data.Presentation` in each `.pro` | Playlist export/import. The `data` file preserves playlist tree structure, item ordering, per-item arrangement UUIDs, and references to embedded presentation documents. |
+| `.proPlaylist` | ZIP | One root `data` file plus embedded `.pro` files | `rv.data.PlaylistDocument` in `data`; `rv.data.Presentation` in each `.pro` | Playlist export/import. The `data` file preserves playlist tree structure, item ordering, per-item arrangement UUIDs, and references to embedded presentation documents. |
 | `.proTheme` | ZIP | One directory per exported theme; each directory contains a `Theme` file and may contain assets | `rv.data.Template.Document` in each `Theme` file | Theme export/import. Each theme document contains reusable template slides. |
 
 ProPresenter 21.4 exports use stored entries and ZIP64 size fields even for small files. A presentation-only export and the `.pro` entry in a presentation bundle are byte-identical to the selected live-library document. A media bundle retains the document's absolute media URLs and `ROOT_SHOW` local paths while storing each media file under its absolute source path in the ZIP. This is ProPresenter's native export shape, not a requirement for compatible third-party archives. Its writer also records the central-directory size as 98 bytes too large by including the ZIP64 end record, ZIP64 locator, and classic end record in that size. Readers can tolerate that exact defect after independently validating the entry count, record boundaries, and trailer; other directory-size mismatches remain corruption errors.
