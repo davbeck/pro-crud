@@ -4,7 +4,7 @@ import Testing
 
 @Suite("ProPresenter 22 native interchange")
 struct ProPresenter22InterchangeTests {
-	@Test(arguments: ["NativePresentation.pro", "MetadataFreeTheme/Theme", "EmptyPlaylist.proPlaylist"])
+	@Test(arguments: ["NativePresentation.pro", "MetadataFreeTheme/Theme", "EmptyPlaylist.proPlaylist", "NativeEditedTarget21.pro", "NativeEditedTarget22.pro"])
 	func nativeExportsLoadValidateAndPreserveTheirPayloads(name: String) throws {
 		let root = URL(fileURLWithPath: #filePath).deletingLastPathComponent().deletingLastPathComponent().deletingLastPathComponent()
 		let input = root.appendingPathComponent("Fixtures/ProPresenter22/Interchange/\(name)")
@@ -20,6 +20,12 @@ struct ProPresenter22InterchangeTests {
 		if case let .presentation(presentation) = loaded.payload {
 			#expect(presentation.applicationInfo.applicationVersion.majorVersion == 22)
 			#expect(presentation.cues.count == 1)
+			if name == "NativeEditedTarget21.pro" {
+				#expect(presentation.ccli.songTitle == "Native Acceptance 21")
+			}
+			if name == "NativeEditedTarget22.pro" {
+				#expect(presentation.ccli.songTitle == "Native Acceptance 22")
+			}
 		}
 	}
 

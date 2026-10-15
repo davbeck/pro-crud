@@ -22,6 +22,11 @@ binding decoded all 385 retained native snapshots, with exact deep-value agreeme
 against independent official WASM projections. This qualifies diagnostic decoding,
 not semantic materialization or editing.
 
+`../Research/Format/ProPresenter22TargetAcceptance.md` records fresh 21-profile
+and 22-profile bundles importing successfully into the pinned 22 build, a
+committed native metadata edit, and native re-export with retained nested IDs.
+The two generated MISC test presentations remain available for review.
+
 Local validation: full Swift suite (276 core + 78 CLI tests; eight existing known
 rendering issues), CLI acceptance, SwiftFormat/SwiftLint, protobuf resource
 freshness, and bundled four-document/99-variation Theme freshness pass. The Theme

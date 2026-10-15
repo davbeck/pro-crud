@@ -12,6 +12,11 @@ independently authored test documents, not content from the private library.
   manifest is excluded because it contains private workspace locations.
 - `EmptyPlaylist.proPlaylist`: native Playlist export of an empty standard
   presentation playlist, with Include media within presentations enabled.
+- `NativeEditedTarget21.pro` and `NativeEditedTarget22.pro`: fresh CLI-generated
+  21-profile and 22-profile rectangle bundles imported into the pinned 22 build,
+  edited natively (CCLI song title), and re-exported through Presentation.
+  Both files therefore declare native application 22. The profile in the name
+  identifies the original CLI input, not a claim of receiving-app 21.4 testing.
 
 The document payloads are unmodified native exports. Tests must not regenerate these with
 DocumentFactory. Collection details are in
