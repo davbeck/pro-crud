@@ -243,3 +243,17 @@ The `edit` subcommands accept `.probundle`, `.proPlaylist`, and `.proTheme` file
 Existing archive entries and media references are preserved rather than passed through the bundler's media-portability rewrite. When an edit introduces a new media UUID backed by a local file, that file is copied into the archive and only the new reference is changed to its archive-relative path. An identical asset already stored at the intended path is reused; a different asset with the same filename receives a `-1`, `-2`, or later numeric suffix.
 
 For `.proPlaylist`, edits address the root `data` playlist document and preserve embedded presentations. For a `.proTheme` containing multiple `*/Theme` documents, the existing `/slides[...]` paths address the first theme in display order while the other theme documents remain unchanged.
+
+## Native Workspace Contents
+
+`pro-crud workspace contents ROOT` reads one consistent native SQLite snapshot
+and reports library membership, resolved presentation stream identities,
+Master/group cue order, arrangements, and playlist trees. It keeps shared and
+client streams separate. Unavailable content, unresolved references, conflicting
+ordering, and unmaterialized stream kinds remain explicit in the report.
+
+Loro tree node IDs and fractional positions are distinct from document UUIDs.
+Master order follows the resolved placement tree; arrangement expansion retains
+repeated group references. Library links resolve through workspace-relative
+logical paths rather than stale pre-migration absolute paths. This inspection
+does not write native content or perform Cloud synchronization.

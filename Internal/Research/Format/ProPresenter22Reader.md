@@ -30,9 +30,35 @@ committed WAL visibility, exclusion of an open uncommitted transaction,
 unchanged source main/WAL bytes, corrupt envelopes, schemas 8/10/99, unavailable
 content, shared/client identity separation, and mismatched version vectors.
 
-The interface is diagnostic. It does not materialize native streams into
+The original dump interface is diagnostic. It does not materialize native streams into
 editable protobuf documents, render native slides, resolve the native media
 registry, or write CRDT operations. Those capabilities retain the plan's
 independent acceptance gates. The reader does not qualify Cloud merges or
 newer storage schemas. SQLite snapshots are bounded to 512 MiB in memory;
 unknown schema/storage versions fail without migration or repair.
+
+## Local semantic ordering and references
+
+`workspace contents` now reads the shared Presentation, LibraryData and three
+playlist stream kinds. It resolves native placement topology, group membership,
+Master cue order, repeated arrangement groups, stored arrangement selection,
+library links and playlist trees. Original node metadata remains retained.
+Client scopes, unavailable content and remaining stream kinds are explicit.
+Conflicting legacy/native orders and dangling placement/arrangement references
+are rejected rather than inferred.
+
+The retained consistent snapshot contains 337 presentations and all 337 library
+references resolve to shared native stream identities, including the independent
+probe. All three playlist trees load without semantic diagnostics. An independent
+wire decoder compared the 336 pre-existing presentations with the native Legacy
+Workspace export: root identity/name, ordered group identities/names/membership,
+Master cue order, arrangement identity/name/ordered repeated groups, and selected
+arrangement agree in every case. The remaining probe predates no corresponding
+Legacy Workspace export; its independent standalone native export is checked in
+and compared by the automated suite. No private presentation data was added to
+the shipped fixtures. Fifteen focused tests cover that native/export pair,
+topology, repeated/empty/conflicting arrangements, dangling references, connected
+playlist wrapper preservation, scope separation and logical-path resolution.
+
+This qualifies semantic inspection of those structures. Native mutation and
+full protobuf/media materialization remain separate implementation work.
