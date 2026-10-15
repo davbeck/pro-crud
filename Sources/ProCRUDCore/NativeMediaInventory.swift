@@ -43,7 +43,7 @@ public struct NativeMediaInventory: Encodable, Sendable {
 		var uninspected: [Uninspected] = []
 		var fileCache: [URL: File] = [:]
 		for stream in snapshot.streams {
-			guard stream.identity.scope == .shared, ["Presentation", "Theme"].contains(stream.identity.kind) else {
+			guard Self.supports(stream.identity) else {
 				uninspected.append(.init(identity: stream.identity, reason: "Media traversal for this stream kind/scope is not implemented."))
 				continue
 			}
@@ -52,9 +52,7 @@ public struct NativeMediaInventory: Encodable, Sendable {
 				continue
 			}
 			do {
-				let projection = try stream.protobufProjection()
-				try projection.requireComplete()
-				for reference in try MediaReference.collect(protobuf: projection.protobuf, messageType: projection.messageType) {
+				for reference in try stream.mediaReferences() {
 					var files: [File] = []
 					var diagnostics = Self.identityDiagnostics(reference)
 					if reference.locators.isEmpty {
@@ -101,6 +99,11 @@ public struct NativeMediaInventory: Encodable, Sendable {
 		}
 		self.occurrences = occurrences
 		self.uninspected = uninspected
+	}
+
+	private static func supports(_ identity: NativeWorkspaceStream.Identity) -> Bool {
+		["PlaylistLibrary", "PlaylistMedia", "PlaylistAudio"].contains(identity.kind) ||
+			(identity.scope == .shared && ["Presentation", "Theme"].contains(identity.kind))
 	}
 
 	private static func identityDiagnostics(_ reference: MediaReference) -> [String] {
@@ -153,5 +156,52 @@ public struct NativeMediaInventory: Encodable, Sendable {
 		let resolvedRoot = root.resolvingSymlinksInPath().path + "/"
 		guard candidate.resolvingSymlinksInPath().path.hasPrefix(resolvedRoot) else { throw NativeSemanticError.invalidValue(path: path, expected: "file inside selected workspace") }
 		return candidate
+	}
+}
+
+public extension NativeWorkspaceStream {
+	/// Enumerates media in supported shared document graphs and playlist trees.
+	/// Client playlist state is inspected independently; it is never merged into
+	/// a shared tree or treated as an alternate source of content.
+	func mediaReferences() throws -> [MediaReference] {
+		if identity.scope == .shared, ["Presentation", "Theme"].contains(identity.kind) {
+			let projection = try protobufProjection()
+			try projection.requireComplete()
+			return try MediaReference.collect(protobuf: projection.protobuf, messageType: projection.messageType)
+		}
+		guard ["PlaylistLibrary", "PlaylistMedia", "PlaylistAudio"].contains(identity.kind) else {
+			throw NativeSemanticError.unsupportedNode(path: identity.documentID.uuidString, kind: "media traversal of \(identity.kind)/\(identity.scope)")
+		}
+		let value = try decodedValue().object(at: "/").required("root", at: "/")
+		var encoder = try NativeProtobufEncoder(schema: .bundled(version: .v22))
+		if identity.scope == .client {
+			let data = try encoder.encode(value, message: "rv.data.PlaylistLocalDocument", path: "/root")
+			guard encoder.issues.isEmpty else { throw NativeProjectionError(issues: encoder.issues) }
+			return try MediaReference.collect(protobuf: data, messageType: "rv.data.PlaylistLocalDocument")
+		}
+		_ = try NativePlaylistLayout(root: value)
+		var root = try value.object(at: "/root")
+		let trees = try ["playlists", "live_video_playlist_nodes"].map { name in
+			try (name, NativePlacementNode.read(root.required(name, at: "/root"), path: "/root/\(name)"))
+		}
+		root.removeValue(forKey: "playlists")
+		root.removeValue(forKey: "live_video_playlist_nodes")
+		let data = try encoder.encode(.map(root), message: "rv.data.PlaylistDocument", path: "/root")
+		var references = try MediaReference.collect(protobuf: data, messageType: "rv.data.PlaylistDocument")
+		func collect(_ nodes: [NativePlacementNode], tree: String, encoder: inout NativeProtobufEncoder) throws -> [MediaReference] {
+			var result: [MediaReference] = []
+			for node in nodes {
+				let path = "/root/\(tree)[node_id=\(node.nodeID)]"
+				let data = try encoder.encode(node.metadata, message: "rv.data.PlaylistNode", path: path)
+				try result.append(contentsOf: MediaReference.collect(protobuf: data, messageType: "rv.data.PlaylistNode", rootPath: path))
+				try result.append(contentsOf: collect(node.children, tree: tree, encoder: &encoder))
+			}
+			return result
+		}
+		for (name, nodes) in trees {
+			try references.append(contentsOf: collect(nodes, tree: name, encoder: &encoder))
+		}
+		guard encoder.issues.isEmpty else { throw NativeProjectionError(issues: encoder.issues) }
+		return references
 	}
 }

@@ -56,7 +56,27 @@ fills, obeys protobuf message merging and active oneofs, and distinguishes
 ROOT_SHOW paths, ordinary absolute/relative URLs, and HLS remote sources.
 
 `workspace media ROOT [--hash-files]` reads available shared Presentation/Theme
-streams from one database snapshot. It reports each occurrence, exact local
+streams and presentation/media/audio playlist trees from one database snapshot.
+Playlist inspection includes nested items and the separate live-video tree;
+client node state is checked separately rather than merged into content. Tree
+metadata is encoded through the pinned PlaylistNode descriptor for dependency
+traversal, without flattening or inventing a legacy playlist root. Unknown node
+fields invalidate a stream's complete enumeration. Automated tree tests use
+real Loro containers with owned native media actions; these constructed trees
+exercise traversal, not native playlist mutation acceptance.
+
+The retained 385-stream SQLite snapshot enumerates **927** occurrences: 828 in
+Presentations, 75 in Themes and 24 in PlaylistMedia. PlaylistLibrary/PlaylistAudio
+and all three client playlist streams inspect successfully with no occurrences.
+All 927 reference IDs are distinct; there are 385 asset IDs. An independent
+recursive scan of the previously captured official WASM projections matches the
+complete `(document, reference, asset, schema)` multiset exactly, with zero
+missing/extra occurrences. Twenty-one remaining stream scopes/kinds are explicit
+as uninspected (including PlaylistTemplates and Workspace); this is not complete
+workspace dependency validation. The retained snapshot has no copied media tree,
+so that comparison qualifies identity enumeration, not file availability there.
+
+The command reports each occurrence, exact local
 files and optional SHA-256 agreement, diagnostics, and every uninspected stream.
 ROOT_SHOW lookup is anchored to the selected root, so a moved workspace does
 not fall back to a stale absolute path or a same-basename file. Optional hashing

@@ -100,7 +100,7 @@ public struct MediaReference: Codable, Sendable, Equatable {
 
 	/// Visits the actual document bytes, including media in nested actions and
 	/// fills. The descriptor traversal does not consult projection caches.
-	public static func collect(protobuf: Data, messageType: String) throws -> [Self] {
+	public static func collect(protobuf: Data, messageType: String, rootPath: String = "") throws -> [Self] {
 		let schema = try ProtobufSchema.bundled(version: .v22)
 		func visit(_ data: Data, message: String, path: String) throws -> [Self] {
 			if message == Rv_Data_Media.protoMessageName {
@@ -130,7 +130,7 @@ public struct MediaReference: Codable, Sendable, Equatable {
 			}
 			return result
 		}
-		return try visit(protobuf, message: messageType, path: "")
+		return try visit(protobuf, message: messageType, path: rootPath)
 	}
 }
 

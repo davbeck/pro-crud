@@ -10,7 +10,7 @@ struct WorkspaceCommand: ParsableCommand {
 }
 
 struct WorkspaceMedia: ParsableCommand {
-	static let configuration = CommandConfiguration(commandName: "media", abstract: "Inspect native Presentation/Theme media identities and actual local file availability; report uninspected streams explicitly.")
+	static let configuration = CommandConfiguration(commandName: "media", abstract: "Inspect native Presentation/Theme and playlist-tree media identities and local file availability; report uninspected streams explicitly.")
 	@Argument(help: "Exact native workspace root.") var input: String
 	@Flag(help: "Hash regular files to check locator and shared-asset content agreement (30-second total hashing budget).") var hashFiles = false
 

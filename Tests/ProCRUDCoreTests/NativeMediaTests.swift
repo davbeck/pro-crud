@@ -1,5 +1,6 @@
 import CryptoKit
 import Foundation
+import Loro
 import ProPresenterProto
 import SwiftProtobuf
 import Testing
@@ -7,6 +8,60 @@ import Testing
 
 @Suite("Native media identities and file locators")
 struct NativeMediaTests {
+	@Test func playlistTreesInspectNestedItemsAndLiveVideoNodesInResolvedOrder() throws {
+		let source = try #require(snapshot(root: interchange).streams.first)
+		let nativeRoot = try source.decodedValue().object(at: "/").required("root", at: "/").object(at: "/root")
+		let cues = try nativeRoot.required("cues", at: "/root").object(at: "/root/cues")
+		let actions = try cues.keys.sorted().map { key in
+			try #require(cues.required(key, at: "/cues").object(at: "/cue").required("actions", at: "/cue").array(at: "/actions").first { action in
+				try action.object(at: "/action")["type"] == .integer(13)
+			})
+		}
+		#expect(actions.count == 2)
+		let document = LoroDoc()
+		let root = document.getMap(id: "root")
+		try root.insert(key: "type", v: 2)
+		let tree = try root.insertContainer(key: "playlists", child: LoroTree())
+		let group = try tree.create(parent: .root)
+		try metadata(tree.getMeta(target: group), kind: "group", value: .map([:]))
+		let playlist = try tree.create(parent: .node(id: group))
+		try metadata(tree.getMeta(target: playlist), kind: "playlist", value: .map([:]))
+		let item = try tree.create(parent: .node(id: playlist))
+		try metadata(tree.getMeta(target: item), kind: "item", value: itemValue(action: actions[0]))
+		let live = try root.insertContainer(key: "live_video_playlist_nodes", child: LoroTree())
+		let liveItem = try live.create(parent: .root)
+		try metadata(live.getMeta(target: liveItem), kind: "item", value: itemValue(action: actions[1]))
+		let stream = try playlistStream(document, scope: .shared)
+		let references = try stream.mediaReferences()
+		#expect(references.count == 2)
+		#expect(references[0].path.hasPrefix("/root/playlists[node_id="))
+		#expect(references[1].path.hasPrefix("/root/live_video_playlist_nodes[node_id="))
+		#expect(Set(references.compactMap(\.assetID)) == ["322e4d08-cba2-4b08-bd43-842ae317f6df"])
+		#expect(Set(references.map(\.referenceID)).count == 2)
+		let inventory = try NativeMediaInventory(snapshot: .init(root: interchange, workspaceID: UUID(), metadata: [:], streams: [stream]))
+		#expect(inventory.occurrences.map(\.localFilesAvailable) == [true, true])
+		#expect(inventory.uninspected.isEmpty)
+		// A future node field can carry a dependency. It must invalidate this
+		// stream's complete enumeration rather than silently returning a subset.
+		try tree.getMeta(target: item).insert(key: "future_media", v: "unmapped")
+		#expect(throws: NativeProjectionError.self) { try playlistStream(document, scope: .shared).mediaReferences() }
+	}
+
+	@Test func clientPlaylistStateIsInspectedSeparatelyWithoutSharedTreeFallback() throws {
+		let document = LoroDoc()
+		let root = document.getMap(id: "root")
+		try root.insert(key: "type", v: 2)
+		let id = UUID().uuidString
+		try root.insert(key: "node_states", v: LoroValue.map(value: [id: .map(value: ["uuid": .string(value: id), "expanded": .bool(value: true)])]))
+		let stream = try playlistStream(document, scope: .client)
+		#expect(try stream.mediaReferences().isEmpty)
+		let inventory = try NativeMediaInventory(snapshot: .init(root: interchange, workspaceID: UUID(), metadata: [:], streams: [stream]))
+		#expect(inventory.occurrences.isEmpty)
+		#expect(inventory.uninspected.isEmpty)
+		try root.insert(key: "future_media", v: "unmapped")
+		#expect(throws: NativeProjectionError.self) { try playlistStream(document, scope: .client).mediaReferences() }
+	}
+
 	@Test func nativeBundlePreservesSharedAssetAndDistinctOccurrences() throws {
 		let payload = try Data(contentsOf: interchange.appendingPathComponent("NativeBundle.pro"))
 		let references = try MediaReference.collect(protobuf: payload, messageType: Rv_Data_Presentation.protoMessageName)
@@ -118,6 +173,35 @@ struct NativeMediaTests {
 		return try .init(root: root, workspaceID: UUID(), metadata: [:], streams: [
 			.init(identity: .init(documentID: #require(UUID(uuidString: "12080506-ffda-5a60-9e6d-4c99a9a8f82f")), scope: .shared, kind: "Presentation", corePath: "Default/NativeMediaIdentity", availability: .available, byteCount: Int64(snapshot.count), sha256: hex(Data(SHA256.hash(data: snapshot))), updatedAtMilliseconds: 0), snapshot: snapshot, versionVector: vector, lastSharedVersionVector: nil),
 		])
+	}
+
+	private func playlistStream(_ document: LoroDoc, scope: NativeWorkspaceStream.Scope) throws -> NativeWorkspaceStream {
+		document.commit()
+		let data = try document.exportSnapshot()
+		return .init(identity: .init(documentID: UUID(), scope: scope, kind: "PlaylistMedia", corePath: nil, availability: .available, byteCount: Int64(data.count), sha256: hex(Data(SHA256.hash(data: data))), updatedAtMilliseconds: 0), snapshot: data, versionVector: document.oplogVv().encode(), lastSharedVersionVector: nil)
+	}
+
+	private func metadata(_ map: LoroMap, kind: String, value: NativeWorkspaceValue) throws {
+		try map.insert(key: "uuid", v: UUID().uuidString)
+		try map.insert(key: "name", v: "Owned test node")
+		try map.insert(key: "Kind", v: loro(.map(["__tag": .string(kind), kind: value])))
+	}
+
+	private func itemValue(action: NativeWorkspaceValue) -> NativeWorkspaceValue {
+		.map(["is_hidden": .boolean(false), "ItemType": .map(["__tag": .string("cue"), "cue": .map(["uuid": .string(UUID().uuidString), "name": .string("Owned media cue"), "actions": .list([action])])])])
+	}
+
+	private func loro(_ value: NativeWorkspaceValue) -> LoroValue {
+		switch value {
+		case .null: .null
+		case let .boolean(value): .bool(value: value)
+		case let .number(value): .double(value: value)
+		case let .integer(value): .i64(value: value)
+		case let .binary(value): .binary(value: value)
+		case let .string(value): .string(value: value)
+		case let .list(value): .list(value: value.map(loro))
+		case let .map(value): .map(value: value.mapValues(loro))
+		}
 	}
 
 	private func hex(_ data: Data) -> String {
