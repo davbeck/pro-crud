@@ -3,7 +3,7 @@
   "applicationBuild": "369098875",
   "sourceBinary": "Contents/Frameworks/ProCore.framework/ProCore",
   "sourceSHA256": "793c50c3e28dc742a06eb6ac2029478843372a3667963302737e0f746d273e09",
-  "descriptorSetSHA256": "62fc70a6d4125ac6ed5d8e2cd3ce847dae7611bbf555e467f419f469cb3ae205",
+  "descriptorSetSHA256": "e14d58defe05e9a9f31a31ce5af10dcec624c829ec225d755e052d5cac8cefe8",
   "files": {
     "action.proto": {
       "offset": 127578325,
@@ -140,6 +140,11 @@
       "length": 2221,
       "sha256": "97a2ded8ee832d92f7ce1f5c6662e55e053b006bbb6e6ec1ea05f6dff25c5615"
     },
+    "macros.proto": {
+      "offset": 127684959,
+      "length": 7825,
+      "sha256": "ce9a03b49ef42940470ba7b381d5a995a8a7c76b24d7078540e2991c12a3b819"
+    },
     "messages.proto": {
       "offset": 127513018,
       "length": 6549,
@@ -159,6 +164,11 @@
       "offset": 127657093,
       "length": 14836,
       "sha256": "b29cd153812845805f6d4a5bc9b56a30489781c42ffeb2292dabfbe7dc8b2ce7"
+    },
+    "playlistTemplate.proto": {
+      "offset": 127755323,
+      "length": 660,
+      "sha256": "1605a32bb1e1369f2d7e6a46f7776eee7c66124e03d3254b7b849ba0c4a54a84"
     },
     "preferences.proto": {
       "offset": 130993688,
@@ -189,6 +199,11 @@
       "offset": 127724672,
       "length": 611,
       "sha256": "1d46b143f047927f54625178bc8541f886d30fcab1b977c5b944f9589912230a"
+    },
+    "propDocument.proto": {
+      "offset": 127692787,
+      "length": 2308,
+      "sha256": "63c95605f288db41c3b486864dd2212819c91ddb610f8e40060aa4b513db917f"
     },
     "propSlide.proto": {
       "offset": 127573788,

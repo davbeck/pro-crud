@@ -16,6 +16,9 @@ struct NativeProjectionSchemaTests {
 		#expect(try legacy.message(named: "rv.data.KeyMapping").fieldsByName["cue_identifier"]?.typeName == "rv.data.CollectionElementType")
 		#expect(try native.message(named: "rv.data.KeyMapping").fieldsByName["cue_identifier"]?.typeName == "rv.data.KeyMapping.CollectionElementTypeKey")
 		#expect(try native.message(named: "rv.data.TimedPlayback.Sequence").fieldsByName["presentations"]?.isRepeated == true)
+		#expect(try native.message(named: "rv.data.MacrosDocument").fieldsByName["macro_collections"]?.number == 3)
+		#expect(try native.message(named: "rv.data.PropDocument").fieldsByName["prop_collections"]?.number == 4)
+		#expect(try native.message(named: "rv.data.PlaylistTemplate").fieldsByName["templates"]?.number == 1)
 	}
 
 	@Test func unknownNativeFieldsProducePathsInsteadOfSilentLoss() throws {

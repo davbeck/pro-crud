@@ -13,14 +13,16 @@ public struct NativeMediaInventory: Encodable, Sendable {
 	public struct Occurrence: Codable, Sendable, Equatable {
 		public enum State: String, Codable, Sendable { case availableFiles = "available-files", unresolvedFiles = "unresolved-files", liveDevice = "live-device", remoteSource = "remote-source", webContent = "web-content", unqualified }
 		public let documentID: UUID
+		public let scope: NativeWorkspaceStream.Scope
 		public let reference: MediaReference
 		public let files: [File]
 		public let diagnostics: [String]
 		public let localFilesAvailable: Bool
 		public let state: State
 
-		init(documentID: UUID, reference: MediaReference, files: [File], diagnostics: [String]) {
+		init(documentID: UUID, scope: NativeWorkspaceStream.Scope, reference: MediaReference, files: [File], diagnostics: [String]) {
 			self.documentID = documentID
+			self.scope = scope
 			self.reference = reference
 			self.files = files
 			self.diagnostics = diagnostics
@@ -93,7 +95,7 @@ public struct NativeMediaInventory: Encodable, Sendable {
 					if Set(files.compactMap(\.sha256)).count > 1 {
 						diagnostics.append("Occurrence locators resolve to different file contents.")
 					}
-					occurrences.append(.init(documentID: stream.identity.documentID, reference: reference, files: files, diagnostics: diagnostics))
+					occurrences.append(.init(documentID: stream.identity.documentID, scope: stream.identity.scope, reference: reference, files: files, diagnostics: diagnostics))
 				}
 			} catch {
 				uninspected.append(.init(identity: stream.identity, reason: String(describing: error)))
@@ -106,7 +108,7 @@ public struct NativeMediaInventory: Encodable, Sendable {
 			guard Set(indices.flatMap { occurrences[$0].files.compactMap(\.sha256) }).count > 1 else { continue }
 			for index in indices {
 				let occurrence = occurrences[index]
-				occurrences[index] = .init(documentID: occurrence.documentID, reference: occurrence.reference, files: occurrence.files,
+				occurrences[index] = .init(documentID: occurrence.documentID, scope: occurrence.scope, reference: occurrence.reference, files: occurrence.files,
 				                           diagnostics: occurrence.diagnostics + ["Shared asset ID resolves to different file contents across occurrences."])
 			}
 		}
@@ -116,7 +118,8 @@ public struct NativeMediaInventory: Encodable, Sendable {
 
 	private static func supports(_ identity: NativeWorkspaceStream.Identity) -> Bool {
 		["PlaylistLibrary", "PlaylistMedia", "PlaylistAudio"].contains(identity.kind) ||
-			(identity.scope == .shared && ["Presentation", "Theme"].contains(identity.kind))
+			(identity.scope == .shared && ["Presentation", "Theme"].contains(identity.kind)) ||
+			NativeMediaDocumentAdapter.message(for: identity) != nil
 	}
 
 	private static func identityDiagnostics(_ reference: MediaReference) -> [String] {
@@ -182,6 +185,14 @@ public extension NativeWorkspaceStream {
 			try projection.requireComplete()
 			return try MediaReference.collect(protobuf: projection.protobuf, messageType: projection.messageType)
 		}
+		if let message = NativeMediaDocumentAdapter.message(for: identity) {
+			let root = try decodedValue().object(at: "/").required("root", at: "/")
+			var encoder = try NativeProtobufEncoder(schema: .bundled(version: .v22))
+			let value = try message == "rv.data.ProPresenterWorkspace" ? NativeMediaDocumentAdapter.workspace(root) : root
+			let data = try encoder.encode(value, message: message, path: "/root")
+			guard encoder.issues.isEmpty else { throw NativeProjectionError(issues: encoder.issues) }
+			return try MediaReference.collect(protobuf: data, messageType: message)
+		}
 		guard ["PlaylistLibrary", "PlaylistMedia", "PlaylistAudio"].contains(identity.kind) else {
 			throw NativeSemanticError.unsupportedNode(path: identity.documentID.uuidString, kind: "media traversal of \(identity.kind)/\(identity.scope)")
 		}
@@ -216,5 +227,44 @@ public extension NativeWorkspaceStream {
 		}
 		guard encoder.issues.isEmpty else { throw NativeProjectionError(issues: encoder.issues) }
 		return references
+	}
+}
+
+/// Read-only media traversal of independently scoped native document roots.
+/// This does not export or reconstruct the Workspace/configuration documents.
+enum NativeMediaDocumentAdapter {
+	static func message(for identity: NativeWorkspaceStream.Identity) -> String? {
+		switch (identity.kind, identity.scope) {
+		case ("Workspace", .shared): "rv.data.ProPresenterWorkspace"
+		case ("Workspace", .client): "rv.data.ProPresenterLocalWorkspace"
+		case ("PlaylistTemplates", .shared): "rv.data.PlaylistTemplate"
+		case ("Macros", .shared): "rv.data.MacrosDocument"
+		case ("Props", .shared): "rv.data.PropDocument"
+		case ("Stage", .shared): "rv.data.Stage.Document"
+		case ("Messages", .shared): "rv.data.MessageDocument"
+		case ("Messages", .client): "rv.data.MessageLocalDocument"
+		default: nil
+		}
+	}
+
+	static func workspace(_ value: NativeWorkspaceValue) throws -> NativeWorkspaceValue {
+		var root = try value.object(at: "/root")
+		let field = "bundled_theme_rollout_sequence"
+		var maximum = try root.optional(field)?.int(at: "/root/\(field)") ?? 0
+		guard UInt32(exactly: maximum) != nil else { throw NativeSemanticError.invalidValue(path: "/root/\(field)", expected: "unsigned 32-bit completed rollout marker") }
+		// The pinned native descriptor documents the exported high-water mark:
+		// Core retains monotonic versioned markers and projects their maximum.
+		for key in root.keys.sorted() where key.hasPrefix(field + "__version_") {
+			let suffix = key.dropFirst((field + "__version_").count)
+			guard UInt32(suffix) != nil else { continue } // Unknown keys remain visible to the descriptor gate.
+			let marker = try root.required(key, at: "/root").int(at: "/root/\(key)")
+			guard UInt32(exactly: marker) != nil else { throw NativeSemanticError.invalidValue(path: "/root/\(key)", expected: "unsigned 32-bit completed rollout marker") }
+			maximum = max(maximum, marker)
+			root.removeValue(forKey: key)
+		}
+		if root[field] != nil || maximum > 0 {
+			root[field] = .integer(Int64(maximum))
+		}
+		return .map(root)
 	}
 }

@@ -436,7 +436,12 @@ rejected. The source Loro history and client state remain untouched.
 `workspace media ROOT [--hash-files]` inspects media occurrences in available
 shared Presentation/Theme streams and presentation/media/audio playlist trees,
 including nested items and the separate live-video tree. Client playlist state
-is checked independently. It distinguishes reference, asset and
+is checked independently. Traversal also covers shared macros, props, stage
+layouts, playlist templates and messages, plus the independent client messages
+and shared/client Workspace configuration graphs. This includes native macro
+and prop collections and media inside Workspace masks; it does not export those
+configuration documents. Every occurrence reports its document ID and stream
+scope. It distinguishes reference, asset and
 container identities, identity schema strings, and each stored locator. Exact
 ROOT_SHOW paths resolve against the selected workspace; a same-basename file
 does not substitute for a missing asset. Optional hashing checks local content

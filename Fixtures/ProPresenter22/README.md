@@ -131,3 +131,10 @@ Presentation re-export. Each owned Presentation snapshot has its actual vector;
 same pinned app/OS. See `Internal/Research/Format/ProPresenter22ArrangementEditing.md`.
 The fixture's native duplication is a control; production duplication remains
 unimplemented.
+
+The owned media actions/fills in `Native/MediaIdentity/` also serve as the
+positive inputs for constructed macro/prop collection, Workspace mask, stage
+layout and playlist-template traversal tests. These are reader tests, not native
+write fixtures. `Internal/Research/Format/ProPresenter22MediaTraversal.md`
+records the 56-file descriptor closure and independent 946-occurrence native
+corpus comparison; private configuration snapshots are not checked in.

@@ -8,6 +8,67 @@ import Testing
 
 @Suite("Native media identities and file locators")
 struct NativeMediaTests {
+	@Test func configurationPropsMacrosStageAndTemplatesTraverseOwnedMediaAndRejectUnknownDependencies() throws {
+		let source = try #require(snapshot(root: interchange).streams.first)
+		let cues = try source.decodedValue().object(at: "/").required("root", at: "/").object(at: "/root").required("cues", at: "/root").object(at: "/cues")
+		let cue = try #require(cues.values.first)
+		let actions = try cue.object(at: "/cue").required("actions", at: "/cue").array(at: "/actions")
+		let action = try #require(actions.first { try $0.object(at: "/action")["type"] == .integer(13) })
+		let media = try action.object(at: "/action").required("ActionTypeData", at: "/action").tagged(at: "/action/ActionTypeData").value.object(at: "/media").required("element", at: "/media")
+		let fill: NativeWorkspaceValue = .map(["enable": .boolean(true), "FillType": .map(["__tag": .string("media"), "media": media])])
+		let slide: NativeWorkspaceValue = .map(["elements": .list([.map(["element": .map(["fill": fill])])])])
+		let roots: [(String, NativeWorkspaceValue)] = [
+			("Workspace", .map(["masks": .list([.map(["name": .string("Owned mask"), "base_slide": slide])]), "bundled_theme_rollout_sequence": .integer(0), "bundled_theme_rollout_sequence__version_3": .integer(3)])),
+			("Stage", .map(["layouts": .list([.map(["slide": slide])])])),
+			("Macros", .map(["macros": .list([.map(["actions": .list([action])])])])),
+			("Macros", .map(["macro_collections": .list([.map(["uuid": .string(UUID().uuidString), "name": .string("Owned collection"), "macros": .list([.map(["actions": .list([action])])])])])])),
+			("Props", .map(["cues": .list([cue])])),
+			("Props", .map(["prop_collections": .list([.map(["uuid": .string(UUID().uuidString), "name": .string("Owned props"), "cues": .list([cue])])])])),
+			("PlaylistTemplates", .map(["templates": .list([.map(["name": .string("Owned template"), "playlist_items": .list([itemValue(action: action)])])])])),
+		]
+		for (kind, value) in roots {
+			let document = LoroDoc()
+			let root = document.getMap(id: "root")
+			for (key, field) in try value.object(at: "/root") {
+				try root.insert(key: key, v: loro(field))
+			}
+			let stream = try documentStream(document, kind: kind, scope: .shared)
+			let references = try stream.mediaReferences()
+			#expect(references.count == 1)
+			#expect(references.first?.assetID == "322e4d08-cba2-4b08-bd43-842ae317f6df")
+			let inventory = try NativeMediaInventory(snapshot: .init(root: interchange, workspaceID: UUID(), metadata: [:], streams: [stream]))
+			#expect(inventory.uninspected.isEmpty)
+			#expect(inventory.occurrences.first?.localFilesAvailable == true)
+			#expect(inventory.occurrences.first?.scope == .shared)
+			try root.insert(key: "future_media", v: loro(media))
+			#expect(throws: NativeProjectionError.self) { try documentStream(document, kind: kind, scope: .shared).mediaReferences() }
+		}
+	}
+
+	@Test func localWorkspaceAndMessagesAreInspectedIndependentlyOfSharedContent() throws {
+		for (kind, scope): (String, NativeWorkspaceStream.Scope) in [("Workspace", .client), ("Messages", .shared), ("Messages", .client)] {
+			let document = LoroDoc()
+			let root = document.getMap(id: "root")
+			try root.insert(key: kind == "Workspace" ? "pro_screens" : "messages", v: LoroValue.list(value: []))
+			let stream = try documentStream(document, kind: kind, scope: scope)
+			#expect(try stream.mediaReferences().isEmpty)
+			let inventory = try NativeMediaInventory(snapshot: .init(root: interchange, workspaceID: UUID(), metadata: [:], streams: [stream]))
+			#expect(inventory.uninspected.isEmpty)
+			try root.insert(key: "future_media", v: "unmapped")
+			#expect(throws: NativeProjectionError.self) { try documentStream(document, kind: kind, scope: scope).mediaReferences() }
+		}
+	}
+
+	@Test func workspaceRolloutProjectionUsesTheDocumentedMaximumAndRetainsUnknownFields() throws {
+		let value: NativeWorkspaceValue = .map(["bundled_theme_rollout_sequence": .integer(0), "bundled_theme_rollout_sequence__version_3": .integer(3), "bundled_theme_rollout_sequence__version_1": .integer(1), "future_media": .string("unmapped")])
+		#expect(try NativeMediaDocumentAdapter.workspace(value) == .map(["bundled_theme_rollout_sequence": .integer(3), "future_media": .string("unmapped")]))
+		for invalid: NativeWorkspaceValue in [.integer(-1), .integer(Int64(UInt32.max) + 1), .string("3"), .null] {
+			#expect(throws: NativeSemanticError.self) { try NativeMediaDocumentAdapter.workspace(.map(["bundled_theme_rollout_sequence__version_3": invalid])) }
+		}
+		let future: NativeWorkspaceValue = .map(["bundled_theme_rollout_sequence__version_unknown": .integer(1)])
+		#expect(try NativeMediaDocumentAdapter.workspace(future) == future)
+	}
+
 	@Test func liveDeviceAndRemoteSourcesDoNotRequireFileAssetsOrReportMissingFiles() throws {
 		let sources: [(String, NativeWorkspaceValue, NativeMediaInventory.Occurrence.State)] = [
 			("live_video", .map([:]), .liveDevice),
@@ -207,9 +268,13 @@ struct NativeMediaTests {
 	}
 
 	private func playlistStream(_ document: LoroDoc, scope: NativeWorkspaceStream.Scope) throws -> NativeWorkspaceStream {
+		try documentStream(document, kind: "PlaylistMedia", scope: scope)
+	}
+
+	private func documentStream(_ document: LoroDoc, kind: String, scope: NativeWorkspaceStream.Scope) throws -> NativeWorkspaceStream {
 		document.commit()
 		let data = try document.exportSnapshot()
-		return .init(identity: .init(documentID: UUID(), scope: scope, kind: "PlaylistMedia", corePath: nil, availability: .available, byteCount: Int64(data.count), sha256: hex(Data(SHA256.hash(data: data))), updatedAtMilliseconds: 0), snapshot: data, versionVector: document.oplogVv().encode(), lastSharedVersionVector: nil)
+		return .init(identity: .init(documentID: UUID(), scope: scope, kind: kind, corePath: nil, availability: .available, byteCount: Int64(data.count), sha256: hex(Data(SHA256.hash(data: data))), updatedAtMilliseconds: 0), snapshot: data, versionVector: document.oplogVv().encode(), lastSharedVersionVector: nil)
 	}
 
 	private func metadata(_ map: LoroMap, kind: String, value: NativeWorkspaceValue) throws {

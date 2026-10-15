@@ -42,6 +42,9 @@ media-dependent renders. Preview a supported native Presentation directly with
 history and rejects unsupported active media/features before replacing output.
 `workspace media ROOT` inspects native occurrence/asset
 identities and local file availability, with uninspected streams explicit.
+It includes macro/prop collections, stage layouts, playlist templates and
+shared/client Workspace graphs alongside Presentations, Themes and playlists.
+Use each occurrence's document ID and scope to identify its source.
 `workspace configuration ROOT` lists saved/live Looks, screens and Theme links.
 For a selected Theme slide without media, preview a native Look with
 `render PRESENTATION --workspace ROOT --look UUID --screen UUID`. This reads
