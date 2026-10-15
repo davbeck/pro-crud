@@ -4,9 +4,38 @@ import ProCRUDCore
 
 struct WorkspaceCommand: ParsableCommand {
 	static let configuration = CommandConfiguration(
-		commandName: "workspace", abstract: "Inspect explicitly selected ProPresenter workspace storage.",
-		subcommands: [WorkspaceInspect.self, WorkspaceInventory.self, WorkspaceContents.self, WorkspaceConfiguration.self, WorkspaceMedia.self, WorkspaceExport.self, WorkspaceDump.self, WorkspaceDiscover.self],
+		commandName: "workspace", abstract: "Inspect, export, and apply supported local edits to an explicitly selected ProPresenter workspace.",
+		subcommands: [WorkspaceInspect.self, WorkspaceInventory.self, WorkspaceContents.self, WorkspaceConfiguration.self, WorkspaceMedia.self, WorkspaceExport.self, WorkspaceSetCopyrightTitle.self, WorkspaceDump.self, WorkspaceDiscover.self],
 	)
+}
+
+struct WorkspaceSetCopyrightTitle: ParsableCommand {
+	static let configuration = CommandConfiguration(
+		commandName: "set-copyright-title",
+		abstract: "Set a native local Presentation's CCLI song title atomically. Quit ProPresenter and stop its workspace helpers first.",
+	)
+	@Argument(help: "Exact registered local native workspace root.") var input: String
+	@Option(help: "Exact shared Presentation stream UUID from workspace inventory.") var stream: String
+	@Option(help: "Exact registry-v1.sqlite3 path containing this local workspace registration.") var registry: String
+	@Option(help: "CCLI song title; an empty string clears the title.") var title: String
+
+	func validate() throws {
+		guard UUID(uuidString: stream) != nil else { throw ValidationError("--stream requires a UUID.") }
+	}
+
+	func run() throws {
+		guard let id = UUID(uuidString: stream) else { throw ValidationError("--stream requires a UUID.") }
+		let root = URL(fileURLWithPath: input).resolvingSymlinksInPath()
+		let receipts = try NativeLocalWorkspaceWriter.edit(.copyrightTitle(title), documentID: id, in: root, registry: URL(fileURLWithPath: registry))
+		try print(prettyJSON(Result(root: root.path, documentID: id, changed: receipts.contains { !$0.alreadyApplied }, receipts: receipts)))
+	}
+
+	private struct Result: Encodable {
+		let root: String
+		let documentID: UUID
+		let changed: Bool
+		let receipts: [NativeLocalCommitReceipt]
+	}
 }
 
 struct WorkspaceConfiguration: ParsableCommand {

@@ -32,6 +32,6 @@ struct BundledProtobufSchemaTests {
 			regularFilePaths.append(String(url.path.dropFirst(resourceRoot.path.count + 1)))
 		}
 
-		#expect(regularFilePaths.sorted() == ["Protobuf/schema.pb", "Protobuf22/schema.pb"])
+		#expect(regularFilePaths.sorted() == ["Protobuf/schema.pb", "Protobuf21/schema.pb", "Protobuf22/schema.pb"])
 	}
 }

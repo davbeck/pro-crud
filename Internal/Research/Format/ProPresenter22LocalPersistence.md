@@ -78,3 +78,24 @@ structural edits, library/path moves, media changes, Planning Center overlays,
 concurrent live writers, unknown future schemas or Cloud synchronization. Those
 are implementation/acceptance work, not prerequisites for this local result.
 The disposable workspace is retained for further testing and review.
+
+## Production CLI integration
+
+`workspace set-copyright-title ROOT --stream UUID --registry PATH --title TEXT`
+now calls the same qualified atomic writer. On the disposable local workspace
+above, the production command rejected the live app and its actual workspace,
+snapshot and network helper processes before any writable setup. After normal
+UI quit and stopping the submitted workspace-helper job, the pinned preflight
+passed. The production CLI wrote **Production CLI Title Acceptance**, returned
+`changed: true` with one receipt, and changed exactly the selected shared
+Presentation stream. The registry main-file SHA-256 was unchanged.
+
+Repeating the exact command returned `changed: false`, no receipts, and left
+both workspace and registry main-file SHA-256 hashes unchanged. Opening the
+pinned app restored the helper and the same **ProCRUD Local Persistence Test**
+workspace. The native Presentation inspector's CCLI Title text field displayed
+**Production CLI Title Acceptance** exactly. No account activation or Cloud
+setup was used. This validates the production command path in addition to the
+previous retained native continuation/re-export fixture; it does not qualify
+other native edit families. Private run artifacts are retained under
+`.build/pro22-cli-title-*` and are not shipped.

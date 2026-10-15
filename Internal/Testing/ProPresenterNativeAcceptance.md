@@ -86,8 +86,9 @@ swift run NativeTestHarness --profile /private/local-test-profile.json \
   --set-copyright-title 'Local persistence acceptance'
 ```
 
-Use only an explicitly disposable local Presentation. No production CLI native
-edit command is exposed by this experiment. The writer checks local registration
+Use only an explicitly disposable local Presentation. The production `workspace set-copyright-title` command now uses this same
+qualified writer; the harness retains the additional pinned environment checks
+for contributor experiments. The writer checks local registration
 and stopped writers again before commit, rejects changed source revisions, and
 preserves client streams, logical location, shared-version bookkeeping and all
 unrelated fields/history. Retries recognize their existing operation receipt;

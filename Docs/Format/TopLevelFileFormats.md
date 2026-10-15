@@ -32,12 +32,33 @@ incomplete WAL/shared-memory pair requires a coherent SQLite backup or native
 open before inspection.
 Other database schemas and storage markers are rejected explicitly.
 
-Direct native document edits, rendering, and strict media validation
-are currently rejected with export instructions. Use **File → Export → Legacy
+General native document edits, direct native presentation rendering, and strict
+media validation require their native adapters. The qualified local metadata
+operation below and media-free native Look previews have separate support. Use **File → Export → Legacy
 Workspace** or export an individual bundle in ProPresenter, then select the
 exported documents. A Legacy Workspace export is a point-in-time snapshot;
 later native edits do not update it. The preserved `UserWorkspaces` copy is a
 separate branch of content and writing there does not update the native store.
+
+For a registered local schema-9 workspace, set an existing Presentation's CCLI
+song title with:
+
+```sh
+pro-crud workspace set-copyright-title /exact/native/root \
+  --stream PRESENTATION_STREAM_UUID \
+  --registry /exact/path/registry-v1.sqlite3 \
+  --title 'Song title'
+```
+
+Select the shared stream UUID from `workspace inventory`. ProPresenter and its
+workspace helpers must be stopped; the command reports active writers when
+necessary. It verifies the exact local registration, retains native Loro history,
+and commits the snapshot, version vector, integrity metadata and operation
+receipt in one SQLite transaction. A concurrent revision change fails without
+publishing the edit. A matching title is a no-op. JSON output includes the
+selected document identity, `changed` and commit receipts. An empty title clears
+the CCLI song title. This operation does not rename the Presentation or change
+its library location. Other native edits still use native export/import.
 
 Valid 22 interchange payloads can omit `application_info`. Loading and editing
 preserve its absence. Root recognition instead checks presentation identities,

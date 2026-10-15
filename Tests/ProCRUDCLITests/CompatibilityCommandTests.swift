@@ -29,4 +29,20 @@ struct CompatibilityCommandTests {
 		#expect(throws: (any Error).self) { try WorkspaceDiscover.parse([]) }
 		#expect(try WorkspaceDiscover.parse(["--registry", "/tmp/registry-v1.sqlite3"]).registry == "/tmp/registry-v1.sqlite3")
 	}
+
+	@Test
+	func qualifiedNativeMetadataCommandRequiresExactIdentityAndRegistration() throws {
+		let id = UUID().uuidString
+		let arguments = ["/tmp/Exact", "--stream", id, "--registry", "/tmp/registry-v1.sqlite3", "--title", "A title with punctuation: ’"]
+		let command = try WorkspaceSetCopyrightTitle.parse(arguments)
+		#expect(command.input == "/tmp/Exact")
+		#expect(command.stream == id)
+		#expect(command.registry == "/tmp/registry-v1.sqlite3")
+		#expect(command.title == "A title with punctuation: ’")
+		#expect(try WorkspaceSetCopyrightTitle.parse(["/tmp/Exact", "--stream", id, "--registry", "/tmp/registry-v1.sqlite3", "--title", ""]).title.isEmpty)
+		#expect(throws: (any Error).self) { try WorkspaceSetCopyrightTitle.parse(["/tmp/Exact", "--stream", "not-a-uuid", "--registry", "/tmp/registry-v1.sqlite3", "--title", "X"]) }
+		#expect(throws: (any Error).self) { try WorkspaceSetCopyrightTitle.parse(["/tmp/Exact", "--stream", id, "--title", "X"]) }
+		#expect(throws: (any Error).self) { try WorkspaceSetCopyrightTitle.parse(arguments + ["--target-version", "21"]) }
+		#expect(try ProCRUD.parseAsRoot(["workspace", "set-copyright-title"] + arguments) is WorkspaceSetCopyrightTitle)
+	}
 }
