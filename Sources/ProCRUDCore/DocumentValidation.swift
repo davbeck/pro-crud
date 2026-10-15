@@ -113,6 +113,15 @@ public enum DocumentValidator {
 		case .playlist:
 			break
 		}
+		do {
+			try diagnostics.append(contentsOf: DocumentCompatibility.analyze(document).issues.map { issue in
+				DocumentValidationDiagnostic(code: "compatibility.\(issue.feature)", severity: issue.severity == .error ? .error : .warning,
+				                             componentPath: issue.componentPath, message: issue.message)
+			})
+		} catch {
+			diagnostics.append(DocumentValidationDiagnostic(code: "compatibility.inspection-failed", severity: .error,
+			                                                componentPath: "/", message: String(describing: error)))
+		}
 		return DocumentValidationReport(diagnostics: diagnostics)
 	}
 

@@ -469,8 +469,9 @@ public enum DocumentLoader {
 }
 
 public enum DocumentWriter {
-	public static func writeRaw(_ document: ProPresenterDocument, to outputURL: URL, replace: Bool = false) throws {
+	public static func writeRaw(_ document: ProPresenterDocument, to outputURL: URL, replace: Bool = false, targetVersion: ProPresenterTargetVersion? = nil) throws {
 		try WorkspaceInspector.requireLegacyAccess(at: outputURL)
+		try DocumentCompatibility.analyze(document, target: targetVersion ?? .v22).requireSupported()
 		try document.kind.validate(rawURL: outputURL)
 		_ = try DocumentLoader.decode(document.payload.serializedData(), as: document.kind, location: outputURL.path)
 		let fileManager = FileManager.default

@@ -5,6 +5,7 @@ import ProPresenterProto
 public struct DocumentDumpReport: Codable, Sendable {
 	public var kind: String
 	public var source: Source
+	public var compatibility: DocumentCompatibilityReport
 	public var archive: Archive
 	public var media: [Media]
 	public var presentation: Presentation?
@@ -350,9 +351,10 @@ private struct DocumentDumpBuilder {
 		case let .playlist(value):
 			playlist = try makePlaylistDocument(value)
 		}
-		return DocumentDumpReport(
+		return try DocumentDumpReport(
 			kind: document.kind.rawValue,
 			source: source(),
+			compatibility: DocumentCompatibility.analyze(document),
 			archive: .init(
 				entries: document.archiveEntries.sorted(),
 				embeddedMedia: document.embeddedAssetPaths.sorted(),

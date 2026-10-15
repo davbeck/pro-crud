@@ -126,7 +126,10 @@ public final class PresentationRenderer {
 	}
 
 	private func selectedCues(slideIndices: Set<Int>?) throws -> [PresentationCueOccurrence] {
-		try document.cueOccurrences().filter { occurrence in
+		var order = document.presentation
+		order.cues = []
+		try requireSupported(order)
+		return try document.cueOccurrences().filter { occurrence in
 			slideIndices?.contains(occurrence.sequenceIndex) ?? true
 		}
 	}
@@ -390,15 +393,25 @@ public final class PresentationRenderer {
 	}
 
 	private func validateForRendering(_ cue: Rv_Data_Cue) throws {
+		var selection = document.presentation
+		selection.cues = [cue]
+		try requireSupported(selection)
 		if let error = document.renderingDiagnostics(for: cue).first(where: { $0.severity == .error }) {
 			throw RenderError.invalidDocument(error)
 		}
 	}
 
 	private func validateForRendering(_ cue: Rv_Data_Cue, storageIndex: Int) throws {
+		var selection = document.presentation
+		selection.cues = [cue]
+		try requireSupported(selection)
 		if let error = document.renderingDiagnostics(forCueAtStorageIndex: storageIndex).first(where: { $0.severity == .error }) {
 			throw RenderError.invalidDocument(error)
 		}
+	}
+
+	private func requireSupported(_ presentation: Rv_Data_Presentation) throws {
+		try DocumentCompatibility.analyze(ProPresenterDocument(payload: .presentation(presentation), origin: .raw(URL(fileURLWithPath: "/")))).requireSupported()
 	}
 
 	private func textDescription(

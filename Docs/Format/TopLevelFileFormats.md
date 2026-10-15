@@ -40,6 +40,40 @@ cues and groups; playlist type and root identity; or Theme template structure.
 A metadata-free Theme needs template slides as root evidence. Missing metadata
 does not identify the originating application version.
 
+## Output Compatibility Profiles
+
+`create presentation`, `create theme`, `create playlist`, and `bundle` accept
+`--target-version 21|22`; creation and export default to 22. Both profiles use
+protobuf interchange containers. The 21 constructor retains the existing
+legacy construction encoding, including its version-7 application metadata;
+the 22 constructor declares the requested 22 target. Metadata is not itself
+proof of native application acceptance. Existing-source edits preserve their
+stored metadata and representation, including absent metadata. `edit --output`
+and edit batches do not request conversion: export the edited document with
+`bundle --target-version` for explicit target checking.
+
+Use `compatibility INPUT --target-version 21|22` to obtain a structured report.
+It reports the declared source metadata separately from the requested profile,
+feature/component paths, severity, and available conversion. Creation and
+bundling accept `--json` to include the selected profile in their results.
+Bundling checks every embedded presentation and Theme document before publishing
+output, and failed compatibility checks preserve source and existing output.
+
+Unknown wire fields and enum values are preserved and reported for 22 output.
+They block a 21-target export because their behavior and dependencies are not
+qualified. Preserved bytes are not a claim of executable support. There is no
+lossy conversion option: no behavior-changing fallback has been qualified.
+Known v2 ordering/build/playlist graphs and native media identity, provider,
+and HLS representations require adapters; packaging, editing sessions, and
+rendering reject them instead of mutating stale legacy arrays. Diagnostic dumps
+and validation expose these capability limits. Static render checks respect
+selected slides while also checking global ordering dependencies.
+
+The fixture CI matrix exercises independent 21 and 22 exports and native
+snapshot reading. Full native delivery, downgrade, new-feature rendering,
+Cloud writing, and newer beta/build qualification require separate native
+acceptance. These profiles do not imply full-version feature parity.
+
 User-facing import/export containers are ZIP archives with protobuf documents
 and optional media assets.
 

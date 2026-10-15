@@ -7,6 +7,9 @@ enum DumpTextFormatter {
 			"Kind: \(report.kind)",
 			"Source: \(report.source.type) \(report.source.path)",
 		]
+		for issue in report.compatibility.issues {
+			lines.append("\(issue.severity.rawValue.capitalized) [\(issue.feature)] \(issue.componentPath): \(issue.message)")
+		}
 		if let presentation = report.presentation {
 			append(presentation, to: &lines)
 		}

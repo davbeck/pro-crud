@@ -27,6 +27,14 @@ protobuf JSON; use native export/import for edits, media validation, and renders
 Use `workspace discover --registry PATH` to list registered identities without
 selecting an active workspace.
 
+New creation and bundle exports default to target 22. Use `--target-version 21`
+on `create presentation`, `create theme`, `create playlist`, or `bundle` for a
+21 compatibility profile. Inspect `compatibility INPUT --target-version 21`
+before a downgrade. Unknown features can block conversion; preserved bytes do
+not imply that an older app executes them. Use `--json` on create/bundle for the
+selected profile and diagnostics. Plain edits and edit batches preserve the
+source representation; `--output` alone does not convert it.
+
 1. Before editing a live ProPresenter library, confirm ProPresenter is not
    running; if it is, ask the user to quit it. Use a copied or disposable
    document for experiments.

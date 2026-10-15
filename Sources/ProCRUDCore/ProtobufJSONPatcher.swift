@@ -145,10 +145,17 @@ enum ProtobufJSONPatcher {
 		return value
 	}
 
-	private struct WireField {
+	struct WireField {
 		var number: Int
 		var payload: Data?
 		var raw: Data
+
+		var varint: UInt64? {
+			guard raw.first.map({ $0 & 7 == 0 }) == true else { return nil }
+			var offset = 0
+			guard (try? Self.readVarint(raw, offset: &offset)) != nil else { return nil }
+			return try? Self.readVarint(raw, offset: &offset)
+		}
 
 		static func parse(_ data: Data) throws -> [WireField] {
 			var offset = 0

@@ -15,7 +15,7 @@ public enum DocumentCreationError: Error, CustomStringConvertible, Sendable {
 }
 
 public enum DocumentFactory {
-	public static func presentation(name: String, canvasSize: CGSize = CGSize(width: 1920, height: 1080)) -> Rv_Data_Presentation {
+	public static func presentation(name: String, canvasSize: CGSize = CGSize(width: 1920, height: 1080), targetVersion: ProPresenterTargetVersion = .v22) -> Rv_Data_Presentation {
 		let presentationID = uuid()
 		let cueID = uuid()
 		var slide = Rv_Data_Slide()
@@ -48,7 +48,7 @@ public enum DocumentFactory {
 		cueGroup.cueIdentifiers = [cueID]
 
 		var result = Rv_Data_Presentation()
-		result.applicationInfo = applicationInfo()
+		result.applicationInfo = applicationInfo(targetVersion: targetVersion)
 		result.uuid = presentationID
 		result.name = name
 		result.cues = [cue]
@@ -56,13 +56,13 @@ public enum DocumentFactory {
 		return result
 	}
 
-	public static func theme() -> Rv_Data_Template.Document {
+	public static func theme(targetVersion: ProPresenterTargetVersion = .v22) -> Rv_Data_Template.Document {
 		var result = Rv_Data_Template.Document()
-		result.applicationInfo = applicationInfo()
+		result.applicationInfo = applicationInfo(targetVersion: targetVersion)
 		return result
 	}
 
-	public static func playlist(name: String) -> Rv_Data_PlaylistDocument {
+	public static func playlist(name: String, targetVersion: ProPresenterTargetVersion = .v22) -> Rv_Data_PlaylistDocument {
 		var child = Rv_Data_Playlist()
 		child.uuid = uuid()
 		child.name = name
@@ -87,7 +87,7 @@ public enum DocumentFactory {
 		downloads.items = Rv_Data_Playlist.PlaylistItems()
 
 		var result = Rv_Data_PlaylistDocument()
-		result.applicationInfo = applicationInfo()
+		result.applicationInfo = applicationInfo(targetVersion: targetVersion)
 		result.type = .presentation
 		result.rootNode = root
 		result.liveVideoPlaylist = liveVideo
@@ -153,12 +153,14 @@ public enum DocumentFactory {
 		return value
 	}
 
-	private static func applicationInfo() -> Rv_Data_ApplicationInfo {
+	private static func applicationInfo(targetVersion: ProPresenterTargetVersion) -> Rv_Data_ApplicationInfo {
 		var value = Rv_Data_ApplicationInfo()
 		value.platform = .macos
 		value.platformVersion.majorVersion = 26
 		value.application = .propresenter
-		value.applicationVersion.majorVersion = 7
+		// The 21 adapter retains the legacy creation encoding and metadata used
+		// by existing native-qualified fixtures. Both targets use interchange.
+		value.applicationVersion.majorVersion = targetVersion == .v21 ? 7 : 22
 		return value
 	}
 

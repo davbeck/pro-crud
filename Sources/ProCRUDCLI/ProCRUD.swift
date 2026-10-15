@@ -7,7 +7,7 @@ struct ProCRUD: ParsableCommand {
 		commandName: "pro-crud",
 		abstract: "Create, inspect, package, and render ProPresenter documents.",
 		version: proCRUDVersion,
-		subcommands: [Create.self, Edit.self, Dump.self, Expand.self, BundleCommand.self, Render.self, Validate.self, WorkspaceCommand.self, Docs.self, SkillCommand.self],
+		subcommands: [Create.self, Edit.self, Dump.self, Expand.self, BundleCommand.self, Render.self, Validate.self, WorkspaceCommand.self, CompatibilityCommand.self, Docs.self, SkillCommand.self],
 		defaultSubcommand: Dump.self,
 	)
 }

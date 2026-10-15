@@ -67,6 +67,7 @@ struct WorkspaceCompatibilityTests {
 		let root = try directory()
 		defer { try? FileManager.default.removeItem(at: root) }
 		let metadata = root.appendingPathComponent(".procore")
+		try FileManager.default.createDirectory(at: root.appendingPathComponent("Libraries"), withIntermediateDirectories: true)
 		try FileManager.default.createDirectory(at: metadata, withIntermediateDirectories: true)
 		try Data(#"{"version":1,"target_contract":"current_pro7","missing_media_policy":"preserve_and_report","documents":[{"reopened":true},{"reopened":false}],"media_references":[{},{}],"compatibility_warnings":["one","two","three"],"preserved_media":[{}]}"#.utf8)
 			.write(to: metadata.appendingPathComponent("legacy-export-manifest.json"))
@@ -79,7 +80,26 @@ struct WorkspaceCompatibilityTests {
 		#expect(manifest.reopenedDocumentCount == 1)
 		#expect(manifest.copiedMediaReferenceCount == 2)
 		#expect(manifest.compatibilityWarningCount == 3)
+		#expect(manifest.compatibilityWarnings == ["one", "two", "three"])
 		#expect(manifest.preservedMediaCount == 1)
+	}
+
+	@Test
+	func aSingleExportManifestIsNotAWholeWorkspace() throws {
+		let root = try directory()
+		defer { try? FileManager.default.removeItem(at: root) }
+		try FileManager.default.createDirectory(at: root.appendingPathComponent(".procore"), withIntermediateDirectories: true)
+		try Data(#"{"version":1,"target_contract":"current_pro7","compatibility_warnings":[]}"#.utf8)
+			.write(to: root.appendingPathComponent(".procore/legacy-export-manifest.json"))
+		var theme = DocumentFactory.theme()
+		DocumentEditor.addTemplate(to: &theme, name: "Template")
+		let file = root.appendingPathComponent("Exported Theme/Theme")
+		try DocumentWriter.writeRaw(.init(payload: .theme(theme), origin: .raw(file)), to: file)
+		#expect(try WorkspaceInspector.inspect(root).storage == .expandedExport)
+		#expect(try DocumentLoader.load(from: root).kind == .theme)
+		let archive = root.deletingLastPathComponent().appendingPathComponent("\(UUID().uuidString).proTheme")
+		defer { try? FileManager.default.removeItem(at: archive) }
+		#expect(try DocumentLoader.load(from: DocumentArchive.bundle(root, to: archive)).kind == .theme)
 	}
 
 	private func directory() throws -> URL {

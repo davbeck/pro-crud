@@ -22,6 +22,7 @@ public enum DocumentArchiveError: Error, CustomStringConvertible, Sendable {
 public struct BundleResult: Sendable {
 	public var archiveURL: URL
 	public var warnings: [String]
+	public var compatibility: DocumentCompatibilityReport
 }
 
 public enum DocumentArchive {
@@ -44,12 +45,14 @@ public enum DocumentArchive {
 		to requestedOutputURL: URL? = nil,
 		replace: Bool = false,
 		limits: ArchiveLimits = .default,
+		targetVersion: ProPresenterTargetVersion = .v22,
 	) throws -> URL {
 		try bundleWithReport(
 			inputURL,
 			to: requestedOutputURL,
 			replace: replace,
 			limits: limits,
+			targetVersion: targetVersion,
 		).archiveURL
 	}
 
@@ -58,6 +61,7 @@ public enum DocumentArchive {
 		to requestedOutputURL: URL? = nil,
 		replace: Bool = false,
 		limits: ArchiveLimits = .default,
+		targetVersion: ProPresenterTargetVersion = .v22,
 	) throws -> BundleResult {
 		try limits.validate()
 		let deadline = ArchiveDeadline(timeout: limits.processingTimeout)
@@ -77,6 +81,8 @@ public enum DocumentArchive {
 		)
 		let workingDirectory = workspace.directory
 		defer { try? FileManager.default.removeItem(at: workingDirectory) }
+		let compatibility = try DocumentCompatibility.analyzeExportContents(in: workingDirectory, target: targetVersion)
+		try compatibility.requireSupported()
 		try deadline.check()
 		let entries = try DocumentLoader.recursiveFiles(in: workingDirectory)
 			.map { try DocumentLoader.relativePath(of: $0, in: workingDirectory) }
@@ -89,7 +95,7 @@ public enum DocumentArchive {
 			limits: limits,
 			deadline: deadline,
 		)
-		return BundleResult(archiveURL: outputURL, warnings: workspace.warnings)
+		return BundleResult(archiveURL: outputURL, warnings: workspace.warnings, compatibility: compatibility)
 	}
 
 	private static func outputURL(for kind: DocumentKind, inputURL: URL, requested: URL?) throws -> URL {

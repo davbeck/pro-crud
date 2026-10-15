@@ -18,6 +18,8 @@ ProPresenter is a trademark of Renewed Vision, LLC. pro-crud is an independent, 
 
 - Inspect documents as readable text, semantic JSON, or known-schema protobuf JSON.
 - Create presentations, themes, and playlists.
+- Select 21/22 output compatibility profiles with `--target-version` on create
+  and bundle commands; inspect structured conversion limits with `compatibility`.
 - Edit raw documents and exported archives without rebuilding unrelated archive
   entries.
 - Apply ordered edit batches atomically.

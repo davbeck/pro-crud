@@ -9,6 +9,26 @@ permissions:
   contents: read
 
 jobs:
+
+  compatibility:
+    name: compatibility-${{ matrix.version }}
+    runs-on: macos-26
+    timeout-minutes: 30
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - version: 21
+            suites: 'ProPresenter21CompatibilityTests|DocumentCompatibilityTests'
+          - version: 22
+            suites: 'ProPresenter22CompatibilityTests|ProPresenter22InterchangeTests|NativeWorkspaceTests|WorkspaceCompatibilityTests|OptionalApplicationMetadataTests|DocumentCompatibilityTests'
+    steps:
+      - uses: actions/checkout@v7
+      - name: Select Xcode 26.6
+        run: sudo xcode-select --switch /Applications/Xcode_26.6.app
+      - name: Run version-specific fixture contracts
+        run: swift test --filter '${{ matrix.suites }}'
+
   test:
     runs-on: macos-26
     timeout-minutes: 30

@@ -3,6 +3,7 @@ import Foundation
 public enum WorkspaceStorage: String, Codable, Sendable {
 	case legacyProtobuf = "legacy-protobuf"
 	case legacyExport = "legacy-export"
+	case expandedExport = "expanded-export"
 	case nativeLoro = "native-loro-sqlite"
 	case unrecognized
 }
@@ -21,9 +22,11 @@ public struct WorkspaceInspection: Codable, Sendable {
 }
 
 public struct LegacyExportManifest: Codable, Sendable {
+	public var version: Int
 	public var targetContract: String?
 	public var mediaPolicy: String?
 	public var compatibilityWarningCount: Int
+	public var compatibilityWarnings: [String]
 	public var documentCount: Int
 	public var reopenedDocumentCount: Int
 	public var copiedMediaReferenceCount: Int
@@ -34,9 +37,14 @@ public struct LegacyExportManifest: Codable, Sendable {
 		guard let json = object as? [String: Any] else {
 			throw WorkspaceInspectionError.invalidManifest(url)
 		}
+		guard let version = json["version"] as? Int, version == 1,
+		      let warnings = json["compatibility_warnings"] as? [String]
+		else { throw WorkspaceInspectionError.invalidManifest(url) }
+		self.version = version
 		targetContract = json["target_contract"] as? String
 		mediaPolicy = json["missing_media_policy"] as? String
-		compatibilityWarningCount = (json["compatibility_warnings"] as? [Any])?.count ?? 0
+		compatibilityWarnings = warnings
+		compatibilityWarningCount = warnings.count
 		let documents = json["documents"] as? [[String: Any]] ?? []
 		documentCount = documents.count
 		reopenedDocumentCount = documents.count { $0["reopened"] as? Bool == true }
@@ -81,20 +89,20 @@ public enum WorkspaceInspector {
 				unresolvedCapabilities: ["native-document-read", "native-document-write", "native-media-registry", "cloud-availability"],
 			)
 		}
+		let folders = ["Libraries", "Playlists", "Configuration", "Themes"].filter {
+			(try? root.appendingPathComponent($0).resourceValues(forKeys: [.isDirectoryKey]).isDirectory) == true
+		}
+		let legacy = folders.contains("Libraries") || folders.contains("Configuration") || folders.contains("Playlists")
 		let manifestURL = root.appendingPathComponent(".procore/legacy-export-manifest.json")
 		if manager.fileExists(atPath: manifestURL.path) {
 			return try WorkspaceInspection(
-				root: root.path, storage: .legacyExport,
+				root: root.path, storage: legacy ? .legacyExport : .expandedExport,
 				evidence: [".procore/legacy-export-manifest.json"],
 				supportedOperations: ["inspect-storage", "protobuf-document-read", "protobuf-document-write"],
 				unresolvedCapabilities: ["source-application-version", "native-only-features"],
 				legacyExportManifest: LegacyExportManifest(url: manifestURL),
 			)
 		}
-		let folders = ["Libraries", "Playlists", "Configuration", "Themes"].filter {
-			(try? root.appendingPathComponent($0).resourceValues(forKeys: [.isDirectoryKey]).isDirectory) == true
-		}
-		let legacy = folders.contains("Libraries") || folders.contains("Configuration") || folders.contains("Playlists")
 		return WorkspaceInspection(
 			root: root.path, storage: legacy ? .legacyProtobuf : .unrecognized,
 			evidence: folders,
