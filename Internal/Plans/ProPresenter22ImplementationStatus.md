@@ -14,8 +14,8 @@ Do not describe the entire ProPresenter 22 feature set or native writes as suppo
 | Native media | Native identity/provider/HLS fields are diagnosed and unsafe legacy operations rejected | Authoritative native media resolver, identity/reference/asset adapters, dependency export and stale projection cases |
 | Native writes | No native writes exposed; contributor offline environment preflight and failure manifest | Controlled persistence experiments, operations/history/receipts, conflicts, atomic multi-stream/media commits and native restart/edit/render acceptance |
 | New features/rendering | Existing unknown bytes preserved; unsupported active representations are visible and gated; existing 21 snapshots retained | Native fixtures and independent inspect/preserve/edit/render/package statuses for animations, stickers, APlay, HLS, ProDisplay, disabled screens, PowerPoint backgrounds and new rendering/PCO cases |
-| CI/docs/release | Distinct immutable-fixture 21/22 checks plus full suite; scoped public docs/skills; native test guidance; Loro license packaging; arm64 runtime and x86_64 compile | Required pinned interactive native jobs, both isolated app environments, Intel execution, signed universal package and transitive dependency license audit |
-| Cloud | Discovery reports local/Cloud metadata; offline preflight requires local native registration | Disposable account/workspace, offline/reconnect/concurrent-writer/delete/tombstone acceptance |
+| CI/docs/release | Distinct immutable-fixture 21/22 checks plus full suite; scoped public docs/skills; native test guidance; Loro license packaging; arm64 runtime and x86_64 compile | Extend existing 21 regression coverage for changed adapters; native 22 acceptance for new behavior; signed universal package and transitive dependency license audit |
+| Cloud | Discovery reports local/Cloud metadata; local implementation and acceptance do not require a Cloud connection | Cloud write support alone requires disposable-workspace offline/reconnect/concurrent-writer/delete/tombstone acceptance; retain an explicit local write boundary until then |
 
 Evidence is in `../Research/Format/ProPresenter22Reader.md`. The official Swift
 binding decoded all 385 retained native snapshots, with exact deep-value agreement
@@ -33,11 +33,21 @@ freshness, and bundled four-document/99-variation Theme freshness pass. The Them
 generator now fixes only AppKit's informational RTF writer-version header: all
 140 host-generated differences were exactly that header; the shipped asset and
 reference images remain unchanged. The native harness adds a separate passing
-negative-control test. Intel compilation passes; execution is unavailable on
-this host because Rosetta is absent.
+negative-control test. x86_64 compilation passes. An x86_64 runtime smoke test
+can use Rosetta; a separate Intel host is not required and this check does not
+block local implementation.
 
-Missing external prerequisites: an isolated pinned 21.4 environment, a pinned 22
-environment with verified helper/account isolation, a disposable Cloud workspace,
-and Intel execution. The local registry currently has two local roots and no
-Cloud workspace. Do not install/downgrade shared helpers or fabricate passing
-native acceptance to bypass those prerequisites.
+The existing native-exported 21 fixtures, reference images, documentation and
+tests are the 21 regression baseline. Reuse them rather than requiring a new 21
+installation to continue implementation. Fresh receiving-app acceptance is
+useful for changed conversion semantics that the existing corpus cannot prove;
+it is not a prerequisite for unrelated code or local 22 experiments. Separate
+account/helper isolation is needed when actually switching native app versions,
+not for every test against the existing corpus.
+
+The installed 22 test instance is authorized for local experiments. Stop actual
+workspace writers and use disposable copies for direct persistence experiments.
+No active Cloud connection is needed for local reads, exports, media resolution,
+local editing, or their tests. The plan explicitly permits local/offline writes
+without qualified Cloud merges. The absent Cloud workspace limits only Cloud
+write claims; it does not block the remaining local implementation.

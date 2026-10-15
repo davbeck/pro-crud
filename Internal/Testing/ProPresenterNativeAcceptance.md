@@ -1,10 +1,18 @@
 # Versioned native acceptance
 
-Use separate isolated macOS test accounts for pinned 21.4 and 22 beta builds,
-as required by `../Plans/ProPresenter22Support.md`. A renamed app alone does
-not isolate the per-user workspace helper. The available local environment has
-not yet qualified that isolation; do not represent fixture CI as native-app
-acceptance. No Cloud workspace is currently registered on the investigated host.
+The existing native-exported 21 corpus, documentation and regression tests are
+the baseline for preserving 21 behavior. They remain usable without installing
+or launching another app version. Extend that coverage for changed adapters;
+use fresh native acceptance where a changed conversion or behavior needs an
+additional oracle. Record fixture tests and new native experiments separately.
+
+When actually switching between pinned 21.4 and 22 applications, use isolated
+macOS test accounts as described in `../Plans/ProPresenter22Support.md`. A renamed
+app alone does not isolate the per-user workspace helper. Cross-version helper
+isolation is not a prerequisite for local 22 implementation or fixture tests.
+The installed 22 instance is an authorized test host. Use disposable local
+workspaces and stop actual workspace writers for direct persistence experiments.
+Cloud acceptance is independent of these local experiments.
 
 ## Offline preflight harness
 
@@ -56,10 +64,11 @@ profiles remain command errors. Never automate helper deletion as a retry.
 
 Only the rejection path has been exercised here: a deliberately mismatched
 account/application emits a failure manifest, leaves sentinel workspace bytes
-unchanged, and does not query its API or inspect its workspace. Passing isolated
-21/22 profiles must be supplied and exercised before the preflight can qualify
-an experiment environment. Shared ports/services and account isolation still
-need the plan's cross-login acceptance.
+unchanged, and does not query its API or inspect its workspace. Passing profiles
+must be exercised before describing this harness as qualified for that experiment
+environment. The harness itself does not require a new test account for work
+confined to the current authorized 22 test host. Shared ports/services and account
+isolation need cross-login acceptance only for cross-version native tests.
 
 ## Native experiment record
 
