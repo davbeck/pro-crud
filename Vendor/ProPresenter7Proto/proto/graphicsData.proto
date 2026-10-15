@@ -277,6 +277,15 @@ message Text {
         CAPITALIZATION_TITLE_CASE = 3;
         CAPITALIZATION_START_CASE = 4;
       }
+      enum CharacterSizeMode {
+        CHARACTER_SIZE_MODE_NORMAL = 0;
+        CHARACTER_SIZE_MODE_SCALED_BY_DOCUMENT_HEIGHT = 1;
+        CHARACTER_SIZE_MODE_SCALED_BY_DOCUMENT_WIDTH = 2;
+      }
+      enum LigatureStyle {
+        LIGATURE_STYLE_DEFAULT = 0;
+        LIGATURE_STYLE_NONE = 1;
+      }
       Capitalization capitalization = 2;
       rv.data.Graphics.Text.Attributes.Underline underline_style = 4;
       rv.data.Color underline_color = 5;
@@ -289,6 +298,7 @@ message Text {
       rv.data.Color stroke_color = 12;
       repeated rv.data.Graphics.Text.Attributes.CustomAttribute custom_attributes = 13;
       rv.data.Color background_color = 15;
+      LigatureStyle ligature_style = 19;
       oneof fill {
         rv.data.Color text_solid_fill = 3;
         rv.data.Graphics.Text.GradientFill text_gradient_fill = 14;
@@ -403,6 +413,8 @@ message Text {
           rv.data.Graphics.Text.CutOutFill cut_out_fill = 8;
           rv.data.Graphics.Text.MediaFill media_fill = 9;
           rv.data.Graphics.BackgroundEffect background_effect = 10;
+          rv.data.Graphics.Text.Attributes.CharacterSizeMode character_size_mode = 11;
+          rv.data.Graphics.Text.Attributes.Font original_font = 12;
         }
 
 

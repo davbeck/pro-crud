@@ -63,6 +63,36 @@ struct NativeProjectionSchemaTests {
 		#expect(try baseline.message(named: "rv.data.Presentation").fieldsByName["cue_group_placements"] == nil)
 	}
 
+	@Test func typed21TextCatchUpMatchesThePinnedBaselineWireLayouts() throws {
+		let baseline = try ProtobufSchema.baseline21()
+		var encoder = NativeProtobufEncoder(schema: baseline)
+		let style = try encoder.encode(.map(["ligature_style": .integer(1)]), message: "rv.data.Graphics.Text.Attributes", path: "/text")
+		let attributes = try Rv_Data_Graphics.Text.Attributes(serializedBytes: style)
+		#expect(attributes.ligatureStyle == .none)
+		#expect(try attributes.serializedData() == style)
+		let mode = try encoder.encode(.map(["Attribute": .map(["__tag": .string("character_size_mode"), "character_size_mode": .integer(2)])]), message: "rv.data.Graphics.Text.Attributes.CustomAttribute", path: "/custom")
+		#expect(try Rv_Data_Graphics.Text.Attributes.CustomAttribute(serializedBytes: mode).characterSizeMode == .scaledByDocumentWidth)
+		let font = try encoder.encode(.map(["Attribute": .map(["__tag": .string("original_font"), "original_font": .map(["name": .string("AvenirNext-Regular"), "size": .number(28), "family": .string("Avenir Next")])])]), message: "rv.data.Graphics.Text.Attributes.CustomAttribute", path: "/custom")
+		let custom = try Rv_Data_Graphics.Text.Attributes.CustomAttribute(serializedBytes: font)
+		#expect(custom.originalFont.name == "AvenirNext-Regular")
+		#expect(custom.originalFont.size == 28)
+		#expect(try custom.serializedData() == font)
+		let retained = try ProtobufSchema.bundled().message(named: "rv.data.Graphics.Text.Attributes.Font")
+		let moved = try baseline.message(named: "rv.data.Font")
+		#expect(retained.fields.map(\.number) == moved.fields.map(\.number))
+		#expect(retained.fields.map(\.type) == moved.fields.map(\.type))
+		#expect(encoder.issues.isEmpty)
+	}
+
+	@Test func typed21ScreenFalsePresenceIsDifferentFromAbsence() throws {
+		var encoder = try NativeProtobufEncoder(schema: .baseline21())
+		let bytes = try encoder.encode(.map(["RenderingEnabledOptional": .map(["__tag": .string("rendering_enabled"), "rendering_enabled": .boolean(false)])]), message: "rv.data.ProPresenterScreen", path: "/screen")
+		let screen = try Rv_Data_ProPresenterScreen(serializedBytes: bytes)
+		#expect(screen.renderingEnabledOptional == .renderingEnabled(false))
+		#expect(Rv_Data_ProPresenterScreen().renderingEnabledOptional == nil)
+		#expect(try screen.serializedData() == bytes)
+	}
+
 	@Test func keyMappingCommonFieldsRemainWireCompatibleWithoutInventedUUIDConversion() throws {
 		let baseline = try ProtobufSchema.baseline21()
 		let native = try ProtobufSchema.bundled(version: .v22)

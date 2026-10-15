@@ -1414,6 +1414,11 @@ public nonisolated struct Rv_Data_Graphics: Sendable {
       /// Clears the value of `backgroundColor`. Subsequent reads from it will return its default value.
       public mutating func clearBackgroundColor() {_uniqueStorage()._backgroundColor = nil}
 
+      public var ligatureStyle: Rv_Data_Graphics.Text.Attributes.LigatureStyle {
+        get {_storage._ligatureStyle}
+        set {_uniqueStorage()._ligatureStyle = newValue}
+      }
+
       public var fill: OneOf_Fill? {
         get {return _storage._fill}
         set {_uniqueStorage()._fill = newValue}
@@ -1512,6 +1517,78 @@ public nonisolated struct Rv_Data_Graphics: Sendable {
           .smallCaps,
           .titleCase,
           .startCase,
+        ]
+
+      }
+
+      public nonisolated enum CharacterSizeMode: SwiftProtobuf.Enum, Swift.CaseIterable {
+        public typealias RawValue = Int
+        case normal // = 0
+        case scaledByDocumentHeight // = 1
+        case scaledByDocumentWidth // = 2
+        case UNRECOGNIZED(Int)
+
+        public init() {
+          self = .normal
+        }
+
+        public init?(rawValue: Int) {
+          switch rawValue {
+          case 0: self = .normal
+          case 1: self = .scaledByDocumentHeight
+          case 2: self = .scaledByDocumentWidth
+          default: self = .UNRECOGNIZED(rawValue)
+          }
+        }
+
+        public var rawValue: Int {
+          switch self {
+          case .normal: return 0
+          case .scaledByDocumentHeight: return 1
+          case .scaledByDocumentWidth: return 2
+          case .UNRECOGNIZED(let i): return i
+          }
+        }
+
+        // The compiler won't synthesize support with the UNRECOGNIZED case.
+        public static let allCases: [Rv_Data_Graphics.Text.Attributes.CharacterSizeMode] = [
+          .normal,
+          .scaledByDocumentHeight,
+          .scaledByDocumentWidth,
+        ]
+
+      }
+
+      public nonisolated enum LigatureStyle: SwiftProtobuf.Enum, Swift.CaseIterable {
+        public typealias RawValue = Int
+        case `default` // = 0
+        case none // = 1
+        case UNRECOGNIZED(Int)
+
+        public init() {
+          self = .default
+        }
+
+        public init?(rawValue: Int) {
+          switch rawValue {
+          case 0: self = .default
+          case 1: self = .none
+          default: self = .UNRECOGNIZED(rawValue)
+          }
+        }
+
+        public var rawValue: Int {
+          switch self {
+          case .default: return 0
+          case .none: return 1
+          case .UNRECOGNIZED(let i): return i
+          }
+        }
+
+        // The compiler won't synthesize support with the UNRECOGNIZED case.
+        public static let allCases: [Rv_Data_Graphics.Text.Attributes.LigatureStyle] = [
+          .default,
+          .none,
         ]
 
       }
@@ -2016,6 +2093,22 @@ public nonisolated struct Rv_Data_Graphics: Sendable {
           set {attribute = .backgroundEffect(newValue)}
         }
 
+        public var characterSizeMode: Rv_Data_Graphics.Text.Attributes.CharacterSizeMode {
+          get {
+            if case .characterSizeMode(let v)? = attribute {return v}
+            return .normal
+          }
+          set {attribute = .characterSizeMode(newValue)}
+        }
+
+        public var originalFont: Rv_Data_Graphics.Text.Attributes.Font {
+          get {
+            if case .originalFont(let v)? = attribute {return v}
+            return Rv_Data_Graphics.Text.Attributes.Font()
+          }
+          set {attribute = .originalFont(newValue)}
+        }
+
         public var unknownFields = SwiftProtobuf.UnknownStorage()
 
         public nonisolated enum OneOf_Attribute: Equatable, Sendable {
@@ -2028,6 +2121,8 @@ public nonisolated struct Rv_Data_Graphics: Sendable {
           case cutOutFill(Rv_Data_Graphics.Text.CutOutFill)
           case mediaFill(Rv_Data_Graphics.Text.MediaFill)
           case backgroundEffect(Rv_Data_Graphics.BackgroundEffect)
+          case characterSizeMode(Rv_Data_Graphics.Text.Attributes.CharacterSizeMode)
+          case originalFont(Rv_Data_Graphics.Text.Attributes.Font)
 
         }
 
@@ -4557,7 +4652,7 @@ nonisolated extension Rv_Data_Graphics.Text.ChordPro.Notation: SwiftProtobuf._Pr
 
 nonisolated extension Rv_Data_Graphics.Text.Attributes: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   public static let protoMessageName: String = Rv_Data_Graphics.Text.protoMessageName + ".Attributes"
-  public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{1}font\0\u{1}capitalization\0\u{3}text_solid_fill\0\u{3}underline_style\0\u{3}underline_color\0\u{3}paragraph_style\0\u{1}kerning\0\u{1}superscript\0\u{3}strikethrough_style\0\u{3}strikethrough_color\0\u{3}stroke_width\0\u{3}stroke_color\0\u{3}custom_attributes\0\u{3}text_gradient_fill\0\u{3}background_color\0\u{3}cut_out_fill\0\u{3}media_fill\0\u{3}background_effect\0")
+  public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{1}font\0\u{1}capitalization\0\u{3}text_solid_fill\0\u{3}underline_style\0\u{3}underline_color\0\u{3}paragraph_style\0\u{1}kerning\0\u{1}superscript\0\u{3}strikethrough_style\0\u{3}strikethrough_color\0\u{3}stroke_width\0\u{3}stroke_color\0\u{3}custom_attributes\0\u{3}text_gradient_fill\0\u{3}background_color\0\u{3}cut_out_fill\0\u{3}media_fill\0\u{3}background_effect\0\u{3}ligature_style\0")
 
   fileprivate class _StorageClass {
     var _font: Rv_Data_Graphics.Text.Attributes.Font? = nil
@@ -4573,6 +4668,7 @@ nonisolated extension Rv_Data_Graphics.Text.Attributes: SwiftProtobuf.Message, S
     var _strokeColor: Rv_Data_Color? = nil
     var _customAttributes: [Rv_Data_Graphics.Text.Attributes.CustomAttribute] = []
     var _backgroundColor: Rv_Data_Color? = nil
+    var _ligatureStyle: Rv_Data_Graphics.Text.Attributes.LigatureStyle = .default
     var _fill: Rv_Data_Graphics.Text.Attributes.OneOf_Fill?
 
       // This property is used as the initial default value for new instances of the type.
@@ -4597,6 +4693,7 @@ nonisolated extension Rv_Data_Graphics.Text.Attributes: SwiftProtobuf.Message, S
       _strokeColor = source._strokeColor
       _customAttributes = source._customAttributes
       _backgroundColor = source._backgroundColor
+      _ligatureStyle = source._ligatureStyle
       _fill = source._fill
     }
   }
@@ -4694,6 +4791,7 @@ nonisolated extension Rv_Data_Graphics.Text.Attributes: SwiftProtobuf.Message, S
             _storage._fill = .backgroundEffect(v)
           }
         }()
+        case 19: try { try decoder.decodeSingularEnumField(value: &_storage._ligatureStyle) }()
         default: break
         }
       }
@@ -4766,6 +4864,9 @@ nonisolated extension Rv_Data_Graphics.Text.Attributes: SwiftProtobuf.Message, S
       }()
       default: break
       }
+      if _storage._ligatureStyle != .default {
+        try visitor.visitSingularEnumField(value: _storage._ligatureStyle, fieldNumber: 19)
+      }
     }
     try unknownFields.traverse(visitor: &visitor)
   }
@@ -4788,6 +4889,7 @@ nonisolated extension Rv_Data_Graphics.Text.Attributes: SwiftProtobuf.Message, S
         if _storage._strokeColor != rhs_storage._strokeColor {return false}
         if _storage._customAttributes != rhs_storage._customAttributes {return false}
         if _storage._backgroundColor != rhs_storage._backgroundColor {return false}
+        if _storage._ligatureStyle != rhs_storage._ligatureStyle {return false}
         if _storage._fill != rhs_storage._fill {return false}
         return true
       }
@@ -4800,6 +4902,14 @@ nonisolated extension Rv_Data_Graphics.Text.Attributes: SwiftProtobuf.Message, S
 
 nonisolated extension Rv_Data_Graphics.Text.Attributes.Capitalization: SwiftProtobuf._ProtoNameProviding {
   public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{2}\0CAPITALIZATION_NONE\0\u{1}CAPITALIZATION_ALL_CAPS\0\u{1}CAPITALIZATION_SMALL_CAPS\0\u{1}CAPITALIZATION_TITLE_CASE\0\u{1}CAPITALIZATION_START_CASE\0")
+}
+
+nonisolated extension Rv_Data_Graphics.Text.Attributes.CharacterSizeMode: SwiftProtobuf._ProtoNameProviding {
+  public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{2}\0CHARACTER_SIZE_MODE_NORMAL\0\u{1}CHARACTER_SIZE_MODE_SCALED_BY_DOCUMENT_HEIGHT\0\u{1}CHARACTER_SIZE_MODE_SCALED_BY_DOCUMENT_WIDTH\0")
+}
+
+nonisolated extension Rv_Data_Graphics.Text.Attributes.LigatureStyle: SwiftProtobuf._ProtoNameProviding {
+  public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{2}\0LIGATURE_STYLE_DEFAULT\0\u{1}LIGATURE_STYLE_NONE\0")
 }
 
 nonisolated extension Rv_Data_Graphics.Text.Attributes.Font: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
@@ -5165,7 +5275,7 @@ nonisolated extension Rv_Data_Graphics.Text.Attributes.Paragraph.TextList.Number
 
 nonisolated extension Rv_Data_Graphics.Text.Attributes.CustomAttribute: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   public static let protoMessageName: String = Rv_Data_Graphics.Text.Attributes.protoMessageName + ".CustomAttribute"
-  public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{1}range\0\u{1}capitalization\0\u{3}original_font_size\0\u{3}font_scale_factor\0\u{3}text_gradient_fill\0\u{3}should_preserve_foreground_color\0\u{1}chord\0\u{3}cut_out_fill\0\u{3}media_fill\0\u{3}background_effect\0")
+  public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{1}range\0\u{1}capitalization\0\u{3}original_font_size\0\u{3}font_scale_factor\0\u{3}text_gradient_fill\0\u{3}should_preserve_foreground_color\0\u{1}chord\0\u{3}cut_out_fill\0\u{3}media_fill\0\u{3}background_effect\0\u{3}character_size_mode\0\u{3}original_font\0")
 
   public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
     while let fieldNumber = try decoder.nextFieldNumber() {
@@ -5266,6 +5376,27 @@ nonisolated extension Rv_Data_Graphics.Text.Attributes.CustomAttribute: SwiftPro
           self.attribute = .backgroundEffect(v)
         }
       }()
+      case 11: try {
+        var v: Rv_Data_Graphics.Text.Attributes.CharacterSizeMode?
+        try decoder.decodeSingularEnumField(value: &v)
+        if let v = v {
+          if self.attribute != nil {try decoder.handleConflictingOneOf()}
+          self.attribute = .characterSizeMode(v)
+        }
+      }()
+      case 12: try {
+        var v: Rv_Data_Graphics.Text.Attributes.Font?
+        var hadOneofValue = false
+        if let current = self.attribute {
+          hadOneofValue = true
+          if case .originalFont(let m) = current {v = m}
+        }
+        try decoder.decodeSingularMessageField(value: &v)
+        if let v = v {
+          if hadOneofValue {try decoder.handleConflictingOneOf()}
+          self.attribute = .originalFont(v)
+        }
+      }()
       default: break
       }
     }
@@ -5315,6 +5446,14 @@ nonisolated extension Rv_Data_Graphics.Text.Attributes.CustomAttribute: SwiftPro
     case .backgroundEffect?: try {
       guard case .backgroundEffect(let v)? = self.attribute else { preconditionFailure() }
       try visitor.visitSingularMessageField(value: v, fieldNumber: 10)
+    }()
+    case .characterSizeMode?: try {
+      guard case .characterSizeMode(let v)? = self.attribute else { preconditionFailure() }
+      try visitor.visitSingularEnumField(value: v, fieldNumber: 11)
+    }()
+    case .originalFont?: try {
+      guard case .originalFont(let v)? = self.attribute else { preconditionFailure() }
+      try visitor.visitSingularMessageField(value: v, fieldNumber: 12)
     }()
     case nil: break
     }

@@ -105,7 +105,7 @@ public enum LookResolver {
 		)
 		let size = try screenSize(screen)
 		var warnings = warnings(mapping: mapping, candidate: candidate)
-		if try ProtobufJSONPatcher.WireField.parse(screen.serializedData()).last(where: { $0.number == 9 })?.varint == 0 {
+		if case .renderingEnabled(false)? = screen.renderingEnabledOptional {
 			warnings.append("This screen is disabled in ProPresenter. A static preview does not enable its output.")
 		}
 		return LookTemplateSelection(

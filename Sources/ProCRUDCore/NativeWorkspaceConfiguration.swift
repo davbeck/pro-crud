@@ -100,8 +100,11 @@ public struct NativeWorkspaceConfiguration: Encodable, Sendable {
 		for value in try clientRoot.optional("pro_screens")?.array(at: "/client/pro_screens") ?? [] {
 			let bytes = try encoder.encode(value, message: "rv.data.ProPresenterScreen", path: "/client/pro_screens")
 			let id = try value.object(at: "/screen").required("uuid", at: "/screen").uuid(at: "/screen/uuid")
-			let enabled = try ProtobufJSONPatcher.WireField.parse(bytes).last { $0.number == 9 }?.varint.map { $0 != 0 }
 			let document = try Rv_Data_ProPresenterScreen(serializedBytes: bytes)
+			let enabled: Bool? = switch document.renderingEnabledOptional {
+			case let .renderingEnabled(value): value
+			case nil: nil
+			}
 			guard localScreens.updateValue((document, enabled), forKey: id) == nil else { throw NativeSemanticError.duplicateIdentity(path: "/client/pro_screens", identity: id.uuidString) }
 		}
 		var screens: [Screen] = []

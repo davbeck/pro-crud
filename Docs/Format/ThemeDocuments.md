@@ -285,6 +285,11 @@ font-family and bold/italic differences relative to the source's modal font,
 relative run sizes, and properties whose values vary within the source box. It
 does not claim complete native precedence for every Cocoa attribute.
 
+The typed protobuf view includes the 21.4 ligature-style, character-size-mode
+and original-font custom metadata fields. Static glyph rendering still follows
+the stored RTF; decoding these fields does not emulate dynamic character-size
+behavior. Original-font metadata is preserved without additional rescaling.
+
 Meaningful source `custom_attributes` are copied using UTF-16 ranges, clipped
 to the unchanged source string, and dropped if their clipped range is empty.
 Range-only entries are discarded, and meaningful template placeholder ranges

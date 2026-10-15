@@ -75,12 +75,27 @@ public nonisolated struct Rv_Data_ProPresenterScreen: Sendable {
     set {arrangement = .arrangementEdgeBlend(newValue)}
   }
 
+  public var renderingEnabledOptional: Rv_Data_ProPresenterScreen.OneOf_RenderingEnabledOptional? = nil
+
+  public var renderingEnabled: Bool {
+    get {
+      if case .renderingEnabled(let v)? = renderingEnabledOptional {return v}
+      return false
+    }
+    set {renderingEnabledOptional = .renderingEnabled(newValue)}
+  }
+
   public var unknownFields = SwiftProtobuf.UnknownStorage()
 
   public nonisolated enum OneOf_Arrangement: Equatable, Sendable {
     case arrangementSingle(Rv_Data_ProPresenterScreen.SingleArrangement)
     case arrangementCombined(Rv_Data_ProPresenterScreen.CombinedArrangement)
     case arrangementEdgeBlend(Rv_Data_ProPresenterScreen.EdgeBlendArrangement)
+
+  }
+
+  public nonisolated enum OneOf_RenderingEnabledOptional: Equatable, Sendable {
+    case renderingEnabled(Bool)
 
   }
 
@@ -178,7 +193,7 @@ fileprivate nonisolated let _protobuf_package = "rv.data"
 
 nonisolated extension Rv_Data_ProPresenterScreen: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   public static let protoMessageName: String = _protobuf_package + ".ProPresenterScreen"
-  public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{1}name\0\u{3}screen_type\0\u{3}arrangement_single\0\u{3}arrangement_combined\0\u{3}arrangement_edge_blend\0\u{3}background_color\0\u{1}uuid\0\u{3}background_color_enabled\0")
+  public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{1}name\0\u{3}screen_type\0\u{3}arrangement_single\0\u{3}arrangement_combined\0\u{3}arrangement_edge_blend\0\u{3}background_color\0\u{1}uuid\0\u{3}background_color_enabled\0\u{3}rendering_enabled\0")
 
   public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
     while let fieldNumber = try decoder.nextFieldNumber() {
@@ -230,6 +245,14 @@ nonisolated extension Rv_Data_ProPresenterScreen: SwiftProtobuf.Message, SwiftPr
       case 6: try { try decoder.decodeSingularMessageField(value: &self._backgroundColor) }()
       case 7: try { try decoder.decodeSingularMessageField(value: &self._uuid) }()
       case 8: try { try decoder.decodeSingularBoolField(value: &self.backgroundColorEnabled) }()
+      case 9: try {
+        var v: Bool?
+        try decoder.decodeSingularBoolField(value: &v)
+        if let v = v {
+          if self.renderingEnabledOptional != nil {try decoder.handleConflictingOneOf()}
+          self.renderingEnabledOptional = .renderingEnabled(v)
+        }
+      }()
       default: break
       }
     }
@@ -270,6 +293,9 @@ nonisolated extension Rv_Data_ProPresenterScreen: SwiftProtobuf.Message, SwiftPr
     if self.backgroundColorEnabled != false {
       try visitor.visitSingularBoolField(value: self.backgroundColorEnabled, fieldNumber: 8)
     }
+    try { if case .renderingEnabled(let v)? = self.renderingEnabledOptional {
+      try visitor.visitSingularBoolField(value: v, fieldNumber: 9)
+    } }()
     try unknownFields.traverse(visitor: &visitor)
   }
 
@@ -280,6 +306,7 @@ nonisolated extension Rv_Data_ProPresenterScreen: SwiftProtobuf.Message, SwiftPr
     if lhs._uuid != rhs._uuid {return false}
     if lhs.backgroundColorEnabled != rhs.backgroundColorEnabled {return false}
     if lhs.arrangement != rhs.arrangement {return false}
+    if lhs.renderingEnabledOptional != rhs.renderingEnabledOptional {return false}
     if lhs.unknownFields != rhs.unknownFields {return false}
     return true
   }

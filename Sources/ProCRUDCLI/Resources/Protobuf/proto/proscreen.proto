@@ -23,6 +23,10 @@ message ProPresenterScreen {
   }
 
 
+  oneof RenderingEnabledOptional {
+    bool rendering_enabled = 9;
+  }
+
   message SingleArrangement {
     repeated rv.data.Screen screens = 1;
 

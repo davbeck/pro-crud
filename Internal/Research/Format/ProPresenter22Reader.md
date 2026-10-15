@@ -153,3 +153,24 @@ second comparison is between CLI rendering paths, not an Audience/Syphon
 capture. No output or active Look was changed in ProPresenter. Diagnostic
 artifacts are `.build/pro22-direct-native-*`; existing reference images and
 tolerances remain unchanged.
+
+## Selected 21.4 schema catch-up
+
+The exact upstream 21.4 baseline confirms `Graphics.Text.Attributes` field 19
+is `ligature_style`, not a 22-only addition. Its enum values are Default=0 and
+None=1. `CustomAttribute` fields 11/12 are character-size mode and original font.
+The historical nested Font type and 21.4's top-level Font have the same six
+numbered scalar fields; the compatibility model deliberately retains its public
+nested type rather than renaming all existing Swift callers. Original-font
+payloads encode/decode identically to the pinned baseline. The generated view
+now recognizes these fields while preserving unknown enum and nested bytes by
+the existing protobuf contract. Renderer dynamic character-size behavior is not
+claimed by this schema catch-up.
+
+`ProPresenterScreen.RenderingEnabledOptional.rendering_enabled=9` is also a
+21.4 addition absent from the previous vendor. It is now generated as a typed
+oneof, preserving false versus absence. Legacy/native Look readers use this
+presence-aware value instead of raw field-number access. Existing disabled
+screen tests remain unchanged; no output is enabled. Swift is regenerated with
+the resolved SwiftProtobuf generator. Timeline field 3 remains deliberately
+opaque, and repeated-message preservation tests continue to apply.
