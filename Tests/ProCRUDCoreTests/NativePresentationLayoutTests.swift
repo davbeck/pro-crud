@@ -6,6 +6,30 @@ import Testing
 
 @Suite("Native presentation ordering")
 struct NativePresentationLayoutTests {
+	@Test func nativeProjectionAgreesWithIndependentExport() throws {
+		let projection = try fixtureStream().protobufProjection()
+		#expect(projection.issues.isEmpty)
+		#expect(projection.retainedMetadataPaths == ["/root/value_array_migration_version"])
+		let result = try projection.presentation()
+		let exported = try DocumentLoader.load(from: fixtures.appendingPathComponent("Interchange/NativePresentation.pro"))
+		guard case let .presentation(expected) = exported.payload else { Issue.record("Expected native export"); return }
+		#expect(UUID(uuidString: result.uuid.string) == UUID(uuidString: expected.uuid.string))
+		#expect(result.name == expected.name)
+		#expect(result.cueGroups == expected.cueGroups)
+		#expect(result.arrangements == expected.arrangements)
+		#expect(result.cues.map(\.uuid) == expected.cues.map(\.uuid))
+		let resultSlide = try #require(result.cues.first?.actions.first?.slide.presentation.baseSlide)
+		let exportedSlide = try #require(expected.cues.first?.actions.first?.slide.presentation.baseSlide)
+		#expect(resultSlide.uuid == exportedSlide.uuid)
+		#expect(resultSlide.size == exportedSlide.size)
+		#expect(resultSlide.elements.map(\.element.bounds) == exportedSlide.elements.map(\.element.bounds))
+		#expect(resultSlide.elements.map(\.element.fill) == exportedSlide.elements.map(\.element.fill))
+		// Native export supplies optional UI defaults for this graphic's inactive
+		// empty text and scroller. Materialization preserves the actual stored values.
+		#expect(resultSlide.elements[0].element.text.rtfData.isEmpty)
+		#expect(!exportedSlide.elements[0].element.text.rtfData.isEmpty)
+	}
+
 	@Test func nativeTreeAgreesWithIndependentProtobufExport() throws {
 		let stream = try fixtureStream()
 		let layout = try stream.presentationLayout()

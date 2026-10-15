@@ -6,6 +6,26 @@ import Testing
 
 @Suite("ProPresenter 22 native snapshot reader")
 struct NativeWorkspaceTests {
+	@Test func nativeProjectionExportsBothTargetsWithoutChangingSource() throws {
+		try withDatabase { root, database in
+			try insertPresentation(database)
+			let databaseURL = root.appendingPathComponent("DocumentStore/workspace-v1.sqlite3")
+			let before = try Data(contentsOf: databaseURL)
+			let stream = try #require(NativeWorkspaceSnapshot.read(from: root).streams.first)
+			let projection = try stream.protobufProjection()
+			let destination = FileManager.default.temporaryDirectory.appendingPathComponent(UUID().uuidString)
+			defer { try? FileManager.default.removeItem(at: destination) }
+			for target in [ProPresenterTargetVersion.v21, .v22] {
+				let output = destination.appendingPathComponent("Target\(target.rawValue).pro")
+				let document = try ProPresenterDocument(payload: projection.payload(), origin: .raw(output))
+				try DocumentWriter.writeRaw(document, to: output, targetVersion: target)
+				#expect(try DocumentLoader.load(from: output).payload.serializedData() == document.payload.serializedData())
+				#expect(try Data(contentsOf: databaseURL) == before)
+				#expect(throws: (any Error).self) { try DocumentWriter.writeRaw(document, to: root.appendingPathComponent("Blocked.pro"), targetVersion: target) }
+			}
+		}
+	}
+
 	@Test
 	func officialSwiftBindingDecodesIndependentNativeSnapshot() throws {
 		try withDatabase { root, database in

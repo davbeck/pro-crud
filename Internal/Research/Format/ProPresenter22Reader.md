@@ -62,3 +62,32 @@ playlist wrapper preservation, scope separation and logical-path resolution.
 
 This qualifies semantic inspection of those structures. Native mutation and
 full protobuf/media materialization remain separate implementation work.
+
+## Versioned binary materialization
+
+The pinned 22 descriptor set includes native custom options: `map_key_field`
+(51302), `crdt_container` (51303), `crdt_tree` (51304), and atomic message values
+(51200). These annotations distinguish keyed maps from ordered lists without
+inferring that distinction from empty sample values. The 53-file document
+closure and per-record source offset/hash provenance are retained separately in
+`Vendor/ProPresenter22Proto`. Legacy generated Swift and its schema are unchanged.
+
+The descriptor-driven binary adapter encodes native UUID strings, tagged unions,
+binary RTF, scalar widths/presence and declared keyed maps. Presentation placement
+and arrangement adapters explicitly produce legacy interchange ordering; slide
+v2 build lists receive the corresponding order adapter. Unknown native fields
+are reported and block export. Original native values/history are retained;
+this projection cannot be used as a native mutation representation.
+
+All **358** Presentation/Theme streams in the retained consistent snapshot
+materialize with **zero unmapped fields or failures**. The independently authored
+native probe exports through the CLI to a separate 22-target `.pro`, reloads, and
+renders with **zero differing pixels** against its original 854×480 native 22
+Slide Images PNG. This qualifies that graphic fixture, not arbitrary text/media.
+The native standalone export populates optional inactive text defaults, an empty
+background/chord-chart URL, a default timeline duration and normalized inactive
+scroller distance that were absent/different in native state. The materializer
+retains the stored native values rather than pretending those export defaults
+were present in Loro. Group order/identity, cue/action/slide identity, geometry and
+fill agree with the independent export. Media-dependent output remains gated
+until native asset resolution is implemented.

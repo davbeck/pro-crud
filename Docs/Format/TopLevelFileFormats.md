@@ -257,3 +257,12 @@ Master order follows the resolved placement tree; arrangement expansion retains
 repeated group references. Library links resolve through workspace-relative
 logical paths rather than stale pre-migration absolute paths. This inspection
 does not write native content or perform Cloud synchronization.
+
+`workspace inventory ROOT --projections` additionally checks Presentation and
+Theme interchange materialization and lists unmapped fields. `workspace export
+ROOT --stream UUID --output PATH [--target-version 21|22]` writes a supported
+shared Presentation or Theme to a separate raw `.pro` or `Theme` file. New
+exports default to target 22. It rejects unmapped content and unsupported media
+identity conversions before publishing output; it does not copy media assets.
+Existing output requires `--replace`, and native workspace destinations are
+rejected. The source Loro history and client state remain untouched.

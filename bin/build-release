@@ -211,6 +211,7 @@ core_resource_path_prefix="${core_resource_root#"$staging_directory/"}"
 cli_resource_path_prefix="${cli_resource_root#"$staging_directory/"}"
 required_resource_bundle_paths=(
 	"$core_resource_path_prefix/Protobuf/schema.pb"
+	"$core_resource_path_prefix/Protobuf22/schema.pb"
 	"$cli_resource_path_prefix/Format/README.md"
 	"$cli_resource_path_prefix/Protobuf/content-sha256.txt"
 	"$cli_resource_path_prefix/Protobuf/proto/proApi.proto"

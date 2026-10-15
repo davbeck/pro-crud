@@ -22,6 +22,13 @@ legacy workspace rather than treating the whole workspace as one archive.
 
 For native storage, use `workspace inventory ROOT` for stream identities and
 availability, and `workspace dump ROOT` for typed diagnostic Loro content.
+Use `workspace contents ROOT` for library references, presentation/group and
+arrangement order, and playlist trees. `workspace inventory ROOT --projections`
+checks Presentation/Theme materialization. For supported content, export an exact
+shared stream with `workspace export ROOT --stream UUID --output PATH`; output
+is a separate `.pro` or `Theme` file and defaults to target 22. Media identity
+conversions remain gated; this command does not copy assets. Use native export
+when a capability diagnostic requires it.
 Shared and client streams are separate. Diagnostic output is not editable
 protobuf JSON; use native export/import for edits, media validation, and renders.
 Use `workspace discover --registry PATH` to list registered identities without
