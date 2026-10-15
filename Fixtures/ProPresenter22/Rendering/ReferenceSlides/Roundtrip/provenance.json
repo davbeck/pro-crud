@@ -1,0 +1,26 @@
+{
+  "bundleSHA256": "78aa2613633900e2a01d829b0162fbf482a7b1853cc580ed319cc9b156354e99",
+  "edit": {
+    "presentation": "01 - Element Layering",
+    "field": "ccli.song_title",
+    "value": "CLI collection round trip"
+  },
+  "streams": [
+    {
+      "originalName": "01 - Element Layering",
+      "nativeName": "01 - Element Layering-2",
+      "documentID": "56d13d2d-b550-53a9-a736-840309b8b98c",
+      "snapshotSHA256": "8dd5658dcfe34bdb9c4e7dd3c3e7aba9f541d22f4130f1f5b930c05e45b5a6ed",
+      "vectorSHA256": "36b5724072ee942d7d7aa29036d0104f57a927dff338c49d2002c3e5a0d5c3ba",
+      "exportSHA256": "ab71007833f6c6fb6972e91edc5e0280f88fd9274c4ddb67e67e7b9871e5bcc2"
+    },
+    {
+      "originalName": "06 - Shapes",
+      "nativeName": "06 - Shapes-2",
+      "documentID": "66de0a6a-14e8-5a13-b72d-91fc1e32d85f",
+      "snapshotSHA256": "b004c20162c883f19d4d2d4bba96562fcb689fd7466829dbaf712bf7c1a28a41",
+      "vectorSHA256": "fc7018f5ca0220c7bc6883bb48c1b9e2135c0cb2dd8d2b12aaf7b8a4475a93d8",
+      "exportSHA256": "a215ba92d1ac2534c45e34e4c3a0697c23a53aa49a45a622ed74aa28c64ef3f6"
+    }
+  ]
+}

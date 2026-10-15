@@ -138,3 +138,13 @@ layout and playlist-template traversal tests. These are reader tests, not native
 write fixtures. `Internal/Research/Format/ProPresenter22MediaTraversal.md`
 records the 56-file descriptor closure and independent 946-occurrence native
 corpus comparison; private configuration snapshots are not checked in.
+
+`Rendering/ReferenceSlides/` contains fresh native 22 exports of the existing
+nine-area/71-slide reference playlist, including all native PNGs, nine bundle
+payloads, three owned media files and the corresponding nine native streams.
+`provenance.json` records per-file hashes and exact collection settings.
+`Roundtrip/` retains a production CLI-edited two-presentation bundle, its two
+native-received streams and independent re-exports. The native manifest with
+workspace paths is excluded. See
+`Internal/Research/Format/ProPresenter22RenderingCorpus.md`. These references do
+not replace the 21.4 snapshots or claim complete 22 rendering parity.

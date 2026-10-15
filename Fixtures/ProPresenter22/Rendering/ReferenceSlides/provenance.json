@@ -1,0 +1,409 @@
+{
+  "application": "ProPresenter",
+  "version": "22 beta",
+  "build": "369098875",
+  "macOS": "27.0.1",
+  "collected": "2026-10-15",
+  "input": "Fixtures/ProPresenter/ReferenceSlides.proPlaylist",
+  "inputSHA256": "d8dfc38574708b3a03dfd9ff8fb655f9f93749c6bb64ffc7518768de9aa78b85",
+  "nativeBundleSHA256": "e3595c376e2c8de2546135761ca1d4a2169477d43517f16d2c47007920ecdd6a",
+  "exportOptions": {
+    "format": "PNG without slide background color",
+    "includeMediaActions": true,
+    "width": 854,
+    "height": 480
+  },
+  "nativeManifestOmitted": true,
+  "images": [
+    {
+      "path": "Images/01 - Element Layering/1.png",
+      "sha256": "2537d5da42e578badf5e8bd472a67e3b1673cd0b09458a8c1336b62b2c7f715d"
+    },
+    {
+      "path": "Images/02 - Text Attributes/1.png",
+      "sha256": "1fc5b5d0c67a91850ac721e9232dca1f19481596f8b04e064750ee516ea8f858"
+    },
+    {
+      "path": "Images/02 - Text Attributes/10.png",
+      "sha256": "702f9944b5859a44c6dced23bce3ecb6e1314bce6423a75efaf5d778a2d20e6f"
+    },
+    {
+      "path": "Images/02 - Text Attributes/11.png",
+      "sha256": "049b750feae4b373e4388d571a80136f9cf59ecf4a0afb1e532b1e9542fcfed1"
+    },
+    {
+      "path": "Images/02 - Text Attributes/12.png",
+      "sha256": "256b810bfa3b9201623ee67f240e81c73362f438634c4e765e90461d1e146e4e"
+    },
+    {
+      "path": "Images/02 - Text Attributes/2.png",
+      "sha256": "2ec7f520614d6ffeec7119a88a2d99222551272d7dc64b3f8601fe705fb41ab8"
+    },
+    {
+      "path": "Images/02 - Text Attributes/3.png",
+      "sha256": "eb76d7c66f70753c0ff83152f20b1bf1422a0fb0f2dd2537e5b0ffaee9aaab3d"
+    },
+    {
+      "path": "Images/02 - Text Attributes/4.png",
+      "sha256": "aa186f7b052499b8b03c2e6fcd5c711da8e6826bacf1bfc948e93f05ac2af380"
+    },
+    {
+      "path": "Images/02 - Text Attributes/5.png",
+      "sha256": "4b4cbd3eee14f6e24d01afca704c38364f44d770cf7bc379a7ae0fa384ee1820"
+    },
+    {
+      "path": "Images/02 - Text Attributes/6.png",
+      "sha256": "7c5329e97cc73cca09faf0833a725b7bd636ea65b96d0bf749aeed7351b42cf1"
+    },
+    {
+      "path": "Images/02 - Text Attributes/7.png",
+      "sha256": "a7ede3d8c77c8b050deafb3fc6268cfd395a315b51f928d62d3653b66252d44b"
+    },
+    {
+      "path": "Images/02 - Text Attributes/8.png",
+      "sha256": "242edcb0afabe2bdf6dbba22146a63531e21dd759950cfc6fcb4900cbf024b19"
+    },
+    {
+      "path": "Images/02 - Text Attributes/9.png",
+      "sha256": "ef18f19b29cb50a639dd14d0d5dbbff61ab102ae9f574684ff90163e5c2b6e8c"
+    },
+    {
+      "path": "Images/03 - Text Scaling/1.png",
+      "sha256": "9bfb2d66a122cec5a649764bca840c93c66c61f84d682b8e574da71a10175f28"
+    },
+    {
+      "path": "Images/03 - Text Scaling/2.png",
+      "sha256": "ab1cb32cf1ba41255bd19be4e8f974abdb9a4ad58287fde90f94b990002d5802"
+    },
+    {
+      "path": "Images/03 - Text Scaling/3.png",
+      "sha256": "2c59b070b11e8887ab2c4c7f127c11bef2497d930e187df6cc360027a0529d1d"
+    },
+    {
+      "path": "Images/03 - Text Scaling/4.png",
+      "sha256": "7dd0cfa146dd614e960f9a66069b112215fdeca4be8de00998d8c615977cc113"
+    },
+    {
+      "path": "Images/03 - Text Scaling/5.png",
+      "sha256": "bb20520bbb2dd0413f1f0249220f7087e0c75b21036ad95ab5f2ec593160e8d3"
+    },
+    {
+      "path": "Images/03 - Text Scaling/6.png",
+      "sha256": "7dd0cfa146dd614e960f9a66069b112215fdeca4be8de00998d8c615977cc113"
+    },
+    {
+      "path": "Images/03 - Text Scaling/7.png",
+      "sha256": "2c59b070b11e8887ab2c4c7f127c11bef2497d930e187df6cc360027a0529d1d"
+    },
+    {
+      "path": "Images/03 - Text Scaling/8.png",
+      "sha256": "bdc3eed493b963667d9f11de9f288c0c321f657feedf8a42e1d206ded939f401"
+    },
+    {
+      "path": "Images/04 - Text Alignment/1.png",
+      "sha256": "0065dc882b32a64e6d0e7c6afb94b28016f9c90ab931e49581d5df52cc480305"
+    },
+    {
+      "path": "Images/04 - Text Alignment/10.png",
+      "sha256": "85e633c5bff41a12d1d3f88ab62704679cb9793e3eee8aae81e29aedd2319214"
+    },
+    {
+      "path": "Images/04 - Text Alignment/2.png",
+      "sha256": "8670282843fa10d5e76c2f9116c6af8d71763ad14e0baf6a35797f6eca0086f2"
+    },
+    {
+      "path": "Images/04 - Text Alignment/3.png",
+      "sha256": "087aa0a3e227d79469276b65c929c118970f9b4d2e37becb8f73aba3b902c4fc"
+    },
+    {
+      "path": "Images/04 - Text Alignment/4.png",
+      "sha256": "00b84ebe45b669bd7bbea9032d03fac758ed353910fb973bbf3871369b7c412c"
+    },
+    {
+      "path": "Images/04 - Text Alignment/5.png",
+      "sha256": "8c7f7e8652c3b860672e277211d694d5d38ed6e94fe73a9504fdff93eb357a80"
+    },
+    {
+      "path": "Images/04 - Text Alignment/6.png",
+      "sha256": "501b9b179123a15a158c951f8c6d4bfb56a4f8d58168ceabc205bc5ad6915903"
+    },
+    {
+      "path": "Images/04 - Text Alignment/7.png",
+      "sha256": "a5bf3b36868e3932edd43dd83c8a59f26f41a23f0884b46528e9af34be8d9aa7"
+    },
+    {
+      "path": "Images/04 - Text Alignment/8.png",
+      "sha256": "b8509408bf680f8c527ea3f2eabf1c08e715534784c98b053ec13687e1dc51f4"
+    },
+    {
+      "path": "Images/04 - Text Alignment/9.png",
+      "sha256": "866a8179467a23f00b8faa1381632ea21075b3120d1f0ce1cba6cc155e62ad56"
+    },
+    {
+      "path": "Images/05 - Text Effects/1.png",
+      "sha256": "8364331cdc14b3512c189504fff0c4e87ea2bf6fa28cd59915cd87dd51f3b8d3"
+    },
+    {
+      "path": "Images/05 - Text Effects/2.png",
+      "sha256": "b2983f5938333e410fa8140f249fe24c5cae25b30a90dc5637038d9c72319a5e"
+    },
+    {
+      "path": "Images/05 - Text Effects/3.png",
+      "sha256": "72e2d01048051922d3877b6429cf7d7756e4d591aff6444e18d9bb1dce56d736"
+    },
+    {
+      "path": "Images/05 - Text Effects/4.png",
+      "sha256": "a77e9ed7505a6eb96113fdb042a8826abdb64d12fcb5ee0baa2920d45eeeb899"
+    },
+    {
+      "path": "Images/05 - Text Effects/5.png",
+      "sha256": "ca5ba08ab0fec9583e2cd4789e71cb104a0a28c42e8a04a08dd47b31bba953d9"
+    },
+    {
+      "path": "Images/05 - Text Effects/6.png",
+      "sha256": "8aede1c94ec96b5a56f58bc056d12bca2aa21c081d5d9de374a5b7e7af857721"
+    },
+    {
+      "path": "Images/06 - Shapes/1.png",
+      "sha256": "02eafbf835d52321ba6a833017d20d005df3350778d3665df14a22bd4d1d6c9a"
+    },
+    {
+      "path": "Images/06 - Shapes/10.png",
+      "sha256": "7daf074a95ecbc0cd1892f72df9177066cf91e21ed8ce2fd95beb7c8cdb9555d"
+    },
+    {
+      "path": "Images/06 - Shapes/11.png",
+      "sha256": "c31d2e4040ea7ad844156ee03b86198335e8b58ea3098c37403ac25b6ddbf472"
+    },
+    {
+      "path": "Images/06 - Shapes/2.png",
+      "sha256": "903f09dadb91f5ca275edfe798ec392a4a88f9bd0cee17ed227e8b090fb5f582"
+    },
+    {
+      "path": "Images/06 - Shapes/3.png",
+      "sha256": "a193ee425dc1fff962f7f1451df3a82e9e0225720a45ae450db5a08f4fcb5331"
+    },
+    {
+      "path": "Images/06 - Shapes/4.png",
+      "sha256": "e31f1a91a46986416b44fbcea3b9815d6e12b30e0b62d09518a0f3ba894f43c6"
+    },
+    {
+      "path": "Images/06 - Shapes/5.png",
+      "sha256": "5d797e7730161fa588f09c8bc1a10283923c2bb9a0aa01cce92bfdec083d55a2"
+    },
+    {
+      "path": "Images/06 - Shapes/6.png",
+      "sha256": "82214efeb9a49437c92faf7dbd080d9daee35d9059b12aabaa921661ea070c3a"
+    },
+    {
+      "path": "Images/06 - Shapes/7.png",
+      "sha256": "90c456c2ec9872dca7bb5e6c0771e80fbefef6852cddb84b41935ecac7be2dcf"
+    },
+    {
+      "path": "Images/06 - Shapes/8.png",
+      "sha256": "d1943e884c18b40292c9c77615aeb57ffe9e387a48c62c8088e68181c6500cca"
+    },
+    {
+      "path": "Images/06 - Shapes/9.png",
+      "sha256": "9924da910430940fbdf47c31bb7f56ccf9903619c0ffcbee042ba0fd351c8fa4"
+    },
+    {
+      "path": "Images/07 - Shape Effects/1.png",
+      "sha256": "eeaa9c3241437408669f535854fd1b5400fdcf61505700a9aa024186a61676a6"
+    },
+    {
+      "path": "Images/07 - Shape Effects/10.png",
+      "sha256": "35d35b689f200591d1f973689c34d7c796a8dcacfbcc5a86728b3a79c42e5b43"
+    },
+    {
+      "path": "Images/07 - Shape Effects/11.png",
+      "sha256": "9a46196904c63689056c568c565c26fbf5745a1b9d869a32a534ab86d634a57c"
+    },
+    {
+      "path": "Images/07 - Shape Effects/12.png",
+      "sha256": "8af60fffdb78ce1abf58c748f33d6bc6db24cc08f8b66426058ca8c22dced320"
+    },
+    {
+      "path": "Images/07 - Shape Effects/13.png",
+      "sha256": "57692fa2c9290d12a640628875ecca6da8e609b00beb25a6504ee97cde926ca5"
+    },
+    {
+      "path": "Images/07 - Shape Effects/14.png",
+      "sha256": "404270f9871308d3ae403c3a93c9e76eca2b68afcc4c12f3f5a22a0f5afa4d98"
+    },
+    {
+      "path": "Images/07 - Shape Effects/15.png",
+      "sha256": "d08b6e0eabf95869dc4c0609afc265ec1c13b3617f95cdf7e581e80250efae61"
+    },
+    {
+      "path": "Images/07 - Shape Effects/2.png",
+      "sha256": "3ad5bf6aa0d6f3e6b788a1e1c1a81ebc5502771cc6e8cf5d084712f021efdf91"
+    },
+    {
+      "path": "Images/07 - Shape Effects/3.png",
+      "sha256": "1f79fe6555990c8cbc7aefc88a55bff90d0e7f139e7df19b332cbdbbc2c344ae"
+    },
+    {
+      "path": "Images/07 - Shape Effects/4.png",
+      "sha256": "1dee9e8eaaeb76441381594381d63505f169f12ba982f66b1e2aad4addc28575"
+    },
+    {
+      "path": "Images/07 - Shape Effects/5.png",
+      "sha256": "3cd0cc4554082ea8242b45116d53d66482d0e87aa6f0fd3a6cf317dd160b5859"
+    },
+    {
+      "path": "Images/07 - Shape Effects/6.png",
+      "sha256": "118b3c7c1dd153ca07a64c1a96931894e235042384acbcf3904f3842ae0aea78"
+    },
+    {
+      "path": "Images/07 - Shape Effects/7.png",
+      "sha256": "e7c05811b15d7fb107cbe5edb0da0d291ab91c4bb150964b4fd087bb1e29c836"
+    },
+    {
+      "path": "Images/07 - Shape Effects/8.png",
+      "sha256": "9360152def55f2f03769710d08a71ecd03ff6d780fddce7a668d166b7f1425eb"
+    },
+    {
+      "path": "Images/07 - Shape Effects/9.png",
+      "sha256": "0921be0879fd21a7e8f8e31bcf4cbcd36c039f6948846cf76fa1b0ece4f27eed"
+    },
+    {
+      "path": "Images/08 - Media Elements/1.png",
+      "sha256": "634dcd7c95956731d2d310774e747671ec6554793703a38d7cb6735621a36d32"
+    },
+    {
+      "path": "Images/08 - Media Elements/2.png",
+      "sha256": "15045e3a48468820cbc99122e313ff66e3ded1cb8680365da942a92bf19c80c3"
+    },
+    {
+      "path": "Images/09 - Media Backgrounds/1.png",
+      "sha256": "9ed09de01170ce04b8c0d2bc2d8c2e2b6ff35d5a9d638b03afdc6e7070ad4685"
+    },
+    {
+      "path": "Images/09 - Media Backgrounds/2.png",
+      "sha256": "65f7d50eaa5c4577daa57106d56ed5ea7a398cf1f23a56c17107e8fcf031f580"
+    },
+    {
+      "path": "Images/09 - Media Backgrounds/3.png",
+      "sha256": "7ebe74c2f4a34512e4c08cac68f8d74e670dd52fae5c22d5772b6ade06d6239a"
+    },
+    {
+      "path": "Images/09 - Media Backgrounds/4.png",
+      "sha256": "389d6f4f2be60f4bc7949c4aa879a51676fa7c63bdff9fa81ecbc1fcda0c5623"
+    },
+    {
+      "path": "Images/09 - Media Backgrounds/5.png",
+      "sha256": "cb69d6dbd1b488acd25efe830703340e5856983023b7e6badb5df5a969aca9ee"
+    },
+    {
+      "path": "Images/09 - Media Backgrounds/6.png",
+      "sha256": "d81d1dfe414e1d697c0fc624174961bc6d2e636ad50df93a0ee07c334e48b703"
+    }
+  ],
+  "payloads": [
+    {
+      "path": "Documents/01 - Element Layering.pro",
+      "sha256": "6e470d6f628434b44c444c424ade0556b5d942c303b7593a3c95129b6214f552"
+    },
+    {
+      "path": "Documents/02 - Text Attributes.pro",
+      "sha256": "71c97ceb92a8ec52d0b5d6394a0ef25525711e778228ff9787e31d0bf17eae1b"
+    },
+    {
+      "path": "Documents/03 - Text Scaling.pro",
+      "sha256": "689c48962ddad851e8cb03f98d4b7d55ba9f3017f8d93f65d9b6a732ddf9c4cd"
+    },
+    {
+      "path": "Documents/04 - Text Alignment.pro",
+      "sha256": "8b988190df30e9508bdec6d7c41219c0e725784f084c95000db246f9e8d5ec02"
+    },
+    {
+      "path": "Documents/05 - Text Effects.pro",
+      "sha256": "33266ad467a97f9200a23299328d453f2cc7db798c5c1a8ce7358125e3b6392e"
+    },
+    {
+      "path": "Documents/06 - Shapes.pro",
+      "sha256": "64b17fc5ab5293dd7f76a84620c8b7581dfdbb93ea138fe7dabde36639fb4527"
+    },
+    {
+      "path": "Documents/07 - Shape Effects.pro",
+      "sha256": "f220dc5d5c1ac8d7805f46e018f346d1c583b55b454e65abc5bb033ec78cc4fa"
+    },
+    {
+      "path": "Documents/08 - Media Elements.pro",
+      "sha256": "af8f4aacc3d4c1b890a29af323d82da04a82ebe95fd776967dbd44b28b422830"
+    },
+    {
+      "path": "Documents/09 - Media Backgrounds.pro",
+      "sha256": "c9ad0ffc7f2a2cb0dde4d9839813920958ee0ba103f405c8b34632c06d17a44e"
+    },
+    {
+      "path": "Documents/Media/Assets/ImageSample.png",
+      "sha256": "e096175e13ffdafb725462992d2082ed8f52dbb9946a2a5193f0adc5c89ff5e2"
+    },
+    {
+      "path": "Documents/Media/Assets/LogoTransparent.png",
+      "sha256": "7643cb97802f6892514c20d4cebb1055d2fe7e7a47c0c129bc0839ae0db29aea"
+    },
+    {
+      "path": "Documents/Media/Assets/frame-test-30fps-480p.mp4",
+      "sha256": "0b23316ed31f9f1fc1647a9ff9a88a1591402ca56e6f914afb1d0d84b82ec6f8"
+    }
+  ],
+  "streams": [
+    {
+      "name": "01 - Element Layering",
+      "documentID": "7906aabf-2050-4f06-ae7a-c1db1f59dab7",
+      "snapshotSHA256": "2af5391439d88b8237b835691fad3d47929a4b24085d049abab2a7de70c21aac",
+      "vectorSHA256": "e8e9eb291ab6026891bfb53e3858edd4a2086ddcd70201e64478e36d7bcfa954"
+    },
+    {
+      "name": "02 - Text Attributes",
+      "documentID": "c479b59a-7e2e-4d35-ac82-73cacd9f2d18",
+      "snapshotSHA256": "9cbfa08e63785ab392108be0dbd3e21c9ff64cdbe45e2b9c619158db1a2cbcf4",
+      "vectorSHA256": "7329b9a947e79fef93e952ca634a1442c17308222cad4a6f23906c71ec40e117"
+    },
+    {
+      "name": "03 - Text Scaling",
+      "documentID": "21b67719-6404-4620-b409-a22d3c486b55",
+      "snapshotSHA256": "296cc7dc01239f7bdcd801e6fed2d8129fd005d7c75b10db49c711b98db4c4f7",
+      "vectorSHA256": "52e332a785040f3af98b0a66cba0d25a04252d0ba654fc8bafdca367a5e94b1f"
+    },
+    {
+      "name": "04 - Text Alignment",
+      "documentID": "2ac4d15a-c099-4924-b62b-55cd955df20a",
+      "snapshotSHA256": "a1b027c1c92f6f827cf075d97f042be4c83bec58f844ee1154e35f1b6260ca6c",
+      "vectorSHA256": "bdce0b2b40548ecbb942d6a2b6502705301c119b449c73dc6d8e9691e51a32c1"
+    },
+    {
+      "name": "05 - Text Effects",
+      "documentID": "713f8a4c-65ef-450e-8dc2-2e872d18a9a9",
+      "snapshotSHA256": "96ddb5ce392c89a5c88e92ef93f8853ac8df34d41973745493aa4150eadddd6a",
+      "vectorSHA256": "4189e8a310f4b4c1f6b800fabc84bf790a4cf9913cdb6d5966b1722c7253e3f1"
+    },
+    {
+      "name": "06 - Shapes",
+      "documentID": "3a017f72-23c7-41c5-9c7e-1bb4a99b5517",
+      "snapshotSHA256": "979c28880b392404639ddcc2aafa22854b9f734bfd6b5195fc681ed359d64d4e",
+      "vectorSHA256": "db0fe82f38faf8edba0982943da488f082fd042606e98df4d0832ca65e622b0d"
+    },
+    {
+      "name": "07 - Shape Effects",
+      "documentID": "a58dab96-a020-428c-8350-ef42d337a3c0",
+      "snapshotSHA256": "33070e9805a4a986eca6b41cff6074b87a233efb90b9b63cf28dd20a49857897",
+      "vectorSHA256": "dae36f97248fff6ba6b8e2f595ece93ccf3815e562348101eb7c62878c625246"
+    },
+    {
+      "name": "08 - Media Elements",
+      "documentID": "04108699-4088-4c02-8ae6-a26c927f594d",
+      "snapshotSHA256": "ffac8b86e07e7b4d99ec716b0f898e4623ad67c99d82a45ad0424a0b194d6153",
+      "vectorSHA256": "fa4406fb4b5c4a678f694240099eddb46abefc4d12ad8e5f26df09c10d53bf80"
+    },
+    {
+      "name": "09 - Media Backgrounds",
+      "documentID": "eb7b9480-6856-4435-8099-7e595c597179",
+      "snapshotSHA256": "dce33a5fe60eecb33a1b5c57364e4f25b13f6e1c613c8b705c6122404412635e",
+      "vectorSHA256": "6c7e710bb19cf1771bdf10316a75b8fbe1711f453281901f2db04c1229e4a15a"
+    }
+  ]
+}

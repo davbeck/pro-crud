@@ -438,7 +438,7 @@ public enum DocumentArchive {
 		let playlistURL = rootFiles.first { $0.lastPathComponent == "data" }
 		let themes = paths.filter { $0.url.lastPathComponent == "Theme" }.map(\.url)
 		let matches = [
-			rootPresentations.count == 1 && playlistURL == nil && themes.isEmpty ? DocumentKind.presentation : nil,
+			!rootPresentations.isEmpty && playlistURL == nil && themes.isEmpty ? DocumentKind.presentation : nil,
 			playlistURL != nil && themes.isEmpty ? .playlist : nil,
 			rootPresentations.isEmpty && playlistURL == nil && !themes.isEmpty ? .theme : nil,
 		].compactMap(\.self)
@@ -447,8 +447,10 @@ public enum DocumentArchive {
 		}
 		switch kind {
 		case .presentation:
-			try deadline.check()
-			_ = try DocumentLoader.loadRaw(rootPresentations[0], kind: .presentation)
+			for presentation in rootPresentations {
+				try deadline.check()
+				_ = try DocumentLoader.loadRaw(presentation, kind: .presentation)
+			}
 		case .playlist:
 			guard let playlistURL else { throw DocumentLoadError.unsupportedInput(inputURL) }
 			try deadline.check()

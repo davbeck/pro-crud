@@ -238,7 +238,7 @@ Archive extensions identify the export workflow. The extension is part of the us
 
 | Extension | Container | Typical entries | Primary payloads | Purpose |
 | --- | --- | --- | --- | --- |
-| `.probundle` | ZIP | One root `.pro` file; optional media files | `rv.data.Presentation` in the `.pro` file | Presentation bundle export/import. A media-free presentation can contain only the `.pro`; a bundle with media can include images, videos, or audio alongside it. |
+| `.probundle` | ZIP | One or more `.pro` files; optional shared media files | `rv.data.Presentation` in each `.pro` file | Presentation bundle export/import. Native 22 can package several selected presentations in one bundle. |
 | `.proPlaylist` | ZIP | One root `data` file plus embedded `.pro` files | `rv.data.PlaylistDocument` in `data`; `rv.data.Presentation` in each `.pro` | Playlist export/import. The `data` file preserves playlist tree structure, item ordering, per-item arrangement UUIDs, and references to embedded presentation documents. |
 | `.proTheme` | ZIP | One directory per exported theme; each directory contains a `Theme` file and may contain assets | `rv.data.Template.Document` in each `Theme` file | Theme export/import. Each theme document contains reusable template slides. |
 
@@ -254,6 +254,16 @@ archive filename is not. A portable single-theme archive therefore uses
 imports of a root `Theme` entry targeted the workspace path `Themes/Theme`,
 collided independently of the archive filename, and did not appear as a normal
 named theme in the API inventory.
+
+Native 22 Presentation Bundle export can contain several independent `.pro`
+payloads with shared media. `render` loads every presentation, uses separate
+output subdirectories for a collection, and retains the shared asset context.
+Single-presentation output naming is unchanged. Single-document inspection and
+editing APIs reject an ambiguous bundle; use `expand`, then select the exact
+`.pro` file to inspect or edit. `bundle DIRECTORY` packages every root `.pro`
+after validating all of them; an invalid later document leaves an existing
+output unchanged. Native media identity and configuration-manifest repackaging
+still require their qualified adapters; use ProPresenter export for those cases.
 
 ## Legacy Workspace Layout
 

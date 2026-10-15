@@ -19,6 +19,13 @@ Playlist, or Theme, and work on those exports. Legacy Workspace exports are
 point-in-time snapshots. The retained older workspace is independent; editing
 it does not update the active native workspace. Select a document inside a
 legacy workspace rather than treating the whole workspace as one archive.
+Presentation Bundles can contain several presentations. `render` loads each
+with shared media and separate output folders. For a document edit, expand the
+bundle and select its exact `.pro` payload; single-document operations reject
+ambiguous collections. Re-bundle an extracted directory of supported root
+presentations with `bundle DIRECTORY --output FILE.probundle`; all payloads are
+validated before output changes. Native media/configuration capability gates
+still apply.
 
 For native storage, use `workspace inventory ROOT` for stream identities and
 availability, and `workspace dump ROOT` for typed diagnostic Loro content.

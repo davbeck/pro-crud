@@ -7,7 +7,7 @@ Do not describe the entire ProPresenter 22 feature set or native writes as suppo
 | Plan area | Implemented | Remaining gate/work |
 | --- | --- | --- |
 | Storage boundary | Explicit-root storage inspection; native markers take precedence over leftovers; expanded exports distinguished; native access rejected in legacy readers/writers/Look/media/batch paths | Registered legacy preference discovery, broader ambiguous/mixed fixture matrix |
-| Export compatibility | Optional application metadata; independent 22 raw/Theme/empty-playlist fixtures; empty playlist expand/rebundle; absent metadata and unknown-field preservation | Connected playlists, populated/media bundle and native edit/reimport acceptance across every export path |
+| Export compatibility | Optional application metadata; independent 22 raw/Theme/empty-playlist fixtures; empty playlist expand/rebundle; multi-Presentation bundle collection loading, media-free collection edit/rebundle/native re-import acceptance; absent metadata and unknown-field preservation | Connected playlists, populated/media bundle and native edit/reimport acceptance across every export path |
 | Targets and conversion | Typed 21/22 profiles; default 22 construction/export; retained 21 construction; JSON results; recursive wire/enum issues; known v2/media gates; atomic failed export | Complete versioned schemas/adapters; dependency/feature conversions and receiving-app 21.4/22 qualification; no lossy fallback is currently qualified |
 | Schema | Existing generated decoder names retained, with verified 21.4 ligature/character-size/original-font fields and optional rendering-enabled state and playlist arrangement names; exact upstream 21.4 baseline with 146 pinned source files and separate descriptor; independently pinned 56-file 22 descriptor set with binary provenance, CRDT map/tree/atomic annotations and versioned binary materialization; repeated timeline preservation through known-field edits, singular-merge negative control and common/scoped KeyMapping wire tests and structured cross-target parent-scope, multi-Presentation timeline and per-item reference gates; schema resources and generated Swift freshness pass using the generator from the resolved SwiftProtobuf 1.38.1 package | Integrate remaining 21.4 fields into editable views and receiving-app KeyMapping/timeline behavior and any deliberate fallback conversions |
 | Native reader | System SQLite committed-WAL backups and stable sidecar-free in-memory images with bounded external-writer retries; schema-9 gates, IDs/scopes/availability/checksums/counts/vectors; pinned official Swift Loro; registry metadata; typed library membership, logical presentation/Theme references, Master/group/arrangement ordering, playlist trees and transient protobuf views with matching client node expansion state; portable standard-playlist export with repeated/hidden media-free dependencies and native 22 import/re-export acceptance; selected shared/client saved/live Look and screen inspection with native-export agreement; media-free native Look preview with explicit Workspace-relative Theme context and disabled-state preservation; 336 presentation comparisons pass; all 358 retained Presentation/Theme streams materialize without unmapped fields; separate-target export and direct `render ROOT --native-stream UUID` with same-snapshot native Look resolution and pixel-exact native probe render | Full configuration materialization, connected-playlist local overlays, remaining playlist/action/media dependency export and media resolution/rebasing |
@@ -27,7 +27,7 @@ and 22-profile bundles importing successfully into the pinned 22 build, a
 committed native metadata edit, and native re-export with retained nested IDs.
 The two generated MISC test presentations remain available for review.
 
-Local validation: full Swift suite (404 core + 92 CLI + one harness test; nine known rendering issues, including the fresh native 22 text-layout comparison), CLI acceptance, SwiftFormat/SwiftLint, protobuf generation/resource
+Local validation: full Swift suite (412 core + 92 CLI + one harness test; nine known rendering issues, including the fresh native 22 text-layout comparison), CLI acceptance, SwiftFormat/SwiftLint, protobuf generation/resource
 freshness, and bundled four-document/99-variation Theme freshness pass. The Theme
 generator now fixes only AppKit's informational RTF writer-version header: all
 140 host-generated differences were exactly that header; the shipped asset and
@@ -100,3 +100,11 @@ All 946 detected Media occurrences across the retained 385-stream corpus match
 the official WASM oracle; 19 macro references were previously uninspected.
 Scope is retained per occurrence. Asset-store authority and non-Media dependency
 roles remain separate work, and thirteen scopes remain explicitly uninspected.
+
+`../Research/Format/ProPresenter22RenderingCorpus.md` retains fresh native 22
+exports of the existing nine-area/71-slide corpus, all native payloads/media
+and owned streams, and a production edited two-Presentation bundle with native
+import/re-export acceptance. Collection loading preserves all payloads/resources;
+media-free collection bundling validates all documents atomically. Three exact
+shape controls pass; broader 22 rendering parity and the remaining fixture
+families still require individual qualification. Existing 21 images are unchanged.

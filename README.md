@@ -258,6 +258,13 @@ pro-crud expand Welcome.probundle --output Welcome
 pro-crud bundle Welcome.pro --output Welcome.probundle
 ```
 
+A Presentation Bundle can contain several presentations. Rendering loads all
+of them into separate output folders. Expand a collection and select its exact
+`.pro` file for editing; single-document operations reject ambiguous bundles.
+`bundle DIRECTORY` includes every supported root presentation and validates
+them all before replacing output. Native media/configuration adapters remain
+required where reported by compatibility checks.
+
 Create a presentation with one blank slide:
 
 ```sh
