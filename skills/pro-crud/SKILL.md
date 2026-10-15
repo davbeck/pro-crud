@@ -102,6 +102,12 @@ Native batches also accept `rename-arrangement` with `arrangement` UUID and
 `name`, and `select-arrangement` with `arrangement` UUID or explicit JSON `null`
 for Master. Naming preserves the group sequence; selection preserves all
 arrangements. Matching names/selections make no change.
+Use batch `add-arrangement` with a new `arrangement` UUID, `name`, explicit
+`groups` UUID array and `select` Boolean. Repeat groups or pass an empty array.
+Use `duplicate-arrangement` with source `arrangement`, new `newArrangement`
+UUID, explicit `name` and `select`. Both append, retain existing content and
+accept a matching replay as a no-op; conflicting UUID reuse is rejected.
+Duplication rejects unmapped source-arrangement fields. Deletion is unsupported.
 Use `workspace transfer-cue ROOT --stream UUID --cue CUE_UUID --group GROUP_UUID
 --registry PATH` to transfer ownership into an existing group. Omit `--after` to
 append or name a cue in the destination group. Cue and placement identities are

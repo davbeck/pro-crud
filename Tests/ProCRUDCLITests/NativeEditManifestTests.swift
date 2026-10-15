@@ -67,6 +67,20 @@ struct NativeEditManifestTests {
 		#expect(throws: (any Error).self) { try WorkspaceSetText.parse(base + ["--text", "X", "--rtf", "Notes.rtf"]) }
 	}
 
+	@Test func arrangementCreationRequiresStableIdentitiesExplicitGroupsAndSelectionPolicy() throws {
+		let stream = UUID(), arrangement = UUID(), copy = UUID(), group = UUID()
+		let create: [String: Any] = ["stream": stream.uuidString, "op": "add-arrangement", "arrangement": arrangement.uuidString, "name": "Created", "groups": [group.uuidString, group.uuidString], "select": false]
+		let duplicate: [String: Any] = ["stream": stream.uuidString, "op": "duplicate-arrangement", "arrangement": arrangement.uuidString, "newArrangement": copy.uuidString, "name": "Copy", "select": true]
+		let operations = try decode([create, duplicate])
+		#expect(operations.map(\.edit) == [.createArrangement(id: arrangement, name: "Created", groups: [group, group], select: false), .duplicateArrangement(arrangement, newID: copy, name: "Copy", select: true)])
+		for key in ["arrangement", "groups", "select"] {
+			var missing = create; missing.removeValue(forKey: key)
+			#expect(throws: ValidationError.self) { try decode([missing]) }
+		}
+		var missing = duplicate; missing.removeValue(forKey: "newArrangement")
+		#expect(throws: ValidationError.self) { try decode([missing]) }
+	}
+
 	@Test func arrangementSelectionRequiresExplicitUUIDOrNullForMaster() throws {
 		let stream = UUID(), arrangement = UUID()
 		let operations = try decode([

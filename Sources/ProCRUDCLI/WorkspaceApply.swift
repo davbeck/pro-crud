@@ -119,6 +119,12 @@ enum NativeEditManifest {
 			case .renameArrangement:
 				fields = ["arrangement", "name"]
 				payload = try .edit(.arrangementName(container.decode(UUID.self, forKey: .arrangement), container.decode(String.self, forKey: .name)))
+			case .addArrangement:
+				fields = ["arrangement", "name", "groups", "select"]
+				payload = try .edit(.createArrangement(id: container.decode(UUID.self, forKey: .arrangement), name: container.decode(String.self, forKey: .name), groups: container.decode([UUID].self, forKey: .groups), select: container.decode(Bool.self, forKey: .select)))
+			case .duplicateArrangement:
+				fields = ["arrangement", "newArrangement", "name", "select"]
+				payload = try .edit(.duplicateArrangement(container.decode(UUID.self, forKey: .arrangement), newID: container.decode(UUID.self, forKey: .newArrangement), name: container.decode(String.self, forKey: .name), select: container.decode(Bool.self, forKey: .select)))
 			case .selectArrangement:
 				fields = ["arrangement"]
 				guard container.contains(.arrangement) else { throw invalid("select-arrangement requires an arrangement UUID or explicit null for Master.", decoder: decoder) }
@@ -139,10 +145,12 @@ enum NativeEditManifest {
 		case setArrangementGroups = "set-arrangement-groups"
 		case renameArrangement = "rename-arrangement"
 		case selectArrangement = "select-arrangement"
+		case addArrangement = "add-arrangement"
+		case duplicateArrangement = "duplicate-arrangement"
 	}
 
 	private enum Key: String, CodingKey {
-		case version, operations, stream, op, title, text, action, element, rtfFile, cue, after, group, name, arrangement, groups
+		case version, operations, stream, op, title, text, action, element, rtfFile, cue, after, group, name, arrangement, groups, newArrangement, select
 	}
 
 	private struct AnyKey: CodingKey {

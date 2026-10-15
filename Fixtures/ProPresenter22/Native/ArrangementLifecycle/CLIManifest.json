@@ -1,0 +1,32 @@
+{
+  "version": 1,
+  "operations": [
+    {
+      "stream": "bfa7b647-93ab-5ee6-b397-ec61b08bcfee",
+      "op": "add-arrangement",
+      "arrangement": "2CE86B4C-F03E-4290-AAD1-C4D9A051E911",
+      "name": "CLI Created Repeated",
+      "groups": [
+        "58FFCB48-ABA1-4C54-9FDE-12CB23439550",
+        "58FFCB48-ABA1-4C54-9FDE-12CB23439550"
+      ],
+      "select": false
+    },
+    {
+      "stream": "bfa7b647-93ab-5ee6-b397-ec61b08bcfee",
+      "op": "add-arrangement",
+      "arrangement": "51103A2D-ACFE-4A93-932F-50CEAD408C87",
+      "name": "CLI Empty Arrangement",
+      "groups": [],
+      "select": false
+    },
+    {
+      "stream": "bfa7b647-93ab-5ee6-b397-ec61b08bcfee",
+      "op": "duplicate-arrangement",
+      "arrangement": "C049469C-FC98-4BAA-BAF3-290846452E5D",
+      "newArrangement": "7D76668F-0DF4-4C28-8BF5-EE488509DE13",
+      "name": "CLI Duplicate Arrangement",
+      "select": true
+    }
+  ]
+}

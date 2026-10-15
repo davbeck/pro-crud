@@ -16,6 +16,8 @@ public enum NativePresentationEdit: Codable, Sendable, Equatable {
 	case arrangementGroups(UUID, [UUID])
 	case arrangementName(UUID, String)
 	case selectedArrangement(UUID?)
+	case createArrangement(id: UUID, name: String, groups: [UUID], select: Bool)
+	case duplicateArrangement(UUID, newID: UUID, name: String, select: Bool)
 }
 
 public enum NativeSlideNotesContent: Codable, Sendable, Equatable {
@@ -135,6 +137,15 @@ public struct NativeLocalPatch: Sendable {
 			let original = layout.arrangements[index].groupIDs
 			guard original != groups else { return }
 			try NativeStructuralEditing.setGroups(groups, replacing: original, at: index, root: root)
+		case let .createArrangement(id, name, groups, select):
+			try NativeStructuralEditing.createArrangement(id: id, name: name, groups: groups, select: select, layout: layout, root: root)
+		case let .duplicateArrangement(sourceID, newID, name, select):
+			guard sourceID != newID else { throw NativeSemanticError.duplicateIdentity(path: "/arrangements", identity: newID.uuidString) }
+			guard let index = layout.arrangements.firstIndex(where: { $0.id == sourceID }) else { throw NativeSemanticError.missingReference(path: "/arrangements", identity: sourceID.uuidString) }
+			let arrangement = try value.object(at: "/").required("root", at: "/").object(at: "/root").required("arrangements", at: "/root").array(at: "/root/arrangements")[index].object(at: "/arrangements/\(sourceID)")
+			guard Set(arrangement.keys) == ["uuid", "name", "group_identifiers_v2"] else { throw NativeSemanticError.unsupportedNode(path: "/arrangements/\(sourceID)", kind: "unqualified arrangement fields in duplication") }
+			let identifiers = try arrangement.required("group_identifiers_v2", at: "/arrangement").array(at: "/arrangement/group_identifiers_v2").map { try $0.text(at: "/arrangement/group_identifiers_v2") }
+			try NativeStructuralEditing.createArrangement(id: newID, name: name, groups: layout.arrangements[index].groupIDs, identifiers: identifiers, select: select, layout: layout, root: root)
 		case let .arrangementName(arrangementID, name):
 			guard !name.isEmpty else { throw NativeSemanticError.invalidValue(path: "/arrangements/\(arrangementID)/name", expected: "nonempty arrangement name") }
 			guard let index = layout.arrangements.firstIndex(where: { $0.id == arrangementID }) else { throw NativeSemanticError.missingReference(path: "/arrangements", identity: arrangementID.uuidString) }

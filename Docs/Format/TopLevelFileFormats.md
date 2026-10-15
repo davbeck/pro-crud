@@ -180,6 +180,16 @@ of the application version. The same stopped-writer/local-registration rules app
 | `set-arrangement-groups` | `arrangement` UUID and ordered `groups` UUID array, including repeats or an empty array |
 | `rename-arrangement` | `arrangement` UUID and nonempty `name`; retains identity, sequence and selection |
 | `select-arrangement` | `arrangement` UUID, or explicit JSON `null` to select Master; omitting the field is an error |
+| `add-arrangement` | New `arrangement` UUID, nonempty `name`, explicit ordered `groups` UUID array and `select` Boolean; appends the arrangement |
+| `duplicate-arrangement` | Source `arrangement` UUID, new `newArrangement` UUID, nonempty `name` and explicit `select` Boolean; appends a copy of the repeated group sequence |
+
+Creation accepts repeated groups or an empty array and retains every existing
+arrangement and cue. Stable caller-supplied UUIDs allow a matching creation or
+duplication to replay as a no-op; a reused UUID with different name/groups is
+rejected. `select: false` retains the current selection. Duplication preserves
+stored group-UUID spelling and rejects unmapped source-arrangement fields.
+Native arrangement deletion remains unsupported pending cross-document
+playlist/action reference handling.
 
 Every operation requires `stream` and `op`. Unknown keys, operations and manifest
 versions fail. Native editing preserves the source storage generation; target

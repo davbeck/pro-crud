@@ -88,6 +88,38 @@ enum NativeStructuralEditing {
 		}
 	}
 
+	static func createArrangement(id: UUID, name: String, groups: [UUID], identifiers: [String]? = nil, select: Bool, layout: NativePresentationLayout, root: LoroMap) throws {
+		guard !name.isEmpty else { throw NativeSemanticError.invalidValue(path: "/arrangements/\(id)/name", expected: "nonempty arrangement name") }
+		for group in groups where !layout.groups.contains(where: { $0.id == group }) {
+			throw NativeSemanticError.missingReference(path: "/arrangements/\(id)/groups", identity: group.uuidString)
+		}
+		guard let list = root.get(key: "arrangements")?.asLoroMovableList() else { throw NativeSemanticError.invalidValue(path: "/arrangements", expected: "native movable arrangement list") }
+		let arrangement: LoroMap
+		if let index = layout.arrangements.firstIndex(where: { $0.id == id }) {
+			guard layout.arrangements[index].name == name, layout.arrangements[index].groupIDs == groups else { throw NativeSemanticError.duplicateIdentity(path: "/arrangements", identity: id.uuidString) }
+			guard let existing = list.get(index: UInt32(index))?.asLoroMap() else { throw NativeSemanticError.invalidValue(path: "/arrangements/\(id)", expected: "native arrangement map") }
+			arrangement = existing
+		} else {
+			arrangement = try list.pushContainer(child: LoroMap())
+			try arrangement.insert(key: "uuid", v: id.uuidString)
+			try arrangement.insert(key: "name", v: name)
+			let sequence = try arrangement.insertContainer(key: "group_identifiers_v2", child: LoroMovableList())
+			for (index, group) in groups.enumerated() {
+				if let identifiers {
+					try sequence.push(v: identifiers[index]); continue
+				}
+				let placement = try layout.placements.first { try $0.metadata.object(at: "/placement").required("uuid", at: "/placement").uuid(at: "/placement/uuid") == group }
+				guard let placement else { throw NativeSemanticError.missingReference(path: "/cue_group_placements", identity: group.uuidString) }
+				let stored = try placement.metadata.object(at: "/placement").required("uuid", at: "/placement").text(at: "/placement/uuid")
+				try sequence.push(v: stored)
+			}
+		}
+		if select, layout.selectedArrangementID != id {
+			guard let stored = arrangement.get(key: "uuid")?.asValue() else { throw NativeSemanticError.invalidValue(path: "/arrangements/\(id)/uuid", expected: "stored native UUID") }
+			try root.insert(key: "selected_arrangement", v: stored)
+		}
+	}
+
 	private static func groupList(at index: Int, root: LoroMap) throws -> LoroMovableList {
 		let path = "/arrangements[\(index)]"
 		guard let arrangements = root.get(key: "arrangements")?.asLoroMovableList(),
