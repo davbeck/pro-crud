@@ -13,6 +13,10 @@ unresolved hypotheses, experiment procedures, and progress history here.
 
 - [ProPresenter 22 support plan](Plans/ProPresenter22Support.md): staged
   interchange, native workspace, schema, media, rendering and release work.
+- [Implementation status](Plans/ProPresenter22ImplementationStatus.md): completed
+  stages, validation and outstanding native/Cloud acceptance gates.
+- [Native reader evidence](Research/Format/ProPresenter22Reader.md) and
+  [versioned native acceptance](Testing/ProPresenterNativeAcceptance.md).
 - ProPresenter 22 investigation: [storage and migration](Research/Format/ProPresenter22Storage.md),
   [code audit](Research/Format/ProPresenter22CodeAudit.md),
   [public/API/schema audit](Research/Format/ProPresenter22Public.md), and

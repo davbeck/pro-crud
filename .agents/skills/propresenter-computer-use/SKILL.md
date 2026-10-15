@@ -15,6 +15,31 @@ Control the local ProPresenter UI with `node_repl` and `@oai/sky`, then validate
 4. Without permission, use copied/disposable documents and do not change the library in place. Treat audience/stage triggers, clears, active looks, capture, and timers as live-control actions; perform them only when the user's request authorizes control of this instance.
 5. Never treat an apparently old, empty, or test-looking library as permission. Authorization comes from the user or project context, not visible content.
 
+## Versioned native acceptance
+
+For 21.4/22 compatibility experiments, follow
+`Internal/Testing/ProPresenterNativeAcceptance.md` and run the contributor-only
+`NativeTestHarness` in the selected isolated test account before initial offline
+persistence work. Pin the app path/build/signature, account-local helper binary
+hash, exact workspace root/identity, API endpoint and discovered Syphon source.
+A successful preflight is not native acceptance. Do not delete or replace
+helpers as an automatic retry, and do not run both test sessions concurrently.
+
+Launch the pinned app by its absolute bundle path after offline experiments,
+then verify its actual version/build and selected workspace in the UI. When
+using Unified Computer Use, select that absolute app path using its documented
+app entry point. Name/bundle-ID launch is unsuitable for switching between two
+installed versions. Use the verified running instance for subsequent UI actions.
+
+ProPresenter 22 beta build 369098875 uses native SQLite/Loro workspace storage.
+Its preserved legacy workspace is a separate copy. Use **File → Export → Legacy
+Workspace**, Presentation Bundle, Playlist, or Themes for interchange tests;
+never edit leftover raw files in a native root. Native import can change the
+root presentation UUID while retaining nested IDs: resolve the imported identity
+after import. Save 22 Slide Images separately with pinned build/OS/fonts/export
+settings; retain the 21.4 references. Shared and client streams, media stores,
+and Cloud acceptance need independent verification.
+
 ## Start and inspect ProPresenter
 
 Follow the Computer Use skill and use `node_repl` for every UI action. Do not use AppleScript, `osascript`, System Events, or synthetic input.

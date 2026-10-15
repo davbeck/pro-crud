@@ -66,6 +66,14 @@ let package = Package(
 			],
 			plugins: [.plugin(name: "SwiftLintBuildToolPlugin", package: "SwiftLintPlugins")],
 		),
+		.executableTarget(
+			name: "NativeTestHarness",
+			dependencies: [
+				"ProCRUDCore",
+				.product(name: "ArgumentParser", package: "swift-argument-parser"),
+			],
+			plugins: [.plugin(name: "SwiftLintBuildToolPlugin", package: "SwiftLintPlugins")],
+		),
 		.testTarget(
 			name: "ProCRUDCoreTests",
 			dependencies: [
@@ -75,6 +83,14 @@ let package = Package(
 				.product(name: "SnapshotTesting", package: "swift-snapshot-testing"),
 			],
 			exclude: ["__Snapshots__"],
+			plugins: [.plugin(name: "SwiftLintBuildToolPlugin", package: "SwiftLintPlugins")],
+		),
+		.testTarget(
+			name: "NativeTestHarnessTests",
+			dependencies: [
+				"NativeTestHarness",
+				.product(name: "ArgumentParser", package: "swift-argument-parser"),
+			],
 			plugins: [.plugin(name: "SwiftLintBuildToolPlugin", package: "SwiftLintPlugins")],
 		),
 		.testTarget(
