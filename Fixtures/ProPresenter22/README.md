@@ -99,3 +99,14 @@ metadata survive, with native initialization of inactive empty-text/chord-chart
 defaults as documented in the playlist research. SHA-256:
 `301bf3c06bee3e1ab4a722ec6c24b5697172166445258c982b4a559766754d9b`.
 See the playlist research for the rejected UUID-only filename experiment.
+
+`Native/Notes/` retains the owned acceptance Presentation before a native Slide
+Notes edit, after that independent native multiline Unicode edit, after the
+production CLI notes transaction, and after native restart/continued editing.
+Each snapshot has its actual version vector. The Presentation stream is
+`bfa7b647-93ab-5ee6-b397-ec61b08bcfee`, slide action
+`b6f1da61-c874-42c1-b4e9-7fe1148715b3`. Collected October 15, 2026 with the same
+pinned 22 build and OS. These histories contain only owned acceptance content.
+Native Slide Notes use `Graphics.Text.rtf_data` on the Presentation slide action;
+the Presentation's root plain `notes` string remains separate. See
+`Internal/Research/Format/ProPresenter22SlideNotes.md` for hashes and acceptance.

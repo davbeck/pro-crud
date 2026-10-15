@@ -81,7 +81,23 @@ receipt in one SQLite transaction. A concurrent revision change fails without
 publishing the edit. A matching title is a no-op. JSON output includes the
 selected document identity, `changed` and commit receipts. An empty title clears
 the CCLI song title. This operation does not rename the Presentation or change
-its library location. Other native edits still use native export/import.
+its library location. Set native rich-text Slide Notes by exact Presentation slide-action UUID with:
+
+```sh
+pro-crud workspace set-slide-notes /exact/native/root \
+  --stream PRESENTATION_STREAM_UUID --action SLIDE_ACTION_UUID \
+  --registry /exact/path/registry-v1.sqlite3 --text 'Slide notes'
+```
+
+Select the action UUID from a supported `workspace export` or native diagnostic
+`workspace dump`. This edits the selected slide's notes, separate from the
+Presentation's plain metadata `notes` field. Use `--rtf FILE` instead of `--text`
+for complete rich-text replacement. Plain text retains the first existing
+character's formatting; new notes use Helvetica Neue at 24 points (system font
+fallback) and white text. Matching plain text preserves formatting and makes no
+change; empty text clears the notes. The same stopped-writer, registration,
+history, transaction and conflict rules apply. Other native edits still use
+native export/import.
 
 Valid 22 interchange payloads can omit `application_info`. Loading and editing
 preserve its absence. Root recognition instead checks presentation identities,

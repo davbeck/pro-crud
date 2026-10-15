@@ -54,7 +54,12 @@ For a registered local native workspace, `workspace set-copyright-title ROOT
 Presentation's CCLI song title. Select the shared Presentation stream UUID;
 stop ProPresenter and its workspace helpers before this operation. An empty
 string clears the title, and a matching title makes no change. This preserves
-native history and local registration; Cloud editing and other native edit
+native history and local registration.
+Use `workspace set-slide-notes ROOT --stream UUID --action SLIDE_ACTION_UUID
+--registry PATH --text TEXT` for native Slide Notes, or `--rtf FILE` for rich
+text. The action UUID identifies the Presentation slide action, distinct from
+the cue and base-slide UUIDs. Matching text is a no-op; empty text clears notes.
+The same offline/local checks apply. Cloud editing and other native edit
 families remain unsupported.
 
 New creation and bundle exports default to target 22. Use `--target-version 21`

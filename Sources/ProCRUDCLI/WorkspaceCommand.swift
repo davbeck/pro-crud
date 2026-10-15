@@ -5,8 +5,44 @@ import ProCRUDCore
 struct WorkspaceCommand: ParsableCommand {
 	static let configuration = CommandConfiguration(
 		commandName: "workspace", abstract: "Inspect, export, and apply supported local edits to an explicitly selected ProPresenter workspace.",
-		subcommands: [WorkspaceInspect.self, WorkspaceInventory.self, WorkspaceContents.self, WorkspaceConfiguration.self, WorkspaceMedia.self, WorkspaceExport.self, WorkspaceExportPlaylist.self, WorkspaceSetCopyrightTitle.self, WorkspaceDump.self, WorkspaceDiscover.self],
+		subcommands: [WorkspaceInspect.self, WorkspaceInventory.self, WorkspaceContents.self, WorkspaceConfiguration.self, WorkspaceMedia.self, WorkspaceExport.self, WorkspaceExportPlaylist.self, WorkspaceSetCopyrightTitle.self, WorkspaceSetSlideNotes.self, WorkspaceDump.self, WorkspaceDiscover.self],
 	)
+}
+
+struct WorkspaceSetSlideNotes: ParsableCommand {
+	static let configuration = CommandConfiguration(commandName: "set-slide-notes", abstract: "Set native local Slide Notes by exact slide-action UUID. Quit ProPresenter and stop workspace helpers first.")
+	@Argument(help: "Exact registered local native workspace root.") var input: String
+	@Option(help: "Shared Presentation stream UUID.") var stream: String
+	@Option(help: "Exact Presentation slide-action UUID from workspace export/dump.") var action: String
+	@Option(help: "Exact local registry-v1.sqlite3 path.") var registry: String
+	@Option(help: "Replacement plain text; retains the first existing character's formatting. Empty text clears notes.") var text: String?
+	@Option(help: "RTF file containing the complete replacement notes, including formatting.") var rtf: String?
+
+	func validate() throws {
+		guard UUID(uuidString: stream) != nil, UUID(uuidString: action) != nil else { throw ValidationError("--stream and --action require UUIDs.") }
+		guard (text != nil) != (rtf != nil) else { throw ValidationError("Provide exactly one of --text or --rtf.") }
+	}
+
+	func run() throws {
+		guard let streamID = UUID(uuidString: stream), let actionID = UUID(uuidString: action) else { throw ValidationError("--stream and --action require UUIDs.") }
+		let content: NativeSlideNotesContent
+		if let text {
+			content = .text(text)
+		} else if let rtf {
+			content = try .rtf(Data(contentsOf: URL(fileURLWithPath: rtf)))
+		} else {
+			throw ValidationError("Provide --text or --rtf.")
+		}
+		let receipts = try NativeLocalWorkspaceWriter.edit(.slideNotes(actionID: actionID, content: content), documentID: streamID, in: URL(fileURLWithPath: input), registry: URL(fileURLWithPath: registry))
+		try print(prettyJSON(Result(documentID: streamID, actionID: actionID, changed: !receipts.isEmpty, receipts: receipts)))
+	}
+
+	private struct Result: Encodable {
+		let documentID: UUID
+		let actionID: UUID
+		let changed: Bool
+		let receipts: [NativeLocalCommitReceipt]
+	}
 }
 
 struct WorkspaceExportPlaylist: ParsableCommand {

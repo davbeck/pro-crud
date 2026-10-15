@@ -8,7 +8,7 @@ import ProCRUDCore
 /// replace helpers, migrate workspaces, or claim native acceptance.
 @main
 struct NativeTestHarness: AsyncParsableCommand {
-	@Option(help: "JSON profile for an isolated macOS test account and pinned application.") var profile: String
+	@Option(help: "JSON profile for the authorized local test account, workspace and pinned application.") var profile: String
 	@Option(help: "Run manifest path, written even when a preflight check fails.") var output: String
 	@Option(help: "Disposable native Presentation UUID for an offline metadata experiment.") var documentID: String?
 	@Option(help: "Experimental: commit this copyright title only after the pinned local/offline preflight passes. Requires --document-id.") var setCopyrightTitle: String?
@@ -41,7 +41,7 @@ struct NativeTestHarness: AsyncParsableCommand {
 		let helperRoot = URL(fileURLWithPath: configuration.helperRoot).resolvingSymlinksInPath()
 		let expectedHelperRoot = FileManager.default.homeDirectoryForCurrentUser
 			.appendingPathComponent("Library/Application Support/RenewedVision/ProPresenter/Helpers/Workspaces").resolvingSymlinksInPath()
-		check("helper-location", helperRoot == expectedHelperRoot, "Helper installation must belong to the isolated account.")
+		check("helper-location", helperRoot == expectedHelperRoot, "Helper installation must belong to the selected test account.")
 		let helperOwner = try? FileManager.default.attributesOfItem(atPath: helperRoot.path)[.ownerAccountID] as? NSNumber
 		check("helper-owner", helperOwner?.uint32Value == getuid(), "Helper root must exist and be owned by user ID \(getuid()).")
 		let helperExecutable = URL(fileURLWithPath: configuration.helperExecutable).resolvingSymlinksInPath()
