@@ -100,7 +100,7 @@ public struct NativeWorkspaceSnapshot: Sendable {
 		return Self(root: root.resolvingSymlinksInPath(), workspaceID: id, metadata: Dictionary(uniqueKeysWithValues: metadataRows), streams: streams)
 	}
 
-	private static func readStream(_ row: OpaquePointer) throws -> NativeWorkspaceStream {
+	static func readStream(_ row: OpaquePointer) throws -> NativeWorkspaceStream {
 		guard let idBytes = WorkspaceDatabase.data(row, 0), idBytes.count == 16,
 		      let scope = NativeWorkspaceStream.Scope(rawValue: Int(sqlite3_column_int(row, 1))),
 		      let kind = WorkspaceDatabase.text(row, 2), !kind.isEmpty,

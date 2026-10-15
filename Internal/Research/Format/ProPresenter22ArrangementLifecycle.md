@@ -17,9 +17,8 @@ The checked-in controls under `Fixtures/ProPresenter22/Native/ArrangementLifecyc
 include actual before/created/deleted/duplicated snapshots and encoded vectors.
 Only `arrangements` and `selected_arrangement` change in native creation and
 duplication. Deleting the selected disposable native control clears selection
-to Master and restores the original full deep state. This last observation is
-evidence only: production deletion still needs qualified handling of references
-from playlists and document actions, so it is not exposed.
+to Master and restores the original full deep state. Production deletion and cross-document reference handling are qualified in
+[the separate deletion experiment](ProPresenter22ArrangementDeletion.md).
 
 ## Qualified Loro operations
 
@@ -69,7 +68,7 @@ Fixtures retain only owned Presentation streams, the exact CLI manifest and
 unmodified native export. `provenance.json` records per-file hashes, app/build,
 OS, source identity and workflow. No configuration/account data is included.
 Native group creation/deletion, general placement/build changes, library
-membership and cross-document arrangement deletion remain separate work.
+membership remain separate work.
 
 Final validation: **429 core + 94 CLI + one harness test pass**, with the same
 nine known rendering issues. SwiftFormat and SwiftLint pass. Six core tests

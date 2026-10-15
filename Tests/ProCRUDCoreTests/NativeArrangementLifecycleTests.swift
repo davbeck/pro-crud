@@ -108,10 +108,104 @@ struct NativeArrangementLifecycleTests {
 	}
 
 	@Test func independentNativeDeletionClearsSelectionAndRestoresTheOriginalDeepState() throws {
-		// Native evidence only: deletion is not exposed until cross-document
-		// arrangement-reference handling has its own qualified adapter.
+		// Independent native control for selected-arrangement removal.
 		#expect(try stream("native-created").presentationLayout().selectedArrangementID != nil)
 		#expect(try stream("native-deleted").decodedValue() == stream("native-before").decodedValue())
+	}
+
+	@Test func deletionMatchesNativeAndRejectsStoredDocumentActionLinks() throws {
+		let source = try stream("native-created")
+		let arrangement = try #require(source.presentationLayout().arrangements.last)
+		let patch = try #require(try NativeLocalPatch.prepare(stream: source, edit: .removeArrangement(arrangement.id)))
+		#expect(try stream("native-created", patch: patch).decodedValue() == stream("native-deleted").decodedValue())
+		#expect(try NativeLocalWorkspaceWriter.prepare([.init(documentID: source.identity.documentID, edit: .removeArrangement(arrangement.id))], in: snapshot([source])).count == 1)
+		let macro = try macroReference(target: source.identity.documentID, arrangement: arrangement.id)
+		let linked = snapshot([source, macro])
+		let inventory = try NativeArrangementReferenceInventory(snapshot: linked)
+		#expect(inventory.uninspected.isEmpty && inventory.references.count == 1)
+		#expect(inventory.references.first?.role == .documentAction)
+		#expect(inventory.references.first?.targetDocumentID == nil)
+		#expect(throws: NativeSemanticError.self) { try NativeLocalWorkspaceWriter.prepare([.init(documentID: source.identity.documentID, edit: .removeArrangement(arrangement.id))], in: linked) }
+		#expect(throws: NativeSemanticError.self) { try NativeArrangementDeletion.validate([patch], in: linked) }
+		#expect(try NativeLocalWorkspaceWriter.prepare([.init(documentID: source.identity.documentID, edit: .copyrightTitle("Unrelated metadata"))], in: linked).count == 1)
+	}
+
+	@Test func sameArrangementUUIDInAnotherPresentationDoesNotTurnItsLinksIntoLocalReferences() throws {
+		let source = try stream("native-created")
+		let arrangement = try #require(source.presentationLayout().arrangements.last)
+		let copy = LoroDoc(); _ = try copy.import(bytes: #require(source.snapshot))
+		let otherID = UUID(); try copy.getMap(id: "root").insert(key: "uuid", v: otherID.uuidString)
+		var identity = source.identity; identity.documentID = otherID; identity.corePath = "Default/OtherOwnedPresentation"
+		let other = try NativeWorkspaceStream(identity: identity, snapshot: copy.exportSnapshot(), versionVector: copy.stateVv().encode(), lastSharedVersionVector: nil)
+		let playlist = try playlistReference(arrangement: arrangement.id, name: nil, path: "Libraries/Default/OtherOwnedPresentation.pro")
+		#expect(try NativeLocalWorkspaceWriter.prepare([.init(documentID: source.identity.documentID, edit: .removeArrangement(arrangement.id))], in: snapshot([source, other, playlist])).count == 1)
+	}
+
+	@Test func playlistUUIDNameOnlyAndUnresolvedLinksPreventDeletion() throws {
+		let source = try stream("native-created")
+		let arrangement = try #require(source.presentationLayout().arrangements.last)
+		for (id, name, path): (UUID?, String?, String) in [(arrangement.id, nil, "Libraries/Default/ProCRUDTarget22Acceptance.pro"), (nil, arrangement.name, "Libraries/Default/ProCRUDTarget22Acceptance.pro"), (arrangement.id, nil, "Libraries/Missing/Unresolved.pro")] {
+			let playlist = try playlistReference(arrangement: id, name: name, path: path)
+			let linked = snapshot([source, playlist])
+			let inventory = try NativeArrangementReferenceInventory(snapshot: linked)
+			#expect(inventory.uninspected.isEmpty && inventory.references.count == 1)
+			#expect(inventory.references.first?.role == .playlist)
+			#expect(throws: NativeSemanticError.self) { try NativeLocalWorkspaceWriter.prepare([.init(documentID: source.identity.documentID, edit: .removeArrangement(arrangement.id))], in: linked) }
+		}
+	}
+
+	@Test func unavailableOrUnknownReferenceScopesBlockDeletionAndRetainMetadataEditing() throws {
+		let source = try stream("native-created")
+		let arrangement = try #require(source.presentationLayout().arrangements.last)
+		var identity = source.identity; identity.documentID = UUID(); identity.kind = "FutureRoot"
+		let unknown = NativeWorkspaceStream(identity: identity, snapshot: source.snapshot, versionVector: source.versionVector, lastSharedVersionVector: nil)
+		identity.kind = "Macros"; identity.availability = .unavailable
+		let unavailable = NativeWorkspaceStream(identity: identity, snapshot: nil, versionVector: nil, lastSharedVersionVector: nil)
+		for stream in [unknown, unavailable] {
+			let state = snapshot([source, stream])
+			#expect(try NativeArrangementReferenceInventory(snapshot: state).uninspected.count == 1)
+			#expect(throws: NativeSemanticError.self) { try NativeLocalWorkspaceWriter.prepare([.init(documentID: source.identity.documentID, edit: .removeArrangement(arrangement.id))], in: state) }
+			#expect(try NativeLocalWorkspaceWriter.prepare([.init(documentID: source.identity.documentID, edit: .copyrightTitle("Preserved unknown references"))], in: state).count == 1)
+		}
+	}
+
+	private func snapshot(_ streams: [NativeWorkspaceStream]) -> NativeWorkspaceSnapshot {
+		.init(root: fixtures, workspaceID: UUID(), metadata: [:], streams: streams)
+	}
+
+	private func macroReference(target: UUID, arrangement: UUID) throws -> NativeWorkspaceStream {
+		let document = LoroDoc()
+		let action: LoroValue = .map(value: ["uuid": .string(value: UUID().uuidString), "type": .i64(value: 14), "ActionTypeData": .map(value: ["__tag": .string(value: "presentation_document"), "presentation_document": .map(value: ["identification": .map(value: ["parameter_uuid": .string(value: target.uuidString)]), "selected_arrangement": .string(value: arrangement.uuidString)])])])
+		try document.getMap(id: "root").insert(key: "macros", v: LoroValue.list(value: [.map(value: ["uuid": .string(value: UUID().uuidString), "name": .string(value: "Owned arrangement reference"), "actions": .list(value: [action])])]))
+		return try referenceStream(document, kind: "Macros")
+	}
+
+	private func playlistReference(arrangement: UUID?, name: String?, path: String) throws -> NativeWorkspaceStream {
+		let document = LoroDoc(), root = document.getMap(id: "root")
+		try root.insert(key: "type", v: 0)
+		let tree = try root.insertContainer(key: "playlists", child: LoroTree())
+		let playlist = try tree.create(parent: .root), item = try tree.create(parent: .node(id: playlist))
+		func metadata(_ node: TreeId, kind: String, value: LoroValue) throws {
+			let map = try tree.getMeta(target: node)
+			try map.insert(key: "uuid", v: UUID().uuidString); try map.insert(key: "name", v: "Owned reference node")
+			try map.insert(key: "Kind", v: LoroValue.map(value: ["__tag": .string(value: kind), kind: value]))
+		}
+		try metadata(playlist, kind: "playlist", value: .map(value: [:]))
+		var link: [String: LoroValue] = ["document_path": .map(value: ["RelativeFilePath": .map(value: ["__tag": .string(value: "local"), "local": .map(value: ["root": .i64(value: 10), "path": .string(value: path)])])])]
+		if let arrangement {
+			link["arrangement"] = .string(value: arrangement.uuidString)
+		}
+		if let name {
+			link["arrangement_name"] = .string(value: name)
+		}
+		try metadata(item, kind: "item", value: .map(value: ["ItemType": .map(value: ["__tag": .string(value: "presentation"), "presentation": .map(value: link)])]))
+		_ = try root.insertContainer(key: "live_video_playlist_nodes", child: LoroTree())
+		return try referenceStream(document, kind: "PlaylistLibrary")
+	}
+
+	private func referenceStream(_ document: LoroDoc, kind: String) throws -> NativeWorkspaceStream {
+		document.commit(); let data = try document.exportSnapshot()
+		return .init(identity: .init(documentID: UUID(), scope: .shared, kind: kind, corePath: nil, availability: .available, byteCount: Int64(data.count), sha256: nil, updatedAtMilliseconds: 0), snapshot: data, versionVector: document.stateVv().encode(), lastSharedVersionVector: nil)
 	}
 
 	private func requireUpdateReplays(_ patch: NativeLocalPatch, source: NativeWorkspaceStream, result: NativeWorkspaceStream) throws {

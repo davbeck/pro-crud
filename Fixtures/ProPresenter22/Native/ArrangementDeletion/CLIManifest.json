@@ -1,0 +1,15 @@
+{
+  "version": 1,
+  "operations": [
+    {
+      "stream": "bf7bda01-2c54-4fcc-bd4e-2551103c383b",
+      "op": "clear-document-action-arrangement",
+      "action": "12F67BC0-D8DE-47F3-91D9-B1692A758620"
+    },
+    {
+      "stream": "bfa7b647-93ab-5ee6-b397-ec61b08bcfee",
+      "op": "remove-arrangement",
+      "arrangement": "7017BE68-8867-48CE-9102-60E9C49DF61D"
+    }
+  ]
+}

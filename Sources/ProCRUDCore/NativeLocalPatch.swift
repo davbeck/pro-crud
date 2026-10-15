@@ -18,6 +18,8 @@ public enum NativePresentationEdit: Codable, Sendable, Equatable {
 	case selectedArrangement(UUID?)
 	case createArrangement(id: UUID, name: String, groups: [UUID], select: Bool)
 	case duplicateArrangement(UUID, newID: UUID, name: String, select: Bool)
+	case removeArrangement(UUID)
+	case clearDocumentActionArrangement(UUID)
 }
 
 public enum NativeSlideNotesContent: Codable, Sendable, Equatable {
@@ -146,6 +148,26 @@ public struct NativeLocalPatch: Sendable {
 			guard Set(arrangement.keys) == ["uuid", "name", "group_identifiers_v2"] else { throw NativeSemanticError.unsupportedNode(path: "/arrangements/\(sourceID)", kind: "unqualified arrangement fields in duplication") }
 			let identifiers = try arrangement.required("group_identifiers_v2", at: "/arrangement").array(at: "/arrangement/group_identifiers_v2").map { try $0.text(at: "/arrangement/group_identifiers_v2") }
 			try NativeStructuralEditing.createArrangement(id: newID, name: name, groups: layout.arrangements[index].groupIDs, identifiers: identifiers, select: select, layout: layout, root: root)
+		case let .clearDocumentActionArrangement(actionID):
+			let presentation = try NativeProtobufProjection.read(identity: identity, source: value).presentation()
+			let matches = presentation.cues.flatMap { cue in cue.actions.enumerated().compactMap { index, action in UUID(uuidString: action.uuid.string) == actionID ? (cue.uuid.string, index, action) : nil } }
+			guard matches.count == 1, let (cueID, index, action) = matches.first, action.type == .presentationDocument, case .presentationDocument? = action.actionTypeData else {
+				throw NativeSemanticError.invalidValue(path: "/actions/\(actionID)", expected: "one Presentation document action")
+			}
+			guard action.presentationDocument.hasSelectedArrangement, !action.presentationDocument.selectedArrangement.string.isEmpty else { return }
+			guard let cues = root.get(key: "cues")?.asLoroMap(), let cue = cues.get(key: cueID)?.asLoroMap(),
+			      let actions = cue.get(key: "actions")?.asLoroMovableList(), let stored = actions.get(index: UInt32(index))?.asLoroMap(),
+			      let properties = stored.get(key: "ActionTypeData")?.asLoroMap()?.get(key: "presentation_document")?.asLoroMap()
+			else { throw NativeSemanticError.invalidValue(path: "/actions/\(actionID)/presentation_document", expected: "native document-action maps") }
+			try properties.insert(key: "selected_arrangement", v: LoroValue.null)
+		case let .removeArrangement(arrangementID):
+			guard let index = layout.arrangements.firstIndex(where: { $0.id == arrangementID }) else { throw NativeSemanticError.missingReference(path: "/arrangements", identity: arrangementID.uuidString) }
+			_ = try NativeProtobufProjection.read(identity: identity, source: value).presentation()
+			guard let arrangements = root.get(key: "arrangements")?.asLoroMovableList() else { throw NativeSemanticError.invalidValue(path: "/arrangements", expected: "native movable arrangement list") }
+			try arrangements.delete(pos: UInt32(index), len: 1)
+			if layout.selectedArrangementID == arrangementID {
+				try root.insert(key: "selected_arrangement", v: LoroValue.null)
+			}
 		case let .arrangementName(arrangementID, name):
 			guard !name.isEmpty else { throw NativeSemanticError.invalidValue(path: "/arrangements/\(arrangementID)/name", expected: "nonempty arrangement name") }
 			guard let index = layout.arrangements.firstIndex(where: { $0.id == arrangementID }) else { throw NativeSemanticError.missingReference(path: "/arrangements", identity: arrangementID.uuidString) }

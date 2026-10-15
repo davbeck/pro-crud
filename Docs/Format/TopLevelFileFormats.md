@@ -186,14 +186,26 @@ of the application version. The same stopped-writer/local-registration rules app
 | `select-arrangement` | `arrangement` UUID, or explicit JSON `null` to select Master; omitting the field is an error |
 | `add-arrangement` | New `arrangement` UUID, nonempty `name`, explicit ordered `groups` UUID array and `select` Boolean; appends the arrangement |
 | `duplicate-arrangement` | Source `arrangement` UUID, new `newArrangement` UUID, nonempty `name` and explicit `select` Boolean; appends a copy of the repeated group sequence |
+| `remove-arrangement` | Existing `arrangement` UUID; removes its definition and selects Master if it was selected |
+| `clear-document-action-arrangement` | `action` UUID of a Presentation cue's document action; clears only its arrangement selector |
 
 Creation accepts repeated groups or an empty array and retains every existing
 arrangement and cue. Stable caller-supplied UUIDs allow a matching creation or
 duplication to replay as a no-op; a reused UUID with different name/groups is
 rejected. `select: false` retains the current selection. Duplication preserves
 stored group-UUID spelling and rejects unmapped source-arrangement fields.
-Native arrangement deletion remains unsupported pending cross-document
-playlist/action reference handling.
+Before deletion, `workspace arrangement-references ROOT` inspects explicit
+playlist and document-action links in all mapped shared/client streams. Reports
+include source paths, arrangement identities/names, resolved playlist targets
+and uninspected scopes. Document-action target identity is unresolved in the
+qualified native representation; a matching selector still blocks deletion.
+Deletion fails when a matching link remains or any reference scope cannot be
+inspected completely. Explicitly clear a Presentation document-action selector
+in the same batch, or remove other links in ProPresenter first. The writer checks
+the final batch graph and rechecks the entire inspected stream set inside its
+SQLite transaction, including added/removed streams. It never removes links
+implicitly. An already absent arrangement is an error; clearing an already
+empty document-action selector makes no change.
 
 Every operation requires `stream` and `op`. Unknown keys, operations and manifest
 versions fail. Native editing preserves the source storage generation; target

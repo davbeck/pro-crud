@@ -94,6 +94,53 @@ struct NativeLocalTransactionTests {
 		}
 	}
 
+	@Test func aChangedReferenceStreamRejectsTheTransactionBeforePublishingItsPatch() throws {
+		try withDatabase { url, database, streams in
+			let pending = try #require(try NativeLocalPatch.prepare(stream: streams[0], edit: .notes("Pending deletion transaction")))
+			let external = try #require(try NativeLocalPatch.prepare(stream: streams[1], edit: .notes("Reference source changed")))
+			_ = try NativeLocalWorkspaceWriter.commitPrepared([external], database: url)
+			#expect(throws: NativeWriteError.conflict(streams[1].identity.documentID)) {
+				try NativeLocalWorkspaceWriter.commitPrepared([pending], expectedReferenceStreams: streams, database: url)
+			}
+			#expect(try snapshot(database, id: streams[0].identity.documentID) == streams[0].snapshot)
+			#expect(try scalar(database, "SELECT count(*) FROM workspace_operation_receipts") == 1)
+		}
+	}
+
+	@Test func anAddedReferenceStreamRejectsTheTransactionBeforePublishingItsPatch() throws {
+		try withDatabase { url, database, streams in
+			let pending = try #require(try NativeLocalPatch.prepare(stream: streams[0], edit: .notes("Pending deletion transaction")))
+			let added = UUID(), original = streams[1].identity.documentID.uuidString.replacingOccurrences(of: "-", with: "")
+			try execute("""
+			INSERT INTO workspace_streams(document_id,scope,location_type,kind,core_path,availability,snapshot,version_vector,sha256,byte_count,updated_at_ms,last_shared_version_vector,last_shared_version_vector_absence_reason,core_path_key)
+			SELECT X'\(added.uuidString.replacingOccurrences(of: "-", with: ""))',scope,location_type,kind,'MISC/Added',availability,snapshot,version_vector,sha256,byte_count,updated_at_ms,last_shared_version_vector,last_shared_version_vector_absence_reason,'misc/added'
+			FROM workspace_streams WHERE document_id=X'\(original)'
+			""", database)
+			#expect(throws: NativeWriteError.conflict(added)) {
+				try NativeLocalWorkspaceWriter.commitPrepared([pending], expectedReferenceStreams: streams, database: url)
+			}
+			#expect(try snapshot(database, id: streams[0].identity.documentID) == streams[0].snapshot)
+			#expect(try scalar(database, "SELECT count(*) FROM workspace_operation_receipts") == 0)
+		}
+	}
+
+	@Test func anAppliedDeletionReceiptRetriesWithoutRecheckingUnrelatedFutureContent() throws {
+		try withDatabase { url, _, streams in
+			let source = streams[0], id = UUID()
+			let create = try #require(try NativeLocalPatch.prepare(stream: source, edit: .createArrangement(id: id, name: "Owned retry control", groups: [], select: true)))
+			_ = try NativeLocalWorkspaceWriter.commitPrepared([create], database: url)
+			let created = NativeWorkspaceStream(identity: source.identity, snapshot: create.snapshot, versionVector: create.versionVector, lastSharedVersionVector: nil)
+			let remove = try #require(try NativeLocalPatch.prepare(stream: created, edit: .removeArrangement(id)))
+			_ = try NativeLocalWorkspaceWriter.commitPrepared([remove], database: url)
+			let deleted = NativeWorkspaceStream(identity: source.identity, snapshot: remove.snapshot, versionVector: remove.versionVector, lastSharedVersionVector: nil)
+			var unknownID = source.identity; unknownID.documentID = UUID(); unknownID.kind = "FutureRoot"
+			let unknown = NativeWorkspaceStream(identity: unknownID, snapshot: source.snapshot, versionVector: source.versionVector, lastSharedVersionVector: nil)
+			let current = NativeWorkspaceSnapshot(root: url.deletingLastPathComponent(), workspaceID: UUID(), metadata: [:], streams: [deleted, streams[1], unknown])
+			let receipts = try NativeLocalWorkspaceWriter.commitPrepared([remove], arrangementReferenceSnapshot: current, database: url)
+			#expect(receipts.count == 1 && receipts.first?.alreadyApplied == true)
+		}
+	}
+
 	private func withDatabase(_ body: (URL, OpaquePointer, [NativeWorkspaceStream]) throws -> Void) throws {
 		let directory = FileManager.default.temporaryDirectory.appendingPathComponent(UUID().uuidString)
 		try FileManager.default.createDirectory(at: directory, withIntermediateDirectories: true)

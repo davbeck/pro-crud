@@ -110,7 +110,14 @@ Use batch `add-arrangement` with a new `arrangement` UUID, `name`, explicit
 Use `duplicate-arrangement` with source `arrangement`, new `newArrangement`
 UUID, explicit `name` and `select`. Both append, retain existing content and
 accept a matching replay as a no-op; conflicting UUID reuse is rejected.
-Duplication rejects unmapped source-arrangement fields. Deletion is unsupported.
+Duplication rejects unmapped source-arrangement fields. Inspect links with
+`workspace arrangement-references ROOT` before batch `remove-arrangement` with
+an existing `arrangement` UUID. Deletion selects Master if necessary and rejects
+remaining links or uninspected scopes. Batch `clear-document-action-arrangement`
+with an `action` UUID clears only a Presentation cue document-action selector;
+combine explicit unlinking and deletion in one batch. Remove other links in
+ProPresenter first. Document-action targets may remain unresolved; matching
+selectors still protect their arrangement definitions.
 Use `workspace transfer-cue ROOT --stream UUID --cue CUE_UUID --group GROUP_UUID
 --registry PATH` to transfer ownership into an existing group. Omit `--after` to
 append or name a cue in the destination group. Cue and placement identities are

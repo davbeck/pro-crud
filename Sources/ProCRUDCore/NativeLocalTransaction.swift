@@ -68,14 +68,18 @@ public enum NativeLocalWorkspaceWriter {
 	/// changed documents and their receipts in one transaction.
 	public static func apply(_ operations: [NativePresentationOperation], in root: URL, registry: URL) throws -> [NativeLocalCommitReceipt] {
 		try withOfflineWriteAccess(to: root, registry: registry) { snapshot in
-			let patches = try prepare(operations, in: snapshot)
-			return try commitPrepared(patches, database: root.appendingPathComponent("DocumentStore/workspace-v1.sqlite3")) {
+			let prepared = try prepareTransaction(operations, in: snapshot)
+			return try commitPrepared(prepared.patches, expectedReferenceStreams: prepared.referenceReadSet, database: root.appendingPathComponent("DocumentStore/workspace-v1.sqlite3")) {
 				try verifyLocalWorkspace(root.resolvingSymlinksInPath(), registry: registry)
 			}
 		}
 	}
 
 	static func prepare(_ operations: [NativePresentationOperation], in snapshot: NativeWorkspaceSnapshot) throws -> [NativeLocalPatch] {
+		try prepareTransaction(operations, in: snapshot).patches
+	}
+
+	private static func prepareTransaction(_ operations: [NativePresentationOperation], in snapshot: NativeWorkspaceSnapshot) throws -> (patches: [NativeLocalPatch], referenceReadSet: [NativeWorkspaceStream]?) {
 		var order: [UUID] = []
 		var grouped: [UUID: [NativePresentationEdit]] = [:]
 		for operation in operations {
@@ -84,15 +88,17 @@ public enum NativeLocalWorkspaceWriter {
 			}
 			grouped[operation.documentID, default: []].append(operation.edit)
 		}
-		return try order.compactMap { id in
+		let patches = try order.compactMap { id in
 			guard let stream = snapshot.streams.first(where: { $0.identity.documentID == id && $0.identity.scope == .shared }) else { throw NativeSemanticError.missingReference(path: "/streams", identity: id.uuidString) }
 			return try NativeLocalPatch.prepare(stream: stream, edits: grouped[id] ?? [])
 		}
+		let readSet = try NativeArrangementDeletion.validate(patches, in: snapshot)
+		return (patches, readSet)
 	}
 
 	public static func commit(_ patches: [NativeLocalPatch], to root: URL, registry: URL) throws -> [NativeLocalCommitReceipt] {
-		try withOfflineWriteAccess(to: root, registry: registry) { _ in
-			try commitPrepared(patches, database: root.appendingPathComponent("DocumentStore/workspace-v1.sqlite3")) {
+		try withOfflineWriteAccess(to: root, registry: registry) { snapshot in
+			try commitPrepared(patches, arrangementReferenceSnapshot: snapshot, database: root.appendingPathComponent("DocumentStore/workspace-v1.sqlite3")) {
 				try verifyLocalWorkspace(root.resolvingSymlinksInPath(), registry: registry)
 			}
 		}
@@ -127,9 +133,31 @@ public enum NativeLocalWorkspaceWriter {
 		guard writers.isEmpty else { throw NativeWriteError.activeWriters(writers) }
 	}
 
+	private static func verifyReferenceReadSet(_ expected: [NativeWorkspaceStream], database: NativeTransactionDatabase) throws {
+		let current = try database.query("""
+		SELECT document_id, scope, kind, core_path, availability, snapshot,
+		       version_vector, sha256, byte_count, updated_at_ms, last_shared_version_vector, location_type
+		FROM workspace_streams
+		""", row: NativeWorkspaceSnapshot.readStream)
+		func key(_ stream: NativeWorkspaceStream) -> String {
+			"\(stream.identity.documentID):\(stream.identity.scope.rawValue)"
+		}
+		let byID = Dictionary(uniqueKeysWithValues: current.map { (key($0), $0) })
+		let expectedIDs = Set(expected.map(key))
+		if let added = current.first(where: { !expectedIDs.contains(key($0)) }) {
+			throw NativeWriteError.conflict(added.identity.documentID)
+		}
+		for original in expected {
+			guard let actual = byID[key(original)], actual.snapshot == original.snapshot, actual.versionVector == original.versionVector,
+			      actual.identity.kind == original.identity.kind, actual.identity.corePath == original.identity.corePath,
+			      actual.identity.availability == original.identity.availability
+			else { throw NativeWriteError.conflict(original.identity.documentID) }
+		}
+	}
+
 	/// Internal transaction primitive also used with isolated schema-9 fixtures.
 	/// The public entry point always checks live writers and local registration.
-	static func commitPrepared(_ patches: [NativeLocalPatch], database url: URL, beforeCommit: () throws -> Void = {}) throws -> [NativeLocalCommitReceipt] {
+	static func commitPrepared(_ patches: [NativeLocalPatch], expectedReferenceStreams: [NativeWorkspaceStream]? = nil, arrangementReferenceSnapshot: NativeWorkspaceSnapshot? = nil, database url: URL, beforeCommit: () throws -> Void = {}) throws -> [NativeLocalCommitReceipt] {
 		guard !patches.isEmpty else { return [] }
 		guard Set(patches.map(\.operationID)).count == patches.count, Set(patches.map(\.identity.documentID)).count == patches.count else { throw NativeWriteError.invalidBatch }
 		let database = try NativeTransactionDatabase(url: url)
@@ -138,6 +166,19 @@ public enum NativeLocalWorkspaceWriter {
 		let schema = try database.query("SELECT (SELECT user_version FROM pragma_user_version), (SELECT application_id FROM pragma_application_id)") { (sqlite3_column_int64($0, 0), sqlite3_column_int64($0, 1)) }.first
 		guard schema?.0 == NativeWorkspaceSnapshot.schemaVersion, schema?.1 == NativeWorkspaceSnapshot.applicationID else {
 			throw NativeWorkspaceError.unsupportedSchema(applicationID: schema?.1 ?? -1, version: schema?.0 ?? -1)
+		}
+		if let expectedReferenceStreams {
+			try verifyReferenceReadSet(expectedReferenceStreams, database: database)
+		}
+		if let arrangementReferenceSnapshot {
+			// Receipt retries do not repeat deletion or apply an old snapshot over
+			// later edits. Check graph dependencies only for pending operations.
+			let pending = try patches.filter { patch in
+				try database.query("SELECT 1 FROM workspace_operation_receipts WHERE operation_id=?", [.blob(uuidBytes(patch.operationID))]) { _ in true }.isEmpty
+			}
+			if let readSet = try NativeArrangementDeletion.validate(pending, in: arrangementReferenceSnapshot) {
+				try verifyReferenceReadSet(readSet, database: database)
+			}
 		}
 		var receipts: [NativeLocalCommitReceipt] = []
 		for patch in patches {

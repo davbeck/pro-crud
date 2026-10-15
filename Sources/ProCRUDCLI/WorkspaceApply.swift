@@ -125,6 +125,12 @@ enum NativeEditManifest {
 			case .duplicateArrangement:
 				fields = ["arrangement", "newArrangement", "name", "select"]
 				payload = try .edit(.duplicateArrangement(container.decode(UUID.self, forKey: .arrangement), newID: container.decode(UUID.self, forKey: .newArrangement), name: container.decode(String.self, forKey: .name), select: container.decode(Bool.self, forKey: .select)))
+			case .clearDocumentActionArrangement:
+				fields = ["action"]
+				payload = try .edit(.clearDocumentActionArrangement(container.decode(UUID.self, forKey: .action)))
+			case .removeArrangement:
+				fields = ["arrangement"]
+				payload = try .edit(.removeArrangement(container.decode(UUID.self, forKey: .arrangement)))
 			case .selectArrangement:
 				fields = ["arrangement"]
 				guard container.contains(.arrangement) else { throw invalid("select-arrangement requires an arrangement UUID or explicit null for Master.", decoder: decoder) }
@@ -147,6 +153,8 @@ enum NativeEditManifest {
 		case selectArrangement = "select-arrangement"
 		case addArrangement = "add-arrangement"
 		case duplicateArrangement = "duplicate-arrangement"
+		case removeArrangement = "remove-arrangement"
+		case clearDocumentActionArrangement = "clear-document-action-arrangement"
 	}
 
 	private enum Key: String, CodingKey {

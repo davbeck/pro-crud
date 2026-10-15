@@ -71,8 +71,9 @@ struct NativeEditManifestTests {
 		let stream = UUID(), arrangement = UUID(), copy = UUID(), group = UUID()
 		let create: [String: Any] = ["stream": stream.uuidString, "op": "add-arrangement", "arrangement": arrangement.uuidString, "name": "Created", "groups": [group.uuidString, group.uuidString], "select": false]
 		let duplicate: [String: Any] = ["stream": stream.uuidString, "op": "duplicate-arrangement", "arrangement": arrangement.uuidString, "newArrangement": copy.uuidString, "name": "Copy", "select": true]
-		let operations = try decode([create, duplicate])
-		#expect(operations.map(\.edit) == [.createArrangement(id: arrangement, name: "Created", groups: [group, group], select: false), .duplicateArrangement(arrangement, newID: copy, name: "Copy", select: true)])
+		let remove: [String: Any] = ["stream": stream.uuidString, "op": "remove-arrangement", "arrangement": copy.uuidString]
+		let operations = try decode([create, duplicate, remove])
+		#expect(operations.map(\.edit) == [.createArrangement(id: arrangement, name: "Created", groups: [group, group], select: false), .duplicateArrangement(arrangement, newID: copy, name: "Copy", select: true), .removeArrangement(copy)])
 		for key in ["arrangement", "groups", "select"] {
 			var missing = create; missing.removeValue(forKey: key)
 			#expect(throws: ValidationError.self) { try decode([missing]) }
@@ -91,6 +92,16 @@ struct NativeEditManifestTests {
 		#expect(operations.map(\.edit) == [.arrangementName(arrangement, "Verse"), .selectedArrangement(arrangement), .selectedArrangement(nil)])
 		#expect(throws: ValidationError.self) { try decode([["stream": stream.uuidString, "op": "select-arrangement"]]) }
 		#expect(throws: ValidationError.self) { try decode([["stream": stream.uuidString, "op": "select-arrangement", "arrangement": "Master"]]) }
+	}
+
+	@Test func arrangementUnlinkAndDeletionRequireExactIdentities() throws {
+		let stream = UUID(), action = UUID(), arrangement = UUID()
+		let unlink: [String: Any] = ["stream": stream.uuidString, "op": "clear-document-action-arrangement", "action": action.uuidString]
+		let remove: [String: Any] = ["stream": stream.uuidString, "op": "remove-arrangement", "arrangement": arrangement.uuidString]
+		#expect(try decode([unlink, remove]).map(\.edit) == [.clearDocumentActionArrangement(action), .removeArrangement(arrangement)])
+		#expect(throws: ValidationError.self) { try decode([unlink.filter { $0.key != "action" }]) }
+		#expect(throws: ValidationError.self) { try decode([remove.filter { $0.key != "arrangement" }]) }
+		#expect(try ProCRUD.parseAsRoot(["workspace", "arrangement-references", "/tmp/Exact"]) is WorkspaceArrangementReferences)
 	}
 
 	private func decode(_ operations: [[String: Any]], version: Int = 1) throws -> [NativePresentationOperation] {
