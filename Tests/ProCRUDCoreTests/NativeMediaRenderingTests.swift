@@ -130,7 +130,8 @@ struct NativeMediaRenderingTests {
 		for extra in variants {
 			let media = try Rv_Data_Media(serializedBytes: original + extra)
 			let unsupported = replacingMedia(in: document, with: media)
-			#expect(unsupported.renderingDiagnostics.contains { $0.code == .unsupportedNativeMedia && $0.severity == .error })
+			let expectedCode: RenderingDiagnostic.Code = try MediaReference(media: media).dependencyKind == .remoteStream ? .unsupportedRuntimeMedia : .unsupportedNativeMedia
+			#expect(unsupported.renderingDiagnostics.contains { $0.code == expectedCode && $0.severity == .error })
 			#expect(throws: (any Error).self) { try PresentationRenderer(document: unsupported).render(cue: unsupported.orderedCues[0]) }
 			#expect(try selectedMedia(unsupported).serializedData() == media.serializedData())
 		}

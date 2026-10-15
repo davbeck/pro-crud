@@ -1,0 +1,74 @@
+{
+  "application": "ProPresenter",
+  "version": "22",
+  "build": "369098875",
+  "osVersion": "27.0.1",
+  "date": "2026-10-15",
+  "documentID": "0b8f0934-0c4a-4056-9129-4a097311109e",
+  "source": "Owned six-second localhost HLS from repository frame-test video; native Add Media Action > Video Stream, native Presentation and Bundle exports, native Bundle reimport, production metadata edit, exact native reopen and independent Presentation re-export",
+  "streamURL": "http://127.0.0.1:61541/stream.m3u8",
+  "sourceVideo": "Fixtures/ProPresenter/Media/frame-test-30fps-480p.mp4",
+  "sourceVideoSHA256": "0b23316ed31f9f1fc1647a9ff9a88a1591402ca56e6f914afb1d0d84b82ec6f8",
+  "files": [
+    {
+      "path": "NativeAfterMetadata.pro",
+      "sha256": "93a9beb11fb52650060fe9942dfca8a02c70b6abc5eb571e54491daf4da09694"
+    },
+    {
+      "path": "NativeBundle.pro",
+      "sha256": "914baff95452b92703ca7529d0091b72e8c2c12e0aabfd02fff0cc8dea1831a6"
+    },
+    {
+      "path": "NativeStandalone.pro",
+      "sha256": "8a25783516adc33221790d5594414174be4820981783180fad89369965e89115"
+    },
+    {
+      "path": "cli-after.loro",
+      "sha256": "ac5eb2d986ed30b5b12612d14ede82d4b9e87aa2b2f9fa0e200dd764c82929fd"
+    },
+    {
+      "path": "cli-after.vector",
+      "sha256": "6a776823528d2d6e0cb8a80327fef999fe4e526032523f4ecd1c9923e56b66ac"
+    },
+    {
+      "path": "cli-before.loro",
+      "sha256": "c59d5db116821d822c2f38aac034198a5367203cb94d03e21d3875e04ed22575"
+    },
+    {
+      "path": "cli-before.vector",
+      "sha256": "4a1ff8cb25ae6491674a0de97af8b947ce1fb31bbff50872b8a0c80f3e02dbbb"
+    },
+    {
+      "path": "native-before.loro",
+      "sha256": "152a6783231ad02591e014b585e846c27ba9a0bfd8dadedf60ca536df57d91cb"
+    },
+    {
+      "path": "native-before.vector",
+      "sha256": "8184f136e2f9dccfcc721e4f5911c6b168d182841d426a94e679db68d16f0178"
+    },
+    {
+      "path": "native-created.loro",
+      "sha256": "c59d5db116821d822c2f38aac034198a5367203cb94d03e21d3875e04ed22575"
+    },
+    {
+      "path": "native-created.vector",
+      "sha256": "4a1ff8cb25ae6491674a0de97af8b947ce1fb31bbff50872b8a0c80f3e02dbbb"
+    },
+    {
+      "path": "native-open.loro",
+      "sha256": "ac5eb2d986ed30b5b12612d14ede82d4b9e87aa2b2f9fa0e200dd764c82929fd"
+    },
+    {
+      "path": "native-open.vector",
+      "sha256": "6a776823528d2d6e0cb8a80327fef999fe4e526032523f4ecd1c9923e56b66ac"
+    },
+    {
+      "path": "native-reimported.loro",
+      "sha256": "5f466c473304763af6ee37eb104669bbf509a774f393c9ed81ff29e66fc7c79e"
+    },
+    {
+      "path": "native-reimported.vector",
+      "sha256": "5dd2a56841e9f769e806df8a725d8e6b25f761799c17f8524c2b9bdff5eebbe8"
+    }
+  ]
+}

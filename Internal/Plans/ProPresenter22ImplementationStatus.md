@@ -4,6 +4,14 @@ Tracking `ProPresenter22Support.md`. This branch is a **partial implementation**
 and must remain a draft; it does not satisfy the plan's completion criteria.
 Do not describe the entire ProPresenter 22 feature set or native writes as supported.
 
+`../Research/Format/ProPresenter22HLS.md` adds native video-source HLS creation,
+both export paths and same-workspace reimport evidence. Runtime classification
+now excludes streams from file validation and file bundling/rebasing; all static
+render paths diagnose HLS explicitly, including media-only cues. A production
+metadata edit retains the entire media action and exact native-reopened history.
+Native asset-identity interchange/media-store writes and HLS playback remain
+unqualified. Cloud work remains deferred by the user.
+
 | Plan area | Implemented | Remaining gate/work |
 | --- | --- | --- |
 | Storage boundary | Explicit-root storage inspection and explicit macOS userWorkspaces preference discovery with active/minimum-version hints kept separate from actual storage; native markers take precedence over leftovers; expanded exports distinguished; native access rejected in legacy readers/writers/Look/media/batch paths | Broader ambiguous/mixed fixture matrix |

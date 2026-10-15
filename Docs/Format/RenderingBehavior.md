@@ -37,6 +37,10 @@ existing image-sampling and video-frame comparison limitations; pixel-exact
 native media rendering is not claimed. Static rendering retains its existing
 runtime-feature limitations.
 
+HLS actions and fills produce `rendering.unsupported-runtime-media`, including
+media-only cues and sources without native asset identities. Static rendering
+does not fetch the stream or use superseded file locators as a preview.
+
 Use `--workspace ROOT --look LOOK_UUID --screen SCREEN_UUID` with this input to
 apply a supported media-free native Look. When the source and Look workspace
 are the same root, Presentation, shared/client configuration and selected Theme

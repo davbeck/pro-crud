@@ -235,6 +235,7 @@ public enum DocumentArchive {
 		case .media, .foregroundMedia, .backgroundMedia:
 			var mediaType = action.media
 			var media = mediaType.element
+			guard try MediaReference(media: media).dependencyKind != .remoteStream else { return }
 			try rewrite(
 				mediaURL: &media.url,
 				sourceRoot: sourceRoot,
@@ -275,6 +276,7 @@ public enum DocumentArchive {
 		for elementIndex in slide.elements.indices {
 			var element = slide.elements[elementIndex].element
 			if case var .media(media)? = element.fill.fillType {
+				guard try MediaReference(media: media).dependencyKind != .remoteStream else { continue }
 				try rewrite(
 					mediaURL: &media.url,
 					sourceRoot: sourceRoot,

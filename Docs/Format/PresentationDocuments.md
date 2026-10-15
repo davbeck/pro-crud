@@ -181,6 +181,12 @@ one UUID referring to conflicting files, disagreement with the canonical
 `Playlists/Media` registry, and filename-like cue labels that disagree with the
 selected asset. It does not modify the document.
 
+HLS sources are runtime dependencies. Strict file-media validation excludes
+them from file existence, filename-label and file-identity comparisons, including
+HLS entries in the Media registry. It does not fetch their URLs or verify stream
+availability. Native 22 asset-identity interchange remains subject to the target
+compatibility checks; recognizing a stream does not enable native media writes.
+
 ## Cue Groups
 
 Each `Presentation.CueGroup` pairs an embedded `rv.data.Group` with an ordered

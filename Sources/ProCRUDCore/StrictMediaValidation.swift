@@ -67,11 +67,15 @@ public enum StrictMediaValidator {
 				kind: .unsupportedWorkspace, componentPath: "/", message: error.description,
 			)])
 		}
-		let documentReferences = references(in: document, scope: .document)
+		let documentReferences = try references(in: document, scope: .document).filter {
+			try MediaReference(media: $0.media).dependencyKind != .remoteStream
+		}
 		let registryReferences = try workspaceRegistryReferences(
 			workspaceURL: workspaceURL,
 			fileManager: fileManager,
-		)
+		).filter {
+			try MediaReference(media: $0.media).dependencyKind != .remoteStream
+		}
 		var diagnostics = documentReferences.flatMap {
 			validate($0, workspaceURL: workspaceURL, fileManager: fileManager)
 		}
@@ -94,7 +98,7 @@ public enum StrictMediaValidator {
 		case registry
 	}
 
-	private struct MediaReference {
+	private struct ScopedMediaReference {
 		var media: Rv_Data_Media
 		var documentPath: String?
 		var componentPath: String
@@ -104,8 +108,8 @@ public enum StrictMediaValidator {
 		var scope: Scope
 	}
 
-	private static func references(in document: ProPresenterDocument, scope: Scope) -> [MediaReference] {
-		var result: [MediaReference] = []
+	private static func references(in document: ProPresenterDocument, scope: Scope) -> [ScopedMediaReference] {
+		var result: [ScopedMediaReference] = []
 		switch document.payload {
 		case let .presentation(presentation):
 			append(presentation: presentation, basePath: "", document: document, scope: scope, to: &result)
@@ -142,7 +146,7 @@ public enum StrictMediaValidator {
 		documentPath: String? = nil,
 		document: ProPresenterDocument,
 		scope: Scope,
-		to result: inout [MediaReference],
+		to result: inout [ScopedMediaReference],
 	) {
 		let cueIdentities = presentation.cues.map(\.uuid.string)
 		let cueOrder = presentation.presentationCueIndexOrder
@@ -172,7 +176,7 @@ public enum StrictMediaValidator {
 		documentPath: String? = nil,
 		document: ProPresenterDocument,
 		scope: Scope,
-		to result: inout [MediaReference],
+		to result: inout [ScopedMediaReference],
 	) {
 		let slideIdentities = theme.slides.map(\.baseSlide.uuid.string)
 		for (slideIndex, template) in theme.slides.enumerated() {
@@ -207,7 +211,7 @@ public enum StrictMediaValidator {
 		documentPath: String? = nil,
 		document: ProPresenterDocument,
 		scope: Scope,
-		to result: inout [MediaReference],
+		to result: inout [ScopedMediaReference],
 	) {
 		let cueIdentities = playlist.cues.map(\.uuid.string)
 		for (cueIndex, cue) in playlist.cues.enumerated() {
@@ -292,7 +296,7 @@ public enum StrictMediaValidator {
 		documentPath: String? = nil,
 		document: ProPresenterDocument,
 		scope: Scope,
-		to result: inout [MediaReference],
+		to result: inout [ScopedMediaReference],
 	) {
 		let actionIdentities = actions.map(\.uuid.string)
 		let filenameLabels = actions.enumerated().compactMap { index, action -> (index: Int, text: String, path: String)? in
@@ -319,7 +323,7 @@ public enum StrictMediaValidator {
 					mediaActionCount: mediaActionCount,
 					filenameLabels: filenameLabels,
 				)
-				result.append(MediaReference(
+				result.append(ScopedMediaReference(
 					media: media,
 					documentPath: documentPath,
 					componentPath: "\(actionPath)/media/element",
@@ -348,7 +352,7 @@ public enum StrictMediaValidator {
 		documentPath: String? = nil,
 		document: ProPresenterDocument,
 		scope: Scope,
-		to result: inout [MediaReference],
+		to result: inout [ScopedMediaReference],
 	) {
 		let elementIdentities = slide.elements.map(\.element.uuid.string)
 		for (elementIndex, slideElement) in slide.elements.enumerated() {
@@ -359,7 +363,7 @@ public enum StrictMediaValidator {
 				storageIndex: elementIndex,
 				identities: elementIdentities,
 			) + "/element"
-			result.append(MediaReference(
+			result.append(ScopedMediaReference(
 				media: media,
 				documentPath: documentPath,
 				componentPath: "\(elementPath)/fill/media",
@@ -374,7 +378,7 @@ public enum StrictMediaValidator {
 	private static func workspaceRegistryReferences(
 		workspaceURL: URL,
 		fileManager: FileManager,
-	) throws -> [MediaReference] {
+	) throws -> [ScopedMediaReference] {
 		let registryURL = workspaceURL.appendingPathComponent("Playlists/Media")
 		guard fileManager.fileExists(atPath: registryURL.path) else { return [] }
 		let registry = try DocumentLoader.load(from: registryURL)
@@ -382,7 +386,7 @@ public enum StrictMediaValidator {
 	}
 
 	private static func validate(
-		_ reference: MediaReference,
+		_ reference: ScopedMediaReference,
 		workspaceURL: URL,
 		fileManager: FileManager,
 	) -> [StrictMediaDiagnostic] {
@@ -478,7 +482,7 @@ public enum StrictMediaValidator {
 		}
 	}
 
-	private static func mediaLocations(_ reference: MediaReference, workspaceURL: URL) -> MediaLocations {
+	private static func mediaLocations(_ reference: ScopedMediaReference, workspaceURL: URL) -> MediaLocations {
 		let mediaURL = reference.media.url
 		let absolute: URL?
 		let storageRelative: URL?
@@ -605,8 +609,8 @@ public enum StrictMediaValidator {
 	}
 
 	private static func uuidDiagnostics(
-		documentReferences: [MediaReference],
-		registryReferences: [MediaReference],
+		documentReferences: [ScopedMediaReference],
+		registryReferences: [ScopedMediaReference],
 		workspaceURL: URL,
 	) -> [StrictMediaDiagnostic] {
 		var diagnostics: [StrictMediaDiagnostic] = []
@@ -657,7 +661,7 @@ public enum StrictMediaValidator {
 			}
 		}
 
-		let registryByIdentity = Dictionary(grouping: registryReferences.compactMap { reference -> (String, MediaReference)? in
+		let registryByIdentity = Dictionary(grouping: registryReferences.compactMap { reference -> (String, ScopedMediaReference)? in
 			guard !reference.media.uuid.string.isEmpty,
 			      let identity = identityPaths([reference], workspaceURL: workspaceURL).first
 			else { return nil }
@@ -679,7 +683,7 @@ public enum StrictMediaValidator {
 		return diagnostics
 	}
 
-	private static func identityPaths(_ references: [MediaReference], workspaceURL: URL) -> Set<String> {
+	private static func identityPaths(_ references: [ScopedMediaReference], workspaceURL: URL) -> Set<String> {
 		Set(references.compactMap { reference in
 			let locations = mediaLocations(reference, workspaceURL: workspaceURL)
 			return (locations.local ?? locations.storageRelative ?? locations.absolute)?.path
@@ -689,7 +693,7 @@ public enum StrictMediaValidator {
 	private static func conflictDiagnostic(
 		kind: StrictMediaDiagnosticKind,
 		uuid: String,
-		references: [MediaReference],
+		references: [ScopedMediaReference],
 		identities: Set<String>,
 	) -> StrictMediaDiagnostic {
 		StrictMediaDiagnostic(
@@ -700,7 +704,7 @@ public enum StrictMediaValidator {
 		)
 	}
 
-	private static func qualifiedPath(_ reference: MediaReference) -> String {
+	private static func qualifiedPath(_ reference: ScopedMediaReference) -> String {
 		guard let documentPath = reference.documentPath else { return reference.componentPath }
 		return "\(documentPath):\(reference.componentPath)"
 	}
