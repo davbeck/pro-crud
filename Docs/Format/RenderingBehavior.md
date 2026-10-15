@@ -19,8 +19,22 @@ history, with native cue/group/arrangement/build ordering resolved. All existing
 render formats, slide selection, arrangement selection and supported Theme
 options apply. Input history is read-only. An explicit output is required;
 output and template reports must be outside source workspace roots and cannot
-replace their parent directories. Unsupported native media representations
-fail before replacing existing output. Static rendering retains its existing
+replace their parent directories. Native schema-1 local image and video media
+can be previewed from exact file locators. The selected SourceInfo takes
+precedence over FileProperties and the root URL; relative paths require the
+selected workspace or archive resource root. Native sources never fall back to
+a same-basename file or a superseded locator. Missing files fail before
+replacing output. The preview preserves source occurrence/asset identities and
+history; it does not qualify media editing or packaging.
+
+Native previews support SDR/unknown color metadata, straight/unspecified alpha
+and the existing static image/video drawing behavior. HDR, premultiplied-alpha
+metadata, blur, provider associations, live/web/HLS sources, unknown media
+fields and other identity schemas return explicit errors. Video uses its native
+type and stored thumbnail position (five seconds for the default negative
+position), rather than running transport or audio. These previews retain the
+existing image-sampling and video-frame comparison limitations; pixel-exact
+native media rendering is not claimed. Static rendering retains its existing
 runtime-feature limitations.
 
 Use `--workspace ROOT --look LOOK_UUID --screen SCREEN_UUID` with this input to
@@ -54,7 +68,7 @@ visible shape elements should write an explicit opacity of one.
 
 Full-slide media often has a natural size equal or very close to the slide size. If `custom_image_bounds` is empty, drawing the media to the full canvas is the renderer policy for simple background media.
 
-When a media URL has both an absolute source path and a matching archive-local
+For legacy-style media, when a URL has both an absolute source path and a matching archive-local
 filename, renderers should resolve the archive-local file first. The absolute
 path is a portability fallback for documents whose media was not embedded.
 

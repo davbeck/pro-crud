@@ -43,10 +43,14 @@ is a separate `.pro` or `Theme` file and defaults to target 22. Media identity
 conversions remain gated; this command does not copy assets. Use native export
 when a capability diagnostic requires it.
 Shared and client streams are separate. Diagnostic output is not editable
-protobuf JSON; use native export/import for edits, media validation, and
-media-dependent renders. Preview a supported native Presentation directly with
+protobuf JSON; use native export/import for unsupported edits and media writes.
+Preview a supported native Presentation directly with
 `render ROOT --native-stream UUID --output SEPARATE_PATH`; this preserves native
 history and rejects unsupported active media/features before replacing output.
+Native schema-1 local images and video thumbnails resolve their selected source
+against the workspace/resource root. A stale URL or same-basename file is not a
+fallback. HDR, blur, provider/live/web/HLS sources and other unqualified native
+media settings remain gated; preview does not qualify media editing/packaging.
 `workspace media ROOT` inspects native occurrence/asset
 identities and local file availability, with uninspected streams explicit.
 It includes macro/prop collections, stage layouts, playlist templates and

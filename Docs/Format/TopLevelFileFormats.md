@@ -55,8 +55,10 @@ remain separate.
 General native document edits and strict media validation require their native
 adapters. Render a supported shared Presentation directly with
 `render ROOT --native-stream UUID --output SEPARATE_PATH`. The native reader
-resolves order and builds from one consistent snapshot; unsupported native
-media/features remain explicit capability errors before replacing output. The qualified local metadata
+resolves order and builds from one consistent snapshot. Native schema-1 local
+images/video thumbnails use exact selected-source locators; unsupported native
+media/features and missing assets fail before replacing output. See
+[RenderingBehavior.md](RenderingBehavior.md) for the static preview limits. The qualified local metadata
 operation below and media-free native Look previews have separate support. Use **File → Export → Legacy
 Workspace** or export an individual bundle in ProPresenter, then select the
 exported documents. A Legacy Workspace export is a point-in-time snapshot;

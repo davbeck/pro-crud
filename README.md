@@ -8,8 +8,9 @@ It works directly with documents on disk using a reverse-engineered implementati
 
 ProPresenter 21 protobuf documents and selected ProPresenter 22 beta exports
 are supported. Run `pro-crud workspace inspect /exact/root` before choosing
-workspace paths. Native 22 SQLite/Loro inspection, supported media-free rendering
-and exports, and selected local metadata/group/arrangement edits are available.
+workspace paths. Native 22 SQLite/Loro inspection, supported static rendering
+(including local image/video files), media-free exports, and selected local
+metadata/group/arrangement edits are available.
 Native edit batches commit atomically with exact local registration and stopped
 workspace writers. Other native workflows use ProPresenter's export/import path.
 See the [storage compatibility reference](Docs/Format/TopLevelFileFormats.md).

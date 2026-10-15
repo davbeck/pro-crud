@@ -1,0 +1,44 @@
+{
+  "application": "ProPresenter",
+  "version": "22",
+  "build": "369098875",
+  "osVersion": "27.0.1",
+  "date": "2026-10-15",
+  "source": "Existing native streams in ../Native and unmodified bundle payloads in ../Documents",
+  "workflow": "Select each media Presentation individually, verify actual media in its thumbnails, then File > Export > Slide Images. PNG without slide background; Include Media Actions enabled.",
+  "reason": "The earlier bulk export contains unloaded media placeholders. Preserve it as evidence; these separate loaded-media exports are the media comparison reference.",
+  "images": [
+    {
+      "path": "Images/08 - Media Elements/1.png",
+      "sha256": "7bfe5aeb22b8b34ecebd2e5511f411a7bdb978643b11c91ec966f776f6c16774"
+    },
+    {
+      "path": "Images/08 - Media Elements/2.png",
+      "sha256": "95ad474dd6661ac14cf0ecabf4039f338aac9895388569b09a6f3340b9ba97bb"
+    },
+    {
+      "path": "Images/09 - Media Backgrounds/1.png",
+      "sha256": "9ed09de01170ce04b8c0d2bc2d8c2e2b6ff35d5a9d638b03afdc6e7070ad4685"
+    },
+    {
+      "path": "Images/09 - Media Backgrounds/2.png",
+      "sha256": "65f7d50eaa5c4577daa57106d56ed5ea7a398cf1f23a56c17107e8fcf031f580"
+    },
+    {
+      "path": "Images/09 - Media Backgrounds/3.png",
+      "sha256": "7ebe74c2f4a34512e4c08cac68f8d74e670dd52fae5c22d5772b6ade06d6239a"
+    },
+    {
+      "path": "Images/09 - Media Backgrounds/4.png",
+      "sha256": "389d6f4f2be60f4bc7949c4aa879a51676fa7c63bdff9fa81ecbc1fcda0c5623"
+    },
+    {
+      "path": "Images/09 - Media Backgrounds/5.png",
+      "sha256": "cb69d6dbd1b488acd25efe830703340e5856983023b7e6badb5df5a969aca9ee"
+    },
+    {
+      "path": "Images/09 - Media Backgrounds/6.png",
+      "sha256": "d81d1dfe414e1d697c0fc624174961bc6d2e636ad50df93a0ee07c334e48b703"
+    }
+  ]
+}

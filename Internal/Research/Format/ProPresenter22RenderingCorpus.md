@@ -97,3 +97,16 @@ full native media rendering, or the entire support plan.
 Full regression suite: **412 core + 92 CLI + one harness test pass**, with the
 same nine tracked rendering issues. SwiftFormat and SwiftLint pass. The native
 collection evidence adds no broad rendering exception or snapshot recording.
+
+## Loaded-media export control
+
+Subsequent inspection found that the initial bulk native image export contains
+placeholders for the two Media Elements slides. The actual owned assets exist,
+and opening each media Presentation individually displays the real image/video
+thumbnails. Repeating native **Export → Slide Images** separately after that
+observation produces actual media content. The original 71 images are preserved
+as collected. `LoadedMedia/Images/` retains the separate eight unmodified PNGs
+from the two media Presentations; `LoadedMedia/provenance.json` records exact
+hashes/options. The initial placeholders do not qualify media rendering parity.
+No inference about asset-store corruption or a missing file is warranted from
+that bulk-export result. See `ProPresenter22MediaRendering.md`.

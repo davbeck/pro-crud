@@ -22,6 +22,7 @@ public struct RenderingDiagnostic: Sendable, Equatable, CustomStringConvertible 
 		case invalidTextCustomAttributeRange = "rendering.invalid-text-custom-attribute-range"
 		case missingMediaURL = "rendering.missing-media-url"
 		case unresolvedMedia = "rendering.unresolved-media"
+		case unsupportedNativeMedia = "rendering.unsupported-native-media"
 	}
 
 	public enum Severity: String, Sendable {
@@ -296,6 +297,14 @@ public extension PresentationDocument {
 	}
 
 	private func mediaDiagnostics(_ media: Rv_Data_Media, at path: String) -> [RenderingDiagnostic] {
+		do {
+			if try NativeMediaRendering.requiresAdapter(media) {
+				_ = try NativeMediaRendering.compatibilityMedia(media, contextRoot: mediaDirectory, path: path)
+				return []
+			}
+		} catch {
+			return [.init(code: .unsupportedNativeMedia, severity: .error, componentPath: path, message: String(describing: error))]
+		}
 		let source = media.url.renderPath
 		guard !source.isEmpty else {
 			return [RenderingDiagnostic(

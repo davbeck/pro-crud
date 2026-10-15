@@ -29,15 +29,34 @@ struct NativeRenderCommandTests {
 		}
 	}
 
-	@Test func unqualifiedNativeMediaDoesNotReplaceExistingOutput() throws {
+	@Test func missingNativeMediaDoesNotReplaceExistingOutput() throws {
 		try withWorkspace(media: true) { root, id in
 			let output = root.deletingLastPathComponent().appendingPathComponent("existing.json")
 			let sentinel = Data("existing output".utf8)
 			try sentinel.write(to: output)
-			#expect(throws: DocumentCompatibilityError.self) {
+			#expect(throws: RenderError.self) {
 				try Render.parse([root.path, "--native-stream", id, "--format", "json", "--output", output.path, "--replace"]).run()
 			}
 			#expect(try Data(contentsOf: output) == sentinel)
+		}
+	}
+
+	@Test func nativeFileMediaRendersAllFormatsWhenTheExactSelectedRootContainsTheAsset() throws {
+		try withWorkspace(media: true) { root, id in
+			let database = root.appendingPathComponent("DocumentStore/workspace-v1.sqlite3")
+			let before = try Data(contentsOf: database)
+			let assets = root.appendingPathComponent("Media/Assets")
+			try FileManager.default.createDirectory(at: assets, withIntermediateDirectories: true)
+			try FileManager.default.copyItem(at: fixtures.appendingPathComponent("Interchange/MediaIdentity/Media/Assets/SharedRectangle.png"), to: assets.appendingPathComponent("SharedRectangle.png"))
+			let output = root.deletingLastPathComponent().appendingPathComponent("rendered")
+			try Render.parse([root.path, "--native-stream", id, "--format", "png,pdf,json", "--output", output.path]).run()
+			let files = try FileManager.default.contentsOfDirectory(at: output, includingPropertiesForKeys: nil)
+			#expect(files.filter { $0.pathExtension == "png" }.count == 2)
+			#expect(files.filter { $0.pathExtension == "pdf" }.count == 1)
+			let json = try #require(files.first { $0.pathExtension == "json" })
+			let report = try JSONDecoder().decode(EffectiveRendering.self, from: Data(contentsOf: json))
+			#expect(report.presentations.first?.slides.count == 2)
+			#expect(try Data(contentsOf: database) == before)
 		}
 	}
 
