@@ -37,6 +37,38 @@ independent acceptance gates. The reader does not qualify Cloud merges or
 newer storage schemas. SQLite snapshots are bounded to 512 MiB in memory;
 unknown schema/storage versions fail without migration or repair.
 
+## Sidecar-free offline reads
+
+On October 15 the stopped original workspace had a complete 30,498,816-byte
+WAL-mode main database with no WAL/shared-memory files. SQLite's read-only
+opening path failed when it could not initialize sidecars. A normal read-only
+SQLite connection can also initialize sidecars in a writable directory; the
+READONLY flag alone does not qualify unchanged offline inspection.
+
+The reader now captures a stable main image before opening SQLite whenever no
+journal/sidecars exist. It checks the open file and current path's device/inode,
+size, modification/change timestamps, complete byte count, and continued
+absence of all journal/sidecar files. Changed captures retry up to three times;
+a writer appearing on retry returns to the normal committed-WAL backup path.
+An existing WAL is never ignored, and incomplete WAL/shared-memory pairs are
+rejected without creating their missing member.
+
+SQLite's documented deserialize workaround normalizes journal-version header
+bytes 18/19 in the **private allocated buffer** only, then deserializes it as
+read-only memory. The live source is never declared immutable, and neither its
+header nor its schema is changed. See SQLite's
+[deserialize documentation](https://sqlite.org/c3ref/deserialize.html) and
+[read-only WAL constraints](https://sqlite.org/wal.html#read_only_databases).
+
+The actual closed source now inventories all **386** current streams. Its full
+SHA-256 and DocumentStore directory entries remain unchanged, with no sidecars
+created. Deterministic tests cover the unchanged closed image, an external
+committed change forcing a retry, a writer creating WAL with committed and
+uncommitted data during capture, repeated changes exhausting the retry bound,
+and each incomplete sidecar pair. The test SQLite defaults to persistent WAL;
+the fixture explicitly clears SQLITE_FCNTL_PERSIST_WAL so last-writer close
+models the observed sidecar-free native workspace, without deleting WAL data.
+
 ## Local semantic ordering and references
 
 `workspace contents` now reads the shared Presentation, LibraryData and three

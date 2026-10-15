@@ -22,9 +22,14 @@ be used to rebuild native documents. Retained migration patches are not replayed
 `workspace discover --registry /exact/path/registry-v1.sqlite3` reports registry
 metadata without selecting an active workspace or consulting account data.
 
-Inspection uses an in-memory SQLite backup, bounded to 512 MiB. It does not
-migrate, repair, or write the source database. A WAL lacking its shared-memory
-file requires a coherent SQLite backup or native open before inspection.
+Inspection is bounded to 512 MiB. Active WAL databases use an in-memory SQLite
+backup. A database with no journal/sidecars uses a stable main-file image,
+deserialized into private memory without opening a writable source or
+initializing sidecars. File identity/size/timestamps and continued absence of
+journals are checked around that capture; a changing source retries up to three
+times. Inspection does not migrate, repair, or write the source database. An
+incomplete WAL/shared-memory pair requires a coherent SQLite backup or native
+open before inspection.
 Other database schemas and storage markers are rejected explicitly.
 
 Direct native document edits, rendering, and strict media validation

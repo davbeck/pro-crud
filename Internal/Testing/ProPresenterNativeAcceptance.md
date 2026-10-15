@@ -94,10 +94,11 @@ unrelated fields/history. Retries recognize their existing operation receipt;
 a matching value creates no patch or receipt. Cloud roots are rejected.
 
 Explicit writer setup may initialize SQLite's normal WAL sidecars while holding
-ordinary SQLite handles. This is necessary for the observed closed-WAL case on
-this host; it does not bypass SQLite locks or run a migration/repair. Ordinary
-inspection retains its read-only opening policy. Preflight-only runs may need a
-readable SQLite backup when the stopped source cannot be opened read-only.
+ordinary SQLite handles; it does not bypass locks or run a migration/repair.
+Ordinary inspection supports a verified stable sidecar-free main image in private
+memory, so a cleanly closed WAL database needs no writable setup for preflight.
+An incomplete WAL/shared-memory pair still requires a
+coherent SQLite backup or native open; inspection does not repair it.
 No helper installation is deleted or replaced. The tested launchd-managed helper
 restarted after SIGTERM; a controlled `launchctl bootout` stopped the submitted
 job, and opening the pinned app restored the service automatically.
