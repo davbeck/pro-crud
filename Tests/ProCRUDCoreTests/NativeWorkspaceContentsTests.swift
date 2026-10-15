@@ -4,6 +4,15 @@ import Testing
 
 @Suite("Native workspace contents")
 struct NativeWorkspaceContentsTests {
+	@Test func currentResourceThemePathRequiresAnExplicitWorkspaceDocumentContext() throws {
+		let id = UUID()
+		let resolver = try NativeWorkspaceReferenceResolver(streams: [stream(id: id, path: "Deep Look Theme/Theme", scope: .shared, kind: "Theme")])
+		let fixture = URL(fileURLWithPath: #filePath).deletingLastPathComponent().deletingLastPathComponent().deletingLastPathComponent().appendingPathComponent("Fixtures/ProPresenter22/Native/LookTheme/WorkspaceThemeURL.json")
+		let url = try JSONDecoder().decode(NativeWorkspaceValue.self, from: Data(contentsOf: fixture))
+		#expect(try resolver.theme(url).documentID == nil)
+		#expect(try resolver.theme(inWorkspaceDocument: url).documentID == id)
+	}
+
 	@Test func themeLinksKeepSameBasenameThemesDistinctAndIgnoreStaleAbsolutePaths() throws {
 		let id = UUID()
 		let resolver = try NativeWorkspaceReferenceResolver(streams: [stream(id: id, path: "Owned/Theme", scope: .shared, kind: "Theme"), stream(id: UUID(), path: "Other/Theme", scope: .shared, kind: "Theme")])

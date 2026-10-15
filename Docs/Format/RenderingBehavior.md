@@ -330,6 +330,17 @@ unsupported because they are not present in the source document. Persisted
 background/foreground switches are reported but not separated by the file
 renderer, and Look rendering does not copy template actions.
 
+An explicitly selected native 22 workspace is also supported for static Looks
+whose selected Theme slide contains no media. Saved/shared and live/client Looks
+remain separate and can be selected by UUID when names overlap. Theme references
+resolve to native streams in the same database snapshot, using ROOT_SHOW or a
+Workspace-scoped ROOT_CURRENT_RESOURCE path. The preview uses shared logical
+dimensions, with local screen geometry as a fallback. A disabled screen emits a
+warning; previewing it does not enable output. Missing client configuration can
+use valid shared dimensions with a warning. Missing/unavailable Themes, dangling
+template UUIDs and selected-slide media are diagnosed before publishing output.
+Media on unused templates and ignored Theme actions does not block the Look.
+
 Theme media is resolved against its Theme origin before source-document
 basename fallback. `ROOT_CURRENT_RESOURCE` uses the Theme directory.
 `ROOT_SHOW` can be resolved when the persisted Look supplies a user-workspace

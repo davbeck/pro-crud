@@ -54,3 +54,14 @@ native occurrences have distinct reference UUIDs and share one asset UUID with
 identity schema string `"1"`. No private manifest or default stock media is
 included. Exact provenance and scope are in
 `Internal/Research/Format/ProPresenter22MediaIdentity.md`.
+
+`Native/LookTheme/Theme.loro` and `Theme.vector` retain the owned Deep Look Theme
+stream (`e90a8c1e-a43f-5688-8d49-70cf33b1a6e7`) from the original retained
+snapshot. Its active slide geometry, fills and RTF agree with the independently
+exported `Interchange/MetadataFreeTheme/Theme`. `LookAPI.json` is the unmodified
+local API response for the separately created **ProCRUD Native Look Acceptance**
+preset in the disposable local workspace. `WorkspaceThemeURL.json` retains only
+that preset's native Theme URL value, as a typed diagnostic projection. The app
+authored it with ROOT_CURRENT_RESOURCE relative to the Workspace. No full
+Workspace configuration/history, hardware data or recording/account settings
+are included. See `Internal/Research/Format/ProPresenter22WorkspaceConfiguration.md`.

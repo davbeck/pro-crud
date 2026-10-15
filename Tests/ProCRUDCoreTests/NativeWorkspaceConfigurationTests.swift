@@ -1,10 +1,108 @@
 import Foundation
 import Loro
+import ProPresenterProto
+import SwiftProtobuf
 import Testing
 @testable import ProCRUDCore
 
 @Suite("Native shared and client workspace configuration")
 struct NativeWorkspaceConfigurationTests {
+	@Test func nativeLookSelectsTheOwnedThemeByLogicalIdentityAndPreservesDisabledState() throws {
+		let (fixture, source) = try lookSnapshot()
+		let selected = try LookResolver.resolve(snapshot: source, look: fixture.savedID.uuidString.lowercased(), screen: fixture.screenID.uuidString.lowercased())
+		#expect(selected.lookName == "Saved Look")
+		#expect(selected.screenName == "Shared Audience")
+		#expect(selected.destinationSize.width == 854 && selected.destinationSize.height == 480)
+		#expect(UUID(uuidString: selected.template.slide.baseSlide.uuid.string) == fixture.templateID)
+		#expect(selected.warnings.contains { $0.contains("disabled in ProPresenter") })
+		#expect(selected.template.preferredMediaReferences.isEmpty)
+		let exported = try DocumentLoader.load(from: fixtures.appendingPathComponent("Interchange/MetadataFreeTheme/Theme"))
+		guard case let .theme(theme) = exported.payload else { Issue.record("Expected owned native Theme export"); return }
+		let expected = try #require(theme.slides.first { UUID(uuidString: $0.baseSlide.uuid.string) == fixture.templateID })
+		#expect(selected.template.slide.name == expected.name)
+		#expect(selected.template.slide.baseSlide.size == expected.baseSlide.size)
+		#expect(selected.template.slide.baseSlide.elements.map(\.element.uuid) == expected.baseSlide.elements.map(\.element.uuid))
+		#expect(selected.template.slide.baseSlide.elements.map(\.element.bounds) == expected.baseSlide.elements.map(\.element.bounds))
+		#expect(selected.template.slide.baseSlide.elements.map(\.element.fill) == expected.baseSlide.elements.map(\.element.fill))
+		#expect(selected.template.slide.baseSlide.elements.map(\.element.text.rtfData) == expected.baseSlide.elements.map(\.element.text.rtfData))
+	}
+
+	@Test func nativeLookCanPreviewSharedDimensionsWithoutLocalHardwareConfiguration() throws {
+		let (fixture, source) = try lookSnapshot(includeClient: false)
+		let selected = try LookResolver.resolve(snapshot: source, look: "Saved Look", screen: "Shared Audience")
+		#expect(UUID(uuidString: selected.template.slide.baseSlide.uuid.string) == fixture.templateID)
+		#expect(selected.destinationSize.width == 854)
+		#expect(selected.warnings.contains { $0.contains("no local output configuration") })
+	}
+
+	@Test func nativeLookRejectsUnavailableThemeWithoutConsultingLegacyLeftovers() throws {
+		let (fixture, source) = try lookSnapshot()
+		let streams = source.streams.map { stream in
+			guard stream.identity.kind == "Theme" else { return stream }
+			var identity = stream.identity
+			identity.availability = .unavailable
+			return NativeWorkspaceStream(identity: identity, snapshot: nil, versionVector: nil, lastSharedVersionVector: nil)
+		}
+		#expect(throws: NativeWorkspaceError.self) { try LookResolver.resolve(snapshot: .init(root: source.root, workspaceID: source.workspaceID, metadata: [:], streams: streams), look: fixture.savedID.uuidString, screen: fixture.screenID.uuidString) }
+	}
+
+	@Test func nativeLookReportsADanglingTemplateUUIDWithoutChoosingAnotherSlide() throws {
+		let (fixture, original) = try lookSnapshot()
+		let missing = UUID()
+		var mapping = try fixture.mapping.object(at: "/mapping")
+		mapping["template_slide_uuid"] = .string(missing.uuidString)
+		var look = fixture.savedLook
+		look["screen_looks"] = .list([.map(mapping)])
+		var root = fixture.shared
+		root["audience_looks"] = .list([.map(look)])
+		let updated = try stream(id: fixture.workspaceID, scope: .shared, root: root)
+		let source = NativeWorkspaceSnapshot(root: original.root, workspaceID: original.workspaceID, metadata: [:], streams: [updated] + original.streams.filter { $0.identity.kind != "Workspace" || $0.identity.scope != .shared })
+		#expect(throws: NativeSemanticError.missingReference(path: "Owned/Theme", identity: missing.uuidString)) {
+			try LookResolver.resolve(snapshot: source, look: fixture.savedID.uuidString, screen: fixture.screenID.uuidString)
+		}
+	}
+
+	@Test func selectedTemplateMediaBlocksPreviewButUnusedTemplateMediaDoesNot() throws {
+		let (fixture, original) = try lookSnapshot()
+		let source = try #require(original.streams.first { $0.identity.kind == "Theme" })
+		var root = try source.decodedValue().object(at: "/").required("root", at: "/").object(at: "/root")
+		let slides = try root.required("slides", at: "/root").array(at: "/root/slides")
+		var mediaSlide = try #require(slides.first).object(at: "/slide")
+		var base = try mediaSlide.required("base_slide", at: "/slide").object(at: "/base_slide")
+		var elements = try base.required("elements", at: "/base_slide").array(at: "/elements")
+		var slideElement = try #require(elements.first).object(at: "/element")
+		var element = try slideElement.required("element", at: "/element").object(at: "/graphic")
+		element["fill"] = .map(["enable": .boolean(true), "FillType": .map(["__tag": .string("media"), "media": .map([
+			"uuid": .string(UUID().uuidString), "asset_id": .string(UUID().uuidString), "identity_schema_version": .string("1"),
+			"TypeProperties": .map(["__tag": .string("image"), "image": .map([:])]),
+		])])])
+		slideElement["element"] = .map(element)
+		elements[0] = .map(slideElement)
+		base["elements"] = .list(elements)
+		mediaSlide["base_slide"] = .map(base)
+		var replaced = slides
+		replaced[0] = .map(mediaSlide)
+		root["slides"] = .list(replaced)
+		func snapshot(_ root: [String: NativeWorkspaceValue]) throws -> NativeWorkspaceSnapshot {
+			let theme = try stream(id: source.identity.documentID, scope: .shared, root: root, kind: "Theme", corePath: "Owned/Theme")
+			return .init(root: original.root, workspaceID: original.workspaceID, metadata: [:], streams: original.streams.filter { $0.identity.kind != "Theme" } + [theme])
+		}
+		#expect(throws: NativeSemanticError.self) { try LookResolver.resolve(snapshot: snapshot(root), look: fixture.savedID.uuidString, screen: fixture.screenID.uuidString) }
+		base["uuid"] = .string(UUID().uuidString)
+		mediaSlide["base_slide"] = .map(base)
+		root["slides"] = .list(slides + [.map(mediaSlide)])
+		let selected = try LookResolver.resolve(snapshot: snapshot(root), look: fixture.savedID.uuidString, screen: fixture.screenID.uuidString)
+		#expect(UUID(uuidString: selected.template.slide.baseSlide.uuid.string) == fixture.templateID)
+		var actionSlide = try #require(slides.first).object(at: "/slide")
+		let media = try element.required("fill", at: "/graphic").object(at: "/fill").required("FillType", at: "/fill").tagged(at: "/fill/FillType").value
+		actionSlide["actions"] = .list([.map(["uuid": .string(UUID().uuidString), "type": .integer(13), "isEnabled": .boolean(true), "ActionTypeData": .map(["__tag": .string("media"), "media": .map(["element": media])])])])
+		var actionSlides = slides
+		actionSlides[0] = .map(actionSlide)
+		root["slides"] = .list(actionSlides)
+		let actionResult = try LookResolver.resolve(snapshot: snapshot(root), look: fixture.savedID.uuidString, screen: fixture.screenID.uuidString)
+		#expect(actionResult.template.slide.actions.isEmpty)
+	}
+
 	@Test func savedAndLiveLooksAndScreenStateRemainInTheirOwningScopes() throws {
 		let fixture = Fixture()
 		var shared = fixture.shared
@@ -88,8 +186,13 @@ struct NativeWorkspaceConfigurationTests {
 		let screenID = UUID()
 		let savedID = UUID()
 		let liveID = UUID()
-		let themeID = UUID()
-		let templateID = UUID()
+		let themeID: UUID
+		let templateID: UUID
+		init(themeID: UUID = UUID(), templateID: UUID = UUID()) {
+			self.themeID = themeID
+			self.templateID = templateID
+		}
+
 		var mapping: NativeWorkspaceValue {
 			.map(["pro_screen_uuid": .string(screenID.uuidString), "template_slide_uuid": .string(templateID.uuidString), "template_document_file_path": .map([
 				"RelativeFilePath": .map(["__tag": .string("local"), "local": .map(["root": .integer(10), "path": .string("Themes/Owned/Theme")])]),
@@ -126,14 +229,31 @@ struct NativeWorkspaceConfigurationTests {
 		return .init(root: FileManager.default.temporaryDirectory, workspaceID: fixture.workspaceID, metadata: [:], streams: streams)
 	}
 
-	private func stream(id: UUID, scope: NativeWorkspaceStream.Scope, root: [String: NativeWorkspaceValue]) throws -> NativeWorkspaceStream {
+	private func lookSnapshot(includeClient: Bool = true) throws -> (Fixture, NativeWorkspaceSnapshot) {
+		let directory = fixtures.appendingPathComponent("Native/LookTheme")
+		let data = try Data(contentsOf: directory.appendingPathComponent("Theme.loro"))
+		let vector = try Data(contentsOf: directory.appendingPathComponent("Theme.vector"))
+		let id = try #require(UUID(uuidString: "e90a8c1e-a43f-5688-8d49-70cf33b1a6e7"))
+		let themeStream = NativeWorkspaceStream(identity: .init(documentID: id, scope: .shared, kind: "Theme", corePath: "Owned/Theme", availability: .available, byteCount: Int64(data.count), sha256: nil, updatedAtMilliseconds: 0), snapshot: data, versionVector: vector, lastSharedVersionVector: nil)
+		guard case let .theme(theme) = try themeStream.protobufProjection().payload() else { throw NativeSemanticError.invalidValue(path: "/fixture", expected: "Theme") }
+		let slideID = try #require(theme.slides.first.flatMap { UUID(uuidString: $0.baseSlide.uuid.string) })
+		let fixture = Fixture(themeID: id, templateID: slideID)
+		let original = try snapshot(fixture, includeClient: includeClient, includeTheme: false)
+		return (fixture, .init(root: original.root, workspaceID: original.workspaceID, metadata: [:], streams: original.streams + [themeStream]))
+	}
+
+	private var fixtures: URL {
+		URL(fileURLWithPath: #filePath).deletingLastPathComponent().deletingLastPathComponent().deletingLastPathComponent().appendingPathComponent("Fixtures/ProPresenter22")
+	}
+
+	private func stream(id: UUID, scope: NativeWorkspaceStream.Scope, root: [String: NativeWorkspaceValue], kind: String = "Workspace", corePath: String? = nil) throws -> NativeWorkspaceStream {
 		let document = LoroDoc()
 		for (key, value) in root {
 			try document.getMap(id: "root").insert(key: key, v: loro(value))
 		}
 		document.commit()
 		let data = try document.exportSnapshot()
-		return .init(identity: .init(documentID: id, scope: scope, kind: "Workspace", corePath: nil, availability: .available, byteCount: Int64(data.count), sha256: nil, updatedAtMilliseconds: 0), snapshot: data, versionVector: document.oplogVv().encode(), lastSharedVersionVector: nil)
+		return .init(identity: .init(documentID: id, scope: scope, kind: kind, corePath: corePath, availability: .available, byteCount: Int64(data.count), sha256: nil, updatedAtMilliseconds: 0), snapshot: data, versionVector: document.oplogVv().encode(), lastSharedVersionVector: nil)
 	}
 
 	private func loro(_ value: NativeWorkspaceValue) -> LoroValue {

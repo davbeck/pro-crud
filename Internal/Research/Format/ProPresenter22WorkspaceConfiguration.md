@@ -39,6 +39,55 @@ Other root fields (including recording, device and audio configuration) are
 listed by field name as uninspected. Their values are not included in this
 report or copied into fixtures. Unknown fields within a selected Look/screen
 block that view instead of disappearing. The original histories remain intact;
-this is not a writable or complete interchange Workspace projection. Native
-Look rendering, physical-output execution and configuration mutation remain
-separate qualification work.
+this is not a writable or complete interchange Workspace projection. The static
+Look scope qualified below is separate from physical-output execution and
+configuration mutation.
+
+## Static native Look rendering
+
+The renderer now selects configuration and Theme content from one native
+snapshot. It keeps the shared saved Looks and separate client live Look intact,
+matches screen/template UUIDs, and uses the shared logical canvas (or valid local
+geometry). A stored disabled flag is reported without enabling output. No client
+configuration can still yield a static preview using valid shared dimensions,
+with an explicit warning. Native selected-slide media rebasing remains gated;
+unused templates and ignored Theme actions do not enter that capability check.
+Missing Theme content and dangling template UUIDs fail without legacy fallback.
+
+The unmodified owned Deep Look Theme snapshot/vector are retained separately as
+`Fixtures/ProPresenter22/Native/LookTheme`. Its geometry, fills and active RTF
+bytes agree with its independent native export. Constructed scoped configurations
+test disabled/missing client state, unavailable Themes, dangling template IDs,
+selected versus unused media, and ignored Theme actions against that source.
+
+A new disposable preset, **ProCRUD Native Look Acceptance**, was created in the
+local test workspace and assigned the owned Conflict Template through the
+already-enabled official local API. The existing service was confirmed in
+Settings → Network at port 50001, `/version` reported `v1`, and the installed
+instance's own documentation defined the complete Look PUT body. No network
+setting or Cloud connection was introduced. The PUT returned 200 on this build
+(the local specification describes 204); a separate GET and SQLite/Loro view
+confirmed the saved assignment.
+
+That fresh app-authored Theme URL uses **ROOT_CURRENT_RESOURCE=12** with
+`Themes/Deep Look Theme/Theme`, relative to the Workspace document. The migrated
+references used ROOT_SHOW=10. The resolver permits root 12 only with that explicit
+Workspace context; generic Theme resource references are not reinterpreted.
+The owned API response and that single native URL value are retained as fixtures,
+without unrelated Workspace settings/history or account/hardware data.
+
+The production CLI reads the actual live local workspace and renders the owned
+Look at **1440×900**. Its premultiplied sRGB output has **zero differing channels**
+against rendering the independent native-export Theme at the same canvas. This
+compares two file-rendering paths, not a native Audience/Syphon capture. Runtime
+layers retain the existing warnings. Computer Use timed out during a separate
+attempt to activate the test app, so no new physical-output or Syphon execution
+claim is made and no output binding was changed.
+An independent read of the selected client screen's output metadata confirmed
+the original Built-in Retina Display binding remained in place.
+
+The retained pre-existing workspace additionally has three Look template UUIDs
+absent from all 21 native Theme documents. They now produce exact missing-reference
+diagnostics; four other selected mappings require media rebasing. Resolving all
+seven Theme *document* references does not imply that every template or runtime
+dependency is available. No arbitrary substitute was chosen.

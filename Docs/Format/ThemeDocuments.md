@@ -406,6 +406,15 @@ does not contact or mutate a running ProPresenter instance. It uses
 never includes template actions. The Look's persisted background/foreground
 switches are reported but are not yet separated in the file renderer.
 
+For a native 22 workspace, the same command resolves saved/shared or live/client
+Looks and the selected Theme stream from one consistent database snapshot.
+Selected slides containing media remain gated pending native media rebasing;
+unused slides and ignored Theme actions do not block a media-free selection.
+ROOT_CURRENT_RESOURCE in a Workspace Look refers to that workspace, separately
+from a Theme element's own resource directory. Stored disabled-screen state
+produces a warning without enabling output. Missing local configuration can use
+valid shared logical dimensions; missing Theme/template identities fail explicitly.
+
 ## Compatibility Limits
 
 Resolution reports identify these limits:

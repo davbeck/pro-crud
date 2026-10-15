@@ -30,7 +30,14 @@ is a separate `.pro` or `Theme` file and defaults to target 22. Media identity
 conversions remain gated; this command does not copy assets. Use native export
 when a capability diagnostic requires it.
 Shared and client streams are separate. Diagnostic output is not editable
-protobuf JSON; use native export/import for edits, media validation, and renders.
+protobuf JSON; use native export/import for edits, media validation, and
+media-dependent renders. `workspace media ROOT` inspects native occurrence/asset
+identities and local file availability, with uninspected streams explicit.
+`workspace configuration ROOT` lists saved/live Looks, screens and Theme links.
+For a selected Theme slide without media, preview a native Look with
+`render PRESENTATION --workspace ROOT --look UUID --screen UUID`. This reads
+stored native streams without an app/API connection. A disabled-screen warning
+does not enable that output.
 Use `workspace discover --registry PATH` to list registered identities without
 selecting an active workspace.
 
@@ -345,7 +352,9 @@ copied or rendered; do not ignore it.
 
 ## Media identity
 
-Treat a media UUID as the asset identity, not as path metadata. Never use
+Supported legacy-style interchange media uses its UUID as the asset identity.
+Native 22 separates occurrence UUID and asset UUID; inspect those roles with
+`workspace media` and retain the native editing/packaging gates. Never use
 `edit patch` to change only `rv.data.Media.url` when replacing content.
 
 - Use `edit set-media --source FILE` for a new local asset. It generates a new

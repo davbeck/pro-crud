@@ -80,7 +80,7 @@ public struct NativeWorkspaceConfiguration: Encodable, Sendable {
 			let mappings = try (object.optional("screen_looks")?.array(at: "\(path)/screen_looks") ?? []).enumerated().map { offset, value in
 				let mapping = try value.object(at: "\(path)/screen_looks")
 				let materialized = document.screenLooks[offset]
-				let theme = try mapping.optional("template_document_file_path").map(resolver.theme)
+				let theme = try mapping.optional("template_document_file_path").map { try resolver.theme(inWorkspaceDocument: $0) }
 				let template = try mapping.optional("template_slide_uuid")?.text(at: "\(path)/template_slide_uuid")
 				return try Mapping(screenID: mapping.required("pro_screen_uuid", at: path).uuid(at: "\(path)/pro_screen_uuid"), templateSlideID: template.flatMap(UUID.init(uuidString:)), theme: theme,
 				                   propsEnabled: materialized.propsEnabled, liveVideoEnabled: materialized.liveVideoEnabled,

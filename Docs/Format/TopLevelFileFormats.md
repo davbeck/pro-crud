@@ -269,6 +269,10 @@ rendering flags, and referenced native Theme identities. Missing client outputs
 and missing/unavailable Themes remain explicit. Other configuration fields are
 listed as uninspected by name. This selected read-only view does not export or
 edit the whole Workspace document or configure physical outputs.
+`render PRESENTATION --workspace ROOT --look NAME_OR_UUID --screen NAME_OR_UUID`
+can use this native configuration for media-free selected Theme slides. It reads
+the referenced native Theme rather than legacy leftovers and preserves screen
+disabled state. See [rendering behavior](RenderingBehavior.md#template-and-look-resolution).
 
 `workspace inventory ROOT --projections` additionally checks Presentation and
 Theme interchange materialization and lists unmapped fields. `workspace export

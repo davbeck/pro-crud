@@ -1,0 +1,41 @@
+{
+  "map": {
+    "_0": {
+      "RelativeFilePath": {
+        "map": {
+          "_0": {
+            "__tag": {
+              "string": {
+                "_0": "local"
+              }
+            },
+            "local": {
+              "map": {
+                "_0": {
+                  "path": {
+                    "string": {
+                      "_0": "Themes/Deep Look Theme/Theme"
+                    }
+                  },
+                  "root": {
+                    "integer": {
+                      "_0": 12
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "Storage": {
+        "null": {}
+      },
+      "platform": {
+        "integer": {
+          "_0": 1
+        }
+      }
+    }
+  }
+}

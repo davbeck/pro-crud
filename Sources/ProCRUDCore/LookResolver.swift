@@ -46,6 +46,12 @@ public enum LookResolver {
 		look lookSelector: String,
 		screen screenSelector: String,
 	) throws -> LookTemplateSelection {
+		if (try? input.resourceValues(forKeys: [.isDirectoryKey]).isDirectory) == true {
+			let inspection = try WorkspaceInspector.inspect(input)
+			if inspection.storage == .nativeLoro, inspection.storageMarker == "sqlite-v1" {
+				return try resolve(snapshot: NativeWorkspaceSnapshot.read(from: input), look: lookSelector, screen: screenSelector)
+			}
+		}
 		let paths = try workspacePaths(from: input)
 		let workspace = try Rv_Data_ProPresenterWorkspace(
 			serializedBytes: Data(contentsOf: paths.file),
@@ -98,14 +104,9 @@ public enum LookResolver {
 			named: "/slides[uuid=\(mapping.templateSlideUuid.string)]",
 		)
 		let size = try screenSize(screen)
-		var warnings: [String] = candidate.mediaWarnings
-		if mapping.propsEnabled || mapping.liveVideoEnabled || mapping.announcementsEnabled ||
-			mapping.propsLayerEnabled || mapping.messagesLayerEnabled || !mapping.maskUuid.string.isEmpty
-		{
-			warnings.append("Look masks and runtime props, messages, announcements, and live-video layers are not available from a presentation document render.")
-		}
-		if !mapping.presentationBackgroundEnabled || !mapping.presentationForegroundEnabled {
-			warnings.append("Presentation background/foreground layer switches are recorded by the Look but cannot yet be separated from cue actions during file rendering.")
+		var warnings = warnings(mapping: mapping, candidate: candidate)
+		if try ProtobufJSONPatcher.WireField.parse(screen.serializedData()).last(where: { $0.number == 9 })?.varint == 0 {
+			warnings.append("This screen is disabled in ProPresenter. A static preview does not enable its output.")
 		}
 		return LookTemplateSelection(
 			lookName: look.name,
@@ -114,6 +115,82 @@ public enum LookResolver {
 			template: candidate,
 			warnings: Array(Set(warnings)).sorted(),
 		)
+	}
+
+	/// Resolves all configuration and Theme references from the same native
+	/// database snapshot. This transient view never enables a physical output.
+	public static func resolve(snapshot: NativeWorkspaceSnapshot, look lookSelector: String, screen screenSelector: String) throws -> LookTemplateSelection {
+		let configuration = try NativeWorkspaceConfiguration(snapshot: snapshot)
+		var looks = configuration.savedLooks
+		if let live = configuration.liveLook, !looks.contains(where: { $0.id == live.id }) {
+			looks.append(live)
+		}
+		let lookID = UUID(uuidString: lookSelector)
+		let matchingLooks = looks.filter { $0.name == lookSelector || $0.id == lookID }
+		guard matchingLooks.count == 1, let look = matchingLooks.first else {
+			throw LookResolverError.ambiguousLook(selector: lookSelector, candidates: looks.map { "\($0.name) (\($0.id))" })
+		}
+		let screens = configuration.screens.filter { $0.screenType == 1 }
+		let screenID = UUID(uuidString: screenSelector)
+		let matchingScreens = screens.filter { $0.name == screenSelector || $0.id == screenID }
+		guard matchingScreens.count == 1, let screen = matchingScreens.first else {
+			throw LookResolverError.ambiguousScreen(selector: screenSelector, candidates: screens.map { "\($0.name) (\($0.id))" })
+		}
+		guard let mapping = look.mappings.first(where: { $0.screenID == screen.id }) else { throw LookResolverError.missingScreenMapping(look: look.name, screen: screen.name) }
+		guard let templateID = mapping.templateSlideID, let reference = mapping.theme else { throw LookResolverError.missingTemplateReference(look: look.name, screen: screen.name) }
+		guard let themeID = reference.documentID,
+		      let stream = snapshot.streams.first(where: { $0.identity.scope == .shared && $0.identity.kind == "Theme" && $0.identity.documentID == themeID })
+		else { throw NativeSemanticError.missingReference(path: reference.logicalPath ?? "/look/template", identity: "native Theme stream") }
+		let projection = try stream.protobufProjection()
+		guard case let .theme(theme) = try projection.payload() else { throw NativeSemanticError.invalidValue(path: themeID.uuidString, expected: "Theme payload") }
+		let matches = theme.slides.enumerated().filter { UUID(uuidString: $0.element.baseSlide.uuid.string) == templateID }
+		guard let selected = matches.first else { throw NativeSemanticError.missingReference(path: reference.logicalPath ?? themeID.uuidString, identity: templateID.uuidString) }
+		guard matches.count == 1 else { throw NativeSemanticError.duplicateIdentity(path: reference.logicalPath ?? themeID.uuidString, identity: templateID.uuidString) }
+		guard try MediaReference.collect(protobuf: selected.element.baseSlide.serializedData(), messageType: "rv.data.Slide").isEmpty else {
+			throw NativeSemanticError.unsupportedNode(path: "\(reference.logicalPath ?? themeID.uuidString)/\(templateID)", kind: "native Look template media rebasing; use a Legacy Workspace export for this Look")
+		}
+		var selectedTheme = theme
+		var renderedTemplate = selected.element
+		// Persisted Look rendering does not execute Theme actions. Keep them in
+		// the source history, outside this static rendering capability check.
+		renderedTemplate.actions = []
+		selectedTheme.slides = [renderedTemplate]
+		try DocumentCompatibility.analyze(.init(payload: .theme(selectedTheme), origin: .workspace(snapshot.root))).requireSupported()
+		let candidate = ThemeTemplateSource.Candidate(name: selected.element.name, sourcePath: "\(reference.logicalPath ?? themeID.uuidString)#\(selected.offset)", componentPath: "/slides[index=\(selected.offset)]",
+		                                              themeDocumentPath: reference.logicalPath ?? "Theme", resourceDirectory: snapshot.root, mediaWarnings: [], preferredAbsoluteMediaURLs: [],
+		                                              preferredMediaReferences: [], slide: renderedTemplate, temporaryResourceOwner: nil)
+		let size: CGSize
+		if let width = screen.logicalWidth, let height = screen.logicalHeight,
+		   width.isFinite, height.isFinite, width >= 1, height >= 1, width * height <= PresentationRenderer.maximumCanvasPixelCount
+		{
+			size = CGSize(width: width, height: height)
+		} else if let local = screen.document {
+			size = try screenSize(local)
+		} else {
+			throw LookResolverError.invalidScreenSize(screen.name)
+		}
+		guard let flags = look.document.screenLooks.first(where: { UUID(uuidString: $0.proScreenUuid.string) == screen.id }) else { throw LookResolverError.missingScreenMapping(look: look.name, screen: screen.name) }
+		var warnings = warnings(mapping: flags, candidate: candidate)
+		if screen.renderingEnabled == false {
+			warnings.append("This screen is disabled in ProPresenter. A static preview does not enable its output.")
+		}
+		if !screen.hasLocalOutput {
+			warnings.append("This screen has no local output configuration. The preview uses its shared logical dimensions.")
+		}
+		return .init(lookName: look.name, screenName: screen.name, destinationSize: size, template: candidate, warnings: Array(Set(warnings)).sorted())
+	}
+
+	private static func warnings(mapping: Rv_Data_ProAudienceLook.ProScreenLook, candidate: ThemeTemplateSource.Candidate) -> [String] {
+		var warnings = candidate.mediaWarnings
+		if mapping.propsEnabled || mapping.liveVideoEnabled || mapping.announcementsEnabled ||
+			mapping.propsLayerEnabled || mapping.messagesLayerEnabled || !mapping.maskUuid.string.isEmpty
+		{
+			warnings.append("Look masks and runtime props, messages, announcements, and live-video layers are not available from a presentation document render.")
+		}
+		if !mapping.presentationBackgroundEnabled || !mapping.presentationForegroundEnabled {
+			warnings.append("Presentation background/foreground layer switches are recorded by the Look but cannot yet be separated from cue actions during file rendering.")
+		}
+		return warnings
 	}
 
 	private static func workspacePaths(from input: URL) throws -> (root: URL, file: URL) {

@@ -13,7 +13,7 @@ public enum NativeSemanticError: Error, CustomStringConvertible, Sendable, Equat
 		case let .duplicateIdentity(path, identity): "Duplicate native identity \(identity) at \(path)."
 		case let .missingReference(path, identity): "Native reference at \(path) points to missing identity \(identity)."
 		case let .conflictingOrder(path): "Native and legacy ordering disagree at \(path); no ordering was guessed."
-		case let .unsupportedNode(path, kind): "Unsupported native placement kind \(kind) at \(path)."
+		case let .unsupportedNode(path, kind): "Unsupported native content \(kind) at \(path)."
 		}
 	}
 }

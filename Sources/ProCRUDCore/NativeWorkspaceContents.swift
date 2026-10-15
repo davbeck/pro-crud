@@ -170,12 +170,19 @@ public struct NativeWorkspaceReferenceResolver: Sendable {
 		try resolve(url, prefix: "Themes", suffix: "", index: themes)
 	}
 
-	private func resolve(_ url: NativeWorkspaceValue, prefix: String, suffix: String, index: [String: NativeWorkspaceStream.Identity]) throws -> NativeWorkspaceContents.Reference {
+	/// A Look belongs to the Workspace document. Its current-resource root is
+	/// that workspace, unlike a Theme slide's resource-relative media locator.
+	public func theme(inWorkspaceDocument url: NativeWorkspaceValue) throws -> NativeWorkspaceContents.Reference {
+		try resolve(url, prefix: "Themes", suffix: "", index: themes, workspaceResource: true)
+	}
+
+	private func resolve(_ url: NativeWorkspaceValue, prefix: String, suffix: String, index: [String: NativeWorkspaceStream.Identity], workspaceResource: Bool = false) throws -> NativeWorkspaceContents.Reference {
 		let object = try url.object(at: "/url")
 		guard let relative = object.optional("RelativeFilePath"), case let .map(relativeObject) = relative,
 		      relativeObject["__tag"] == .string("local"),
 		      let local = relativeObject.optional("local"), case let .map(localObject) = local,
-		      localObject["root"] == .integer(10), let path = localObject.optional("path")
+		      localObject["root"] == .integer(10) || (workspaceResource && localObject["root"] == .integer(12)),
+		      let path = localObject.optional("path")
 		else { return .init(source: url, logicalPath: nil, documentID: nil, availability: nil) }
 		let raw = try path.text(at: "/url/local/path")
 		let parts = raw.split(separator: "/", omittingEmptySubsequences: false)

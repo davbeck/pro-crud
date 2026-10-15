@@ -81,7 +81,9 @@ editing commands are not supported.
 
 ### Replacing Media Safely
 
-A media UUID identifies the asset, not merely the stored URL. Changing only
+In legacy-style interchange media, a UUID identifies the asset, not merely the
+stored URL. Native 22 separates occurrence references and asset UUIDs; native
+editing/packaging requires its identity adapter and remains gated. Changing only
 `rv.data.Media.url` can leave the document pointing at one file while
 ProPresenter's media registry associates the UUID with another. `edit patch`
 therefore rejects URL-only media changes unless `--allow-url-only` is passed for
