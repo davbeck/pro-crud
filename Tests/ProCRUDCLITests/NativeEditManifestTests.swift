@@ -104,6 +104,15 @@ struct NativeEditManifestTests {
 		#expect(try ProCRUD.parseAsRoot(["workspace", "arrangement-references", "/tmp/Exact"]) is WorkspaceArrangementReferences)
 	}
 
+	@Test func groupSplittingRequiresStableGroupAndTemplateIdentities() throws {
+		let stream = UUID(), cue = UUID(), group = UUID(), template = UUID()
+		let split: [String: Any] = ["stream": stream.uuidString, "op": "split-cue-group", "cue": cue.uuidString, "group": group.uuidString, "templateGroup": template.uuidString, "name": "New group"]
+		#expect(try decode([split]).first?.edit == .splitCueGroup(startingAt: cue, newID: group, template: template, name: "New group"))
+		for key in ["cue", "group", "templateGroup", "name"] {
+			#expect(throws: ValidationError.self) { try decode([split.filter { $0.key != key }]) }
+		}
+	}
+
 	private func decode(_ operations: [[String: Any]], version: Int = 1) throws -> [NativePresentationOperation] {
 		let data = try JSONSerialization.data(withJSONObject: ["version": version, "operations": operations])
 		return try NativeEditManifest.decode(data, relativeTo: URL(fileURLWithPath: "/tmp"))

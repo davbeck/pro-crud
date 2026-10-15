@@ -1,0 +1,28 @@
+{
+  "version": 1,
+  "operations": [
+    {
+      "stream": "BFA7B647-93AB-5EE6-B397-EC61B08BCFEE",
+      "op": "split-cue-group",
+      "cue": "2FABF989-5E73-4CCE-8139-33F50F483922",
+      "group": "D903E3F7-A2B7-4BD6-A089-E47DD62FCC40",
+      "templateGroup": "B153A269-3E18-4753-B68C-42629FA3A427",
+      "name": "CLI Split Group"
+    },
+    {
+      "stream": "BFA7B647-93AB-5EE6-B397-EC61B08BCFEE",
+      "op": "set-arrangement-groups",
+      "arrangement": "C049469C-FC98-4BAA-BAF3-290846452E5D",
+      "groups": [
+        "58FFCB48-ABA1-4C54-9FDE-12CB23439550",
+        "D903E3F7-A2B7-4BD6-A089-E47DD62FCC40",
+        "D903E3F7-A2B7-4BD6-A089-E47DD62FCC40"
+      ]
+    },
+    {
+      "stream": "BFA7B647-93AB-5EE6-B397-EC61B08BCFEE",
+      "op": "select-arrangement",
+      "arrangement": "C049469C-FC98-4BAA-BAF3-290846452E5D"
+    }
+  ]
+}

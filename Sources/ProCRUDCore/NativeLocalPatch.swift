@@ -12,6 +12,7 @@ public enum NativePresentationEdit: Codable, Sendable, Equatable {
 	case slideText(actionID: UUID, elementID: UUID, content: NativeSlideTextContent)
 	case moveCue(UUID, after: UUID)
 	case transferCue(UUID, to: UUID, after: UUID?)
+	case splitCueGroup(startingAt: UUID, newID: UUID, template: UUID, name: String)
 	case cueGroupName(UUID, String)
 	case arrangementGroups(UUID, [UUID])
 	case arrangementName(UUID, String)
@@ -131,6 +132,8 @@ public struct NativeLocalPatch: Sendable {
 			guard let group = layout.groups.first(where: { $0.id == groupID }) else { throw NativeSemanticError.missingReference(path: "/cue_group_placements", identity: groupID.uuidString) }
 			guard group.name != name else { return }
 			try NativeStructuralEditing.rename(group: group, to: name, root: root)
+		case let .splitCueGroup(cueID, newID, templateID, name):
+			try NativeGroupCreation.split(startingAt: cueID, newID: newID, templateID: templateID, name: name, layout: layout, root: root)
 		case let .arrangementGroups(arrangementID, groups):
 			guard let index = layout.arrangements.firstIndex(where: { $0.id == arrangementID }) else { throw NativeSemanticError.missingReference(path: "/arrangements", identity: arrangementID.uuidString) }
 			for id in groups where !layout.groups.contains(where: { $0.id == id }) {

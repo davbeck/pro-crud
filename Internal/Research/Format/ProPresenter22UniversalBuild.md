@@ -1,6 +1,6 @@
 # Universal CLI qualification
 
-October 15, 2026, macOS **27.0.1** on arm64. Checkpoint **468ddbb**.
+October 15, 2026, macOS **27.0.1** on arm64. Checkpoints **468ddbb** and **a659c5f**.
 This is local QA, not a published or notarized release.
 
 `swift build -c release --arch arm64 --arch x86_64 --product pro-crud` succeeds
@@ -25,3 +25,7 @@ No installation or Intel host is required to continue local implementation.
 Intel runtime coverage is a separate remaining qualification. Developer ID
 signing, installer/notarization, and the complete transitive Rust license audit
 remain release gates; ad-hoc signing does not satisfy those gates.
+
+The a659c5f universal rebuild also passes strict local ad-hoc signature
+verification, the full CLI acceptance script and all 385 retained native
+projections. This includes the menu-map adapter and unknown-oneof diagnostics.

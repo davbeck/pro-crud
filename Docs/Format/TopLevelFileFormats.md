@@ -193,6 +193,7 @@ of the application version. The same stopped-writer/local-registration rules app
 | `move-cue` | `cue` and `after` UUIDs in the same group |
 | `transfer-cue` | `cue` and destination `group` UUIDs; optional `after` UUID, otherwise append |
 | `rename-cue-group` | `group` UUID and nonempty `name` |
+| `split-cue-group` | `cue` UUID, new `group` UUID, existing `templateGroup` UUID in this Presentation and nonempty `name` |
 | `set-arrangement-groups` | `arrangement` UUID and ordered `groups` UUID array, including repeats or an empty array |
 | `rename-arrangement` | `arrangement` UUID and nonempty `name`; retains identity, sequence and selection |
 | `select-arrangement` | `arrangement` UUID, or explicit JSON `null` to select Master; omitting the field is an error |
@@ -200,6 +201,17 @@ of the application version. The same stopped-writer/local-registration rules app
 | `duplicate-arrangement` | Source `arrangement` UUID, new `newArrangement` UUID, nonempty `name` and explicit `select` Boolean; appends a copy of the repeated group sequence |
 | `remove-arrangement` | Existing `arrangement` UUID; removes its definition and selects Master if it was selected |
 | `clear-document-action-arrangement` | `action` UUID of a Presentation cue's document action; clears only its arrangement selector |
+
+Splitting requires a cue after the first cue of its current group. It creates a
+new group immediately after that group and moves the selected cue and following
+cues into it, retaining their placement-node identities and Master order. The
+template supplies color, hotkey and application-group link; an explicit name
+retains those copied values. Unmapped template metadata blocks copying.
+Existing arrangements remain unchanged, so include `set-arrangement-groups` in
+the same batch to use the new group in an arrangement. Stable group identity,
+matching metadata and the same starting cue make a replay a no-op; conflicting
+identity reuse fails. Empty-group creation and splitting at a group's first cue
+are not supported by this operation.
 
 Creation accepts repeated groups or an empty array and retains every existing
 arrangement and cue. Stable caller-supplied UUIDs allow a matching creation or

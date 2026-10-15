@@ -113,6 +113,9 @@ enum NativeEditManifest {
 			case .renameCueGroup:
 				fields = ["group", "name"]
 				payload = try .edit(.cueGroupName(container.decode(UUID.self, forKey: .group), container.decode(String.self, forKey: .name)))
+			case .splitCueGroup:
+				fields = ["cue", "group", "templateGroup", "name"]
+				payload = try .edit(.splitCueGroup(startingAt: container.decode(UUID.self, forKey: .cue), newID: container.decode(UUID.self, forKey: .group), template: container.decode(UUID.self, forKey: .templateGroup), name: container.decode(String.self, forKey: .name)))
 			case .setArrangementGroups:
 				fields = ["arrangement", "groups"]
 				payload = try .edit(.arrangementGroups(container.decode(UUID.self, forKey: .arrangement), container.decode([UUID].self, forKey: .groups)))
@@ -148,6 +151,7 @@ enum NativeEditManifest {
 		case moveCue = "move-cue"
 		case transferCue = "transfer-cue"
 		case renameCueGroup = "rename-cue-group"
+		case splitCueGroup = "split-cue-group"
 		case setArrangementGroups = "set-arrangement-groups"
 		case renameArrangement = "rename-arrangement"
 		case selectArrangement = "select-arrangement"
@@ -158,7 +162,7 @@ enum NativeEditManifest {
 	}
 
 	private enum Key: String, CodingKey {
-		case version, operations, stream, op, title, text, action, element, rtfFile, cue, after, group, name, arrangement, groups, newArrangement, select
+		case version, operations, stream, op, title, text, action, element, rtfFile, cue, after, group, name, arrangement, groups, newArrangement, select, templateGroup
 	}
 
 	private struct AnyKey: CodingKey {

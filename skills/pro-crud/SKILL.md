@@ -105,6 +105,15 @@ with explicit `stream` UUID and `op` fields; see the installed format reference
 for operation-specific fields. All operations prepare before one atomic commit,
 with ordered edits within each Presentation, one receipt per changed document
 and no changes if any operation fails. RTF paths are relative to the manifest.
+Batch `split-cue-group` uses a `cue` UUID after the first cue of its group, a new
+`group` UUID, an existing `templateGroup` UUID in the same Presentation and an
+explicit `name`. The selected cue and following cues form a new group directly
+after the source group, preserving Master order and cue-node identities. Color,
+hotkey and application-group link are copied from the template and retained
+with the new name. Unmapped template metadata blocks copying. Existing
+arrangements stay unchanged; add `set-arrangement-groups` in the same batch when
+the new group belongs in an arrangement. Matching stable-ID replay makes no
+change. This operation does not create an empty group or split at its first cue.
 Native batches also accept `rename-arrangement` with `arrangement` UUID and
 `name`, and `select-arrangement` with `arrangement` UUID or explicit JSON `null`
 for Master. Naming preserves the group sequence; selection preserves all
