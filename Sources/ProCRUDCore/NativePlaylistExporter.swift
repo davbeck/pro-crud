@@ -83,7 +83,7 @@ public enum NativePlaylistExporter {
 					dependencies.append(.init(documentID: id, archivePath: "Presentations/\(id.uuidString.lowercased())/\(name).pro"))
 				}
 				if link.hasArrangement, !link.arrangement.string.isEmpty {
-					guard let arrangement = UUID(uuidString: link.arrangement.string), presentations[id]?.arrangements.filter({ UUID(uuidString: $0.uuid.string) == arrangement }).count == 1 else {
+					guard let arrangement = UUID(uuidString: link.arrangement.string), presentations[id]?.arrangements.count(where: { UUID(uuidString: $0.uuid.string) == arrangement }) == 1 else {
 						throw NativeSemanticError.missingReference(path: "\(path)/arrangement", identity: link.arrangement.string)
 					}
 				}

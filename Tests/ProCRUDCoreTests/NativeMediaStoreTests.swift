@@ -28,7 +28,7 @@ struct NativeMediaStoreTests {
 		let occurrences = try JSONDecoder().decode([NativeMediaInventory.Occurrence].self, from: Data(contentsOf: modelFixtures.appendingPathComponent("ObservedOccurrences.json")))
 		let associations = NativeMediaStoreAssociation.inspect(occurrences, in: store)
 		#expect(occurrences.filter { !$0.localFilesAvailable }.isEmpty)
-		#expect(associations.filter { $0.status == .matched }.count == 2)
+		#expect(associations.count(where: { $0.status == .matched }) == 2)
 		let mismatch = try #require(associations.first { $0.status == .differentAsset })
 		#expect(mismatch.declaredAssetID == "c9d1f3fa-0a66-59ea-8e21-2a8dc07cc848")
 		#expect(mismatch.materializedAssetID == UUID(uuidString: "e9d88797-3cdd-5d73-9d15-e403549de005"))

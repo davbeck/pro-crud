@@ -130,6 +130,7 @@ try drawFrame(second: nil, completedDots: 0, into: &posterPixels)
 guard let posterProvider = CGDataProvider(data: posterPixels as CFData) else {
 	throw CocoaError(.coderInvalidValue)
 }
+
 guard let posterImage = CGImage(
 	width: width,
 	height: height,

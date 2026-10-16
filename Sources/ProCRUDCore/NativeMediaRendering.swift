@@ -59,7 +59,7 @@ enum NativeMediaRendering {
 				let index = occurrences[field.number, default: 0]
 				occurrences[field.number] = index + 1
 				if let replacement = replaced[field.number] {
-					if index == wire.fields.filter({ $0.number == field.number }).count - 1 {
+					if index == wire.fields.count(where: { $0.number == field.number }) - 1 {
 						output.append(ProtobufJSONPatcher.WireField.lengthDelimited(number: field.number, payload: replacement).raw)
 					}
 				} else if let descriptor = descriptor.fields.first(where: { $0.number == field.number }), descriptor.isRepeated, descriptor.isMessage, let nested = descriptor.typeName, let payload = field.payload {

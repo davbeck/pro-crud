@@ -27,7 +27,7 @@ struct NativePlaylistProjectionTests {
 			// The hidden occurrence is retained in the file but ordinary playlist
 			// rendering continues to select only the visible occurrence.
 			#expect(try PresentationLoader.loadPresentations(from: output).count == 1)
-			#expect(loaded.archiveEntries.filter { $0.hasSuffix(".pro") }.count == 1)
+			#expect(loaded.archiveEntries.count(where: { $0.hasSuffix(".pro") }) == 1)
 		}
 	}
 

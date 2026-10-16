@@ -50,7 +50,7 @@ struct DocumentCompatibilityTests {
 			let document = try DocumentLoader.load(from: source)
 			let report = try DocumentCompatibility.analyze(document, target: .v21)
 			#expect(!report.canWrite)
-			#expect(report.issues.filter { $0.feature == "unknown-field" }.count == 2)
+			#expect(report.issues.count(where: { $0.feature == "unknown-field" }) == 2)
 			#expect(report.issues.contains { $0.feature == "unknown-enum-value" && $0.componentPath.contains("/actions[index=0]/type") })
 			#expect(report.issues.allSatisfy { $0.targetVersion == .v21 && $0.availableConversion == "unsupported" })
 			let output = root.appendingPathComponent("Existing.probundle")

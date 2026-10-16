@@ -142,7 +142,7 @@ public enum DocumentCompatibility {
 			let descriptor = try selectedSchema.message(named: message)
 			let known = Dictionary(uniqueKeysWithValues: descriptor.fields.map { ($0.number, $0) })
 			let fields = try ProtobufJSONPatcher.WireField.parse(data)
-			if message == "rv.data.TimedPlayback.Sequence", target == .v21, fields.filter({ $0.number == 3 }).count > 1 {
+			if message == "rv.data.TimedPlayback.Sequence", target == .v21, fields.count(where: { $0.number == 3 }) > 1 {
 				append("multi-presentation-timeline", path: "\(path)/presentations", unsupported: true, message: "ProPresenter 21.4 has one embedded timeline Presentation. Multiple 22 messages would merge and lose identity/ordering; no flattening conversion is qualified.")
 			}
 			var occurrences: [Int: Int] = [:]

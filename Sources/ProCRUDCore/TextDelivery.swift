@@ -90,7 +90,7 @@ enum TextDelivery {
 				order.insert(reference, at: position)
 			} else {
 				let anchor = oldOrder.firstIndex { oldIDs.contains($0.string) }
-				let position = anchor.map { oldOrder[..<$0].filter { ref in order.contains { $0.string == ref.string } }.count }
+				let position = anchor.map { oldOrder[..<$0].count(where: { ref in order.contains { $0.string == ref.string } }) }
 					?? order.firstIndex { element.hasBuildOut && $0.string == element.buildOut.uuid.string }
 					?? order.count
 				order.insert(reference, at: position)
