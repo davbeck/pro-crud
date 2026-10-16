@@ -113,6 +113,15 @@ struct NativeEditManifestTests {
 		}
 	}
 
+	@Test func mediaRemovalRequiresAnActionUUIDAndCannotRequestFileDeletion() throws {
+		let stream = UUID(), action = UUID()
+		let remove: [String: Any] = ["stream": stream.uuidString, "op": "remove-media-action", "action": action.uuidString]
+		#expect(try decode([remove]).first?.edit == .removeMediaAction(action))
+		#expect(throws: ValidationError.self) { try decode([remove.filter { $0.key != "action" }]) }
+		#expect(throws: ValidationError.self) { try decode([remove.merging(["action": "bad"]) { _, new in new }]) }
+		#expect(throws: ValidationError.self) { try decode([remove.merging(["deleteFiles": true]) { _, new in new }]) }
+	}
+
 	private func decode(_ operations: [[String: Any]], version: Int = 1) throws -> [NativePresentationOperation] {
 		let data = try JSONSerialization.data(withJSONObject: ["version": version, "operations": operations])
 		return try NativeEditManifest.decode(data, relativeTo: URL(fileURLWithPath: "/tmp"))

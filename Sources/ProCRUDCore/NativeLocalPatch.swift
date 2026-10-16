@@ -21,6 +21,7 @@ public enum NativePresentationEdit: Codable, Sendable, Equatable {
 	case duplicateArrangement(UUID, newID: UUID, name: String, select: Bool)
 	case removeArrangement(UUID)
 	case clearDocumentActionArrangement(UUID)
+	case removeMediaAction(UUID)
 }
 
 public enum NativeSlideNotesContent: Codable, Sendable, Equatable {
@@ -163,6 +164,9 @@ public struct NativeLocalPatch: Sendable {
 			      let properties = stored.get(key: "ActionTypeData")?.asLoroMap()?.get(key: "presentation_document")?.asLoroMap()
 			else { throw NativeSemanticError.invalidValue(path: "/actions/\(actionID)/presentation_document", expected: "native document-action maps") }
 			try properties.insert(key: "selected_arrangement", v: LoroValue.null)
+		case let .removeMediaAction(actionID):
+			let presentation = try NativeProtobufProjection.read(identity: identity, source: value).presentation()
+			try NativeMediaActionEditing.remove(actionID, presentation: presentation, root: root)
 		case let .removeArrangement(arrangementID):
 			guard let index = layout.arrangements.firstIndex(where: { $0.id == arrangementID }) else { throw NativeSemanticError.missingReference(path: "/arrangements", identity: arrangementID.uuidString) }
 			_ = try NativeProtobufProjection.read(identity: identity, source: value).presentation()

@@ -25,6 +25,14 @@ tombstone validation, and explicit declared-versus-materialized associations.
 File availability stays independent. Production asset-store writes still
 require controlled native mutation qualification.
 
+`../Research/Format/ProPresenter22MediaActionEditing.md` qualifies removing a
+media action from a slide cue through `workspace apply`, using independent
+native media/background-media controls, atomic production rollback/no-op checks,
+exact native reopen, continued group editing and independent export. Native
+reference adoption/tombstoning is observed across helper restarts; the writer
+does not touch media-store files or managed assets. Media replacement, creation
+and broader file transactions remain separate work.
+
 | Plan area | Implemented | Remaining gate/work |
 | --- | --- | --- |
 | Storage boundary | Explicit-root storage inspection and explicit macOS userWorkspaces preference discovery with active/minimum-version hints kept separate from actual storage; native markers take precedence over leftovers; expanded exports distinguished; native access rejected in legacy readers/writers/Look/media/batch paths | Broader ambiguous/mixed fixture matrix |

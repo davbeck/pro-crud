@@ -201,6 +201,7 @@ of the application version. The same stopped-writer/local-registration rules app
 | `duplicate-arrangement` | Source `arrangement` UUID, new `newArrangement` UUID, nonempty `name` and explicit `select` Boolean; appends a copy of the repeated group sequence |
 | `remove-arrangement` | Existing `arrangement` UUID; removes its definition and selects Master if it was selected |
 | `clear-document-action-arrangement` | `action` UUID of a Presentation cue's document action; clears only its arrangement selector |
+| `remove-media-action` | `action` UUID of a media/foreground/background action in a cue with a presentation slide; an absent action is a no-op |
 
 Splitting requires a cue after the first cue of its current group. It creates a
 new group immediately after that group and moves the selected cue and following
@@ -230,6 +231,14 @@ the final batch graph and rechecks the entire inspected stream set inside its
 SQLite transaction, including added/removed streams. It never removes links
 implicitly. An already absent arrangement is an error; clearing an already
 empty document-action selector makes no change.
+
+Media-action removal deletes the selected action from its existing native list,
+retaining the cue, slide action, other actions, groups and arrangements. An
+active after-action completion selector targeting that action blocks removal;
+choose another completion source in ProPresenter first. The operation does not
+delete files or write MediaStore records. ProPresenter rematerializes reference
+tombstones when reopening the saved document. Media-only cue removal, media
+replacement and media-file transactions remain unsupported.
 
 Every operation requires `stream` and `op`. Unknown keys, operations and manifest
 versions fail. Native editing preserves the source storage generation; target

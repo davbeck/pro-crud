@@ -38,3 +38,12 @@ acceptance pass. An explicit `workspace inventory --projections` reports all
 still reports exactly two links and zero uninspected streams. This verifies the
 actual universal product, separately from the debug tests. The 727ede9 build
 also completed; 153124d supersedes it for this qualification.
+
+Checkpoint **b51e238** adds the native MediaStore reader and pinned xxHash
+checksum bridge. Both release architectures build in 145.45 seconds. Local
+ad-hoc hardened signing, strict signature verification, full CLI/resource/skill
+acceptance and all **385** native projections pass with zero projection failures
+or issues. The signed product also reads the actual test workspace's MediaStore
+and all 81 file associations. The xxHash BSD notice is now required in both
+release staging and installer payload verification. Developer ID/notarization
+and the existing transitive Rust audit remain separate release work.

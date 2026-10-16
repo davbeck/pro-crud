@@ -131,6 +131,9 @@ enum NativeEditManifest {
 			case .clearDocumentActionArrangement:
 				fields = ["action"]
 				payload = try .edit(.clearDocumentActionArrangement(container.decode(UUID.self, forKey: .action)))
+			case .removeMediaAction:
+				fields = ["action"]
+				payload = try .edit(.removeMediaAction(container.decode(UUID.self, forKey: .action)))
 			case .removeArrangement:
 				fields = ["arrangement"]
 				payload = try .edit(.removeArrangement(container.decode(UUID.self, forKey: .arrangement)))
@@ -159,6 +162,7 @@ enum NativeEditManifest {
 		case duplicateArrangement = "duplicate-arrangement"
 		case removeArrangement = "remove-arrangement"
 		case clearDocumentActionArrangement = "clear-document-action-arrangement"
+		case removeMediaAction = "remove-media-action"
 	}
 
 	private enum Key: String, CodingKey {

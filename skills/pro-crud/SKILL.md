@@ -139,6 +139,12 @@ with an `action` UUID clears only a Presentation cue document-action selector;
 combine explicit unlinking and deletion in one batch. Remove other links in
 ProPresenter first. Document-action targets may remain unresolved; matching
 selectors still protect their arrangement definitions.
+Batch `remove-media-action` accepts an `action` UUID in a cue with a presentation
+slide. It retains the cue/other actions and makes an absent UUID a no-op. A cue's
+active after-action completion selector blocks removal of its source action.
+This removes the action, preserves media files and lets ProPresenter update its
+reference records on reopen. Media-only cue removal and native media replacement
+remain gated.
 Use `workspace transfer-cue ROOT --stream UUID --cue CUE_UUID --group GROUP_UUID
 --registry PATH` to transfer ownership into an existing group. Omit `--after` to
 append or name a cue in the destination group. Cue and placement identities are

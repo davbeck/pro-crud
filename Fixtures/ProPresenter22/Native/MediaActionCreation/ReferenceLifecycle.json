@@ -1,0 +1,89 @@
+{
+  "created": {
+    "assetID": "FE240A1B-DE9A-5518-976E-4C72A07A65A4",
+    "id": "BBBFB028-5753-43D8-A264-9392E194692A",
+    "projectionOwned": false,
+    "tombstoned": false,
+    "transformationID": "504A4F93-51EE-46CD-BBBB-71E056ECC2C4"
+  },
+  "beforeRemoval": {
+    "assetID": "FE240A1B-DE9A-5518-976E-4C72A07A65A4",
+    "id": "BBBFB028-5753-43D8-A264-9392E194692A",
+    "projectionOwned": true,
+    "tombstoned": false,
+    "transformationID": "504A4F93-51EE-46CD-BBBB-71E056ECC2C4"
+  },
+  "immediateRemoval": {
+    "assetID": "FE240A1B-DE9A-5518-976E-4C72A07A65A4",
+    "id": "BBBFB028-5753-43D8-A264-9392E194692A",
+    "projectionOwned": true,
+    "tombstoned": false,
+    "transformationID": "504A4F93-51EE-46CD-BBBB-71E056ECC2C4"
+  },
+  "reopenedRemoval": {
+    "assetID": "FE240A1B-DE9A-5518-976E-4C72A07A65A4",
+    "id": "BBBFB028-5753-43D8-A264-9392E194692A",
+    "projectionOwned": true,
+    "tombstoned": true,
+    "transformationID": "504A4F93-51EE-46CD-BBBB-71E056ECC2C4"
+  },
+  "cliReopened": [
+    {
+      "assetID": "322E4D08-CBA2-4B08-BD43-842AE317F6DF",
+      "id": "03FAED06-5361-5B33-A317-731F3D4E3C81",
+      "projectionOwned": true,
+      "tombstoned": true,
+      "transformationID": "7D4A0FD4-4CF2-4AE8-B251-8FC5A940C1AA"
+    },
+    {
+      "assetID": "322E4D08-CBA2-4B08-BD43-842AE317F6DF",
+      "id": "8AC453EB-29F3-593E-AAD0-7E1F085984AD",
+      "projectionOwned": true,
+      "tombstoned": true,
+      "transformationID": "33D2461C-111A-4F49-BD89-B3A450A3A06E"
+    }
+  ],
+  "sharedAsset": {
+    "availability": "Ready",
+    "height": 480,
+    "id": "322E4D08-CBA2-4B08-BD43-842AE317F6DF",
+    "mediaType": "Image",
+    "nativeChecksum": [
+      155,
+      203,
+      194,
+      192,
+      62,
+      126,
+      70,
+      208,
+      119,
+      230,
+      133,
+      79,
+      169,
+      199,
+      159,
+      214,
+      243,
+      15,
+      76,
+      105,
+      163,
+      129,
+      9,
+      219,
+      6,
+      122,
+      87,
+      31,
+      212,
+      35,
+      1,
+      222
+    ],
+    "purged": false,
+    "storedPath": "/Users/davbeck/Library/Application Support/RenewedVision/ProPresenter/Workspaces/9f65d640-6477-441e-9b71-70ef74bb12d7/Media/Assets/SharedRectangle.png",
+    "width": 854
+  }
+}
