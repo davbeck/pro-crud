@@ -211,6 +211,8 @@ core_resource_path_prefix="${core_resource_root#"$staging_directory/"}"
 cli_resource_path_prefix="${cli_resource_root#"$staging_directory/"}"
 required_resource_bundle_paths=(
 	"$core_resource_path_prefix/Protobuf/schema.pb"
+	"$core_resource_path_prefix/Protobuf21/schema.pb"
+	"$core_resource_path_prefix/Protobuf22/schema.pb"
 	"$cli_resource_path_prefix/Format/README.md"
 	"$cli_resource_path_prefix/Protobuf/content-sha256.txt"
 	"$cli_resource_path_prefix/Protobuf/proto/proApi.proto"
@@ -296,6 +298,15 @@ fi
 cp "$swift_protobuf_license" \
 	"$staging_directory/LICENSE-SwiftProtobuf.txt"
 
+loro_license=$(find "$arm_scratch_path/checkouts" \
+	-path '*/loro-swift/LICENSE' -print -quit)
+if [[ -z "$loro_license" ]]; then
+	echo "Could not locate the Loro Swift license." >&2
+	exit 1
+fi
+cp "$loro_license" "$staging_directory/LICENSE-Loro.txt"
+cp "$project_root/Sources/CXXHash/LICENSE.txt" "$staging_directory/LICENSE-xxHash.txt"
+
 if [[ "$($binary --version)" != "$version" ]]; then
 	echo "Built binary did not report version $version." >&2
 	exit 1
@@ -360,6 +371,8 @@ install -m 644 \
 	"$staging_directory/LICENSE" \
 	"$staging_directory/LICENSE-SwiftArgumentParser.txt" \
 	"$staging_directory/LICENSE-SwiftProtobuf.txt" \
+	"$staging_directory/LICENSE-Loro.txt" \
+	"$staging_directory/LICENSE-xxHash.txt" \
 	"$package_license_directory/"
 mkdir -p "$package_scripts"
 install -m 755 "$project_root/Packaging/Scripts/preinstall" \
@@ -405,6 +418,8 @@ required_package_files=(
 	"usr/local/share/doc/pro-crud/LICENSE"
 	"usr/local/share/doc/pro-crud/LICENSE-SwiftArgumentParser.txt"
 	"usr/local/share/doc/pro-crud/LICENSE-SwiftProtobuf.txt"
+	"usr/local/share/doc/pro-crud/LICENSE-Loro.txt"
+	"usr/local/share/doc/pro-crud/LICENSE-xxHash.txt"
 )
 for required_resource_bundle_path in "${required_resource_bundle_paths[@]}"; do
 	required_package_files+=(

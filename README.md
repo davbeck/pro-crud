@@ -6,12 +6,23 @@ files.
 
 It works directly with documents on disk using a reverse-engineered implementation.
 
+ProPresenter 21 protobuf documents and selected ProPresenter 22 beta exports
+are supported. Run `pro-crud workspace inspect /exact/root` before choosing
+workspace paths. Native 22 SQLite/Loro inspection, supported static rendering
+(including local image/video files), media-free exports, and selected local
+metadata/group/arrangement edits are available.
+Native edit batches commit atomically with exact local registration and stopped
+workspace writers. Other native workflows use ProPresenter's export/import path.
+See the [storage compatibility reference](Docs/Format/TopLevelFileFormats.md).
+
 ProPresenter is a trademark of Renewed Vision, LLC. pro-crud is an independent, unofficial project and is not affiliated with, endorsed by, or supported by Renewed Vision.
 
 ## Features
 
 - Inspect documents as readable text, semantic JSON, or known-schema protobuf JSON.
 - Create presentations, themes, and playlists.
+- Select 21/22 output compatibility profiles with `--target-version` on create
+  and bundle commands; inspect structured conversion limits with `compatibility`.
 - Edit raw documents and exported archives without rebuilding unrelated archive
   entries.
 - Apply ordered edit batches atomically.
@@ -248,6 +259,13 @@ pro-crud expand Welcome.probundle --output Welcome
 pro-crud bundle Welcome.pro --output Welcome.probundle
 ```
 
+A Presentation Bundle can contain several presentations. Rendering loads all
+of them into separate output folders. Expand a collection and select its exact
+`.pro` file for editing; single-document operations reject ambiguous bundles.
+`bundle DIRECTORY` includes every supported root presentation and validates
+them all before replacing output. Native media/configuration adapters remain
+required where reported by compatibility checks.
+
 Create a presentation with one blank slide:
 
 ```sh
@@ -478,6 +496,10 @@ pro-crud skill install --agent codex --agent cursor
 ## License
 
 `pro-crud` is available under the [MIT License](LICENSE).
+
+Native workspace inspection uses the official [Loro Swift binding](https://github.com/loro-dev/loro-swift)
+and its [MIT license](https://github.com/loro-dev/loro-swift/blob/1.13.3/LICENSE).
+The pinned binary includes macOS arm64 and x86_64 slices. SQLite is supplied by macOS.
 
 The vendored ProPresenter Protocol Buffer definitions retain their upstream
 [MIT license and attribution](Vendor/ProPresenter7Proto/LICENSE).

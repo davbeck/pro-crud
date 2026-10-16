@@ -15,14 +15,14 @@ import SwiftProtobuf
 // incompatible with the version of SwiftProtobuf to which you are linking.
 // Please ensure that you are building against the same version of the API
 // that was used to generate this file.
-fileprivate struct _GeneratedWithProtocGenSwiftVersion: SwiftProtobuf.ProtobufAPIVersionCheck {
+fileprivate nonisolated struct _GeneratedWithProtocGenSwiftVersion: SwiftProtobuf.ProtobufAPIVersionCheck {
   struct _2: SwiftProtobuf.ProtobufAPIVersion_2 {}
   typealias Version = _2
 }
 
 /// Theme document data. Template slides are copied into presentations; a presentation
 /// does not persist a live link back to this document.
-public struct Rv_Data_Template: Sendable {
+public nonisolated struct Rv_Data_Template: Sendable {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
   // methods supported on all messages.
@@ -30,17 +30,17 @@ public struct Rv_Data_Template: Sendable {
   public var unknownFields = SwiftProtobuf.UnknownStorage()
 
   /// Reusable slide data and any actions associated with that template.
-  public struct Slide: Sendable {
+  public nonisolated struct Slide: Sendable {
     // SwiftProtobuf.Message conformance is added in an extension below. See the
     // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
     // methods supported on all messages.
 
     public var baseSlide: Rv_Data_Slide {
-      get {return _baseSlide ?? Rv_Data_Slide()}
+      get {_baseSlide ?? Rv_Data_Slide()}
       set {_baseSlide = newValue}
     }
     /// Returns true if `baseSlide` has been explicitly set.
-    public var hasBaseSlide: Bool {return self._baseSlide != nil}
+    public var hasBaseSlide: Bool {self._baseSlide != nil}
     /// Clears the value of `baseSlide`. Subsequent reads from it will return its default value.
     public mutating func clearBaseSlide() {self._baseSlide = nil}
 
@@ -55,17 +55,17 @@ public struct Rv_Data_Template: Sendable {
     fileprivate var _baseSlide: Rv_Data_Slide? = nil
   }
 
-  public struct Document: Sendable {
+  public nonisolated struct Document: Sendable {
     // SwiftProtobuf.Message conformance is added in an extension below. See the
     // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
     // methods supported on all messages.
 
     public var applicationInfo: Rv_Data_ApplicationInfo {
-      get {return _applicationInfo ?? Rv_Data_ApplicationInfo()}
+      get {_applicationInfo ?? Rv_Data_ApplicationInfo()}
       set {_applicationInfo = newValue}
     }
     /// Returns true if `applicationInfo` has been explicitly set.
-    public var hasApplicationInfo: Bool {return self._applicationInfo != nil}
+    public var hasApplicationInfo: Bool {self._applicationInfo != nil}
     /// Clears the value of `applicationInfo`. Subsequent reads from it will return its default value.
     public mutating func clearApplicationInfo() {self._applicationInfo = nil}
 
@@ -83,9 +83,9 @@ public struct Rv_Data_Template: Sendable {
 
 // MARK: - Code below here is support for the SwiftProtobuf runtime.
 
-fileprivate let _protobuf_package = "rv.data"
+fileprivate nonisolated let _protobuf_package = "rv.data"
 
-extension Rv_Data_Template: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+nonisolated extension Rv_Data_Template: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   public static let protoMessageName: String = _protobuf_package + ".Template"
   public static let _protobuf_nameMap = SwiftProtobuf._NameMap()
 
@@ -104,7 +104,7 @@ extension Rv_Data_Template: SwiftProtobuf.Message, SwiftProtobuf._MessageImpleme
   }
 }
 
-extension Rv_Data_Template.Slide: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+nonisolated extension Rv_Data_Template.Slide: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   public static let protoMessageName: String = Rv_Data_Template.protoMessageName + ".Slide"
   public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{3}base_slide\0\u{1}name\0\u{1}actions\0")
 
@@ -148,7 +148,7 @@ extension Rv_Data_Template.Slide: SwiftProtobuf.Message, SwiftProtobuf._MessageI
   }
 }
 
-extension Rv_Data_Template.Document: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+nonisolated extension Rv_Data_Template.Document: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   public static let protoMessageName: String = Rv_Data_Template.protoMessageName + ".Document"
   public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{3}application_info\0\u{2}\u{2}slides\0")
 

@@ -5,17 +5,25 @@ repo_root="$(cd "$(dirname "$0")/.." && pwd)"
 source_root="$repo_root/Vendor/ProPresenter7Proto/proto"
 core_destination_root="$repo_root/Sources/ProCRUDCore/Resources/Protobuf"
 cli_destination_root="$repo_root/Sources/ProCRUDCLI/Resources/Protobuf"
+native_source="$repo_root/Vendor/ProPresenter22Proto/schema.pb"
+native_destination_root="$repo_root/Sources/ProCRUDCore/Resources/Protobuf22"
+baseline_source_root="$repo_root/Vendor/ProPresenter21Proto/proto"
+baseline_destination_root="$repo_root/Sources/ProCRUDCore/Resources/Protobuf21"
 
 case "${1:-}" in
   "")
     core_output_root="$core_destination_root"
     cli_output_root="$cli_destination_root"
+    native_output_root="$native_destination_root"
+    baseline_output_root="$baseline_destination_root"
     ;;
   --check)
     temporary_root="$(mktemp -d)"
     trap 'rm -rf "$temporary_root"' EXIT
     core_output_root="$temporary_root/CoreProtobuf"
     cli_output_root="$temporary_root/CLIProtobuf"
+    native_output_root="$temporary_root/NativeProtobuf"
+    baseline_output_root="$temporary_root/BaselineProtobuf"
     ;;
   *)
     echo "Usage: Scripts/sync-protobuf-assets.sh [--check]" >&2
@@ -23,8 +31,14 @@ case "${1:-}" in
     ;;
 esac
 
-rm -rf "$core_output_root" "$cli_output_root"
-mkdir -p "$core_output_root" "$cli_output_root/proto/google/protobuf"
+rm -rf "$core_output_root" "$cli_output_root" "$native_output_root" "$baseline_output_root"
+mkdir -p "$core_output_root" "$cli_output_root/proto/google/protobuf" "$native_output_root" "$baseline_output_root"
+cp "$native_source" "$native_output_root/schema.pb"
+baseline_protos=()
+while IFS= read -r proto; do
+  baseline_protos+=("$proto")
+done < <(find "$baseline_source_root" -maxdepth 1 -name '*.proto' -print | sort)
+protoc --include_imports --descriptor_set_out="$baseline_output_root/schema.pb" -I"$baseline_source_root" "${baseline_protos[@]}"
 cp "$source_root"/*.proto "$cli_output_root/proto/"
 cp "$source_root/google/protobuf/wrappers.proto" "$cli_output_root/proto/google/protobuf/"
 cp "$repo_root/Vendor/ProPresenter7Proto/LICENSE" "$cli_output_root/LICENSE"
@@ -44,4 +58,6 @@ git -C "$repo_root" log -1 --format=%H -- "Vendor/ProPresenter7Proto/proto" > "$
 if [[ "${1:-}" == "--check" ]]; then
   diff -ru "$core_destination_root" "$core_output_root"
   diff -ru "$cli_destination_root" "$cli_output_root"
+  diff -ru "$native_destination_root" "$native_output_root"
+  diff -ru "$baseline_destination_root" "$baseline_output_root"
 fi

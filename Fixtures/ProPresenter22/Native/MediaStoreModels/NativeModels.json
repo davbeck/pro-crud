@@ -1,0 +1,294 @@
+[
+  {
+    "key": "__rv_media_store_schema",
+    "value": {
+      "application_id": "com.renewedvision.media-store",
+      "version": 1
+    }
+  },
+  {
+    "key": "helper_workspaces::db::models::asset::Asset:322e4d08-cba2-4b08-bd43-842ae317f6df",
+    "value": {
+      "key": "322e4d08-cba2-4b08-bd43-842ae317f6df",
+      "url": "/Users/davbeck/Library/Application Support/RenewedVision/ProPresenter/Workspaces/9f65d640-6477-441e-9b71-70ef74bb12d7/Media/Assets/SharedRectangle.png",
+      "checksum": [
+        155,
+        203,
+        194,
+        192,
+        62,
+        126,
+        70,
+        208,
+        119,
+        230,
+        133,
+        79,
+        169,
+        199,
+        159,
+        214,
+        243,
+        15,
+        76,
+        105,
+        163,
+        129,
+        9,
+        219,
+        6,
+        122,
+        87,
+        31,
+        212,
+        35,
+        1,
+        222
+      ],
+      "pro_content_asset_id": null,
+      "pro_content_etag": null,
+      "width": 854,
+      "height": 480,
+      "fps": 25,
+      "duration": 0.33,
+      "num_audio_channel": 0,
+      "codec_type": "png",
+      "artist": "",
+      "title": "",
+      "rotation": 0,
+      "media_type": "Image",
+      "supports_hw_decode": true,
+      "has_alpha": true,
+      "color_format": "Sdr",
+      "date_triggered": null,
+      "availability": "Ready",
+      "purged": false,
+      "trashed_url": null,
+      "date_created": 1792049412,
+      "date_modified": 1792049413,
+      "date_last_accessed": 1792103825
+    }
+  },
+  {
+    "key": "helper_workspaces::db::models::asset::Asset:e9d88797-3cdd-5d73-9d15-e403549de005",
+    "value": {
+      "key": "e9d88797-3cdd-5d73-9d15-e403549de005",
+      "url": "/Users/davbeck/Library/Application Support/RenewedVision/ProPresenter/Workspaces/9f65d640-6477-441e-9b71-70ef74bb12d7/Media/Assets/EventPhoto.jpg",
+      "checksum": [
+        12,
+        183,
+        236,
+        100,
+        231,
+        107,
+        69,
+        226,
+        204,
+        155,
+        133,
+        169,
+        181,
+        93,
+        108,
+        128,
+        217,
+        222,
+        170,
+        168,
+        33,
+        75,
+        66,
+        195,
+        254,
+        123,
+        201,
+        125,
+        127,
+        58,
+        0,
+        8
+      ],
+      "pro_content_asset_id": null,
+      "pro_content_etag": null,
+      "width": 863,
+      "height": 646,
+      "fps": 0,
+      "duration": 0.33,
+      "num_audio_channel": 0,
+      "codec_type": "JPG",
+      "artist": "",
+      "title": "",
+      "rotation": 0,
+      "media_type": "Image",
+      "supports_hw_decode": true,
+      "has_alpha": false,
+      "color_format": "Sdr",
+      "date_triggered": null,
+      "availability": "Ready",
+      "purged": false,
+      "trashed_url": null,
+      "date_created": 1792046935,
+      "date_modified": 1792046936,
+      "date_last_accessed": 1792103825
+    }
+  },
+  {
+    "key": "helper_workspaces::db::models::snapshot::Snapshot:322e4d08-cba2-4b08-bd43-842ae317f6df-38f2d42d-b74e-4a5c-8a28-08fcd9168cc5",
+    "value": {
+      "asset_uuid": "322e4d08-cba2-4b08-bd43-842ae317f6df",
+      "transformation_uuid": "38f2d42d-b74e-4a5c-8a28-08fcd9168cc5",
+      "width": null,
+      "height": null,
+      "url": "/Users/davbeck/Library/Application Support/RenewedVision/ProPresenter/Workspaces/9f65d640-6477-441e-9b71-70ef74bb12d7/Thumbnails/322e4d08-cba2-4b08-bd43-842ae317f6df-38f2d42d-b74e-4a5c-8a28-08fcd9168cc5.png",
+      "state": "Finished",
+      "num_tries": 0,
+      "priority": "UserInitiated",
+      "availability": "Ready",
+      "date_created": 1792049412,
+      "date_modified": 1792049413,
+      "date_last_accessed": 1792103805
+    }
+  },
+  {
+    "key": "helper_workspaces::db::models::snapshot::Snapshot:322e4d08-cba2-4b08-bd43-842ae317f6df-4e09ed1e-7712-448a-bcbc-f840327ea31a",
+    "value": {
+      "asset_uuid": "322e4d08-cba2-4b08-bd43-842ae317f6df",
+      "transformation_uuid": "4e09ed1e-7712-448a-bcbc-f840327ea31a",
+      "width": null,
+      "height": null,
+      "url": "/Users/davbeck/Library/Application Support/RenewedVision/ProPresenter/Workspaces/9f65d640-6477-441e-9b71-70ef74bb12d7/Thumbnails/322e4d08-cba2-4b08-bd43-842ae317f6df-4e09ed1e-7712-448a-bcbc-f840327ea31a.png",
+      "state": "Finished",
+      "num_tries": 0,
+      "priority": "UserInitiated",
+      "availability": "Ready",
+      "date_created": 1792049412,
+      "date_modified": 1792049413,
+      "date_last_accessed": 1792103805
+    }
+  },
+  {
+    "key": "helper_workspaces::db::models::snapshot::Snapshot:e9d88797-3cdd-5d73-9d15-e403549de005-ce663142-1ee1-466f-a493-35092232e1be",
+    "value": {
+      "asset_uuid": "e9d88797-3cdd-5d73-9d15-e403549de005",
+      "transformation_uuid": "ce663142-1ee1-466f-a493-35092232e1be",
+      "width": null,
+      "height": null,
+      "url": "/Users/davbeck/Library/Application Support/RenewedVision/ProPresenter/Workspaces/9f65d640-6477-441e-9b71-70ef74bb12d7/Thumbnails/e9d88797-3cdd-5d73-9d15-e403549de005-ce663142-1ee1-466f-a493-35092232e1be.png",
+      "state": "Finished",
+      "num_tries": 0,
+      "priority": "Background",
+      "availability": "Ready",
+      "date_created": 1792046935,
+      "date_modified": 1792046936,
+      "date_last_accessed": 1792103805
+    }
+  },
+  {
+    "key": "helper_workspaces::db::models::transformation::Transformation:38f2d42d-b74e-4a5c-8a28-08fcd9168cc5",
+    "value": {
+      "key": "38f2d42d-b74e-4a5c-8a28-08fcd9168cc5",
+      "effects": [],
+      "position": 0,
+      "width": 854,
+      "height": 480,
+      "rotation": 0,
+      "insets_top": 0,
+      "insets_left": 0,
+      "insets_right": 0,
+      "insets_bottom": 0,
+      "flip_mode": "",
+      "alpha_type": "Straight",
+      "use_default_native_rotation": false,
+      "date_created": 1792049412,
+      "date_modified": 1792049412,
+      "date_last_accessed": 1792103805
+    }
+  },
+  {
+    "key": "helper_workspaces::db::models::transformation::Transformation:4e09ed1e-7712-448a-bcbc-f840327ea31a",
+    "value": {
+      "key": "4e09ed1e-7712-448a-bcbc-f840327ea31a",
+      "effects": [],
+      "position": 0,
+      "width": 854,
+      "height": 480,
+      "rotation": 0,
+      "insets_top": 0,
+      "insets_left": 0,
+      "insets_right": 0,
+      "insets_bottom": 0,
+      "flip_mode": "",
+      "alpha_type": "Straight",
+      "use_default_native_rotation": false,
+      "date_created": 1792049412,
+      "date_modified": 1792049412,
+      "date_last_accessed": 1792103805
+    }
+  },
+  {
+    "key": "helper_workspaces::db::models::transformation::Transformation:ce663142-1ee1-466f-a493-35092232e1be",
+    "value": {
+      "key": "ce663142-1ee1-466f-a493-35092232e1be",
+      "effects": [],
+      "position": 0,
+      "width": 863,
+      "height": 646,
+      "rotation": 0,
+      "insets_top": 0,
+      "insets_left": 0,
+      "insets_right": 0,
+      "insets_bottom": 0,
+      "flip_mode": "",
+      "alpha_type": "Straight",
+      "use_default_native_rotation": false,
+      "date_created": 1792046935,
+      "date_modified": 1792046935,
+      "date_last_accessed": 1792103805
+    }
+  },
+  {
+    "key": "v3_helper_workspaces::db::models::reference::Reference:80eb4ec7-9507-5bb1-be56-1b42ab4f077a",
+    "value": {
+      "key": {
+        "uuid": "80eb4ec7-9507-5bb1-be56-1b42ab4f077a"
+      },
+      "asset_uuid": "322e4d08-cba2-4b08-bd43-842ae317f6df",
+      "transformation_uuid": "38f2d42d-b74e-4a5c-8a28-08fcd9168cc5",
+      "projection_owned": true,
+      "projection_tombstoned": false,
+      "date_created": 1792049412,
+      "date_modified": 1792103805,
+      "date_last_accessed": 1792103805
+    }
+  },
+  {
+    "key": "v3_helper_workspaces::db::models::reference::Reference:a334238d-6c81-5441-85f6-3c61ffaf9004",
+    "value": {
+      "key": {
+        "uuid": "a334238d-6c81-5441-85f6-3c61ffaf9004"
+      },
+      "asset_uuid": "322e4d08-cba2-4b08-bd43-842ae317f6df",
+      "transformation_uuid": "4e09ed1e-7712-448a-bcbc-f840327ea31a",
+      "projection_owned": true,
+      "projection_tombstoned": false,
+      "date_created": 1792049412,
+      "date_modified": 1792103805,
+      "date_last_accessed": 1792103805
+    }
+  },
+  {
+    "key": "v3_helper_workspaces::db::models::reference::Reference:b3f57269-e05d-5ea7-9ac5-5cbbe0a95628",
+    "value": {
+      "key": {
+        "uuid": "b3f57269-e05d-5ea7-9ac5-5cbbe0a95628"
+      },
+      "asset_uuid": "e9d88797-3cdd-5d73-9d15-e403549de005",
+      "transformation_uuid": "ce663142-1ee1-466f-a493-35092232e1be",
+      "projection_owned": true,
+      "projection_tombstoned": false,
+      "date_created": 1792046935,
+      "date_modified": 1792103805,
+      "date_last_accessed": 1792103805
+    }
+  }
+]

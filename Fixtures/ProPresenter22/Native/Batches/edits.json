@@ -1,0 +1,41 @@
+{
+  "version": 1,
+  "operations": [
+    {
+      "stream": "bfa7b647-93ab-5ee6-b397-ec61b08bcfee",
+      "op": "set-notes",
+      "text": "CLI atomic batch operator notes"
+    },
+    {
+      "stream": "900d3c21-55ae-4446-8f44-1563b0dbbb1c",
+      "op": "set-copyright-title",
+      "title": "CLI atomic batch second title"
+    },
+    {
+      "stream": "bfa7b647-93ab-5ee6-b397-ec61b08bcfee",
+      "op": "set-copyright-title",
+      "title": "CLI atomic batch first title"
+    },
+    {
+      "stream": "bfa7b647-93ab-5ee6-b397-ec61b08bcfee",
+      "op": "rename-cue-group",
+      "group": "58FFCB48-ABA1-4C54-9FDE-12CB23439550",
+      "name": "CLI Batch Group"
+    },
+    {
+      "stream": "bfa7b647-93ab-5ee6-b397-ec61b08bcfee",
+      "op": "set-arrangement-groups",
+      "arrangement": "C049469C-FC98-4BAA-BAF3-290846452E5D",
+      "groups": [
+        "58FFCB48-ABA1-4C54-9FDE-12CB23439550",
+        "58FFCB48-ABA1-4C54-9FDE-12CB23439550"
+      ]
+    },
+    {
+      "stream": "bfa7b647-93ab-5ee6-b397-ec61b08bcfee",
+      "op": "set-slide-notes",
+      "action": "B6F1DA61-C874-42C1-B4E9-7FE1148715B3",
+      "text": "CLI atomic batch Slide Notes \u2014 caf\u00e9 \ud83c\udfb5"
+    }
+  ]
+}

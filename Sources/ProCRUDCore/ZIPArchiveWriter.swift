@@ -68,7 +68,7 @@ enum ZIPWriter {
 		let validatedUpdates = try validatedEntryNames(updatedPaths, limits: limits)
 		var updatesByPath = Dictionary(uniqueKeysWithValues: validatedUpdates.map { ($0, $0) })
 		let existingPaths = Set(reader.entries.map(\.destinationPath))
-		let resultingEntryCount = reader.entries.count + validatedUpdates.lazy.filter { !existingPaths.contains($0) }.count
+		let resultingEntryCount = reader.entries.count + validatedUpdates.lazy.count(where: { !existingPaths.contains($0) })
 		guard resultingEntryCount <= limits.maximumEntryCount else {
 			throw ArchiveError.entryCountLimitExceeded(
 				count: UInt64(resultingEntryCount),

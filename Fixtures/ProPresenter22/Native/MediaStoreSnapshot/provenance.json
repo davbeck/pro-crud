@@ -1,0 +1,34 @@
+{
+  "application": "ProPresenter",
+  "version": "22",
+  "build": "369098875",
+  "osVersion": "27.0.1",
+  "date": "2026-10-15",
+  "source": "Unmodified current manifest, all three active tables and committed WAL copied from the closed authorized local test workspace; no media bytes, thumbnail files, account database or settings plist included. JSON model paths retain their native source locations.",
+  "files": [
+    {
+      "path": "CURRENT",
+      "sha256": "8f50c5a3df03ff605772a3bcce5f91b499ec049d91afe6122995c58476445d63"
+    },
+    {
+      "path": "MANIFEST-000153",
+      "sha256": "1529b153df9b6b7d5dd73a82876e0e2f5561bdd949cd710d4929ffa7542f6cf7"
+    },
+    {
+      "path": "000143.sst",
+      "sha256": "7fa8ff157baf001bc0e519eaa6c474fc823b6020e8149ee5d7b4f1e2d308b453"
+    },
+    {
+      "path": "000146.sst",
+      "sha256": "bc9edf15af65648a31cc818ddf261289db0d3bd40b52971d1665c96dbefcd12c"
+    },
+    {
+      "path": "000151.sst",
+      "sha256": "0144894442b77c840b90f69978950f56c5c8ed06aab9528dd0abf21b39fe2c10"
+    },
+    {
+      "path": "000152.log",
+      "sha256": "ba1c3599be71c6e9f15c063d879c12e6ae157c4482ac70762bd6040bd30b3591"
+    }
+  ]
+}

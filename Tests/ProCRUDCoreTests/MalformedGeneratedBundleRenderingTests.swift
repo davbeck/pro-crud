@@ -15,7 +15,7 @@ struct MalformedGeneratedBundleRenderingTests {
 			from: fixtureURL("ProPresenter/MalformedGeneratedBundle/MalformedGeneratedBundle.probundle"),
 		)
 		#expect(document.orderedCues.count == 5)
-		#expect(document.renderingDiagnostics.filter { $0.message.contains("stale metadata") }.count == 7)
+		#expect(document.renderingDiagnostics.count(where: { $0.message.contains("stale metadata") }) == 7)
 		let opacitySlide = try #require(document.orderedCues.last?.actions.first?.slide.presentation.baseSlide)
 		#expect(Set(opacitySlide.elements.map(\.element.opacity)).isSuperset(of: [0, 0.25, 1]))
 

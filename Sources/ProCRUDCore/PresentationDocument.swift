@@ -362,6 +362,20 @@ public struct LoadedPresentationDocument: Sendable {
 }
 
 public enum PresentationLoader {
+	/// Materializes a read-only view from one consistent native snapshot. The
+	/// original Loro history remains the source of truth; rendering still checks
+	/// the selected content's capabilities before using this interchange view.
+	public static func load(nativeDocumentID: UUID, from snapshot: NativeWorkspaceSnapshot) throws -> LoadedPresentationDocument {
+		guard let stream = snapshot.streams.first(where: { $0.identity.documentID == nativeDocumentID && $0.identity.scope == .shared }) else {
+			throw NativeSemanticError.missingReference(path: "/streams", identity: nativeDocumentID.uuidString)
+		}
+		let presentation = try stream.protobufProjection().presentation()
+		return LoadedPresentationDocument(
+			sourceName: safeDirectoryName(presentation.name.isEmpty ? nativeDocumentID.uuidString : presentation.name),
+			document: PresentationDocument(presentation: presentation, mediaDirectory: snapshot.root),
+		)
+	}
+
 	public static func load(from url: URL) throws -> PresentationDocument {
 		let loaded = try DocumentLoader.load(from: url)
 		guard case let .presentation(presentation) = loaded.payload else {
@@ -381,7 +395,15 @@ public enum PresentationLoader {
 	}
 
 	public static func loadPresentations(from url: URL) throws -> [LoadedPresentationDocument] {
-		let loaded = try DocumentLoader.load(from: url)
+		try loadPresentations(from: url, archiveLimits: .default)
+	}
+
+	public static func loadPresentations(from url: URL, archiveLimits: ArchiveLimits) throws -> [LoadedPresentationDocument] {
+		try WorkspaceInspector.requireLegacyAccess(at: url)
+		if url.pathExtension.lowercased() == "probundle", try url.resourceValues(forKeys: [.isDirectoryKey]).isDirectory != true {
+			return try loadBundlePresentations(from: url, limits: archiveLimits)
+		}
+		let loaded = try DocumentLoader.load(from: url, archiveLimits: archiveLimits)
 		if case let .playlist(playlist) = loaded.payload {
 			guard let resourceDirectory = loaded.resourceDirectory else {
 				throw DocumentLoadError.missingPayload(kind: .playlist, location: url)
@@ -441,6 +463,33 @@ public enum PresentationLoader {
 				document: load(from: url),
 			),
 		]
+	}
+
+	/// Native Presentation Bundle export can contain several independent .pro
+	/// payloads. Keep the single-document loader/editing boundary unambiguous,
+	/// while collection consumers retain every payload and its shared assets.
+	private static func loadBundlePresentations(from url: URL, limits: ArchiveLimits) throws -> [LoadedPresentationDocument] {
+		let reader = try ZIPReader(archiveURL: url, limits: limits)
+		let directory = FileManager.default.temporaryDirectory.appendingPathComponent("ProCRUD-\(UUID().uuidString)", isDirectory: true)
+		try reader.extract(to: directory)
+		let owner = TemporaryDirectoryOwner(url: directory)
+		let files = try DocumentLoader.recursiveFiles(in: directory).filter { $0.pathExtension.lowercased() == "pro" }.sorted { $0.path < $1.path }
+		guard !files.isEmpty else { throw DocumentLoadError.missingPayload(kind: .presentation, location: url) }
+		let assets = reader.entries.filter { $0.kind == .file && URL(fileURLWithPath: $0.destinationPath).pathExtension.lowercased() != "pro" }.map(\.destinationPath)
+		var names: Set<String> = []
+		return try files.map { file in
+			let relative = try DocumentLoader.relativePath(of: file, in: directory)
+			let name = files.count > 1 ? String(relative.dropLast(file.pathExtension.count + 1)) : url.deletingPathExtension().lastPathComponent
+			let sourceName = safeDirectoryName(name)
+			guard names.insert(sourceName.precomposedStringWithCanonicalMapping.lowercased()).inserted else {
+				throw DocumentLoadError.ambiguousPayload(kind: .presentation, candidates: files.map { $0.path.replacingOccurrences(of: directory.path + "/", with: "") })
+			}
+			let loaded = try DocumentLoader.loadRaw(file, kind: .presentation)
+			guard case let .presentation(presentation) = loaded.payload else { preconditionFailure("Presentation decoder returned a different payload kind.") }
+			var document = PresentationDocument(presentation: presentation, mediaDirectory: directory, embeddedMediaFiles: assets)
+			document.temporaryResourceOwners = [owner]
+			return LoadedPresentationDocument(sourceName: sourceName, document: document, usesOutputSubdirectory: files.count > 1)
+		}
 	}
 
 	private static func presentationDocument(

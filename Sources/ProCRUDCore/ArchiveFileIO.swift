@@ -1,3 +1,4 @@
+import CryptoKit
 import Darwin
 import Foundation
 
@@ -28,6 +29,23 @@ enum ArchiveFileIO {
 			throw ArchiveError.invalidEntry(url.path)
 		}
 		return Snapshot(size: UInt64(opened.information.st_size))
+	}
+
+	static func sha256(of url: URL, deadline: ArchiveDeadline) throws -> String {
+		let opened = try openRegularFile(url)
+		defer { try? opened.handle.close() }
+		var hash = SHA256()
+		var count: Int64 = 0
+		while true {
+			try deadline.check()
+			let data = try opened.handle.read(upToCount: 64 * 1024) ?? Data()
+			guard !data.isEmpty else { break }
+			count += Int64(data.count)
+			guard count <= opened.information.st_size else { throw ArchiveError.integrityCheckFailed(url.path) }
+			hash.update(data: data)
+		}
+		guard count == opened.information.st_size else { throw ArchiveError.integrityCheckFailed(url.path) }
+		return hash.finalize().map { String(format: "%02x", $0) }.joined()
 	}
 
 	static func copyRegularFile(

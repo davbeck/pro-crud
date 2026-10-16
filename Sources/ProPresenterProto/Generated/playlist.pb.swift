@@ -15,93 +15,93 @@ import SwiftProtobuf
 // incompatible with the version of SwiftProtobuf to which you are linking.
 // Please ensure that you are building against the same version of the API
 // that was used to generate this file.
-fileprivate struct _GeneratedWithProtocGenSwiftVersion: SwiftProtobuf.ProtobufAPIVersionCheck {
+fileprivate nonisolated struct _GeneratedWithProtocGenSwiftVersion: SwiftProtobuf.ProtobufAPIVersionCheck {
   struct _2: SwiftProtobuf.ProtobufAPIVersion_2 {}
   typealias Version = _2
 }
 
-public struct Rv_Data_Playlist: @unchecked Sendable {
+public nonisolated struct Rv_Data_Playlist: @unchecked Sendable {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
   // methods supported on all messages.
 
   public var uuid: Rv_Data_UUID {
-    get {return _storage._uuid ?? Rv_Data_UUID()}
+    get {_storage._uuid ?? Rv_Data_UUID()}
     set {_uniqueStorage()._uuid = newValue}
   }
   /// Returns true if `uuid` has been explicitly set.
-  public var hasUuid: Bool {return _storage._uuid != nil}
+  public var hasUuid: Bool {_storage._uuid != nil}
   /// Clears the value of `uuid`. Subsequent reads from it will return its default value.
   public mutating func clearUuid() {_uniqueStorage()._uuid = nil}
 
   public var name: String {
-    get {return _storage._name}
+    get {_storage._name}
     set {_uniqueStorage()._name = newValue}
   }
 
   public var type: Rv_Data_Playlist.TypeEnum {
-    get {return _storage._type}
+    get {_storage._type}
     set {_uniqueStorage()._type = newValue}
   }
 
   public var expanded: Bool {
-    get {return _storage._expanded}
+    get {_storage._expanded}
     set {_uniqueStorage()._expanded = newValue}
   }
 
   public var targetedLayerUuid: Rv_Data_UUID {
-    get {return _storage._targetedLayerUuid ?? Rv_Data_UUID()}
+    get {_storage._targetedLayerUuid ?? Rv_Data_UUID()}
     set {_uniqueStorage()._targetedLayerUuid = newValue}
   }
   /// Returns true if `targetedLayerUuid` has been explicitly set.
-  public var hasTargetedLayerUuid: Bool {return _storage._targetedLayerUuid != nil}
+  public var hasTargetedLayerUuid: Bool {_storage._targetedLayerUuid != nil}
   /// Clears the value of `targetedLayerUuid`. Subsequent reads from it will return its default value.
   public mutating func clearTargetedLayerUuid() {_uniqueStorage()._targetedLayerUuid = nil}
 
   public var smartDirectoryPath: Rv_Data_URL {
-    get {return _storage._smartDirectoryPath ?? Rv_Data_URL()}
+    get {_storage._smartDirectoryPath ?? Rv_Data_URL()}
     set {_uniqueStorage()._smartDirectoryPath = newValue}
   }
   /// Returns true if `smartDirectoryPath` has been explicitly set.
-  public var hasSmartDirectoryPath: Bool {return _storage._smartDirectoryPath != nil}
+  public var hasSmartDirectoryPath: Bool {_storage._smartDirectoryPath != nil}
   /// Clears the value of `smartDirectoryPath`. Subsequent reads from it will return its default value.
   public mutating func clearSmartDirectoryPath() {_uniqueStorage()._smartDirectoryPath = nil}
 
   public var hotKey: Rv_Data_HotKey {
-    get {return _storage._hotKey ?? Rv_Data_HotKey()}
+    get {_storage._hotKey ?? Rv_Data_HotKey()}
     set {_uniqueStorage()._hotKey = newValue}
   }
   /// Returns true if `hotKey` has been explicitly set.
-  public var hasHotKey: Bool {return _storage._hotKey != nil}
+  public var hasHotKey: Bool {_storage._hotKey != nil}
   /// Clears the value of `hotKey`. Subsequent reads from it will return its default value.
   public mutating func clearHotKey() {_uniqueStorage()._hotKey = nil}
 
   public var cues: [Rv_Data_Cue] {
-    get {return _storage._cues}
+    get {_storage._cues}
     set {_uniqueStorage()._cues = newValue}
   }
 
   public var children: [Rv_Data_Playlist] {
-    get {return _storage._children}
+    get {_storage._children}
     set {_uniqueStorage()._children = newValue}
   }
 
   public var timecodeEnabled: Bool {
-    get {return _storage._timecodeEnabled}
+    get {_storage._timecodeEnabled}
     set {_uniqueStorage()._timecodeEnabled = newValue}
   }
 
   public var timing: Rv_Data_Playlist.TimingType {
-    get {return _storage._timing}
+    get {_storage._timing}
     set {_uniqueStorage()._timing = newValue}
   }
 
   public var startupInfo: Rv_Data_Playlist.StartupInfo {
-    get {return _storage._startupInfo ?? Rv_Data_Playlist.StartupInfo()}
+    get {_storage._startupInfo ?? Rv_Data_Playlist.StartupInfo()}
     set {_uniqueStorage()._startupInfo = newValue}
   }
   /// Returns true if `startupInfo` has been explicitly set.
-  public var hasStartupInfo: Bool {return _storage._startupInfo != nil}
+  public var hasStartupInfo: Bool {_storage._startupInfo != nil}
   /// Clears the value of `startupInfo`. Subsequent reads from it will return its default value.
   public mutating func clearStartupInfo() {_uniqueStorage()._startupInfo = nil}
 
@@ -149,19 +149,19 @@ public struct Rv_Data_Playlist: @unchecked Sendable {
 
   public var unknownFields = SwiftProtobuf.UnknownStorage()
 
-  public enum OneOf_ChildrenType: Equatable, Sendable {
+  public nonisolated enum OneOf_ChildrenType: Equatable, Sendable {
     case playlists(Rv_Data_Playlist.PlaylistArray)
     case items(Rv_Data_Playlist.PlaylistItems)
 
   }
 
-  public enum OneOf_LinkData: Equatable, Sendable {
+  public nonisolated enum OneOf_LinkData: Equatable, Sendable {
     case smartDirectory(Rv_Data_Playlist.FolderDirectory)
     case pcoPlan(Rv_Data_PlanningCenterPlan)
 
   }
 
-  public enum TypeEnum: SwiftProtobuf.Enum, Swift.CaseIterable {
+  public nonisolated enum TypeEnum: SwiftProtobuf.Enum, Swift.CaseIterable {
     public typealias RawValue = Int
     case unknown // = 0
     case playlist // = 1
@@ -207,7 +207,7 @@ public struct Rv_Data_Playlist: @unchecked Sendable {
 
   }
 
-  public enum TimingType: SwiftProtobuf.Enum, Swift.CaseIterable {
+  public nonisolated enum TimingType: SwiftProtobuf.Enum, Swift.CaseIterable {
     public typealias RawValue = Int
     case none // = 0
     case timecode // = 1
@@ -245,7 +245,7 @@ public struct Rv_Data_Playlist: @unchecked Sendable {
 
   }
 
-  public struct PlaylistArray: Sendable {
+  public nonisolated struct PlaylistArray: Sendable {
     // SwiftProtobuf.Message conformance is added in an extension below. See the
     // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
     // methods supported on all messages.
@@ -257,7 +257,7 @@ public struct Rv_Data_Playlist: @unchecked Sendable {
     public init() {}
   }
 
-  public struct PlaylistItems: Sendable {
+  public nonisolated struct PlaylistItems: Sendable {
     // SwiftProtobuf.Message conformance is added in an extension below. See the
     // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
     // methods supported on all messages.
@@ -269,17 +269,17 @@ public struct Rv_Data_Playlist: @unchecked Sendable {
     public init() {}
   }
 
-  public struct FolderDirectory: Sendable {
+  public nonisolated struct FolderDirectory: Sendable {
     // SwiftProtobuf.Message conformance is added in an extension below. See the
     // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
     // methods supported on all messages.
 
     public var smartDirectory: Rv_Data_URL {
-      get {return _smartDirectory ?? Rv_Data_URL()}
+      get {_smartDirectory ?? Rv_Data_URL()}
       set {_smartDirectory = newValue}
     }
     /// Returns true if `smartDirectory` has been explicitly set.
-    public var hasSmartDirectory: Bool {return self._smartDirectory != nil}
+    public var hasSmartDirectory: Bool {self._smartDirectory != nil}
     /// Clears the value of `smartDirectory`. Subsequent reads from it will return its default value.
     public mutating func clearSmartDirectory() {self._smartDirectory = nil}
 
@@ -287,7 +287,7 @@ public struct Rv_Data_Playlist: @unchecked Sendable {
 
     public var unknownFields = SwiftProtobuf.UnknownStorage()
 
-    public enum ImportBehavior: SwiftProtobuf.Enum, Swift.CaseIterable {
+    public nonisolated enum ImportBehavior: SwiftProtobuf.Enum, Swift.CaseIterable {
       public typealias RawValue = Int
       case background // = 0
       case foreground // = 1
@@ -326,28 +326,28 @@ public struct Rv_Data_Playlist: @unchecked Sendable {
     fileprivate var _smartDirectory: Rv_Data_URL? = nil
   }
 
-  public struct Tag: Sendable {
+  public nonisolated struct Tag: Sendable {
     // SwiftProtobuf.Message conformance is added in an extension below. See the
     // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
     // methods supported on all messages.
 
     public var color: Rv_Data_Color {
-      get {return _color ?? Rv_Data_Color()}
+      get {_color ?? Rv_Data_Color()}
       set {_color = newValue}
     }
     /// Returns true if `color` has been explicitly set.
-    public var hasColor: Bool {return self._color != nil}
+    public var hasColor: Bool {self._color != nil}
     /// Clears the value of `color`. Subsequent reads from it will return its default value.
     public mutating func clearColor() {self._color = nil}
 
     public var name: String = String()
 
     public var uuid: Rv_Data_UUID {
-      get {return _uuid ?? Rv_Data_UUID()}
+      get {_uuid ?? Rv_Data_UUID()}
       set {_uuid = newValue}
     }
     /// Returns true if `uuid` has been explicitly set.
-    public var hasUuid: Bool {return self._uuid != nil}
+    public var hasUuid: Bool {self._uuid != nil}
     /// Clears the value of `uuid`. Subsequent reads from it will return its default value.
     public mutating func clearUuid() {self._uuid = nil}
 
@@ -359,7 +359,7 @@ public struct Rv_Data_Playlist: @unchecked Sendable {
     fileprivate var _uuid: Rv_Data_UUID? = nil
   }
 
-  public struct StartupInfo: Sendable {
+  public nonisolated struct StartupInfo: Sendable {
     // SwiftProtobuf.Message conformance is added in an extension below. See the
     // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
     // methods supported on all messages.
@@ -376,32 +376,32 @@ public struct Rv_Data_Playlist: @unchecked Sendable {
   fileprivate var _storage = _StorageClass.defaultInstance
 }
 
-public struct Rv_Data_PlaylistItem: @unchecked Sendable {
+public nonisolated struct Rv_Data_PlaylistItem: @unchecked Sendable {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
   // methods supported on all messages.
 
   public var uuid: Rv_Data_UUID {
-    get {return _storage._uuid ?? Rv_Data_UUID()}
+    get {_storage._uuid ?? Rv_Data_UUID()}
     set {_uniqueStorage()._uuid = newValue}
   }
   /// Returns true if `uuid` has been explicitly set.
-  public var hasUuid: Bool {return _storage._uuid != nil}
+  public var hasUuid: Bool {_storage._uuid != nil}
   /// Clears the value of `uuid`. Subsequent reads from it will return its default value.
   public mutating func clearUuid() {_uniqueStorage()._uuid = nil}
 
   public var name: String {
-    get {return _storage._name}
+    get {_storage._name}
     set {_uniqueStorage()._name = newValue}
   }
 
   public var tags: [Rv_Data_UUID] {
-    get {return _storage._tags}
+    get {_storage._tags}
     set {_uniqueStorage()._tags = newValue}
   }
 
   public var isHidden: Bool {
-    get {return _storage._isHidden}
+    get {_storage._isHidden}
     set {_uniqueStorage()._isHidden = newValue}
   }
 
@@ -452,7 +452,7 @@ public struct Rv_Data_PlaylistItem: @unchecked Sendable {
 
   public var unknownFields = SwiftProtobuf.UnknownStorage()
 
-  public enum OneOf_ItemType: Equatable, Sendable {
+  public nonisolated enum OneOf_ItemType: Equatable, Sendable {
     case header(Rv_Data_PlaylistItem.Header)
     case presentation(Rv_Data_PlaylistItem.Presentation)
     case cue(Rv_Data_Cue)
@@ -461,17 +461,17 @@ public struct Rv_Data_PlaylistItem: @unchecked Sendable {
 
   }
 
-  public struct Header: Sendable {
+  public nonisolated struct Header: Sendable {
     // SwiftProtobuf.Message conformance is added in an extension below. See the
     // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
     // methods supported on all messages.
 
     public var color: Rv_Data_Color {
-      get {return _color ?? Rv_Data_Color()}
+      get {_color ?? Rv_Data_Color()}
       set {_color = newValue}
     }
     /// Returns true if `color` has been explicitly set.
-    public var hasColor: Bool {return self._color != nil}
+    public var hasColor: Bool {self._color != nil}
     /// Clears the value of `color`. Subsequent reads from it will return its default value.
     public mutating func clearColor() {self._color = nil}
 
@@ -484,43 +484,45 @@ public struct Rv_Data_PlaylistItem: @unchecked Sendable {
     fileprivate var _color: Rv_Data_Color? = nil
   }
 
-  public struct Presentation: Sendable {
+  public nonisolated struct Presentation: Sendable {
     // SwiftProtobuf.Message conformance is added in an extension below. See the
     // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
     // methods supported on all messages.
 
     public var documentPath: Rv_Data_URL {
-      get {return _documentPath ?? Rv_Data_URL()}
+      get {_documentPath ?? Rv_Data_URL()}
       set {_documentPath = newValue}
     }
     /// Returns true if `documentPath` has been explicitly set.
-    public var hasDocumentPath: Bool {return self._documentPath != nil}
+    public var hasDocumentPath: Bool {self._documentPath != nil}
     /// Clears the value of `documentPath`. Subsequent reads from it will return its default value.
     public mutating func clearDocumentPath() {self._documentPath = nil}
 
     public var arrangement: Rv_Data_UUID {
-      get {return _arrangement ?? Rv_Data_UUID()}
+      get {_arrangement ?? Rv_Data_UUID()}
       set {_arrangement = newValue}
     }
     /// Returns true if `arrangement` has been explicitly set.
-    public var hasArrangement: Bool {return self._arrangement != nil}
+    public var hasArrangement: Bool {self._arrangement != nil}
     /// Clears the value of `arrangement`. Subsequent reads from it will return its default value.
     public mutating func clearArrangement() {self._arrangement = nil}
 
     public var contentDestination: Rv_Data_PlaylistItem.Presentation.ContentDestination = .global
 
     public var userMusicKey: Rv_Data_MusicKeyScale {
-      get {return _userMusicKey ?? Rv_Data_MusicKeyScale()}
+      get {_userMusicKey ?? Rv_Data_MusicKeyScale()}
       set {_userMusicKey = newValue}
     }
     /// Returns true if `userMusicKey` has been explicitly set.
-    public var hasUserMusicKey: Bool {return self._userMusicKey != nil}
+    public var hasUserMusicKey: Bool {self._userMusicKey != nil}
     /// Clears the value of `userMusicKey`. Subsequent reads from it will return its default value.
     public mutating func clearUserMusicKey() {self._userMusicKey = nil}
 
+    public var arrangementName: String = String()
+
     public var unknownFields = SwiftProtobuf.UnknownStorage()
 
-    public enum ContentDestination: SwiftProtobuf.Enum, Swift.CaseIterable {
+    public nonisolated enum ContentDestination: SwiftProtobuf.Enum, Swift.CaseIterable {
       public typealias RawValue = Int
       case global // = 0
       case announcements // = 1
@@ -561,26 +563,26 @@ public struct Rv_Data_PlaylistItem: @unchecked Sendable {
     fileprivate var _userMusicKey: Rv_Data_MusicKeyScale? = nil
   }
 
-  public struct PlanningCenter: @unchecked Sendable {
+  public nonisolated struct PlanningCenter: @unchecked Sendable {
     // SwiftProtobuf.Message conformance is added in an extension below. See the
     // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
     // methods supported on all messages.
 
     public var item: Rv_Data_PlanningCenterPlan.PlanItem {
-      get {return _storage._item ?? Rv_Data_PlanningCenterPlan.PlanItem()}
+      get {_storage._item ?? Rv_Data_PlanningCenterPlan.PlanItem()}
       set {_uniqueStorage()._item = newValue}
     }
     /// Returns true if `item` has been explicitly set.
-    public var hasItem: Bool {return _storage._item != nil}
+    public var hasItem: Bool {_storage._item != nil}
     /// Clears the value of `item`. Subsequent reads from it will return its default value.
     public mutating func clearItem() {_uniqueStorage()._item = nil}
 
     public var linkedData: Rv_Data_PlaylistItem {
-      get {return _storage._linkedData ?? Rv_Data_PlaylistItem()}
+      get {_storage._linkedData ?? Rv_Data_PlaylistItem()}
       set {_uniqueStorage()._linkedData = newValue}
     }
     /// Returns true if `linkedData` has been explicitly set.
-    public var hasLinkedData: Bool {return _storage._linkedData != nil}
+    public var hasLinkedData: Bool {_storage._linkedData != nil}
     /// Clears the value of `linkedData`. Subsequent reads from it will return its default value.
     public mutating func clearLinkedData() {_uniqueStorage()._linkedData = nil}
 
@@ -591,17 +593,17 @@ public struct Rv_Data_PlaylistItem: @unchecked Sendable {
     fileprivate var _storage = _StorageClass.defaultInstance
   }
 
-  public struct Placeholder: @unchecked Sendable {
+  public nonisolated struct Placeholder: @unchecked Sendable {
     // SwiftProtobuf.Message conformance is added in an extension below. See the
     // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
     // methods supported on all messages.
 
     public var linkedData: Rv_Data_PlaylistItem {
-      get {return _storage._linkedData ?? Rv_Data_PlaylistItem()}
+      get {_storage._linkedData ?? Rv_Data_PlaylistItem()}
       set {_uniqueStorage()._linkedData = newValue}
     }
     /// Returns true if `linkedData` has been explicitly set.
-    public var hasLinkedData: Bool {return _storage._linkedData != nil}
+    public var hasLinkedData: Bool {_storage._linkedData != nil}
     /// Clears the value of `linkedData`. Subsequent reads from it will return its default value.
     public mutating func clearLinkedData() {_uniqueStorage()._linkedData = nil}
 
@@ -619,9 +621,9 @@ public struct Rv_Data_PlaylistItem: @unchecked Sendable {
 
 // MARK: - Code below here is support for the SwiftProtobuf runtime.
 
-fileprivate let _protobuf_package = "rv.data"
+fileprivate nonisolated let _protobuf_package = "rv.data"
 
-extension Rv_Data_Playlist: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+nonisolated extension Rv_Data_Playlist: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   public static let protoMessageName: String = _protobuf_package + ".Playlist"
   public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{1}uuid\0\u{1}name\0\u{1}type\0\u{1}expanded\0\u{3}targeted_layer_uuid\0\u{3}smart_directory_path\0\u{3}hot_key\0\u{1}cues\0\u{1}children\0\u{3}timecode_enabled\0\u{1}timing\0\u{1}playlists\0\u{1}items\0\u{3}smart_directory\0\u{3}pco_plan\0\u{3}startup_info\0")
 
@@ -848,15 +850,15 @@ extension Rv_Data_Playlist: SwiftProtobuf.Message, SwiftProtobuf._MessageImpleme
   }
 }
 
-extension Rv_Data_Playlist.TypeEnum: SwiftProtobuf._ProtoNameProviding {
+nonisolated extension Rv_Data_Playlist.TypeEnum: SwiftProtobuf._ProtoNameProviding {
   public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{2}\0TYPE_UNKNOWN\0\u{1}TYPE_PLAYLIST\0\u{1}TYPE_GROUP\0\u{1}TYPE_SMART\0\u{1}TYPE_ROOT\0")
 }
 
-extension Rv_Data_Playlist.TimingType: SwiftProtobuf._ProtoNameProviding {
+nonisolated extension Rv_Data_Playlist.TimingType: SwiftProtobuf._ProtoNameProviding {
   public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{2}\0TIMING_TYPE_NONE\0\u{1}TIMING_TYPE_TIMECODE\0\u{1}TIMING_TYPE_TIME_OF_DAY\0")
 }
 
-extension Rv_Data_Playlist.PlaylistArray: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+nonisolated extension Rv_Data_Playlist.PlaylistArray: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   public static let protoMessageName: String = Rv_Data_Playlist.protoMessageName + ".PlaylistArray"
   public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{1}playlists\0")
 
@@ -886,7 +888,7 @@ extension Rv_Data_Playlist.PlaylistArray: SwiftProtobuf.Message, SwiftProtobuf._
   }
 }
 
-extension Rv_Data_Playlist.PlaylistItems: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+nonisolated extension Rv_Data_Playlist.PlaylistItems: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   public static let protoMessageName: String = Rv_Data_Playlist.protoMessageName + ".PlaylistItems"
   public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{1}items\0")
 
@@ -916,7 +918,7 @@ extension Rv_Data_Playlist.PlaylistItems: SwiftProtobuf.Message, SwiftProtobuf._
   }
 }
 
-extension Rv_Data_Playlist.FolderDirectory: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+nonisolated extension Rv_Data_Playlist.FolderDirectory: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   public static let protoMessageName: String = Rv_Data_Playlist.protoMessageName + ".FolderDirectory"
   public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{3}smart_directory\0\u{3}import_behavior\0")
 
@@ -955,11 +957,11 @@ extension Rv_Data_Playlist.FolderDirectory: SwiftProtobuf.Message, SwiftProtobuf
   }
 }
 
-extension Rv_Data_Playlist.FolderDirectory.ImportBehavior: SwiftProtobuf._ProtoNameProviding {
+nonisolated extension Rv_Data_Playlist.FolderDirectory.ImportBehavior: SwiftProtobuf._ProtoNameProviding {
   public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{2}\0IMPORT_BEHAVIOR_BACKGROUND\0\u{1}IMPORT_BEHAVIOR_FOREGROUND\0")
 }
 
-extension Rv_Data_Playlist.Tag: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+nonisolated extension Rv_Data_Playlist.Tag: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   public static let protoMessageName: String = Rv_Data_Playlist.protoMessageName + ".Tag"
   public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{1}color\0\u{1}name\0\u{1}uuid\0")
 
@@ -1003,7 +1005,7 @@ extension Rv_Data_Playlist.Tag: SwiftProtobuf.Message, SwiftProtobuf._MessageImp
   }
 }
 
-extension Rv_Data_Playlist.StartupInfo: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+nonisolated extension Rv_Data_Playlist.StartupInfo: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   public static let protoMessageName: String = Rv_Data_Playlist.protoMessageName + ".StartupInfo"
   public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{3}trigger_on_startup\0")
 
@@ -1033,7 +1035,7 @@ extension Rv_Data_Playlist.StartupInfo: SwiftProtobuf.Message, SwiftProtobuf._Me
   }
 }
 
-extension Rv_Data_PlaylistItem: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+nonisolated extension Rv_Data_PlaylistItem: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   public static let protoMessageName: String = _protobuf_package + ".PlaylistItem"
   public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{1}uuid\0\u{1}name\0\u{1}header\0\u{1}presentation\0\u{1}cue\0\u{3}planning_center\0\u{1}tags\0\u{1}placeholder\0\u{3}is_hidden\0")
 
@@ -1214,7 +1216,7 @@ extension Rv_Data_PlaylistItem: SwiftProtobuf.Message, SwiftProtobuf._MessageImp
   }
 }
 
-extension Rv_Data_PlaylistItem.Header: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+nonisolated extension Rv_Data_PlaylistItem.Header: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   public static let protoMessageName: String = Rv_Data_PlaylistItem.protoMessageName + ".Header"
   public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{1}color\0\u{1}actions\0")
 
@@ -1253,9 +1255,9 @@ extension Rv_Data_PlaylistItem.Header: SwiftProtobuf.Message, SwiftProtobuf._Mes
   }
 }
 
-extension Rv_Data_PlaylistItem.Presentation: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+nonisolated extension Rv_Data_PlaylistItem.Presentation: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   public static let protoMessageName: String = Rv_Data_PlaylistItem.protoMessageName + ".Presentation"
-  public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{3}document_path\0\u{1}arrangement\0\u{3}content_destination\0\u{3}user_music_key\0")
+  public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{3}document_path\0\u{1}arrangement\0\u{3}content_destination\0\u{3}user_music_key\0\u{3}arrangement_name\0")
 
   public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
     while let fieldNumber = try decoder.nextFieldNumber() {
@@ -1267,6 +1269,7 @@ extension Rv_Data_PlaylistItem.Presentation: SwiftProtobuf.Message, SwiftProtobu
       case 2: try { try decoder.decodeSingularMessageField(value: &self._arrangement) }()
       case 3: try { try decoder.decodeSingularEnumField(value: &self.contentDestination) }()
       case 4: try { try decoder.decodeSingularMessageField(value: &self._userMusicKey) }()
+      case 5: try { try decoder.decodeSingularStringField(value: &self.arrangementName) }()
       default: break
       }
     }
@@ -1289,6 +1292,9 @@ extension Rv_Data_PlaylistItem.Presentation: SwiftProtobuf.Message, SwiftProtobu
     try { if let v = self._userMusicKey {
       try visitor.visitSingularMessageField(value: v, fieldNumber: 4)
     } }()
+    if !self.arrangementName.isEmpty {
+      try visitor.visitSingularStringField(value: self.arrangementName, fieldNumber: 5)
+    }
     try unknownFields.traverse(visitor: &visitor)
   }
 
@@ -1297,16 +1303,17 @@ extension Rv_Data_PlaylistItem.Presentation: SwiftProtobuf.Message, SwiftProtobu
     if lhs._arrangement != rhs._arrangement {return false}
     if lhs.contentDestination != rhs.contentDestination {return false}
     if lhs._userMusicKey != rhs._userMusicKey {return false}
+    if lhs.arrangementName != rhs.arrangementName {return false}
     if lhs.unknownFields != rhs.unknownFields {return false}
     return true
   }
 }
 
-extension Rv_Data_PlaylistItem.Presentation.ContentDestination: SwiftProtobuf._ProtoNameProviding {
+nonisolated extension Rv_Data_PlaylistItem.Presentation.ContentDestination: SwiftProtobuf._ProtoNameProviding {
   public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{2}\0CONTENT_DESTINATION_GLOBAL\0\u{1}CONTENT_DESTINATION_ANNOUNCEMENTS\0")
 }
 
-extension Rv_Data_PlaylistItem.PlanningCenter: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+nonisolated extension Rv_Data_PlaylistItem.PlanningCenter: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   public static let protoMessageName: String = Rv_Data_PlaylistItem.protoMessageName + ".PlanningCenter"
   public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{1}item\0\u{3}linked_data\0")
 
@@ -1383,7 +1390,7 @@ extension Rv_Data_PlaylistItem.PlanningCenter: SwiftProtobuf.Message, SwiftProto
   }
 }
 
-extension Rv_Data_PlaylistItem.Placeholder: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+nonisolated extension Rv_Data_PlaylistItem.Placeholder: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   public static let protoMessageName: String = Rv_Data_PlaylistItem.protoMessageName + ".Placeholder"
   public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{3}linked_data\0")
 

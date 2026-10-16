@@ -1,0 +1,15 @@
+{
+  "version": 1,
+  "operations": [
+    {
+      "stream": "58884c2c-1eb4-50f8-99ac-c88b29cb0f34",
+      "op": "remove-media-action",
+      "action": "F2421D65-4D95-4434-8DFE-1520C8B3B09D"
+    },
+    {
+      "stream": "58884c2c-1eb4-50f8-99ac-c88b29cb0f34",
+      "op": "set-copyright-title",
+      "title": "Native Media Removal CLI"
+    }
+  ]
+}

@@ -15,136 +15,136 @@ import SwiftProtobuf
 // incompatible with the version of SwiftProtobuf to which you are linking.
 // Please ensure that you are building against the same version of the API
 // that was used to generate this file.
-fileprivate struct _GeneratedWithProtocGenSwiftVersion: SwiftProtobuf.ProtobufAPIVersionCheck {
+fileprivate nonisolated struct _GeneratedWithProtocGenSwiftVersion: SwiftProtobuf.ProtobufAPIVersionCheck {
   struct _2: SwiftProtobuf.ProtobufAPIVersion_2 {}
   typealias Version = _2
 }
 
-public struct Rv_Data_Screen: @unchecked Sendable {
+public nonisolated struct Rv_Data_Screen: @unchecked Sendable {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
   // methods supported on all messages.
 
   public var uuid: Rv_Data_UUID {
-    get {return _storage._uuid ?? Rv_Data_UUID()}
+    get {_storage._uuid ?? Rv_Data_UUID()}
     set {_uniqueStorage()._uuid = newValue}
   }
   /// Returns true if `uuid` has been explicitly set.
-  public var hasUuid: Bool {return _storage._uuid != nil}
+  public var hasUuid: Bool {_storage._uuid != nil}
   /// Clears the value of `uuid`. Subsequent reads from it will return its default value.
   public mutating func clearUuid() {_uniqueStorage()._uuid = nil}
 
   public var name: String {
-    get {return _storage._name}
+    get {_storage._name}
     set {_uniqueStorage()._name = newValue}
   }
 
   public var color: Rv_Data_Color {
-    get {return _storage._color ?? Rv_Data_Color()}
+    get {_storage._color ?? Rv_Data_Color()}
     set {_uniqueStorage()._color = newValue}
   }
   /// Returns true if `color` has been explicitly set.
-  public var hasColor: Bool {return _storage._color != nil}
+  public var hasColor: Bool {_storage._color != nil}
   /// Clears the value of `color`. Subsequent reads from it will return its default value.
   public mutating func clearColor() {_uniqueStorage()._color = nil}
 
   public var bounds: Rv_Data_Graphics.Rect {
-    get {return _storage._bounds ?? Rv_Data_Graphics.Rect()}
+    get {_storage._bounds ?? Rv_Data_Graphics.Rect()}
     set {_uniqueStorage()._bounds = newValue}
   }
   /// Returns true if `bounds` has been explicitly set.
-  public var hasBounds: Bool {return _storage._bounds != nil}
+  public var hasBounds: Bool {_storage._bounds != nil}
   /// Clears the value of `bounds`. Subsequent reads from it will return its default value.
   public mutating func clearBounds() {_uniqueStorage()._bounds = nil}
 
   public var aspectRatioLocked: Bool {
-    get {return _storage._aspectRatioLocked}
+    get {_storage._aspectRatioLocked}
     set {_uniqueStorage()._aspectRatioLocked = newValue}
   }
 
   public var outputBoundsAspectRatioLocked: Bool {
-    get {return _storage._outputBoundsAspectRatioLocked}
+    get {_storage._outputBoundsAspectRatioLocked}
     set {_uniqueStorage()._outputBoundsAspectRatioLocked = newValue}
   }
 
   public var cornerPinningEnabled: Bool {
-    get {return _storage._cornerPinningEnabled}
+    get {_storage._cornerPinningEnabled}
     set {_uniqueStorage()._cornerPinningEnabled = newValue}
   }
 
   public var subscreenUnitRect: Rv_Data_Graphics.Rect {
-    get {return _storage._subscreenUnitRect ?? Rv_Data_Graphics.Rect()}
+    get {_storage._subscreenUnitRect ?? Rv_Data_Graphics.Rect()}
     set {_uniqueStorage()._subscreenUnitRect = newValue}
   }
   /// Returns true if `subscreenUnitRect` has been explicitly set.
-  public var hasSubscreenUnitRect: Bool {return _storage._subscreenUnitRect != nil}
+  public var hasSubscreenUnitRect: Bool {_storage._subscreenUnitRect != nil}
   /// Clears the value of `subscreenUnitRect`. Subsequent reads from it will return its default value.
   public mutating func clearSubscreenUnitRect() {_uniqueStorage()._subscreenUnitRect = nil}
 
   public var rotation: Double {
-    get {return _storage._rotation}
+    get {_storage._rotation}
     set {_uniqueStorage()._rotation = newValue}
   }
 
   public var gamma: Double {
-    get {return _storage._gamma}
+    get {_storage._gamma}
     set {_uniqueStorage()._gamma = newValue}
   }
 
   public var blackLevel: Double {
-    get {return _storage._blackLevel}
+    get {_storage._blackLevel}
     set {_uniqueStorage()._blackLevel = newValue}
   }
 
   public var blendedEdges: UInt32 {
-    get {return _storage._blendedEdges}
+    get {_storage._blendedEdges}
     set {_uniqueStorage()._blendedEdges = newValue}
   }
 
   public var cornerValues: Rv_Data_CornerValues {
-    get {return _storage._cornerValues ?? Rv_Data_CornerValues()}
+    get {_storage._cornerValues ?? Rv_Data_CornerValues()}
     set {_uniqueStorage()._cornerValues = newValue}
   }
   /// Returns true if `cornerValues` has been explicitly set.
-  public var hasCornerValues: Bool {return _storage._cornerValues != nil}
+  public var hasCornerValues: Bool {_storage._cornerValues != nil}
   /// Clears the value of `cornerValues`. Subsequent reads from it will return its default value.
   public mutating func clearCornerValues() {_uniqueStorage()._cornerValues = nil}
 
   public var outputDisplay: Rv_Data_OutputDisplay {
-    get {return _storage._outputDisplay ?? Rv_Data_OutputDisplay()}
+    get {_storage._outputDisplay ?? Rv_Data_OutputDisplay()}
     set {_uniqueStorage()._outputDisplay = newValue}
   }
   /// Returns true if `outputDisplay` has been explicitly set.
-  public var hasOutputDisplay: Bool {return _storage._outputDisplay != nil}
+  public var hasOutputDisplay: Bool {_storage._outputDisplay != nil}
   /// Clears the value of `outputDisplay`. Subsequent reads from it will return its default value.
   public mutating func clearOutputDisplay() {_uniqueStorage()._outputDisplay = nil}
 
   public var colorEnabled: Bool {
-    get {return _storage._colorEnabled}
+    get {_storage._colorEnabled}
     set {_uniqueStorage()._colorEnabled = newValue}
   }
 
   public var colorAdjustment: Rv_Data_Screen.ColorAdjustment {
-    get {return _storage._colorAdjustment ?? Rv_Data_Screen.ColorAdjustment()}
+    get {_storage._colorAdjustment ?? Rv_Data_Screen.ColorAdjustment()}
     set {_uniqueStorage()._colorAdjustment = newValue}
   }
   /// Returns true if `colorAdjustment` has been explicitly set.
-  public var hasColorAdjustment: Bool {return _storage._colorAdjustment != nil}
+  public var hasColorAdjustment: Bool {_storage._colorAdjustment != nil}
   /// Clears the value of `colorAdjustment`. Subsequent reads from it will return its default value.
   public mutating func clearColorAdjustment() {_uniqueStorage()._colorAdjustment = nil}
 
   public var blendCompensation: Rv_Data_Screen.BlendCompensation {
-    get {return _storage._blendCompensation ?? Rv_Data_Screen.BlendCompensation()}
+    get {_storage._blendCompensation ?? Rv_Data_Screen.BlendCompensation()}
     set {_uniqueStorage()._blendCompensation = newValue}
   }
   /// Returns true if `blendCompensation` has been explicitly set.
-  public var hasBlendCompensation: Bool {return _storage._blendCompensation != nil}
+  public var hasBlendCompensation: Bool {_storage._blendCompensation != nil}
   /// Clears the value of `blendCompensation`. Subsequent reads from it will return its default value.
   public mutating func clearBlendCompensation() {_uniqueStorage()._blendCompensation = nil}
 
   public var unknownFields = SwiftProtobuf.UnknownStorage()
 
-  public struct ColorAdjustment: Sendable {
+  public nonisolated struct ColorAdjustment: Sendable {
     // SwiftProtobuf.Message conformance is added in an extension below. See the
     // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
     // methods supported on all messages.
@@ -168,7 +168,7 @@ public struct Rv_Data_Screen: @unchecked Sendable {
     public init() {}
   }
 
-  public struct BlendCompensation: Sendable {
+  public nonisolated struct BlendCompensation: Sendable {
     // SwiftProtobuf.Message conformance is added in an extension below. See the
     // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
     // methods supported on all messages.
@@ -185,44 +185,44 @@ public struct Rv_Data_Screen: @unchecked Sendable {
   fileprivate var _storage = _StorageClass.defaultInstance
 }
 
-public struct Rv_Data_CornerValues: Sendable {
+public nonisolated struct Rv_Data_CornerValues: Sendable {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
   // methods supported on all messages.
 
   public var topLeft: Rv_Data_Graphics.Point {
-    get {return _topLeft ?? Rv_Data_Graphics.Point()}
+    get {_topLeft ?? Rv_Data_Graphics.Point()}
     set {_topLeft = newValue}
   }
   /// Returns true if `topLeft` has been explicitly set.
-  public var hasTopLeft: Bool {return self._topLeft != nil}
+  public var hasTopLeft: Bool {self._topLeft != nil}
   /// Clears the value of `topLeft`. Subsequent reads from it will return its default value.
   public mutating func clearTopLeft() {self._topLeft = nil}
 
   public var topRight: Rv_Data_Graphics.Point {
-    get {return _topRight ?? Rv_Data_Graphics.Point()}
+    get {_topRight ?? Rv_Data_Graphics.Point()}
     set {_topRight = newValue}
   }
   /// Returns true if `topRight` has been explicitly set.
-  public var hasTopRight: Bool {return self._topRight != nil}
+  public var hasTopRight: Bool {self._topRight != nil}
   /// Clears the value of `topRight`. Subsequent reads from it will return its default value.
   public mutating func clearTopRight() {self._topRight = nil}
 
   public var bottomLeft: Rv_Data_Graphics.Point {
-    get {return _bottomLeft ?? Rv_Data_Graphics.Point()}
+    get {_bottomLeft ?? Rv_Data_Graphics.Point()}
     set {_bottomLeft = newValue}
   }
   /// Returns true if `bottomLeft` has been explicitly set.
-  public var hasBottomLeft: Bool {return self._bottomLeft != nil}
+  public var hasBottomLeft: Bool {self._bottomLeft != nil}
   /// Clears the value of `bottomLeft`. Subsequent reads from it will return its default value.
   public mutating func clearBottomLeft() {self._bottomLeft = nil}
 
   public var bottomRight: Rv_Data_Graphics.Point {
-    get {return _bottomRight ?? Rv_Data_Graphics.Point()}
+    get {_bottomRight ?? Rv_Data_Graphics.Point()}
     set {_bottomRight = newValue}
   }
   /// Returns true if `bottomRight` has been explicitly set.
-  public var hasBottomRight: Bool {return self._bottomRight != nil}
+  public var hasBottomRight: Bool {self._bottomRight != nil}
   /// Clears the value of `bottomRight`. Subsequent reads from it will return its default value.
   public mutating func clearBottomRight() {self._bottomRight = nil}
 
@@ -236,7 +236,7 @@ public struct Rv_Data_CornerValues: Sendable {
   fileprivate var _bottomRight: Rv_Data_Graphics.Point? = nil
 }
 
-public struct Rv_Data_DisplayMode: Sendable {
+public nonisolated struct Rv_Data_DisplayMode: Sendable {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
   // methods supported on all messages.
@@ -256,66 +256,66 @@ public struct Rv_Data_DisplayMode: Sendable {
   public init() {}
 }
 
-public struct Rv_Data_OutputDisplay: @unchecked Sendable {
+public nonisolated struct Rv_Data_OutputDisplay: @unchecked Sendable {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
   // methods supported on all messages.
 
   public var name: String {
-    get {return _storage._name}
+    get {_storage._name}
     set {_uniqueStorage()._name = newValue}
   }
 
   public var model: String {
-    get {return _storage._model}
+    get {_storage._model}
     set {_uniqueStorage()._model = newValue}
   }
 
   public var serial: String {
-    get {return _storage._serial}
+    get {_storage._serial}
     set {_uniqueStorage()._serial = newValue}
   }
 
   public var deviceName: String {
-    get {return _storage._deviceName}
+    get {_storage._deviceName}
     set {_uniqueStorage()._deviceName = newValue}
   }
 
   public var vendor: String {
-    get {return _storage._vendor}
+    get {_storage._vendor}
     set {_uniqueStorage()._vendor = newValue}
   }
 
   public var modeIndex: UInt32 {
-    get {return _storage._modeIndex}
+    get {_storage._modeIndex}
     set {_uniqueStorage()._modeIndex = newValue}
   }
 
   public var bounds: Rv_Data_Graphics.Rect {
-    get {return _storage._bounds ?? Rv_Data_Graphics.Rect()}
+    get {_storage._bounds ?? Rv_Data_Graphics.Rect()}
     set {_uniqueStorage()._bounds = newValue}
   }
   /// Returns true if `bounds` has been explicitly set.
-  public var hasBounds: Bool {return _storage._bounds != nil}
+  public var hasBounds: Bool {_storage._bounds != nil}
   /// Clears the value of `bounds`. Subsequent reads from it will return its default value.
   public mutating func clearBounds() {_uniqueStorage()._bounds = nil}
 
   public var type: Rv_Data_OutputDisplay.TypeEnum {
-    get {return _storage._type}
+    get {_storage._type}
     set {_uniqueStorage()._type = newValue}
   }
 
   public var mode: Rv_Data_DisplayMode {
-    get {return _storage._mode ?? Rv_Data_DisplayMode()}
+    get {_storage._mode ?? Rv_Data_DisplayMode()}
     set {_uniqueStorage()._mode = newValue}
   }
   /// Returns true if `mode` has been explicitly set.
-  public var hasMode: Bool {return _storage._mode != nil}
+  public var hasMode: Bool {_storage._mode != nil}
   /// Clears the value of `mode`. Subsequent reads from it will return its default value.
   public mutating func clearMode() {_uniqueStorage()._mode = nil}
 
   public var renderID: String {
-    get {return _storage._renderID}
+    get {_storage._renderID}
     set {_uniqueStorage()._renderID = newValue}
   }
 
@@ -334,12 +334,12 @@ public struct Rv_Data_OutputDisplay: @unchecked Sendable {
 
   public var unknownFields = SwiftProtobuf.UnknownStorage()
 
-  public enum OneOf_AlphaKeySettings: Equatable, Sendable {
+  public nonisolated enum OneOf_AlphaKeySettings: Equatable, Sendable {
     case blackMagicAlphaKeySettings(Rv_Data_OutputDisplay.BlackmagicAlphaKeySettings)
 
   }
 
-  public enum TypeEnum: SwiftProtobuf.Enum, Swift.CaseIterable {
+  public nonisolated enum TypeEnum: SwiftProtobuf.Enum, Swift.CaseIterable {
     public typealias RawValue = Int
     case unknown // = 0
     case screen // = 1
@@ -389,7 +389,7 @@ public struct Rv_Data_OutputDisplay: @unchecked Sendable {
 
   }
 
-  public struct BlackmagicAlphaKeySettings: Sendable {
+  public nonisolated struct BlackmagicAlphaKeySettings: Sendable {
     // SwiftProtobuf.Message conformance is added in an extension below. See the
     // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
     // methods supported on all messages.
@@ -402,7 +402,7 @@ public struct Rv_Data_OutputDisplay: @unchecked Sendable {
 
     public var unknownFields = SwiftProtobuf.UnknownStorage()
 
-    public enum KeyMode: SwiftProtobuf.Enum, Swift.CaseIterable {
+    public nonisolated enum KeyMode: SwiftProtobuf.Enum, Swift.CaseIterable {
       public typealias RawValue = Int
       case `internal` // = 0
       case external // = 1
@@ -444,92 +444,92 @@ public struct Rv_Data_OutputDisplay: @unchecked Sendable {
   fileprivate var _storage = _StorageClass.defaultInstance
 }
 
-public struct Rv_Data_EdgeBlend: @unchecked Sendable {
+public nonisolated struct Rv_Data_EdgeBlend: @unchecked Sendable {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
   // methods supported on all messages.
 
   public var uuid: Rv_Data_UUID {
-    get {return _storage._uuid ?? Rv_Data_UUID()}
+    get {_storage._uuid ?? Rv_Data_UUID()}
     set {_uniqueStorage()._uuid = newValue}
   }
   /// Returns true if `uuid` has been explicitly set.
-  public var hasUuid: Bool {return _storage._uuid != nil}
+  public var hasUuid: Bool {_storage._uuid != nil}
   /// Clears the value of `uuid`. Subsequent reads from it will return its default value.
   public mutating func clearUuid() {_uniqueStorage()._uuid = nil}
 
   public var radius: Double {
-    get {return _storage._radius}
+    get {_storage._radius}
     set {_uniqueStorage()._radius = newValue}
   }
 
   public var intensity: Double {
-    get {return _storage._intensity}
+    get {_storage._intensity}
     set {_uniqueStorage()._intensity = newValue}
   }
 
   public var mode: Rv_Data_EdgeBlend.Mode {
-    get {return _storage._mode}
+    get {_storage._mode}
     set {_uniqueStorage()._mode = newValue}
   }
 
   public var firstScreen: Rv_Data_EdgeBlend.Screen {
-    get {return _storage._firstScreen ?? Rv_Data_EdgeBlend.Screen()}
+    get {_storage._firstScreen ?? Rv_Data_EdgeBlend.Screen()}
     set {_uniqueStorage()._firstScreen = newValue}
   }
   /// Returns true if `firstScreen` has been explicitly set.
-  public var hasFirstScreen: Bool {return _storage._firstScreen != nil}
+  public var hasFirstScreen: Bool {_storage._firstScreen != nil}
   /// Clears the value of `firstScreen`. Subsequent reads from it will return its default value.
   public mutating func clearFirstScreen() {_uniqueStorage()._firstScreen = nil}
 
   public var secondScreen: Rv_Data_EdgeBlend.Screen {
-    get {return _storage._secondScreen ?? Rv_Data_EdgeBlend.Screen()}
+    get {_storage._secondScreen ?? Rv_Data_EdgeBlend.Screen()}
     set {_uniqueStorage()._secondScreen = newValue}
   }
   /// Returns true if `secondScreen` has been explicitly set.
-  public var hasSecondScreen: Bool {return _storage._secondScreen != nil}
+  public var hasSecondScreen: Bool {_storage._secondScreen != nil}
   /// Clears the value of `secondScreen`. Subsequent reads from it will return its default value.
   public mutating func clearSecondScreen() {_uniqueStorage()._secondScreen = nil}
 
   public var leftScreen: Rv_Data_EdgeBlend.Screen {
-    get {return _storage._leftScreen ?? Rv_Data_EdgeBlend.Screen()}
+    get {_storage._leftScreen ?? Rv_Data_EdgeBlend.Screen()}
     set {_uniqueStorage()._leftScreen = newValue}
   }
   /// Returns true if `leftScreen` has been explicitly set.
-  public var hasLeftScreen: Bool {return _storage._leftScreen != nil}
+  public var hasLeftScreen: Bool {_storage._leftScreen != nil}
   /// Clears the value of `leftScreen`. Subsequent reads from it will return its default value.
   public mutating func clearLeftScreen() {_uniqueStorage()._leftScreen = nil}
 
   public var rightScreen: Rv_Data_EdgeBlend.Screen {
-    get {return _storage._rightScreen ?? Rv_Data_EdgeBlend.Screen()}
+    get {_storage._rightScreen ?? Rv_Data_EdgeBlend.Screen()}
     set {_uniqueStorage()._rightScreen = newValue}
   }
   /// Returns true if `rightScreen` has been explicitly set.
-  public var hasRightScreen: Bool {return _storage._rightScreen != nil}
+  public var hasRightScreen: Bool {_storage._rightScreen != nil}
   /// Clears the value of `rightScreen`. Subsequent reads from it will return its default value.
   public mutating func clearRightScreen() {_uniqueStorage()._rightScreen = nil}
 
   public var topScreen: Rv_Data_EdgeBlend.Screen {
-    get {return _storage._topScreen ?? Rv_Data_EdgeBlend.Screen()}
+    get {_storage._topScreen ?? Rv_Data_EdgeBlend.Screen()}
     set {_uniqueStorage()._topScreen = newValue}
   }
   /// Returns true if `topScreen` has been explicitly set.
-  public var hasTopScreen: Bool {return _storage._topScreen != nil}
+  public var hasTopScreen: Bool {_storage._topScreen != nil}
   /// Clears the value of `topScreen`. Subsequent reads from it will return its default value.
   public mutating func clearTopScreen() {_uniqueStorage()._topScreen = nil}
 
   public var bottomScreen: Rv_Data_EdgeBlend.Screen {
-    get {return _storage._bottomScreen ?? Rv_Data_EdgeBlend.Screen()}
+    get {_storage._bottomScreen ?? Rv_Data_EdgeBlend.Screen()}
     set {_uniqueStorage()._bottomScreen = newValue}
   }
   /// Returns true if `bottomScreen` has been explicitly set.
-  public var hasBottomScreen: Bool {return _storage._bottomScreen != nil}
+  public var hasBottomScreen: Bool {_storage._bottomScreen != nil}
   /// Clears the value of `bottomScreen`. Subsequent reads from it will return its default value.
   public mutating func clearBottomScreen() {_uniqueStorage()._bottomScreen = nil}
 
   public var unknownFields = SwiftProtobuf.UnknownStorage()
 
-  public enum Mode: SwiftProtobuf.Enum, Swift.CaseIterable {
+  public nonisolated enum Mode: SwiftProtobuf.Enum, Swift.CaseIterable {
     public typealias RawValue = Int
     case linear // = 0
     case cubic // = 1
@@ -567,17 +567,17 @@ public struct Rv_Data_EdgeBlend: @unchecked Sendable {
 
   }
 
-  public struct Screen: Sendable {
+  public nonisolated struct Screen: Sendable {
     // SwiftProtobuf.Message conformance is added in an extension below. See the
     // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
     // methods supported on all messages.
 
     public var uuid: Rv_Data_UUID {
-      get {return _uuid ?? Rv_Data_UUID()}
+      get {_uuid ?? Rv_Data_UUID()}
       set {_uuid = newValue}
     }
     /// Returns true if `uuid` has been explicitly set.
-    public var hasUuid: Bool {return self._uuid != nil}
+    public var hasUuid: Bool {self._uuid != nil}
     /// Clears the value of `uuid`. Subsequent reads from it will return its default value.
     public mutating func clearUuid() {self._uuid = nil}
 
@@ -595,7 +595,7 @@ public struct Rv_Data_EdgeBlend: @unchecked Sendable {
 
     public var unknownFields = SwiftProtobuf.UnknownStorage()
 
-    public enum Edge: SwiftProtobuf.Enum, Swift.CaseIterable {
+    public nonisolated enum Edge: SwiftProtobuf.Enum, Swift.CaseIterable {
       public typealias RawValue = Int
       case unknown // = 0
       case left // = 1
@@ -641,7 +641,7 @@ public struct Rv_Data_EdgeBlend: @unchecked Sendable {
 
     }
 
-    public enum Mode: SwiftProtobuf.Enum, Swift.CaseIterable {
+    public nonisolated enum Mode: SwiftProtobuf.Enum, Swift.CaseIterable {
       public typealias RawValue = Int
       case linear // = 0
       case cubic // = 1
@@ -691,9 +691,9 @@ public struct Rv_Data_EdgeBlend: @unchecked Sendable {
 
 // MARK: - Code below here is support for the SwiftProtobuf runtime.
 
-fileprivate let _protobuf_package = "rv.data"
+fileprivate nonisolated let _protobuf_package = "rv.data"
 
-extension Rv_Data_Screen: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+nonisolated extension Rv_Data_Screen: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   public static let protoMessageName: String = _protobuf_package + ".Screen"
   public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{1}uuid\0\u{1}name\0\u{1}color\0\u{1}bounds\0\u{3}aspect_ratio_locked\0\u{3}output_bounds_aspect_ratio_locked\0\u{3}corner_pinning_enabled\0\u{3}subscreen_unit_rect\0\u{1}rotation\0\u{1}gamma\0\u{3}black_level\0\u{3}blended_edges\0\u{3}corner_values\0\u{3}output_display\0\u{3}color_enabled\0\u{3}color_adjustment\0\u{3}blend_compensation\0")
 
@@ -875,7 +875,7 @@ extension Rv_Data_Screen: SwiftProtobuf.Message, SwiftProtobuf._MessageImplement
   }
 }
 
-extension Rv_Data_Screen.ColorAdjustment: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+nonisolated extension Rv_Data_Screen.ColorAdjustment: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   public static let protoMessageName: String = Rv_Data_Screen.protoMessageName + ".ColorAdjustment"
   public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{1}gamma\0\u{3}black_level\0\u{3}red_level\0\u{3}green_level\0\u{3}blue_level\0\u{1}brightness\0\u{1}contrast\0")
 
@@ -935,7 +935,7 @@ extension Rv_Data_Screen.ColorAdjustment: SwiftProtobuf.Message, SwiftProtobuf._
   }
 }
 
-extension Rv_Data_Screen.BlendCompensation: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+nonisolated extension Rv_Data_Screen.BlendCompensation: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   public static let protoMessageName: String = Rv_Data_Screen.protoMessageName + ".BlendCompensation"
   public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{3}black_level\0")
 
@@ -965,7 +965,7 @@ extension Rv_Data_Screen.BlendCompensation: SwiftProtobuf.Message, SwiftProtobuf
   }
 }
 
-extension Rv_Data_CornerValues: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+nonisolated extension Rv_Data_CornerValues: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   public static let protoMessageName: String = _protobuf_package + ".CornerValues"
   public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{3}top_left\0\u{3}top_right\0\u{3}bottom_left\0\u{3}bottom_right\0")
 
@@ -1014,7 +1014,7 @@ extension Rv_Data_CornerValues: SwiftProtobuf.Message, SwiftProtobuf._MessageImp
   }
 }
 
-extension Rv_Data_DisplayMode: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+nonisolated extension Rv_Data_DisplayMode: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   public static let protoMessageName: String = _protobuf_package + ".DisplayMode"
   public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{1}name\0\u{1}width\0\u{1}height\0\u{3}refresh_rate\0\u{1}interlaced\0")
 
@@ -1064,7 +1064,7 @@ extension Rv_Data_DisplayMode: SwiftProtobuf.Message, SwiftProtobuf._MessageImpl
   }
 }
 
-extension Rv_Data_OutputDisplay: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+nonisolated extension Rv_Data_OutputDisplay: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   public static let protoMessageName: String = _protobuf_package + ".OutputDisplay"
   public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{1}name\0\u{1}model\0\u{1}serial\0\u{1}deviceName\0\u{1}vendor\0\u{1}modeIndex\0\u{1}bounds\0\u{1}type\0\u{1}mode\0\u{3}render_id\0\u{3}black_magic_alpha_key_settings\0")
 
@@ -1216,11 +1216,11 @@ extension Rv_Data_OutputDisplay: SwiftProtobuf.Message, SwiftProtobuf._MessageIm
   }
 }
 
-extension Rv_Data_OutputDisplay.TypeEnum: SwiftProtobuf._ProtoNameProviding {
+nonisolated extension Rv_Data_OutputDisplay.TypeEnum: SwiftProtobuf._ProtoNameProviding {
   public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{2}\0TYPE_UNKNOWN\0\u{1}TYPE_SCREEN\0\u{1}TYPE_CARD\0\u{1}TYPE_NDI\0\u{1}TYPE_SYPHON\0\u{1}TYPE_CUSTOM\0")
 }
 
-extension Rv_Data_OutputDisplay.BlackmagicAlphaKeySettings: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+nonisolated extension Rv_Data_OutputDisplay.BlackmagicAlphaKeySettings: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   public static let protoMessageName: String = Rv_Data_OutputDisplay.protoMessageName + ".BlackmagicAlphaKeySettings"
   public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{1}enabled\0\u{3}key_mode\0\u{3}blend_value\0")
 
@@ -1260,11 +1260,11 @@ extension Rv_Data_OutputDisplay.BlackmagicAlphaKeySettings: SwiftProtobuf.Messag
   }
 }
 
-extension Rv_Data_OutputDisplay.BlackmagicAlphaKeySettings.KeyMode: SwiftProtobuf._ProtoNameProviding {
+nonisolated extension Rv_Data_OutputDisplay.BlackmagicAlphaKeySettings.KeyMode: SwiftProtobuf._ProtoNameProviding {
   public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{2}\0KEY_MODE_INTERNAL\0\u{1}KEY_MODE_EXTERNAL\0")
 }
 
-extension Rv_Data_EdgeBlend: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+nonisolated extension Rv_Data_EdgeBlend: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   public static let protoMessageName: String = _protobuf_package + ".EdgeBlend"
   public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{1}uuid\0\u{1}radius\0\u{1}intensity\0\u{1}mode\0\u{3}first_screen\0\u{3}second_screen\0\u{3}left_screen\0\u{3}right_screen\0\u{3}top_screen\0\u{3}bottom_screen\0")
 
@@ -1397,11 +1397,11 @@ extension Rv_Data_EdgeBlend: SwiftProtobuf.Message, SwiftProtobuf._MessageImplem
   }
 }
 
-extension Rv_Data_EdgeBlend.Mode: SwiftProtobuf._ProtoNameProviding {
+nonisolated extension Rv_Data_EdgeBlend.Mode: SwiftProtobuf._ProtoNameProviding {
   public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{2}\0MODE_LINEAR\0\u{1}MODE_CUBIC\0\u{1}MODE_QUADRATIC\0")
 }
 
-extension Rv_Data_EdgeBlend.Screen: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+nonisolated extension Rv_Data_EdgeBlend.Screen: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   public static let protoMessageName: String = Rv_Data_EdgeBlend.protoMessageName + ".Screen"
   public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{1}uuid\0\u{1}edge\0\u{1}gamma\0\u{3}black_level\0\u{1}mode\0\u{1}radius\0\u{1}intensity\0")
 
@@ -1465,10 +1465,10 @@ extension Rv_Data_EdgeBlend.Screen: SwiftProtobuf.Message, SwiftProtobuf._Messag
   }
 }
 
-extension Rv_Data_EdgeBlend.Screen.Edge: SwiftProtobuf._ProtoNameProviding {
+nonisolated extension Rv_Data_EdgeBlend.Screen.Edge: SwiftProtobuf._ProtoNameProviding {
   public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{2}\0EDGE_UNKNOWN\0\u{1}EDGE_LEFT\0\u{1}EDGE_RIGHT\0\u{1}EDGE_TOP\0\u{1}EDGE_BOTTOM\0")
 }
 
-extension Rv_Data_EdgeBlend.Screen.Mode: SwiftProtobuf._ProtoNameProviding {
+nonisolated extension Rv_Data_EdgeBlend.Screen.Mode: SwiftProtobuf._ProtoNameProviding {
   public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{2}\0MODE_LINEAR\0\u{1}MODE_CUBIC\0\u{1}MODE_QUADRATIC\0")
 }

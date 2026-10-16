@@ -1,0 +1,63 @@
+{
+  "application": "ProPresenter",
+  "version": "22",
+  "build": "369098875",
+  "osVersion": "27.0.1",
+  "date": "2026-10-15",
+  "source": "Selected unmodified JSON model values reconstructed read-only from a frozen native test workspace MediaStore; current manifest verified, all current SST block checksums and WAL record checksums verified. This selected model fixture is not a complete RocksDB snapshot.",
+  "rocksdbVersion": "8.10.0",
+  "schema": {
+    "application_id": "com.renewedvision.media-store",
+    "version": 1
+  },
+  "activeFiles": {
+    "logNumber": 148,
+    "lastSequence": 40201,
+    "files": [
+      146,
+      143,
+      151
+    ]
+  },
+  "sourceSHA256": {
+    "LOG.old.1792100848013409": "15c93be61dc76b23c918f72d36154c9a7f0a7d23d555697ce81fa465c34299d6",
+    "LOG.old.1792089180838538": "04376e8817c1908795d7ff42ea87718902be7e6a07ecefebe2a4ebdfd9a420bc",
+    "LOG.old.1792095867420573": "80228c7273b43c3003f98410ade572b52ed860d64c2a895a8ff835f35dece38b",
+    "LOG.old.1792087382711741": "19a676a0c29df474c5120fd009eca48b7e9802fae4284321f44c1dd83a11291c",
+    "LOG.old.1792088842975390": "964d0d6befd45f209b3d6666611204ede0a8ba6f3ac99925cb22e276147cba95",
+    "IDENTITY": "98cbfde4f5aea24b97c73c6fec75a404dafe830328e786d322e8f78c22629373",
+    "LOG.old.1792098725362955": "533375143b3b3e295f4d8f934f47aa801d69664857f1fa1f93f3376e3d53d293",
+    "OPTIONS-000150": "5e1f0bccde6f0181d1ebc6c41c667e4c937a7e3bfdb57bac060513cc704c6b19",
+    "LOCK": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "LOG.old.1792103465619179": "972a046c0cce18d3c7367078d9e11b5d7b1b989b678373a38ff301dddf699094",
+    "MANIFEST-000153": "1529b153df9b6b7d5dd73a82876e0e2f5561bdd949cd710d4929ffa7542f6cf7",
+    "CURRENT": "8f50c5a3df03ff605772a3bcce5f91b499ec049d91afe6122995c58476445d63",
+    "LOG": "e6ab179ab396c2d01fd40fad0a370f12c922188baef702b4d5a8573877a015cd",
+    "000152.log": "ba1c3599be71c6e9f15c063d879c12e6ae157c4482ac70762bd6040bd30b3591",
+    "000143.sst": "7fa8ff157baf001bc0e519eaa6c474fc823b6020e8149ee5d7b4f1e2d308b453",
+    "OPTIONS-000155": "5e1f0bccde6f0181d1ebc6c41c667e4c937a7e3bfdb57bac060513cc704c6b19",
+    "LOG.old.1792103803375051": "3311864e4ab1a8e9933e63c6d5383a67690df2fe409108cf0b01ea4aa8093b76",
+    "000146.sst": "bc9edf15af65648a31cc818ddf261289db0d3bd40b52971d1665c96dbefcd12c",
+    "000151.sst": "0144894442b77c840b90f69978950f56c5c8ed06aab9528dd0abf21b39fe2c10",
+    "LOG.old.1792090247661720": "2c2a34290e13800b41c244760c86e99decaf86c1c8de8def3216c8cd1f02f248"
+  },
+  "verification": {
+    "xxh3Blocks": 174,
+    "walBatches": 1519,
+    "walEntries": 1784,
+    "currentModels": 343,
+    "fileOccurrences": 78,
+    "matchingReferenceModels": 78,
+    "matchingDeclaredAssetModels": 77
+  },
+  "files": [
+    {
+      "path": "NativeModels.json",
+      "sha256": "a7f4cb94018c40216a61c3b91685c5b734e2f0337a7e9dbb4f4c2efaa5c09732"
+    },
+    {
+      "path": "ObservedOccurrences.json",
+      "sha256": "7fb2b84ace0326eb1eb6af233acf7513841890fa8ce9c1e3a48bf17675964497"
+    }
+  ]
+}

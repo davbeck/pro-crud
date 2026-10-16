@@ -1,0 +1,299 @@
+{
+  "applicationVersion": "22 beta",
+  "applicationBuild": "369098875",
+  "sourceBinary": "Contents/Frameworks/ProCore.framework/ProCore",
+  "sourceSHA256": "793c50c3e28dc742a06eb6ac2029478843372a3667963302737e0f746d273e09",
+  "descriptorSetSHA256": "12a01eb9618834ca51a782122088a6bf818922e596d380156b4435cf6526c8fa",
+  "files": {
+    "action.proto": {
+      "offset": 127578325,
+      "length": 43921,
+      "sha256": "25d05c90ca1d4c0585637dd1ef955b329a6f78123ea4b4526853851004fba059"
+    },
+    "alignmentGuide.proto": {
+      "offset": 127519570,
+      "length": 989,
+      "sha256": "872fc4fdc334ac2890f266c8ab9998024d5e0421826d389f1a7c18558cef575f"
+    },
+    "alphaType.proto": {
+      "offset": 127389582,
+      "length": 421,
+      "sha256": "46db6339288bbdd89037e8cd88d79d6164f9c40cbc20f378422d7e2ff5fbb1cb"
+    },
+    "applicationInfo.proto": {
+      "offset": 127501459,
+      "length": 1937,
+      "sha256": "4223b760be4486af21207601a290fe3bd324b37170adc0d5886895d91d8af147"
+    },
+    "audio.proto": {
+      "offset": 127695098,
+      "length": 5969,
+      "sha256": "526e967a0b1b3860dc81cee6c46d7ad5ebcc9d717896b87a408a78eb4e0c317f"
+    },
+    "background.proto": {
+      "offset": 127479286,
+      "length": 719,
+      "sha256": "3d83057df48d4b7303e11306ce12d99f559922dc8b4dcc33ca29f4b6c1356abc"
+    },
+    "calendar.proto": {
+      "offset": 127673307,
+      "length": 5520,
+      "sha256": "0ae13ace87681fea6a8e979b1598588f7364a2d92c69eb32d531d160e79a57cf"
+    },
+    "ccli.proto": {
+      "offset": 127775128,
+      "length": 3427,
+      "sha256": "384cd7938eba70e3fbf6b9a09e22361a05da508684104890dd6cc5490ee5fd37"
+    },
+    "clearGroups.proto": {
+      "offset": 127778558,
+      "length": 4924,
+      "sha256": "3e8c1b3940000151787f5bbe58b16fb0e6646dbe071418b170e7137bfa621742"
+    },
+    "collectionElementType.proto": {
+      "offset": 127480008,
+      "length": 925,
+      "sha256": "16ff932709d2edb94a82ba4c36b74b4f8311aec782dbaf6ac35c0cdb20b8ae38"
+    },
+    "color.proto": {
+      "offset": 127388876,
+      "length": 703,
+      "sha256": "667dee7aa87ebc086fd04a1bfe4b52846ee7a8fb30bba0440df99edf34231965"
+    },
+    "communications.proto": {
+      "offset": 127741359,
+      "length": 13961,
+      "sha256": "f4de384031c294bc612ebb54c5d966427cf04d02374c5306c8a204adb5eba306"
+    },
+    "contentProvider.proto": {
+      "offset": 127390006,
+      "length": 1342,
+      "sha256": "07f68a19d42f28200f357d37c4a1405407541bf1470725dfbab10b1c9f32310b"
+    },
+    "cue.proto": {
+      "offset": 127622249,
+      "length": 4418,
+      "sha256": "e573a12f626b636501cb1f5289f7c27a1527f27934020c40049bc51b2e0f5342"
+    },
+    "customOptions.proto": {
+      "offset": 127377679,
+      "length": 2195,
+      "sha256": "75d8fc18b3b736c5b04a1808c1ad94a648ee77522216a1fa2f27eaab5de36c10"
+    },
+    "digitalAudio.proto": {
+      "offset": 127391351,
+      "length": 5732,
+      "sha256": "baddc2cd2da4bc79c2a9ceb807206ca127fddccf73e9074c25f6d75906971608"
+    },
+    "effects.proto": {
+      "offset": 127397595,
+      "length": 9753,
+      "sha256": "5ee04942244c6f03639de07ef4295c7062009908cc983c1944e762efe2482369"
+    },
+    "fileProperties.proto": {
+      "offset": 127407351,
+      "length": 2401,
+      "sha256": "e064be88e7f482e341fbb5dae7c62024de2e53fe3cafe2bd46633cb303a48626"
+    },
+    "font.proto": {
+      "offset": 127409755,
+      "length": 1581,
+      "sha256": "3d22c0020a892b67f7cde76b2d19f14f21555a0aea64035d189cc4d6678af3c8"
+    },
+    "graphicsData.proto": {
+      "offset": 127411879,
+      "length": 67404,
+      "sha256": "890696b69fa05d5927f5d266a867eabcb45a9b08a82a30789b53f4f0d35cc9c3"
+    },
+    "groups.proto": {
+      "offset": 127628821,
+      "length": 1424,
+      "sha256": "d67be2a420eb57ca34f9e87e164f417ff2ceedbf7a76ca1d42a7a4667922e39e"
+    },
+    "hotKey.proto": {
+      "offset": 127486499,
+      "length": 8266,
+      "sha256": "a0a74860a7331da158381e00e437103dca9db3877ab884620782a5abd0e519a5"
+    },
+    "input.proto": {
+      "offset": 127480936,
+      "length": 5560,
+      "sha256": "bd72ea01dc5d0f31dd48270ceecf346f6c2ff36c4828b7ad6bd486301cfbac02"
+    },
+    "intRange.proto": {
+      "offset": 127411339,
+      "length": 536,
+      "sha256": "5d394a04cf494d631a2276d6734644a87fb835bcf8bf386d2f33968765099895"
+    },
+    "keymapping.proto": {
+      "offset": 127678830,
+      "length": 5708,
+      "sha256": "aeaa72f17796bff672c3858c83de608faccfca4d2de71a30eed0a454fb146cc3"
+    },
+    "labels.proto": {
+      "offset": 127684541,
+      "length": 415,
+      "sha256": "5e6eaa5397289b2cd5ee9bc8c86eb54c5c1083e42396a2faf6accaf42b2b2981"
+    },
+    "layers.proto": {
+      "offset": 127494768,
+      "length": 5890,
+      "sha256": "5afde44dcacb7647807a652dce33bde4146fac273a2b3d92df404fdbb99fab4d"
+    },
+    "library.proto": {
+      "offset": 127386652,
+      "length": 2221,
+      "sha256": "97a2ded8ee832d92f7ce1f5c6662e55e053b006bbb6e6ec1ea05f6dff25c5615"
+    },
+    "macros.proto": {
+      "offset": 127684959,
+      "length": 7825,
+      "sha256": "ce9a03b49ef42940470ba7b381d5a995a8a7c76b24d7078540e2991c12a3b819"
+    },
+    "messages.proto": {
+      "offset": 127513018,
+      "length": 6549,
+      "sha256": "188b129a41faaa398a35a76c13db079d1b1627b1638c658b5475152ee21c9fb0"
+    },
+    "musicKeyScale.proto": {
+      "offset": 127626670,
+      "length": 2148,
+      "sha256": "34b2e39d9eae61819aa816113755ea9e4bcbb9efd0f5864a1eca37b10e640b93"
+    },
+    "planningCenter.proto": {
+      "offset": 127649569,
+      "length": 7521,
+      "sha256": "dff4a2bd2dca5d0facf50d15daa386afe310495ee5c95f1a6dbdb8be7f5dbed5"
+    },
+    "playlist.proto": {
+      "offset": 127657093,
+      "length": 14836,
+      "sha256": "b29cd153812845805f6d4a5bc9b56a30489781c42ffeb2292dabfbe7dc8b2ce7"
+    },
+    "playlistTemplate.proto": {
+      "offset": 127755323,
+      "length": 660,
+      "sha256": "1605a32bb1e1369f2d7e6a46f7776eee7c66124e03d3254b7b849ba0c4a54a84"
+    },
+    "preferences.proto": {
+      "offset": 130993688,
+      "length": 13129,
+      "sha256": "e94f44c0ece88f0d59d23a03ab634d4d187279404b4e688ba32f16921e1b39f2"
+    },
+    "presentation.proto": {
+      "offset": 127631060,
+      "length": 18506,
+      "sha256": "b1c0ce3ec28a5f23283d66a9ea5ba7a2a6f1a5b3608fb6cb042e92ec37c49ead"
+    },
+    "presentationSlide.proto": {
+      "offset": 127574745,
+      "length": 2010,
+      "sha256": "0918d46f6c07f9451aff8e2b3b640186b7d49d6f88a49571416070fc7f4eb509"
+    },
+    "proAudienceLook.proto": {
+      "offset": 127701070,
+      "length": 3573,
+      "sha256": "6f67f51caacf1049f9eed19ec084e1fb290fbdd98e832e7e1d5ad7aa88813b77"
+    },
+    "proClockSource.proto": {
+      "offset": 130992794,
+      "length": 891,
+      "sha256": "3679bd1cb5eb07e0f8427d64e8efdc57591ba7b6ba3f5145eb5d3a62bd43e424"
+    },
+    "proMask.proto": {
+      "offset": 127724672,
+      "length": 611,
+      "sha256": "1d46b143f047927f54625178bc8541f886d30fcab1b977c5b944f9589912230a"
+    },
+    "propDocument.proto": {
+      "offset": 127692787,
+      "length": 2308,
+      "sha256": "63c95605f288db41c3b486864dd2212819c91ddb610f8e40060aa4b513db917f"
+    },
+    "propSlide.proto": {
+      "offset": 127573788,
+      "length": 954,
+      "sha256": "a9daed9de67afd421ff9cf091b74b12bbd5136900361e69709b8fd7a7925b906"
+    },
+    "propresenter.proto": {
+      "offset": 127783485,
+      "length": 4434,
+      "sha256": "21be0eb73aa9449cdb5786ff98b611b18767dc2daa0559375ca9f5151cc156d1"
+    },
+    "proscreen.proto": {
+      "offset": 127720211,
+      "length": 4458,
+      "sha256": "7fa1201d718763de51ebf2f13e1fe1e7620487e7cb32dfbab3a0faffa1a1f77d"
+    },
+    "proworkspace.proto": {
+      "offset": 127735723,
+      "length": 5633,
+      "sha256": "f52a54ef2c1358c1801eca852145a0bc5e84c4ce6f7787cca26165a3afce6e96"
+    },
+    "recording.proto": {
+      "offset": 127725286,
+      "length": 10434,
+      "sha256": "bbe6fcf91aa41f39f7e9d922bdc4a75bb2eafcb4297ab03ee8c2658dcdd22714"
+    },
+    "rvtimestamp.proto": {
+      "offset": 127630248,
+      "length": 808,
+      "sha256": "95d9f1c367869d4a77210b8f62afe6e2cd22e5dd1fca34f13595db0149f20bc5"
+    },
+    "screens.proto": {
+      "offset": 127704646,
+      "length": 15562,
+      "sha256": "732b23b297f528786b1222bd3ca5845815b7ce6ed853295b2324b8630c16a4c2"
+    },
+    "slide.proto": {
+      "offset": 127520563,
+      "length": 53222,
+      "sha256": "deff9f7c1d4f6ee149c03ce39166d98c3b2a08a2ce088e5e0abff6a49cb3d398"
+    },
+    "stage.proto": {
+      "offset": 127576758,
+      "length": 1563,
+      "sha256": "6ec12797596f945e6e88499f239ebc5133dd4793dbdc48a172bc1f1c2c591fa1"
+    },
+    "template.proto": {
+      "offset": 127671932,
+      "length": 1372,
+      "sha256": "be5a218e0188e0ebdada88ad41f382f6063b991889445a6becd6cd40cd6a31d1"
+    },
+    "templateIdentification.proto": {
+      "offset": 127503399,
+      "length": 1047,
+      "sha256": "299fdca8c330771bc12748c6174e4ee19f608575b7ef58ab417cf38ff46343f7"
+    },
+    "testPattern.proto": {
+      "offset": 127755987,
+      "length": 19138,
+      "sha256": "0d6da520cf160d256d9e252e5d52b6e29d06c64ba4a042108b46830d13f9230d"
+    },
+    "timedPlayback.proto": {
+      "offset": 131084201,
+      "length": 10328,
+      "sha256": "bcb8db428617a21b5d54d090114f1a32e69546f0f6b380e75e54f3fbe7099f4d"
+    },
+    "timers.proto": {
+      "offset": 127504449,
+      "length": 8566,
+      "sha256": "415e18f2798e5261b055ab4473fc7aedc91c7119e6fc74d986f657d4d3a280d6"
+    },
+    "url.proto": {
+      "offset": 127379877,
+      "length": 6772,
+      "sha256": "9f301abe813bc97030ce28d09b4bc66766609b6f6323b91191d66fe71fbf9d67"
+    },
+    "uuid.proto": {
+      "offset": 127397086,
+      "length": 506,
+      "sha256": "f2ad443b7e583a2e129c85d4d6686f81740a6d12541a1ca47a27cd336c3e0ded"
+    },
+    "version.proto": {
+      "offset": 127500661,
+      "length": 795,
+      "sha256": "c226b753311955e2334e7211a6373d30baecc39c81877450bdccd2c53b497680"
+    }
+  }
+}

@@ -81,7 +81,9 @@ editing commands are not supported.
 
 ### Replacing Media Safely
 
-A media UUID identifies the asset, not merely the stored URL. Changing only
+In legacy-style interchange media, a UUID identifies the asset, not merely the
+stored URL. Native 22 separates occurrence references and asset UUIDs; native
+editing/packaging requires its identity adapter and remains gated. Changing only
 `rv.data.Media.url` can leave the document pointing at one file while
 ProPresenter's media registry associates the UUID with another. `edit patch`
 therefore rejects URL-only media changes unless `--allow-url-only` is passed for
@@ -178,6 +180,19 @@ UUIDs, absolute/local URL disagreement, actual-versus-stored image dimensions,
 one UUID referring to conflicting files, disagreement with the canonical
 `Playlists/Media` registry, and filename-like cue labels that disagree with the
 selected asset. It does not modify the document.
+
+HLS sources are runtime dependencies. Strict file-media validation excludes
+them from file existence, filename-label and file-identity comparisons, including
+HLS entries in the Media registry. It does not fetch their URLs or verify stream
+availability.
+
+Target 22 supports preserving native schema-1 video-source HLS media actions in
+raw edits, native Presentation exports and bundles. The action must have valid
+occurrence/asset UUIDs and one HTTP(S) stream source, with no provider/container,
+file dependency, effect, transition or playback marker. Unknown fields/enums
+inside this action's media graph fail compatibility checks. Target 21 rejects
+this native representation. HLS fills, the separate root `hls_stream` variant,
+media-store construction and runtime playback remain unsupported.
 
 ## Cue Groups
 
@@ -472,6 +487,18 @@ pro-crud edit set-text deck.pro --path '/cues[index=0]/actions[index=0]/slide/pr
 ```
 
 Inline and file RTF are decoded before the presentation is changed, and their original bytes are preserved. The first RTF run also updates the text box's compatibility font metadata; mixed run styling remains in the RTF itself.
+
+For a registered local native 22 workspace, use `workspace set-text ROOT
+--stream PRESENTATION_UUID --action SLIDE_ACTION_UUID --element ELEMENT_UUID
+--registry PATH` with exactly one of `--text TEXT` or `--rtf FILE`. Select the
+slide action and element by UUID; stop ProPresenter and its workspace helpers
+before writing. Plain text uses the element's default formatting. Matching plain
+text preserves existing rich formatting and makes no change. Full replacement
+clears old custom ranges, updates the first-run font metadata and preserves the
+existing native containers and history. Native delivery and element builds are
+not yet supported by this operation. The version-1 `workspace apply` manifest
+also accepts `{"stream":"UUID","op":"set-text","action":"UUID",
+"element":"UUID","text":"Replacement"}`, or `rtfFile` instead of `text`.
 
 Replacing the complete RTF also clears all `custom_attributes`. Those entries
 are ranges into the previous string and can otherwise apply stale

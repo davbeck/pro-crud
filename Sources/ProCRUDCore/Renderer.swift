@@ -126,7 +126,10 @@ public final class PresentationRenderer {
 	}
 
 	private func selectedCues(slideIndices: Set<Int>?) throws -> [PresentationCueOccurrence] {
-		try document.cueOccurrences().filter { occurrence in
+		var order = document.presentation
+		order.cues = []
+		try requireSupported(order)
+		return try document.cueOccurrences().filter { occurrence in
 			slideIndices?.contains(occurrence.sequenceIndex) ?? true
 		}
 	}
@@ -390,15 +393,25 @@ public final class PresentationRenderer {
 	}
 
 	private func validateForRendering(_ cue: Rv_Data_Cue) throws {
+		var selection = document.presentation
+		selection.cues = [cue]
+		try requireSupported(selection)
 		if let error = document.renderingDiagnostics(for: cue).first(where: { $0.severity == .error }) {
 			throw RenderError.invalidDocument(error)
 		}
 	}
 
 	private func validateForRendering(_ cue: Rv_Data_Cue, storageIndex: Int) throws {
+		var selection = document.presentation
+		selection.cues = [cue]
+		try requireSupported(selection)
 		if let error = document.renderingDiagnostics(forCueAtStorageIndex: storageIndex).first(where: { $0.severity == .error }) {
 			throw RenderError.invalidDocument(error)
 		}
+	}
+
+	private func requireSupported(_ presentation: Rv_Data_Presentation) throws {
+		try DocumentCompatibility.analyze(ProPresenterDocument(payload: .presentation(NativeMediaRendering.compatibilityView(presentation, contextRoot: document.mediaDirectory)), origin: .raw(URL(fileURLWithPath: "/")))).requireSupported()
 	}
 
 	private func textDescription(
@@ -617,7 +630,7 @@ public final class PresentationRenderer {
 		case nil: "unknown"
 		}
 		return EffectiveRendering.Media(
-			source: nonEmpty(media.url.renderPath),
+			source: (try? NativeMediaRendering.requiresAdapter(media)) == true ? resolvedURL(for: media)?.absoluteString : nonEmpty(media.url.renderPath),
 			resolvedSource: resolvedURL(for: media)?.path,
 			type: type == "unknown" ? nil : type,
 		)
@@ -1229,7 +1242,17 @@ public final class PresentationRenderer {
 	private func draw(media: Rv_Data_Media, in destination: CGRect) {
 		guard let mediaURL = resolvedURL(for: media) else { return }
 
-		if mediaURL.pathExtension.lowercased() == "m4v" || mediaURL.pathExtension.lowercased() == "mp4" || mediaURL.pathExtension.lowercased() == "mov" {
+		let isVideo: Bool
+		if (try? NativeMediaRendering.requiresAdapter(media)) == true {
+			if case .video? = media.typeProperties {
+				isVideo = true
+			} else {
+				isVideo = false
+			}
+		} else {
+			isVideo = ["m4v", "mp4", "mov"].contains(mediaURL.pathExtension.lowercased())
+		}
+		if isVideo {
 			let imageTime = media.video.video.thumbnailPosition < 0
 				? 5
 				: media.video.video.thumbnailPosition
@@ -2377,6 +2400,9 @@ public final class PresentationRenderer {
 	}
 
 	private func resolvedURL(for media: Rv_Data_Media) -> URL? {
+		if (try? NativeMediaRendering.requiresAdapter(media)) == true {
+			return try? NativeMediaRendering.resolvedFile(media, contextRoot: document.mediaDirectory)
+		}
 		let url = media.url
 		let renderPath = url.renderPath
 		let reference = ThemeTemplateSource.MediaReference(
@@ -2539,6 +2565,7 @@ private extension EffectiveRendering.Insets {
 public enum RenderError: Error, CustomStringConvertible {
 	case bitmapCreationFailed
 	case invalidDocument(RenderingDiagnostic)
+	case nativeMediaFile(path: String, source: String, underlyingError: any Error)
 	case pngEncodingFailed
 	case pdfCreationFailed
 
@@ -2548,6 +2575,8 @@ public enum RenderError: Error, CustomStringConvertible {
 			"Could not create a bitmap for the requested canvas."
 		case let .invalidDocument(diagnostic):
 			diagnostic.description
+		case let .nativeMediaFile(path, source, underlyingError):
+			"Cannot render native file media at \(path) from \(source): \(underlyingError)"
 		case .pngEncodingFailed:
 			"Could not encode the rendered bitmap."
 		case .pdfCreationFailed:

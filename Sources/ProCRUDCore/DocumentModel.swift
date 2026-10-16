@@ -170,6 +170,7 @@ public enum DocumentLoader {
 		archiveLimits: ArchiveLimits,
 		validatesPayload: Bool,
 	) throws -> ProPresenterDocument {
+		try WorkspaceInspector.requireLegacyAccess(at: url)
 		let values = try url.resourceValues(forKeys: [.isDirectoryKey])
 		if values.isDirectory == true {
 			return try loadWorkspace(from: url, validatesPayload: validatesPayload)
@@ -220,6 +221,7 @@ public enum DocumentLoader {
 		from directory: URL,
 		validatesPayload: Bool,
 	) throws -> ProPresenterDocument {
+		try WorkspaceInspector.requireSingleDocumentDirectory(directory)
 		let contents = try FileManager.default.contentsOfDirectory(at: directory, includingPropertiesForKeys: [.isRegularFileKey], options: [.skipsHiddenFiles])
 		let rootPros = contents.filter { $0.pathExtension.lowercased() == "pro" }
 		let hasData = contents.contains { $0.lastPathComponent == "data" }
@@ -227,7 +229,7 @@ public enum DocumentLoader {
 
 		let layouts = [
 			!rootPros.isEmpty && !hasData && themes.isEmpty ? DocumentKind.presentation : nil,
-			hasData && !rootPros.isEmpty && themes.isEmpty ? .playlist : nil,
+			hasData && themes.isEmpty ? .playlist : nil,
 			!themes.isEmpty && rootPros.isEmpty && !hasData ? .theme : nil,
 		].compactMap(\.self)
 		guard layouts.count == 1, let kind = layouts.first else {
@@ -374,9 +376,7 @@ public enum DocumentLoader {
 	private static func validate(_ payload: DocumentPayload, location: String) throws {
 		let failure: String? = switch payload {
 		case let .presentation(presentation):
-			if !presentation.hasApplicationInfo {
-				"missing application_info"
-			} else if !presentation.hasUuid || presentation.uuid.string.isEmpty {
+			if !presentation.hasUuid || presentation.uuid.string.isEmpty {
 				"missing presentation UUID"
 			} else if presentation.name.isEmpty {
 				"missing presentation name"
@@ -388,8 +388,8 @@ public enum DocumentLoader {
 				validatePresentationReferences(presentation)
 			}
 		case let .theme(theme):
-			if !theme.hasApplicationInfo {
-				"missing application_info"
+			if !theme.hasApplicationInfo && theme.slides.isEmpty {
+				"no Theme identity evidence (application_info or template slides)"
 			} else if theme.slides.contains(where: {
 				!$0.hasBaseSlide ||
 					!$0.baseSlide.hasUuid || $0.baseSlide.uuid.string.isEmpty ||
@@ -400,9 +400,7 @@ public enum DocumentLoader {
 				nil
 			}
 		case let .playlist(playlist):
-			if !playlist.hasApplicationInfo {
-				"missing application_info"
-			} else if playlist.type == .unknown {
+			if playlist.type == .unknown {
 				"missing playlist document type"
 			} else if !playlist.hasRootNode || playlist.rootNode.uuid.string.isEmpty {
 				"missing playlist root node UUID"
@@ -471,7 +469,9 @@ public enum DocumentLoader {
 }
 
 public enum DocumentWriter {
-	public static func writeRaw(_ document: ProPresenterDocument, to outputURL: URL, replace: Bool = false) throws {
+	public static func writeRaw(_ document: ProPresenterDocument, to outputURL: URL, replace: Bool = false, targetVersion: ProPresenterTargetVersion? = nil) throws {
+		try WorkspaceInspector.requireLegacyAccess(at: outputURL)
+		try DocumentCompatibility.analyze(document, target: targetVersion ?? .v22).requireSupported()
 		try document.kind.validate(rawURL: outputURL)
 		_ = try DocumentLoader.decode(document.payload.serializedData(), as: document.kind, location: outputURL.path)
 		let fileManager = FileManager.default

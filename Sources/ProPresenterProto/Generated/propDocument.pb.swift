@@ -15,36 +15,36 @@ import SwiftProtobuf
 // incompatible with the version of SwiftProtobuf to which you are linking.
 // Please ensure that you are building against the same version of the API
 // that was used to generate this file.
-fileprivate struct _GeneratedWithProtocGenSwiftVersion: SwiftProtobuf.ProtobufAPIVersionCheck {
+fileprivate nonisolated struct _GeneratedWithProtocGenSwiftVersion: SwiftProtobuf.ProtobufAPIVersionCheck {
   struct _2: SwiftProtobuf.ProtobufAPIVersion_2 {}
   typealias Version = _2
 }
 
-public struct Rv_Data_PropDocument: @unchecked Sendable {
+public nonisolated struct Rv_Data_PropDocument: @unchecked Sendable {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
   // methods supported on all messages.
 
   public var applicationInfo: Rv_Data_ApplicationInfo {
-    get {return _storage._applicationInfo ?? Rv_Data_ApplicationInfo()}
+    get {_storage._applicationInfo ?? Rv_Data_ApplicationInfo()}
     set {_uniqueStorage()._applicationInfo = newValue}
   }
   /// Returns true if `applicationInfo` has been explicitly set.
-  public var hasApplicationInfo: Bool {return _storage._applicationInfo != nil}
+  public var hasApplicationInfo: Bool {_storage._applicationInfo != nil}
   /// Clears the value of `applicationInfo`. Subsequent reads from it will return its default value.
   public mutating func clearApplicationInfo() {_uniqueStorage()._applicationInfo = nil}
 
   public var cues: [Rv_Data_Cue] {
-    get {return _storage._cues}
+    get {_storage._cues}
     set {_uniqueStorage()._cues = newValue}
   }
 
   public var transition: Rv_Data_Transition {
-    get {return _storage._transition ?? Rv_Data_Transition()}
+    get {_storage._transition ?? Rv_Data_Transition()}
     set {_uniqueStorage()._transition = newValue}
   }
   /// Returns true if `transition` has been explicitly set.
-  public var hasTransition: Bool {return _storage._transition != nil}
+  public var hasTransition: Bool {_storage._transition != nil}
   /// Clears the value of `transition`. Subsequent reads from it will return its default value.
   public mutating func clearTransition() {_uniqueStorage()._transition = nil}
 
@@ -57,9 +57,9 @@ public struct Rv_Data_PropDocument: @unchecked Sendable {
 
 // MARK: - Code below here is support for the SwiftProtobuf runtime.
 
-fileprivate let _protobuf_package = "rv.data"
+fileprivate nonisolated let _protobuf_package = "rv.data"
 
-extension Rv_Data_PropDocument: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+nonisolated extension Rv_Data_PropDocument: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   public static let protoMessageName: String = _protobuf_package + ".PropDocument"
   public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{3}application_info\0\u{1}cues\0\u{1}transition\0")
 

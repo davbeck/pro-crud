@@ -58,6 +58,7 @@ enum RenderingEdgeCasesFixture {
 		var presentation = DocumentFactory.presentation(
 			name: "Rendering Edge Cases",
 			canvasSize: CGSize(width: canvasWidth, height: canvasHeight),
+			targetVersion: .v21,
 		)
 		presentation.uuid = uuid(1)
 		presentation.cues = slides.enumerated().map { index, slide in

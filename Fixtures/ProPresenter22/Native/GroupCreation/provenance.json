@@ -1,0 +1,75 @@
+{
+  "application": "ProPresenter",
+  "version": "22",
+  "build": "369098875",
+  "osVersion": "27.0.1",
+  "date": "2026-10-15",
+  "documentID": "bfa7b647-93ab-5ee6-b397-ec61b08bcfee",
+  "source": "Owned Presentation; native Group > Chorus 4 controls, production three-operation CLI batch, exact native reopen, continued native Group > Edit and File > Export > Presentation",
+  "files": [
+    {
+      "path": "CLIManifest.json",
+      "sha256": "c0533afe879fdf3e2ef473fe332d5dc750d0187139a6add9bd372ab34db4612a"
+    },
+    {
+      "path": "NativeReexport.pro",
+      "sha256": "274c68466d4bfeb93a2cfd03ef50ce96dcc64090b1cf64cc71de6155ec95e1e6"
+    },
+    {
+      "path": "cli-after.loro",
+      "sha256": "cb7b6618f6fbd8dfca115878120ecc1975f244036540fc81ea277ec429321242"
+    },
+    {
+      "path": "cli-after.vector",
+      "sha256": "a2e347b8e251765883ef6f3bcd920c6c09406fa61365110341cb4c8b661f7123"
+    },
+    {
+      "path": "cli-before.loro",
+      "sha256": "14be18f587706c27bd1971d08de80d3a4d5f1f10380772a8361321c0a2779b2f"
+    },
+    {
+      "path": "cli-before.vector",
+      "sha256": "a6cbfc4de3bdfc05843de6ca31628e6729aef76b5a3c2ba47ff06c7629719a0d"
+    },
+    {
+      "path": "native-before.loro",
+      "sha256": "b35c2d0f11179d05afdb4d7eacaeff8c91f06f2082340dd7817934eb5dd1b1fd"
+    },
+    {
+      "path": "native-before.vector",
+      "sha256": "71ec45c8933fe7a51f68749bda329b99b1942ee3b097772bc879eaf42944512c"
+    },
+    {
+      "path": "native-continued.loro",
+      "sha256": "1ef6c0b6e61b5c25e7fb375ab6cc3195848d3ed1ae0311252670788037bdb334"
+    },
+    {
+      "path": "native-continued.vector",
+      "sha256": "7ad227961542f059f055f1bca5d0458186903a01bb6ecc5a52c36aea7d064cbb"
+    },
+    {
+      "path": "native-created.loro",
+      "sha256": "8c41fa0eab9aa88015626747c8bdb1aaa3ab77e08d1f52ecc51c8d6dec78f5f0"
+    },
+    {
+      "path": "native-created.vector",
+      "sha256": "50f8bd68323175a6c136fc9cd8c0cc158926722e59b721b11c9ba3827912c47a"
+    },
+    {
+      "path": "native-open.loro",
+      "sha256": "cb7b6618f6fbd8dfca115878120ecc1975f244036540fc81ea277ec429321242"
+    },
+    {
+      "path": "native-open.vector",
+      "sha256": "a2e347b8e251765883ef6f3bcd920c6c09406fa61365110341cb4c8b661f7123"
+    },
+    {
+      "path": "native-split-same.loro",
+      "sha256": "14be18f587706c27bd1971d08de80d3a4d5f1f10380772a8361321c0a2779b2f"
+    },
+    {
+      "path": "native-split-same.vector",
+      "sha256": "a6cbfc4de3bdfc05843de6ca31628e6729aef76b5a3c2ba47ff06c7629719a0d"
+    }
+  ]
+}

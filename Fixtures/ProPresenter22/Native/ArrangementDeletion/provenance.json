@@ -1,0 +1,117 @@
+{
+  "application": "ProPresenter",
+  "version": "22",
+  "build": "369098875",
+  "osVersion": "27.0.1",
+  "date": "2026-10-15",
+  "source": "Owned local test Presentations; native File > Import, production two-document CLI batch, native reopen/continued edits and independent File > Export > Presentation",
+  "documentIDs": {
+    "target": "bfa7b647-93ab-5ee6-b397-ec61b08bcfee",
+    "reference": "bf7bda01-2c54-4fcc-bd4e-2551103c383b",
+    "actionID": "12F67BC0-D8DE-47F3-91D9-B1692A758620",
+    "targetDocumentID": "BFA7B647-93AB-5EE6-B397-EC61B08BCFEE",
+    "targetArrangementID": "7017BE68-8867-48CE-9102-60E9C49DF61D"
+  },
+  "files": [
+    {
+      "path": "CLIManifest.json",
+      "sha256": "90511a870a905d0cc877eea9508960b545d073dfe0c172619926681c9e244129"
+    },
+    {
+      "path": "CLIReferenceInput.pro",
+      "sha256": "08d93c06ad64a5459e6e23744f9789273eabadc0cdd99d6a96a508d76219fe7e"
+    },
+    {
+      "path": "NativeReferenceReexport.pro",
+      "sha256": "f380ad18fe6d6d249e16d9f035112eab002fc7c5bbbe3fcfdb79e404f6bc0aaf"
+    },
+    {
+      "path": "NativeTargetReexport.pro",
+      "sha256": "2206acef7f5ad7d604f8a50d78420773ac8dc1e84416c505aec1668fca28f4d0"
+    },
+    {
+      "path": "cli-after-reference.loro",
+      "sha256": "263e681795b92d9463757cae5917a411f47e956503e53669342aa59acdcbe06a"
+    },
+    {
+      "path": "cli-after-reference.vector",
+      "sha256": "99e5c247deb848584e8f4c574ee3bd520197d55dbba26835e4ee42492902c1d4"
+    },
+    {
+      "path": "cli-after-target.loro",
+      "sha256": "7dec7a2b82d086e8efe38b03f682331dd0bad806872d033a16ebcf15984f42db"
+    },
+    {
+      "path": "cli-after-target.vector",
+      "sha256": "4b212b1ed5b7417bbee61b7daeb6f8f310b64b08f6828b110e7d13e70d08c03d"
+    },
+    {
+      "path": "cli-before-reference.loro",
+      "sha256": "131381b60f5e2c1142724c8ba21017e26f51067e3ec610799b07df131cd21064"
+    },
+    {
+      "path": "cli-before-reference.vector",
+      "sha256": "5b8e03aa8c71a240a9834ea539930bd75750ee7d859b5a36de50bde7dede19f3"
+    },
+    {
+      "path": "cli-before-target.loro",
+      "sha256": "9c2a1b8492e5b5363cdaec2c8e80d2f3f82e78af73aef200ae086447b0f26e53"
+    },
+    {
+      "path": "cli-before-target.vector",
+      "sha256": "aa31528baebf00f4bb3d6882300dce87dddcb8c7f7ad5b2ccd588da49c81bcb9"
+    },
+    {
+      "path": "identities.json",
+      "sha256": "a796d374fdfaba82d7b3b2f9d25e7f6597424c1432f31227a9f1dc1f3e66a832"
+    },
+    {
+      "path": "native-continued-reference.loro",
+      "sha256": "537ea66a6a10c3b64846afb45d5aaa325c4b41b1eef29f50894786754467b77e"
+    },
+    {
+      "path": "native-continued-reference.vector",
+      "sha256": "d45c5710b077d36be9abb52a7b553ce1a72c708e636c04bf45d747b3d20f3fad"
+    },
+    {
+      "path": "native-continued-target.loro",
+      "sha256": "706b3fd1a0e2f891f51028a2130cce8c637b952fc0fb5aaf76348040e224c933"
+    },
+    {
+      "path": "native-continued-target.vector",
+      "sha256": "6e12057934cc037ee7bebedb43c29253234dc1fc7ab38fbac406055ba9fcd18d"
+    },
+    {
+      "path": "native-open-reference.loro",
+      "sha256": "263e681795b92d9463757cae5917a411f47e956503e53669342aa59acdcbe06a"
+    },
+    {
+      "path": "native-open-reference.vector",
+      "sha256": "99e5c247deb848584e8f4c574ee3bd520197d55dbba26835e4ee42492902c1d4"
+    },
+    {
+      "path": "native-open-target.loro",
+      "sha256": "7dec7a2b82d086e8efe38b03f682331dd0bad806872d033a16ebcf15984f42db"
+    },
+    {
+      "path": "native-open-target.vector",
+      "sha256": "4b212b1ed5b7417bbee61b7daeb6f8f310b64b08f6828b110e7d13e70d08c03d"
+    },
+    {
+      "path": "native-reference-imported-reference.loro",
+      "sha256": "131381b60f5e2c1142724c8ba21017e26f51067e3ec610799b07df131cd21064"
+    },
+    {
+      "path": "native-reference-imported-reference.vector",
+      "sha256": "5b8e03aa8c71a240a9834ea539930bd75750ee7d859b5a36de50bde7dede19f3"
+    },
+    {
+      "path": "native-reference-imported-target.loro",
+      "sha256": "9c2a1b8492e5b5363cdaec2c8e80d2f3f82e78af73aef200ae086447b0f26e53"
+    },
+    {
+      "path": "native-reference-imported-target.vector",
+      "sha256": "aa31528baebf00f4bb3d6882300dce87dddcb8c7f7ad5b2ccd588da49c81bcb9"
+    }
+  ]
+}

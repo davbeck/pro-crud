@@ -15,42 +15,42 @@ import SwiftProtobuf
 // incompatible with the version of SwiftProtobuf to which you are linking.
 // Please ensure that you are building against the same version of the API
 // that was used to generate this file.
-fileprivate struct _GeneratedWithProtocGenSwiftVersion: SwiftProtobuf.ProtobufAPIVersionCheck {
+fileprivate nonisolated struct _GeneratedWithProtocGenSwiftVersion: SwiftProtobuf.ProtobufAPIVersionCheck {
   struct _2: SwiftProtobuf.ProtobufAPIVersion_2 {}
   typealias Version = _2
 }
 
-public struct Rv_Data_Document: Sendable {
+public nonisolated struct Rv_Data_Document: Sendable {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
   // methods supported on all messages.
 
   public var applicationInfo: Rv_Data_ApplicationInfo {
-    get {return _applicationInfo ?? Rv_Data_ApplicationInfo()}
+    get {_applicationInfo ?? Rv_Data_ApplicationInfo()}
     set {_applicationInfo = newValue}
   }
   /// Returns true if `applicationInfo` has been explicitly set.
-  public var hasApplicationInfo: Bool {return self._applicationInfo != nil}
+  public var hasApplicationInfo: Bool {self._applicationInfo != nil}
   /// Clears the value of `applicationInfo`. Subsequent reads from it will return its default value.
   public mutating func clearApplicationInfo() {self._applicationInfo = nil}
 
   public var uuid: Rv_Data_UUID {
-    get {return _uuid ?? Rv_Data_UUID()}
+    get {_uuid ?? Rv_Data_UUID()}
     set {_uuid = newValue}
   }
   /// Returns true if `uuid` has been explicitly set.
-  public var hasUuid: Bool {return self._uuid != nil}
+  public var hasUuid: Bool {self._uuid != nil}
   /// Clears the value of `uuid`. Subsequent reads from it will return its default value.
   public mutating func clearUuid() {self._uuid = nil}
 
   public var usesRelativeUrls: Bool = false
 
   public var workspace: Rv_Data_Workspace {
-    get {return _workspace ?? Rv_Data_Workspace()}
+    get {_workspace ?? Rv_Data_Workspace()}
     set {_workspace = newValue}
   }
   /// Returns true if `workspace` has been explicitly set.
-  public var hasWorkspace: Bool {return self._workspace != nil}
+  public var hasWorkspace: Bool {self._workspace != nil}
   /// Clears the value of `workspace`. Subsequent reads from it will return its default value.
   public mutating func clearWorkspace() {self._workspace = nil}
 
@@ -63,35 +63,35 @@ public struct Rv_Data_Document: Sendable {
   fileprivate var _workspace: Rv_Data_Workspace? = nil
 }
 
-public struct Rv_Data_CacheInfo: Sendable {
+public nonisolated struct Rv_Data_CacheInfo: Sendable {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
   // methods supported on all messages.
 
   public var uuid: Rv_Data_UUID {
-    get {return _uuid ?? Rv_Data_UUID()}
+    get {_uuid ?? Rv_Data_UUID()}
     set {_uuid = newValue}
   }
   /// Returns true if `uuid` has been explicitly set.
-  public var hasUuid: Bool {return self._uuid != nil}
+  public var hasUuid: Bool {self._uuid != nil}
   /// Clears the value of `uuid`. Subsequent reads from it will return its default value.
   public mutating func clearUuid() {self._uuid = nil}
 
   public var applicationVersion: Rv_Data_Version {
-    get {return _applicationVersion ?? Rv_Data_Version()}
+    get {_applicationVersion ?? Rv_Data_Version()}
     set {_applicationVersion = newValue}
   }
   /// Returns true if `applicationVersion` has been explicitly set.
-  public var hasApplicationVersion: Bool {return self._applicationVersion != nil}
+  public var hasApplicationVersion: Bool {self._applicationVersion != nil}
   /// Clears the value of `applicationVersion`. Subsequent reads from it will return its default value.
   public mutating func clearApplicationVersion() {self._applicationVersion = nil}
 
   public var url: Rv_Data_URL {
-    get {return _url ?? Rv_Data_URL()}
+    get {_url ?? Rv_Data_URL()}
     set {_url = newValue}
   }
   /// Returns true if `url` has been explicitly set.
-  public var hasURL: Bool {return self._url != nil}
+  public var hasURL: Bool {self._url != nil}
   /// Clears the value of `url`. Subsequent reads from it will return its default value.
   public mutating func clearURL() {self._url = nil}
 
@@ -106,55 +106,55 @@ public struct Rv_Data_CacheInfo: Sendable {
   fileprivate var _url: Rv_Data_URL? = nil
 }
 
-public struct Rv_Data_PVPDocumentState: Sendable {
+public nonisolated struct Rv_Data_PVPDocumentState: Sendable {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
   // methods supported on all messages.
 
   public var primaryPlaylist: Rv_Data_PVPDocumentState.PlaylistState {
-    get {return _primaryPlaylist ?? Rv_Data_PVPDocumentState.PlaylistState()}
+    get {_primaryPlaylist ?? Rv_Data_PVPDocumentState.PlaylistState()}
     set {_primaryPlaylist = newValue}
   }
   /// Returns true if `primaryPlaylist` has been explicitly set.
-  public var hasPrimaryPlaylist: Bool {return self._primaryPlaylist != nil}
+  public var hasPrimaryPlaylist: Bool {self._primaryPlaylist != nil}
   /// Clears the value of `primaryPlaylist`. Subsequent reads from it will return its default value.
   public mutating func clearPrimaryPlaylist() {self._primaryPlaylist = nil}
 
   public var alternatePlaylist: Rv_Data_PVPDocumentState.PlaylistState {
-    get {return _alternatePlaylist ?? Rv_Data_PVPDocumentState.PlaylistState()}
+    get {_alternatePlaylist ?? Rv_Data_PVPDocumentState.PlaylistState()}
     set {_alternatePlaylist = newValue}
   }
   /// Returns true if `alternatePlaylist` has been explicitly set.
-  public var hasAlternatePlaylist: Bool {return self._alternatePlaylist != nil}
+  public var hasAlternatePlaylist: Bool {self._alternatePlaylist != nil}
   /// Clears the value of `alternatePlaylist`. Subsequent reads from it will return its default value.
   public mutating func clearAlternatePlaylist() {self._alternatePlaylist = nil}
 
   public var playlistSplitIsVertical: Bool = false
 
   public var targetedLayer: Rv_Data_UUID {
-    get {return _targetedLayer ?? Rv_Data_UUID()}
+    get {_targetedLayer ?? Rv_Data_UUID()}
     set {_targetedLayer = newValue}
   }
   /// Returns true if `targetedLayer` has been explicitly set.
-  public var hasTargetedLayer: Bool {return self._targetedLayer != nil}
+  public var hasTargetedLayer: Bool {self._targetedLayer != nil}
   /// Clears the value of `targetedLayer`. Subsequent reads from it will return its default value.
   public mutating func clearTargetedLayer() {self._targetedLayer = nil}
 
   public var selectedLayer: Rv_Data_UUID {
-    get {return _selectedLayer ?? Rv_Data_UUID()}
+    get {_selectedLayer ?? Rv_Data_UUID()}
     set {_selectedLayer = newValue}
   }
   /// Returns true if `selectedLayer` has been explicitly set.
-  public var hasSelectedLayer: Bool {return self._selectedLayer != nil}
+  public var hasSelectedLayer: Bool {self._selectedLayer != nil}
   /// Clears the value of `selectedLayer`. Subsequent reads from it will return its default value.
   public mutating func clearSelectedLayer() {self._selectedLayer = nil}
 
   public var lockedLayer: Rv_Data_UUID {
-    get {return _lockedLayer ?? Rv_Data_UUID()}
+    get {_lockedLayer ?? Rv_Data_UUID()}
     set {_lockedLayer = newValue}
   }
   /// Returns true if `lockedLayer` has been explicitly set.
-  public var hasLockedLayer: Bool {return self._lockedLayer != nil}
+  public var hasLockedLayer: Bool {self._lockedLayer != nil}
   /// Clears the value of `lockedLayer`. Subsequent reads from it will return its default value.
   public mutating func clearLockedLayer() {self._lockedLayer = nil}
 
@@ -164,17 +164,17 @@ public struct Rv_Data_PVPDocumentState: Sendable {
 
   public var unknownFields = SwiftProtobuf.UnknownStorage()
 
-  public struct PlaylistState: Sendable {
+  public nonisolated struct PlaylistState: Sendable {
     // SwiftProtobuf.Message conformance is added in an extension below. See the
     // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
     // methods supported on all messages.
 
     public var uuid: Rv_Data_UUID {
-      get {return _uuid ?? Rv_Data_UUID()}
+      get {_uuid ?? Rv_Data_UUID()}
       set {_uuid = newValue}
     }
     /// Returns true if `uuid` has been explicitly set.
-    public var hasUuid: Bool {return self._uuid != nil}
+    public var hasUuid: Bool {self._uuid != nil}
     /// Clears the value of `uuid`. Subsequent reads from it will return its default value.
     public mutating func clearUuid() {self._uuid = nil}
 
@@ -184,7 +184,7 @@ public struct Rv_Data_PVPDocumentState: Sendable {
 
     public var unknownFields = SwiftProtobuf.UnknownStorage()
 
-    public enum LayoutType: SwiftProtobuf.Enum, Swift.CaseIterable {
+    public nonisolated enum LayoutType: SwiftProtobuf.Enum, Swift.CaseIterable {
       public typealias RawValue = Int
       case cue // = 0
       case action // = 1
@@ -238,9 +238,9 @@ public struct Rv_Data_PVPDocumentState: Sendable {
 
 // MARK: - Code below here is support for the SwiftProtobuf runtime.
 
-fileprivate let _protobuf_package = "rv.data"
+fileprivate nonisolated let _protobuf_package = "rv.data"
 
-extension Rv_Data_Document: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+nonisolated extension Rv_Data_Document: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   public static let protoMessageName: String = _protobuf_package + ".Document"
   public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{3}application_info\0\u{1}uuid\0\u{3}uses_relative_urls\0\u{2}\u{7}workspace\0")
 
@@ -289,7 +289,7 @@ extension Rv_Data_Document: SwiftProtobuf.Message, SwiftProtobuf._MessageImpleme
   }
 }
 
-extension Rv_Data_CacheInfo: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+nonisolated extension Rv_Data_CacheInfo: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   public static let protoMessageName: String = _protobuf_package + ".CacheInfo"
   public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{1}uuid\0\u{3}application_version\0\u{1}url\0\u{3}last_modified_date\0")
 
@@ -338,7 +338,7 @@ extension Rv_Data_CacheInfo: SwiftProtobuf.Message, SwiftProtobuf._MessageImplem
   }
 }
 
-extension Rv_Data_PVPDocumentState: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+nonisolated extension Rv_Data_PVPDocumentState: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   public static let protoMessageName: String = _protobuf_package + ".PVPDocumentState"
   public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{3}primary_playlist\0\u{3}alternate_playlist\0\u{3}playlist_split_is_vertical\0\u{3}targeted_layer\0\u{3}selected_layer\0\u{3}locked_layer\0\u{3}live_video_playlist_scale\0\u{3}split_view_divider_position\0")
 
@@ -407,7 +407,7 @@ extension Rv_Data_PVPDocumentState: SwiftProtobuf.Message, SwiftProtobuf._Messag
   }
 }
 
-extension Rv_Data_PVPDocumentState.PlaylistState: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+nonisolated extension Rv_Data_PVPDocumentState.PlaylistState: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   public static let protoMessageName: String = Rv_Data_PVPDocumentState.protoMessageName + ".PlaylistState"
   public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{2}\u{2}uuid\0\u{1}layout\0\u{3}item_scale\0")
 
@@ -451,6 +451,6 @@ extension Rv_Data_PVPDocumentState.PlaylistState: SwiftProtobuf.Message, SwiftPr
   }
 }
 
-extension Rv_Data_PVPDocumentState.PlaylistState.LayoutType: SwiftProtobuf._ProtoNameProviding {
+nonisolated extension Rv_Data_PVPDocumentState.PlaylistState.LayoutType: SwiftProtobuf._ProtoNameProviding {
   public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{2}\0LAYOUT_TYPE_CUE\0\u{1}LAYOUT_TYPE_ACTION\0\u{1}LAYOUT_TYPE_LIVE_VIDEO\0")
 }

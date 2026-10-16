@@ -1,0 +1,176 @@
+# Native reader qualification
+
+October 14, 2026, macOS 27.0.1, ProPresenter 22 beta build 369098875.
+
+The implementation uses the official `loro-dev/loro-swift` **1.13.3** release,
+revision pinned in Package.resolved, with the upstream XCFramework checksum.
+The macOS static library contains arm64 and x86_64 slices. SQLite is the system
+library; no database engine or writable native backend is bundled.
+
+A consistent backup of the investigated native workspace, including the
+independently authored disposable probe, contains **385** streams. The Swift
+reader verified every envelope's ID, scope, location, availability, snapshot
+length and SHA-256. Every Loro import completed without pending dependencies,
+and its decoded version vector agreed with the SQLite vector. The deep-value
+projection of **all 385 streams** matched the independently captured official
+`loro-crdt` **1.16.4** JS/WASM projection exactly, including binary RTF and tree
+metadata. Binary data was normalized to byte arrays for that comparison only.
+The original snapshot bytes remain the preservation source.
+
+The current live registry contains two locally available roots and no Cloud
+workspace. Read-only registry discovery queried only the `workspaces` metadata
+table. The current live workspace inventory contains **384 streams** (376
+shared, eight client); the disposable probe was deleted after the earlier
+export experiment. No migration patches were applied and no live database or
+media files were written.
+
+Automated tests use the independently authored native probe snapshot and its
+original version vector in disposable schema-9 SQLite envelopes. They cover
+committed WAL visibility, exclusion of an open uncommitted transaction,
+unchanged source main/WAL bytes, corrupt envelopes, schemas 8/10/99, unavailable
+content, shared/client identity separation, and mismatched version vectors.
+
+The original dump interface is diagnostic. It does not materialize native streams into
+editable protobuf documents, render native slides, resolve the native media
+registry, or write CRDT operations. Those capabilities retain the plan's
+independent acceptance gates. The reader does not qualify Cloud merges or
+newer storage schemas. SQLite snapshots are bounded to 512 MiB in memory;
+unknown schema/storage versions fail without migration or repair.
+
+## Sidecar-free offline reads
+
+On October 15 the stopped original workspace had a complete 30,498,816-byte
+WAL-mode main database with no WAL/shared-memory files. SQLite's read-only
+opening path failed when it could not initialize sidecars. A normal read-only
+SQLite connection can also initialize sidecars in a writable directory; the
+READONLY flag alone does not qualify unchanged offline inspection.
+
+The reader now captures a stable main image before opening SQLite whenever no
+journal/sidecars exist. It checks the open file and current path's device/inode,
+size, modification/change timestamps, complete byte count, and continued
+absence of all journal/sidecar files. Changed captures retry up to three times;
+a writer appearing on retry returns to the normal committed-WAL backup path.
+An existing WAL is never ignored, and incomplete WAL/shared-memory pairs are
+rejected without creating their missing member.
+
+SQLite's documented deserialize workaround normalizes journal-version header
+bytes 18/19 in the **private allocated buffer** only, then deserializes it as
+read-only memory. The live source is never declared immutable, and neither its
+header nor its schema is changed. See SQLite's
+[deserialize documentation](https://sqlite.org/c3ref/deserialize.html) and
+[read-only WAL constraints](https://sqlite.org/wal.html#read_only_databases).
+
+The actual closed source now inventories all **386** current streams. Its full
+SHA-256 and DocumentStore directory entries remain unchanged, with no sidecars
+created. Deterministic tests cover the unchanged closed image, an external
+committed change forcing a retry, a writer creating WAL with committed and
+uncommitted data during capture, repeated changes exhausting the retry bound,
+and each incomplete sidecar pair. The test SQLite defaults to persistent WAL;
+the fixture explicitly clears SQLITE_FCNTL_PERSIST_WAL so last-writer close
+models the observed sidecar-free native workspace, without deleting WAL data.
+
+## Local semantic ordering and references
+
+`workspace contents` now reads the shared Presentation, LibraryData and three
+playlist stream kinds. It resolves native placement topology, group membership,
+Master cue order, repeated arrangement groups, stored arrangement selection,
+library links and playlist trees. Original node metadata remains retained.
+Client scopes, unavailable content and remaining stream kinds are explicit.
+Conflicting legacy/native orders and dangling placement/arrangement references
+are rejected rather than inferred.
+
+The retained consistent snapshot contains 337 presentations and all 337 library
+references resolve to shared native stream identities, including the independent
+probe. All three playlist trees load without semantic diagnostics. An independent
+wire decoder compared the 336 pre-existing presentations with the native Legacy
+Workspace export: root identity/name, ordered group identities/names/membership,
+Master cue order, arrangement identity/name/ordered repeated groups, and selected
+arrangement agree in every case. The remaining probe predates no corresponding
+Legacy Workspace export; its independent standalone native export is checked in
+and compared by the automated suite. No private presentation data was added to
+the shipped fixtures. Fifteen focused tests cover that native/export pair,
+topology, repeated/empty/conflicting arrangements, dangling references, connected
+playlist wrapper preservation, scope separation and logical-path resolution.
+
+This qualifies semantic inspection of those structures. Native mutation and
+full protobuf/media materialization remain separate implementation work.
+
+## Versioned binary materialization
+
+The pinned 22 descriptor set includes native custom options: `map_key_field`
+(51302), `crdt_container` (51303), `crdt_tree` (51304), and atomic message values
+(51200). These annotations distinguish keyed maps from ordered lists without
+inferring that distinction from empty sample values. The 53-file document
+closure and per-record source offset/hash provenance are retained separately in
+`Vendor/ProPresenter22Proto`. Legacy generated Swift and its schema are unchanged.
+
+The descriptor-driven binary adapter encodes native UUID strings, tagged unions,
+binary RTF, scalar widths/presence and declared keyed maps. Presentation placement
+and arrangement adapters explicitly produce legacy interchange ordering; slide
+v2 build lists receive the corresponding order adapter. Unknown native fields
+are reported and block export. Original native values/history are retained;
+this projection cannot be used as a native mutation representation.
+
+All **358** Presentation/Theme streams in the retained consistent snapshot
+materialize with **zero unmapped fields or failures**. The independently authored
+native probe exports through the CLI to a separate 22-target `.pro`, reloads, and
+renders with **zero differing pixels** against its original 854×480 native 22
+Slide Images PNG. This qualifies that graphic fixture, not arbitrary text/media.
+The native standalone export populates optional inactive text defaults, an empty
+background/chord-chart URL, a default timeline duration and normalized inactive
+scroller distance that were absent/different in native state. The materializer
+retains the stored native values rather than pretending those export defaults
+were present in Loro. Group order/identity, cue/action/slide identity, geometry and
+fill agree with the independent export. Media-dependent output remains gated
+until native asset resolution is implemented.
+
+## Direct production native Presentation rendering
+
+`render ROOT --native-stream UUID --output SEPARATE_PATH` now materializes the
+selected shared native Presentation in memory and uses the existing renderer.
+It requires an explicit output separate from workspace roots and their parent
+directories. Unsupported selected representations are checked before replacing
+an existing output. Missing identities do not fall back to raw leftovers, and
+native source bytes remain unchanged. Native media writes/render adaptations
+remain gated.
+
+The owned original stream `48e32307-7a5a-56cc-8cca-0bc82d6079c1` from the
+retained consistent reader oracle renders directly to 854×480 with **zero
+differing RGBA channels** versus the previously retained native ProPresenter
+Slide Images PNG. The CLI regression also compares its complete effective
+render description to the independent `Interchange/NativePresentation.pro`.
+The only string-level difference is lowercase native root UUID spelling versus
+uppercase native-export spelling; tests compare actual UUID identity before
+normalizing that spelling for the description comparison.
+
+The disposable live local workspace's existing Presentation
+`bfa7b647-93ab-5ee6-b397-ec61b08bcfee`, stored acceptance Look
+`88d5d2fc-6918-40d9-994d-afaab5a78a62`, screen
+`76df51a3-11ed-5e71-abb9-23ddfbd54b09` and referenced owned Theme are read from
+one SQLite/Loro snapshot. Its 1440×900 output agrees with the independent native
+Presentation/Theme export input path at zero differing RGBA channels. This
+second comparison is between CLI rendering paths, not an Audience/Syphon
+capture. No output or active Look was changed in ProPresenter. Diagnostic
+artifacts are `.build/pro22-direct-native-*`; existing reference images and
+tolerances remain unchanged.
+
+## Selected 21.4 schema catch-up
+
+The exact upstream 21.4 baseline confirms `Graphics.Text.Attributes` field 19
+is `ligature_style`, not a 22-only addition. Its enum values are Default=0 and
+None=1. `CustomAttribute` fields 11/12 are character-size mode and original font.
+The historical nested Font type and 21.4's top-level Font have the same six
+numbered scalar fields; the compatibility model deliberately retains its public
+nested type rather than renaming all existing Swift callers. Original-font
+payloads encode/decode identically to the pinned baseline. The generated view
+now recognizes these fields while preserving unknown enum and nested bytes by
+the existing protobuf contract. Renderer dynamic character-size behavior is not
+claimed by this schema catch-up.
+
+`ProPresenterScreen.RenderingEnabledOptional.rendering_enabled=9` is also a
+21.4 addition absent from the previous vendor. It is now generated as a typed
+oneof, preserving false versus absence. Legacy/native Look readers use this
+presence-aware value instead of raw field-number access. Existing disabled
+screen tests remain unchanged; no output is enabled. Swift is regenerated with
+the resolved SwiftProtobuf generator. Timeline field 3 remains deliberately
+opaque, and repeated-message preservation tests continue to apply.

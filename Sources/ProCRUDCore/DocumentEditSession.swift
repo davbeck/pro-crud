@@ -16,9 +16,11 @@ public final class DocumentEditSession {
 		_ inputURL: URL,
 		archiveLimits: ArchiveLimits = .default,
 	) throws -> DocumentEditSession {
+		let source = try DocumentLoader.load(from: inputURL, archiveLimits: archiveLimits)
+		try DocumentCompatibility.analyze(source).requireSupported()
 		let archiveExtensions = Set(["probundle", "proplaylist", "protheme"])
 		if archiveExtensions.contains(inputURL.pathExtension.lowercased()) {
-			let document = try DocumentLoader.load(from: inputURL, archiveLimits: archiveLimits)
+			let document = source
 			guard case .archive = document.origin, let workspace = document.resourceDirectory else {
 				throw DocumentLoadError.unsupportedInput(inputURL)
 			}
@@ -31,8 +33,9 @@ public final class DocumentEditSession {
 				archiveLimits: archiveLimits,
 			)
 		}
-		return try DocumentEditSession(
-			document: DocumentLoader.loadRaw(inputURL),
+		guard case .raw = source.origin else { throw DocumentLoadError.expectedRawDocument(inputURL) }
+		return DocumentEditSession(
+			document: source,
 			archiveLimits: archiveLimits,
 		)
 	}
@@ -59,6 +62,7 @@ public final class DocumentEditSession {
 		replace: Bool = false,
 		materializingTemplateMediaURLs: Set<String> = [],
 	) throws {
+		try WorkspaceInspector.requireLegacyAccess(at: outputURL)
 		guard let archiveWorkspace, let archiveSourceURL, let payloadRelativePath else {
 			try document.kind.validate(rawURL: outputURL)
 			guard replace || !FileManager.default.fileExists(atPath: outputURL.path) else {

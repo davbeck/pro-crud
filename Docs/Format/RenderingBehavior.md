@@ -5,6 +5,48 @@ and how `pro-crud` renders that data. Native behavior described here is scoped
 to ProPresenter 21.4; renderer policies and compatibility limits are identified
 separately.
 
+## Native 22 Presentation Inputs
+
+For schema-9 local/native snapshots, select an exact shared Presentation UUID:
+
+```sh
+pro-crud render /exact/native/workspace --native-stream PRESENTATION_UUID \
+  --output /separate/render-output
+```
+
+The reader materializes a transient interchange view from retained native
+history, with native cue/group/arrangement/build ordering resolved. All existing
+render formats, slide selection, arrangement selection and supported Theme
+options apply. Input history is read-only. An explicit output is required;
+output and template reports must be outside source workspace roots and cannot
+replace their parent directories. Native schema-1 local image and video media
+can be previewed from exact file locators. The selected SourceInfo takes
+precedence over FileProperties and the root URL; relative paths require the
+selected workspace or archive resource root. Native sources never fall back to
+a same-basename file or a superseded locator. Missing files fail before
+replacing output. The preview preserves source occurrence/asset identities and
+history; it does not qualify media editing or packaging.
+
+Native previews support SDR/unknown color metadata, straight/unspecified alpha
+and the existing static image/video drawing behavior. HDR, premultiplied-alpha
+metadata, blur, provider associations, live/web/HLS sources, unknown media
+fields and other identity schemas return explicit errors. Video uses its native
+type and stored thumbnail position (five seconds for the default negative
+position), rather than running transport or audio. These previews retain the
+existing image-sampling and video-frame comparison limitations; pixel-exact
+native media rendering is not claimed. Static rendering retains its existing
+runtime-feature limitations.
+
+HLS actions and fills produce `rendering.unsupported-runtime-media`, including
+media-only cues and sources without native asset identities. Static rendering
+does not fetch the stream or use superseded file locators as a preview.
+
+Use `--workspace ROOT --look LOOK_UUID --screen SCREEN_UUID` with this input to
+apply a supported media-free native Look. When the source and Look workspace
+are the same root, Presentation, shared/client configuration and selected Theme
+are read from the same consistent snapshot. No running app, API, or Cloud
+connection is required.
+
 ## Canvas And Coordinates
 
 Each slide stores its canvas dimensions in
@@ -30,7 +72,7 @@ visible shape elements should write an explicit opacity of one.
 
 Full-slide media often has a natural size equal or very close to the slide size. If `custom_image_bounds` is empty, drawing the media to the full canvas is the renderer policy for simple background media.
 
-When a media URL has both an absolute source path and a matching archive-local
+For legacy-style media, when a URL has both an absolute source path and a matching archive-local
 filename, renderers should resolve the archive-local file first. The absolute
 path is a portability fallback for documents whose media was not embedded.
 
@@ -329,6 +371,17 @@ messages, announcements, live video, and other external layers are reported as
 unsupported because they are not present in the source document. Persisted
 background/foreground switches are reported but not separated by the file
 renderer, and Look rendering does not copy template actions.
+
+An explicitly selected native 22 workspace is also supported for static Looks
+whose selected Theme slide contains no media. Saved/shared and live/client Looks
+remain separate and can be selected by UUID when names overlap. Theme references
+resolve to native streams in the same database snapshot, using ROOT_SHOW or a
+Workspace-scoped ROOT_CURRENT_RESOURCE path. The preview uses shared logical
+dimensions, with local screen geometry as a fallback. A disabled screen emits a
+warning; previewing it does not enable output. Missing client configuration can
+use valid shared dimensions with a warning. Missing/unavailable Themes, dangling
+template UUIDs and selected-slide media are diagnosed before publishing output.
+Media on unused templates and ignored Theme actions does not block the Look.
 
 Theme media is resolved against its Theme origin before source-document
 basename fallback. `ROOT_CURRENT_RESOURCE` uses the Theme directory.

@@ -15,59 +15,59 @@ import SwiftProtobuf
 // incompatible with the version of SwiftProtobuf to which you are linking.
 // Please ensure that you are building against the same version of the API
 // that was used to generate this file.
-fileprivate struct _GeneratedWithProtocGenSwiftVersion: SwiftProtobuf.ProtobufAPIVersionCheck {
+fileprivate nonisolated struct _GeneratedWithProtocGenSwiftVersion: SwiftProtobuf.ProtobufAPIVersionCheck {
   struct _2: SwiftProtobuf.ProtobufAPIVersion_2 {}
   typealias Version = _2
 }
 
-public struct Rv_Data_VideoInput: @unchecked Sendable {
+public nonisolated struct Rv_Data_VideoInput: @unchecked Sendable {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
   // methods supported on all messages.
 
   public var uuid: Rv_Data_UUID {
-    get {return _storage._uuid ?? Rv_Data_UUID()}
+    get {_storage._uuid ?? Rv_Data_UUID()}
     set {_uniqueStorage()._uuid = newValue}
   }
   /// Returns true if `uuid` has been explicitly set.
-  public var hasUuid: Bool {return _storage._uuid != nil}
+  public var hasUuid: Bool {_storage._uuid != nil}
   /// Clears the value of `uuid`. Subsequent reads from it will return its default value.
   public mutating func clearUuid() {_uniqueStorage()._uuid = nil}
 
   public var userDescription: String {
-    get {return _storage._userDescription}
+    get {_storage._userDescription}
     set {_uniqueStorage()._userDescription = newValue}
   }
 
   public var videoInputDevice: Rv_Data_Media.VideoDevice {
-    get {return _storage._videoInputDevice ?? Rv_Data_Media.VideoDevice()}
+    get {_storage._videoInputDevice ?? Rv_Data_Media.VideoDevice()}
     set {_uniqueStorage()._videoInputDevice = newValue}
   }
   /// Returns true if `videoInputDevice` has been explicitly set.
-  public var hasVideoInputDevice: Bool {return _storage._videoInputDevice != nil}
+  public var hasVideoInputDevice: Bool {_storage._videoInputDevice != nil}
   /// Clears the value of `videoInputDevice`. Subsequent reads from it will return its default value.
   public mutating func clearVideoInputDevice() {_uniqueStorage()._videoInputDevice = nil}
 
   public var displayColor: Rv_Data_Color {
-    get {return _storage._displayColor ?? Rv_Data_Color()}
+    get {_storage._displayColor ?? Rv_Data_Color()}
     set {_uniqueStorage()._displayColor = newValue}
   }
   /// Returns true if `displayColor` has been explicitly set.
-  public var hasDisplayColor: Bool {return _storage._displayColor != nil}
+  public var hasDisplayColor: Bool {_storage._displayColor != nil}
   /// Clears the value of `displayColor`. Subsequent reads from it will return its default value.
   public mutating func clearDisplayColor() {_uniqueStorage()._displayColor = nil}
 
   public var thumbnailPath: Rv_Data_URL {
-    get {return _storage._thumbnailPath ?? Rv_Data_URL()}
+    get {_storage._thumbnailPath ?? Rv_Data_URL()}
     set {_uniqueStorage()._thumbnailPath = newValue}
   }
   /// Returns true if `thumbnailPath` has been explicitly set.
-  public var hasThumbnailPath: Bool {return _storage._thumbnailPath != nil}
+  public var hasThumbnailPath: Bool {_storage._thumbnailPath != nil}
   /// Clears the value of `thumbnailPath`. Subsequent reads from it will return its default value.
   public mutating func clearThumbnailPath() {_uniqueStorage()._thumbnailPath = nil}
 
   public var audioType: Rv_Data_VideoInput.AudioDeviceType {
-    get {return _storage._audioType}
+    get {_storage._audioType}
     set {_uniqueStorage()._audioType = newValue}
   }
 
@@ -94,13 +94,13 @@ public struct Rv_Data_VideoInput: @unchecked Sendable {
 
   public var unknownFields = SwiftProtobuf.UnknownStorage()
 
-  public enum OneOf_AltAudioSource: Equatable, Sendable {
+  public nonisolated enum OneOf_AltAudioSource: Equatable, Sendable {
     case audioDevice(Rv_Data_DigitalAudio.Device)
     case videoDevice(Rv_Data_Media.VideoDevice)
 
   }
 
-  public enum AudioDeviceType: SwiftProtobuf.Enum, Swift.CaseIterable {
+  public nonisolated enum AudioDeviceType: SwiftProtobuf.Enum, Swift.CaseIterable {
     public typealias RawValue = Int
     case `default` // = 0
     case none // = 1
@@ -138,7 +138,7 @@ public struct Rv_Data_VideoInput: @unchecked Sendable {
 
   }
 
-  public struct SettingsDocument: Sendable {
+  public nonisolated struct SettingsDocument: Sendable {
     // SwiftProtobuf.Message conformance is added in an extension below. See the
     // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
     // methods supported on all messages.
@@ -155,28 +155,28 @@ public struct Rv_Data_VideoInput: @unchecked Sendable {
   fileprivate var _storage = _StorageClass.defaultInstance
 }
 
-public struct Rv_Data_AudioInput: Sendable {
+public nonisolated struct Rv_Data_AudioInput: Sendable {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
   // methods supported on all messages.
 
   public var uuid: Rv_Data_UUID {
-    get {return _uuid ?? Rv_Data_UUID()}
+    get {_uuid ?? Rv_Data_UUID()}
     set {_uuid = newValue}
   }
   /// Returns true if `uuid` has been explicitly set.
-  public var hasUuid: Bool {return self._uuid != nil}
+  public var hasUuid: Bool {self._uuid != nil}
   /// Clears the value of `uuid`. Subsequent reads from it will return its default value.
   public mutating func clearUuid() {self._uuid = nil}
 
   public var userDescription: String = String()
 
   public var behaviorMode: Rv_Data_AudioInput.BehaviorMode {
-    get {return _behaviorMode ?? Rv_Data_AudioInput.BehaviorMode()}
+    get {_behaviorMode ?? Rv_Data_AudioInput.BehaviorMode()}
     set {_behaviorMode = newValue}
   }
   /// Returns true if `behaviorMode` has been explicitly set.
-  public var hasBehaviorMode: Bool {return self._behaviorMode != nil}
+  public var hasBehaviorMode: Bool {self._behaviorMode != nil}
   /// Clears the value of `behaviorMode`. Subsequent reads from it will return its default value.
   public mutating func clearBehaviorMode() {self._behaviorMode = nil}
 
@@ -200,13 +200,13 @@ public struct Rv_Data_AudioInput: Sendable {
 
   public var unknownFields = SwiftProtobuf.UnknownStorage()
 
-  public enum OneOf_Source: Equatable, Sendable {
+  public nonisolated enum OneOf_Source: Equatable, Sendable {
     case audioDevice(Rv_Data_DigitalAudio.Device)
     case videoDevice(Rv_Data_Media.VideoDevice)
 
   }
 
-  public struct BehaviorMode: Sendable {
+  public nonisolated struct BehaviorMode: Sendable {
     // SwiftProtobuf.Message conformance is added in an extension below. See the
     // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
     // methods supported on all messages.
@@ -247,7 +247,7 @@ public struct Rv_Data_AudioInput: Sendable {
 
     public var unknownFields = SwiftProtobuf.UnknownStorage()
 
-    public enum OneOf_Mode: Equatable, Sendable {
+    public nonisolated enum OneOf_Mode: Equatable, Sendable {
       case on(Rv_Data_AudioInput.BehaviorMode.On)
       case off(Rv_Data_AudioInput.BehaviorMode.Off)
       case autoOn(Rv_Data_AudioInput.BehaviorMode.AutoOn)
@@ -255,7 +255,7 @@ public struct Rv_Data_AudioInput: Sendable {
 
     }
 
-    public struct On: Sendable {
+    public nonisolated struct On: Sendable {
       // SwiftProtobuf.Message conformance is added in an extension below. See the
       // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
       // methods supported on all messages.
@@ -265,7 +265,7 @@ public struct Rv_Data_AudioInput: Sendable {
       public init() {}
     }
 
-    public struct Off: Sendable {
+    public nonisolated struct Off: Sendable {
       // SwiftProtobuf.Message conformance is added in an extension below. See the
       // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
       // methods supported on all messages.
@@ -275,7 +275,7 @@ public struct Rv_Data_AudioInput: Sendable {
       public init() {}
     }
 
-    public struct AutoOff: Sendable {
+    public nonisolated struct AutoOff: Sendable {
       // SwiftProtobuf.Message conformance is added in an extension below. See the
       // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
       // methods supported on all messages.
@@ -285,7 +285,7 @@ public struct Rv_Data_AudioInput: Sendable {
       public init() {}
     }
 
-    public struct AutoOn: Sendable {
+    public nonisolated struct AutoOn: Sendable {
       // SwiftProtobuf.Message conformance is added in an extension below. See the
       // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
       // methods supported on all messages.
@@ -308,9 +308,9 @@ public struct Rv_Data_AudioInput: Sendable {
 
 // MARK: - Code below here is support for the SwiftProtobuf runtime.
 
-fileprivate let _protobuf_package = "rv.data"
+fileprivate nonisolated let _protobuf_package = "rv.data"
 
-extension Rv_Data_VideoInput: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+nonisolated extension Rv_Data_VideoInput: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   public static let protoMessageName: String = _protobuf_package + ".VideoInput"
   public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{1}uuid\0\u{3}user_description\0\u{3}video_input_device\0\u{3}display_color\0\u{3}thumbnail_path\0\u{3}audio_device\0\u{3}video_device\0\u{3}audio_type\0")
 
@@ -455,11 +455,11 @@ extension Rv_Data_VideoInput: SwiftProtobuf.Message, SwiftProtobuf._MessageImple
   }
 }
 
-extension Rv_Data_VideoInput.AudioDeviceType: SwiftProtobuf._ProtoNameProviding {
+nonisolated extension Rv_Data_VideoInput.AudioDeviceType: SwiftProtobuf._ProtoNameProviding {
   public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{2}\0AUDIO_DEVICE_TYPE_DEFAULT\0\u{1}AUDIO_DEVICE_TYPE_NONE\0\u{1}AUDIO_DEVICE_TYPE_ALTERNATE\0")
 }
 
-extension Rv_Data_VideoInput.SettingsDocument: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+nonisolated extension Rv_Data_VideoInput.SettingsDocument: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   public static let protoMessageName: String = Rv_Data_VideoInput.protoMessageName + ".SettingsDocument"
   public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{1}inputs\0")
 
@@ -489,7 +489,7 @@ extension Rv_Data_VideoInput.SettingsDocument: SwiftProtobuf.Message, SwiftProto
   }
 }
 
-extension Rv_Data_AudioInput: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+nonisolated extension Rv_Data_AudioInput: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   public static let protoMessageName: String = _protobuf_package + ".AudioInput"
   public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{1}uuid\0\u{3}user_description\0\u{3}audio_device\0\u{3}video_device\0\u{3}behavior_mode\0")
 
@@ -571,7 +571,7 @@ extension Rv_Data_AudioInput: SwiftProtobuf.Message, SwiftProtobuf._MessageImple
   }
 }
 
-extension Rv_Data_AudioInput.BehaviorMode: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+nonisolated extension Rv_Data_AudioInput.BehaviorMode: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   public static let protoMessageName: String = Rv_Data_AudioInput.protoMessageName + ".BehaviorMode"
   public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{1}on\0\u{1}off\0\u{3}auto_on\0\u{3}auto_off\0")
 
@@ -672,7 +672,7 @@ extension Rv_Data_AudioInput.BehaviorMode: SwiftProtobuf.Message, SwiftProtobuf.
   }
 }
 
-extension Rv_Data_AudioInput.BehaviorMode.On: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+nonisolated extension Rv_Data_AudioInput.BehaviorMode.On: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   public static let protoMessageName: String = Rv_Data_AudioInput.BehaviorMode.protoMessageName + ".On"
   public static let _protobuf_nameMap = SwiftProtobuf._NameMap()
 
@@ -691,7 +691,7 @@ extension Rv_Data_AudioInput.BehaviorMode.On: SwiftProtobuf.Message, SwiftProtob
   }
 }
 
-extension Rv_Data_AudioInput.BehaviorMode.Off: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+nonisolated extension Rv_Data_AudioInput.BehaviorMode.Off: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   public static let protoMessageName: String = Rv_Data_AudioInput.BehaviorMode.protoMessageName + ".Off"
   public static let _protobuf_nameMap = SwiftProtobuf._NameMap()
 
@@ -710,7 +710,7 @@ extension Rv_Data_AudioInput.BehaviorMode.Off: SwiftProtobuf.Message, SwiftProto
   }
 }
 
-extension Rv_Data_AudioInput.BehaviorMode.AutoOff: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+nonisolated extension Rv_Data_AudioInput.BehaviorMode.AutoOff: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   public static let protoMessageName: String = Rv_Data_AudioInput.BehaviorMode.protoMessageName + ".AutoOff"
   public static let _protobuf_nameMap = SwiftProtobuf._NameMap()
 
@@ -729,7 +729,7 @@ extension Rv_Data_AudioInput.BehaviorMode.AutoOff: SwiftProtobuf.Message, SwiftP
   }
 }
 
-extension Rv_Data_AudioInput.BehaviorMode.AutoOn: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+nonisolated extension Rv_Data_AudioInput.BehaviorMode.AutoOn: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   public static let protoMessageName: String = Rv_Data_AudioInput.BehaviorMode.protoMessageName + ".AutoOn"
   public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{3}linked_video_inputs\0")
 

@@ -1,0 +1,110 @@
+[
+  {
+    "diagnostics": [],
+    "documentID": "12080506-FFDA-5A60-9E6D-4C99A9A8F82F",
+    "files": [
+      {
+        "byteCount": 8051,
+        "path": "/Users/davbeck/Library/Application Support/RenewedVision/ProPresenter/Workspaces/9f65d640-6477-441e-9b71-70ef74bb12d7/Media/Assets/SharedRectangle.png"
+      }
+    ],
+    "localFilesAvailable": true,
+    "reference": {
+      "activeLocators": [
+        {
+          "field": "image/file/local_url",
+          "localPath": "Media/Assets/SharedRectangle.png",
+          "localRoot": 10
+        }
+      ],
+      "assetID": "322e4d08-cba2-4b08-bd43-842ae317f6df",
+      "dependencyKind": "file",
+      "hasProvider": false,
+      "identitySchemaVersion": "1",
+      "kind": "image",
+      "locators": [
+        {
+          "field": "image/file/local_url",
+          "localPath": "Media/Assets/SharedRectangle.png",
+          "localRoot": 10
+        }
+      ],
+      "path": "/cues[index=0]/actions[index=1]/media/element",
+      "referenceID": "80eb4ec7-9507-5bb1-be56-1b42ab4f077a"
+    },
+    "scope": 0,
+    "state": "available-files"
+  },
+  {
+    "diagnostics": [],
+    "documentID": "12080506-FFDA-5A60-9E6D-4C99A9A8F82F",
+    "files": [
+      {
+        "byteCount": 8051,
+        "path": "/Users/davbeck/Library/Application Support/RenewedVision/ProPresenter/Workspaces/9f65d640-6477-441e-9b71-70ef74bb12d7/Media/Assets/SharedRectangle.png"
+      }
+    ],
+    "localFilesAvailable": true,
+    "reference": {
+      "activeLocators": [
+        {
+          "field": "image/file/local_url",
+          "localPath": "Media/Assets/SharedRectangle.png",
+          "localRoot": 10
+        }
+      ],
+      "assetID": "322e4d08-cba2-4b08-bd43-842ae317f6df",
+      "dependencyKind": "file",
+      "hasProvider": false,
+      "identitySchemaVersion": "1",
+      "kind": "image",
+      "locators": [
+        {
+          "field": "image/file/local_url",
+          "localPath": "Media/Assets/SharedRectangle.png",
+          "localRoot": 10
+        }
+      ],
+      "path": "/cues[index=1]/actions[index=1]/media/element",
+      "referenceID": "a334238d-6c81-5441-85f6-3c61ffaf9004"
+    },
+    "scope": 0,
+    "state": "available-files"
+  },
+  {
+    "diagnostics": [],
+    "documentID": "97F094D1-79A8-541C-A49A-F3643222948C",
+    "files": [
+      {
+        "byteCount": 61107,
+        "path": "/Users/davbeck/Library/Application Support/RenewedVision/ProPresenter/Workspaces/9f65d640-6477-441e-9b71-70ef74bb12d7/Themes/Black/Assets/EventPhoto.jpg"
+      }
+    ],
+    "localFilesAvailable": true,
+    "reference": {
+      "activeLocators": [
+        {
+          "field": "image/file/local_url",
+          "localPath": "Themes/Black/Assets/EventPhoto.jpg",
+          "localRoot": 10
+        }
+      ],
+      "assetID": "c9d1f3fa-0a66-59ea-8e21-2a8dc07cc848",
+      "dependencyKind": "file",
+      "hasProvider": false,
+      "identitySchemaVersion": "1",
+      "kind": "image",
+      "locators": [
+        {
+          "field": "image/file/local_url",
+          "localPath": "Themes/Black/Assets/EventPhoto.jpg",
+          "localRoot": 10
+        }
+      ],
+      "path": "/slides[index=5]/base_slide/elements[index=1]/element/fill/media",
+      "referenceID": "b3f57269-e05d-5ea7-9ac5-5cbbe0a95628"
+    },
+    "scope": 0,
+    "state": "available-files"
+  }
+]

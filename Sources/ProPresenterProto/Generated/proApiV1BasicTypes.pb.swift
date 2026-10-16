@@ -15,12 +15,12 @@ import SwiftProtobuf
 // incompatible with the version of SwiftProtobuf to which you are linking.
 // Please ensure that you are building against the same version of the API
 // that was used to generate this file.
-fileprivate struct _GeneratedWithProtocGenSwiftVersion: SwiftProtobuf.ProtobufAPIVersionCheck {
+fileprivate nonisolated struct _GeneratedWithProtocGenSwiftVersion: SwiftProtobuf.ProtobufAPIVersionCheck {
   struct _2: SwiftProtobuf.ProtobufAPIVersion_2 {}
   typealias Version = _2
 }
 
-public struct Rv_Data_API_v1_Identifier: Sendable {
+public nonisolated struct Rv_Data_API_v1_Identifier: Sendable {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
   // methods supported on all messages.
@@ -36,7 +36,7 @@ public struct Rv_Data_API_v1_Identifier: Sendable {
   public init() {}
 }
 
-public struct Rv_Data_API_v1_SlideIndex: Sendable {
+public nonisolated struct Rv_Data_API_v1_SlideIndex: Sendable {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
   // methods supported on all messages.
@@ -44,11 +44,11 @@ public struct Rv_Data_API_v1_SlideIndex: Sendable {
   public var index: UInt32 = 0
 
   public var presentationID: Rv_Data_API_v1_Identifier {
-    get {return _presentationID ?? Rv_Data_API_v1_Identifier()}
+    get {_presentationID ?? Rv_Data_API_v1_Identifier()}
     set {_presentationID = newValue}
   }
   /// Returns true if `presentationID` has been explicitly set.
-  public var hasPresentationID: Bool {return self._presentationID != nil}
+  public var hasPresentationID: Bool {self._presentationID != nil}
   /// Clears the value of `presentationID`. Subsequent reads from it will return its default value.
   public mutating func clearPresentationID() {self._presentationID = nil}
 
@@ -59,17 +59,17 @@ public struct Rv_Data_API_v1_SlideIndex: Sendable {
   fileprivate var _presentationID: Rv_Data_API_v1_Identifier? = nil
 }
 
-public struct Rv_Data_API_v1_Playlist: Sendable {
+public nonisolated struct Rv_Data_API_v1_Playlist: Sendable {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
   // methods supported on all messages.
 
   public var id: Rv_Data_API_v1_Identifier {
-    get {return _id ?? Rv_Data_API_v1_Identifier()}
+    get {_id ?? Rv_Data_API_v1_Identifier()}
     set {_id = newValue}
   }
   /// Returns true if `id` has been explicitly set.
-  public var hasID: Bool {return self._id != nil}
+  public var hasID: Bool {self._id != nil}
   /// Clears the value of `id`. Subsequent reads from it will return its default value.
   public mutating func clearID() {self._id = nil}
 
@@ -79,7 +79,7 @@ public struct Rv_Data_API_v1_Playlist: Sendable {
 
   public var unknownFields = SwiftProtobuf.UnknownStorage()
 
-  public enum API_v1_PlaylistType: SwiftProtobuf.Enum, Swift.CaseIterable {
+  public nonisolated enum API_v1_PlaylistType: SwiftProtobuf.Enum, Swift.CaseIterable {
     public typealias RawValue = Int
     case group // = 0
     case playlist // = 1
@@ -118,26 +118,26 @@ public struct Rv_Data_API_v1_Playlist: Sendable {
   fileprivate var _id: Rv_Data_API_v1_Identifier? = nil
 }
 
-public struct Rv_Data_API_v1_PlaylistAndItem: Sendable {
+public nonisolated struct Rv_Data_API_v1_PlaylistAndItem: Sendable {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
   // methods supported on all messages.
 
   public var playlist: Rv_Data_API_v1_Identifier {
-    get {return _playlist ?? Rv_Data_API_v1_Identifier()}
+    get {_playlist ?? Rv_Data_API_v1_Identifier()}
     set {_playlist = newValue}
   }
   /// Returns true if `playlist` has been explicitly set.
-  public var hasPlaylist: Bool {return self._playlist != nil}
+  public var hasPlaylist: Bool {self._playlist != nil}
   /// Clears the value of `playlist`. Subsequent reads from it will return its default value.
   public mutating func clearPlaylist() {self._playlist = nil}
 
   public var item: Rv_Data_API_v1_Identifier {
-    get {return _item ?? Rv_Data_API_v1_Identifier()}
+    get {_item ?? Rv_Data_API_v1_Identifier()}
     set {_item = newValue}
   }
   /// Returns true if `item` has been explicitly set.
-  public var hasItem: Bool {return self._item != nil}
+  public var hasItem: Bool {self._item != nil}
   /// Clears the value of `item`. Subsequent reads from it will return its default value.
   public mutating func clearItem() {self._item = nil}
 
@@ -149,17 +149,17 @@ public struct Rv_Data_API_v1_PlaylistAndItem: Sendable {
   fileprivate var _item: Rv_Data_API_v1_Identifier? = nil
 }
 
-public struct Rv_Data_API_v1_MediaPlaylistItem: Sendable {
+public nonisolated struct Rv_Data_API_v1_MediaPlaylistItem: Sendable {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
   // methods supported on all messages.
 
   public var id: Rv_Data_API_v1_Identifier {
-    get {return _id ?? Rv_Data_API_v1_Identifier()}
+    get {_id ?? Rv_Data_API_v1_Identifier()}
     set {_id = newValue}
   }
   /// Returns true if `id` has been explicitly set.
-  public var hasID: Bool {return self._id != nil}
+  public var hasID: Bool {self._id != nil}
   /// Clears the value of `id`. Subsequent reads from it will return its default value.
   public mutating func clearID() {self._id = nil}
 
@@ -171,7 +171,7 @@ public struct Rv_Data_API_v1_MediaPlaylistItem: Sendable {
 
   public var unknownFields = SwiftProtobuf.UnknownStorage()
 
-  public enum API_v1_MediaPlaylistItemType: SwiftProtobuf.Enum, Swift.CaseIterable {
+  public nonisolated enum API_v1_MediaPlaylistItemType: SwiftProtobuf.Enum, Swift.CaseIterable {
     public typealias RawValue = Int
     case audio // = 0
     case image // = 1
@@ -214,17 +214,17 @@ public struct Rv_Data_API_v1_MediaPlaylistItem: Sendable {
   fileprivate var _id: Rv_Data_API_v1_Identifier? = nil
 }
 
-public struct Rv_Data_API_v1_PlaylistItem: Sendable {
+public nonisolated struct Rv_Data_API_v1_PlaylistItem: Sendable {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
   // methods supported on all messages.
 
   public var id: Rv_Data_API_v1_Identifier {
-    get {return _id ?? Rv_Data_API_v1_Identifier()}
+    get {_id ?? Rv_Data_API_v1_Identifier()}
     set {_id = newValue}
   }
   /// Returns true if `id` has been explicitly set.
-  public var hasID: Bool {return self._id != nil}
+  public var hasID: Bool {self._id != nil}
   /// Clears the value of `id`. Subsequent reads from it will return its default value.
   public mutating func clearID() {self._id = nil}
 
@@ -235,26 +235,26 @@ public struct Rv_Data_API_v1_PlaylistItem: Sendable {
   public var isPco: Bool = false
 
   public var headerColor: Rv_Data_API_v1_Color {
-    get {return _headerColor ?? Rv_Data_API_v1_Color()}
+    get {_headerColor ?? Rv_Data_API_v1_Color()}
     set {_headerColor = newValue}
   }
   /// Returns true if `headerColor` has been explicitly set.
-  public var hasHeaderColor: Bool {return self._headerColor != nil}
+  public var hasHeaderColor: Bool {self._headerColor != nil}
   /// Clears the value of `headerColor`. Subsequent reads from it will return its default value.
   public mutating func clearHeaderColor() {self._headerColor = nil}
 
   public var duration: SwiftProtobuf.Google_Protobuf_UInt32Value {
-    get {return _duration ?? SwiftProtobuf.Google_Protobuf_UInt32Value()}
+    get {_duration ?? SwiftProtobuf.Google_Protobuf_UInt32Value()}
     set {_duration = newValue}
   }
   /// Returns true if `duration` has been explicitly set.
-  public var hasDuration: Bool {return self._duration != nil}
+  public var hasDuration: Bool {self._duration != nil}
   /// Clears the value of `duration`. Subsequent reads from it will return its default value.
   public mutating func clearDuration() {self._duration = nil}
 
   public var unknownFields = SwiftProtobuf.UnknownStorage()
 
-  public enum API_v1_PlaylistItemType: SwiftProtobuf.Enum, Swift.CaseIterable {
+  public nonisolated enum API_v1_PlaylistItemType: SwiftProtobuf.Enum, Swift.CaseIterable {
     public typealias RawValue = Int
     case presentation // = 0
     case placeholder // = 1
@@ -311,28 +311,28 @@ public struct Rv_Data_API_v1_PlaylistItem: Sendable {
   fileprivate var _duration: SwiftProtobuf.Google_Protobuf_UInt32Value? = nil
 }
 
-public struct Rv_Data_API_v1_ClearGroup: Sendable {
+public nonisolated struct Rv_Data_API_v1_ClearGroup: Sendable {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
   // methods supported on all messages.
 
   public var id: Rv_Data_API_v1_Identifier {
-    get {return _id ?? Rv_Data_API_v1_Identifier()}
+    get {_id ?? Rv_Data_API_v1_Identifier()}
     set {_id = newValue}
   }
   /// Returns true if `id` has been explicitly set.
-  public var hasID: Bool {return self._id != nil}
+  public var hasID: Bool {self._id != nil}
   /// Clears the value of `id`. Subsequent reads from it will return its default value.
   public mutating func clearID() {self._id = nil}
 
   public var icon: String = String()
 
   public var tint: Rv_Data_API_v1_Color {
-    get {return _tint ?? Rv_Data_API_v1_Color()}
+    get {_tint ?? Rv_Data_API_v1_Color()}
     set {_tint = newValue}
   }
   /// Returns true if `tint` has been explicitly set.
-  public var hasTint: Bool {return self._tint != nil}
+  public var hasTint: Bool {self._tint != nil}
   /// Clears the value of `tint`. Subsequent reads from it will return its default value.
   public mutating func clearTint() {self._tint = nil}
 
@@ -346,7 +346,7 @@ public struct Rv_Data_API_v1_ClearGroup: Sendable {
 
   public var unknownFields = SwiftProtobuf.UnknownStorage()
 
-  public enum API_v1_ClearGroupLayerType: SwiftProtobuf.Enum, Swift.CaseIterable {
+  public nonisolated enum API_v1_ClearGroupLayerType: SwiftProtobuf.Enum, Swift.CaseIterable {
     public typealias RawValue = Int
     case music // = 0
     case audioEffects // = 1
@@ -410,17 +410,17 @@ public struct Rv_Data_API_v1_ClearGroup: Sendable {
   fileprivate var _tint: Rv_Data_API_v1_Color? = nil
 }
 
-public struct Rv_Data_API_v1_Message: Sendable {
+public nonisolated struct Rv_Data_API_v1_Message: Sendable {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
   // methods supported on all messages.
 
   public var id: Rv_Data_API_v1_Identifier {
-    get {return _id ?? Rv_Data_API_v1_Identifier()}
+    get {_id ?? Rv_Data_API_v1_Identifier()}
     set {_id = newValue}
   }
   /// Returns true if `id` has been explicitly set.
-  public var hasID: Bool {return self._id != nil}
+  public var hasID: Bool {self._id != nil}
   /// Clears the value of `id`. Subsequent reads from it will return its default value.
   public mutating func clearID() {self._id = nil}
 
@@ -429,17 +429,17 @@ public struct Rv_Data_API_v1_Message: Sendable {
   public var tokens: [Rv_Data_API_v1_Message.API_v1_MessageToken] = []
 
   public var theme: Rv_Data_API_v1_Identifier {
-    get {return _theme ?? Rv_Data_API_v1_Identifier()}
+    get {_theme ?? Rv_Data_API_v1_Identifier()}
     set {_theme = newValue}
   }
   /// Returns true if `theme` has been explicitly set.
-  public var hasTheme: Bool {return self._theme != nil}
+  public var hasTheme: Bool {self._theme != nil}
   /// Clears the value of `theme`. Subsequent reads from it will return its default value.
   public mutating func clearTheme() {self._theme = nil}
 
   public var unknownFields = SwiftProtobuf.UnknownStorage()
 
-  public struct API_v1_MessageToken: Sendable {
+  public nonisolated struct API_v1_MessageToken: Sendable {
     // SwiftProtobuf.Message conformance is added in an extension below. See the
     // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
     // methods supported on all messages.
@@ -474,14 +474,14 @@ public struct Rv_Data_API_v1_Message: Sendable {
 
     public var unknownFields = SwiftProtobuf.UnknownStorage()
 
-    public enum OneOf_TokenType: Equatable, Sendable {
+    public nonisolated enum OneOf_TokenType: Equatable, Sendable {
       case text(Rv_Data_API_v1_Message.API_v1_MessageToken.API_v1_TextToken)
       case timer(Rv_Data_API_v1_Message.API_v1_MessageToken.API_v1_TimerToken)
       case clock(Rv_Data_API_v1_Message.API_v1_MessageToken.API_v1_ClockToken)
 
     }
 
-    public struct API_v1_TextToken: Sendable {
+    public nonisolated struct API_v1_TextToken: Sendable {
       // SwiftProtobuf.Message conformance is added in an extension below. See the
       // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
       // methods supported on all messages.
@@ -493,28 +493,28 @@ public struct Rv_Data_API_v1_Message: Sendable {
       public init() {}
     }
 
-    public struct API_v1_TimerToken: Sendable {
+    public nonisolated struct API_v1_TimerToken: Sendable {
       // SwiftProtobuf.Message conformance is added in an extension below. See the
       // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
       // methods supported on all messages.
 
       public var id: Rv_Data_API_v1_Identifier {
-        get {return _id ?? Rv_Data_API_v1_Identifier()}
+        get {_id ?? Rv_Data_API_v1_Identifier()}
         set {_id = newValue}
       }
       /// Returns true if `id` has been explicitly set.
-      public var hasID: Bool {return self._id != nil}
+      public var hasID: Bool {self._id != nil}
       /// Clears the value of `id`. Subsequent reads from it will return its default value.
       public mutating func clearID() {self._id = nil}
 
       public var allowsOverrun: Bool = false
 
       public var format: Rv_Data_API_v1_TimerFormat {
-        get {return _format ?? Rv_Data_API_v1_TimerFormat()}
+        get {_format ?? Rv_Data_API_v1_TimerFormat()}
         set {_format = newValue}
       }
       /// Returns true if `format` has been explicitly set.
-      public var hasFormat: Bool {return self._format != nil}
+      public var hasFormat: Bool {self._format != nil}
       /// Clears the value of `format`. Subsequent reads from it will return its default value.
       public mutating func clearFormat() {self._format = nil}
 
@@ -546,7 +546,7 @@ public struct Rv_Data_API_v1_Message: Sendable {
 
       public var unknownFields = SwiftProtobuf.UnknownStorage()
 
-      public enum OneOf_TimerConfiguration: Equatable, Sendable {
+      public nonisolated enum OneOf_TimerConfiguration: Equatable, Sendable {
         case countdown(Rv_Data_API_v1_Timer.API_v1_Timer_Countdown)
         case countDownToTime(Rv_Data_API_v1_Timer.API_v1_Timer_CountdownToTime)
         case elapsed(Rv_Data_API_v1_Timer.API_v1_Timer_Elapsed)
@@ -559,7 +559,7 @@ public struct Rv_Data_API_v1_Message: Sendable {
       fileprivate var _format: Rv_Data_API_v1_TimerFormat? = nil
     }
 
-    public struct API_v1_ClockToken: Sendable {
+    public nonisolated struct API_v1_ClockToken: Sendable {
       // SwiftProtobuf.Message conformance is added in an extension below. See the
       // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
       // methods supported on all messages.
@@ -572,7 +572,7 @@ public struct Rv_Data_API_v1_Message: Sendable {
 
       public var unknownFields = SwiftProtobuf.UnknownStorage()
 
-      public enum API_v1_ClockTokenFormat: SwiftProtobuf.Enum, Swift.CaseIterable {
+      public nonisolated enum API_v1_ClockTokenFormat: SwiftProtobuf.Enum, Swift.CaseIterable {
         public typealias RawValue = Int
         case none // = 0
         case short // = 1
@@ -630,17 +630,17 @@ public struct Rv_Data_API_v1_Message: Sendable {
   fileprivate var _theme: Rv_Data_API_v1_Identifier? = nil
 }
 
-public struct Rv_Data_API_v1_Timer: Sendable {
+public nonisolated struct Rv_Data_API_v1_Timer: Sendable {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
   // methods supported on all messages.
 
   public var id: Rv_Data_API_v1_Identifier {
-    get {return _id ?? Rv_Data_API_v1_Identifier()}
+    get {_id ?? Rv_Data_API_v1_Identifier()}
     set {_id = newValue}
   }
   /// Returns true if `id` has been explicitly set.
-  public var hasID: Bool {return self._id != nil}
+  public var hasID: Bool {self._id != nil}
   /// Clears the value of `id`. Subsequent reads from it will return its default value.
   public mutating func clearID() {self._id = nil}
 
@@ -674,14 +674,14 @@ public struct Rv_Data_API_v1_Timer: Sendable {
 
   public var unknownFields = SwiftProtobuf.UnknownStorage()
 
-  public enum OneOf_TimerConfiguration: Equatable, Sendable {
+  public nonisolated enum OneOf_TimerConfiguration: Equatable, Sendable {
     case countdown(Rv_Data_API_v1_Timer.API_v1_Timer_Countdown)
     case countDownToTime(Rv_Data_API_v1_Timer.API_v1_Timer_CountdownToTime)
     case elapsed(Rv_Data_API_v1_Timer.API_v1_Timer_Elapsed)
 
   }
 
-  public struct API_v1_Timer_Countdown: Sendable {
+  public nonisolated struct API_v1_Timer_Countdown: Sendable {
     // SwiftProtobuf.Message conformance is added in an extension below. See the
     // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
     // methods supported on all messages.
@@ -693,7 +693,7 @@ public struct Rv_Data_API_v1_Timer: Sendable {
     public init() {}
   }
 
-  public struct API_v1_Timer_CountdownToTime: Sendable {
+  public nonisolated struct API_v1_Timer_CountdownToTime: Sendable {
     // SwiftProtobuf.Message conformance is added in an extension below. See the
     // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
     // methods supported on all messages.
@@ -704,7 +704,7 @@ public struct Rv_Data_API_v1_Timer: Sendable {
 
     public var unknownFields = SwiftProtobuf.UnknownStorage()
 
-    public enum API_v1_TimePeriod: SwiftProtobuf.Enum, Swift.CaseIterable {
+    public nonisolated enum API_v1_TimePeriod: SwiftProtobuf.Enum, Swift.CaseIterable {
       public typealias RawValue = Int
       case am // = 0
       case pm // = 1
@@ -745,7 +745,7 @@ public struct Rv_Data_API_v1_Timer: Sendable {
     public init() {}
   }
 
-  public struct API_v1_Timer_Elapsed: Sendable {
+  public nonisolated struct API_v1_Timer_Elapsed: Sendable {
     // SwiftProtobuf.Message conformance is added in an extension below. See the
     // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
     // methods supported on all messages.
@@ -766,7 +766,7 @@ public struct Rv_Data_API_v1_Timer: Sendable {
   fileprivate var _id: Rv_Data_API_v1_Identifier? = nil
 }
 
-public struct Rv_Data_API_v1_TimerFormat: Sendable {
+public nonisolated struct Rv_Data_API_v1_TimerFormat: Sendable {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
   // methods supported on all messages.
@@ -781,7 +781,7 @@ public struct Rv_Data_API_v1_TimerFormat: Sendable {
 
   public var unknownFields = SwiftProtobuf.UnknownStorage()
 
-  public enum API_v1_TimerUnitDisplayFormat: SwiftProtobuf.Enum, Swift.CaseIterable {
+  public nonisolated enum API_v1_TimerUnitDisplayFormat: SwiftProtobuf.Enum, Swift.CaseIterable {
     public typealias RawValue = Int
     case none // = 0
     case short // = 1
@@ -830,17 +830,17 @@ public struct Rv_Data_API_v1_TimerFormat: Sendable {
   public init() {}
 }
 
-public struct Rv_Data_API_v1_TimerValue: Sendable {
+public nonisolated struct Rv_Data_API_v1_TimerValue: Sendable {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
   // methods supported on all messages.
 
   public var id: Rv_Data_API_v1_Identifier {
-    get {return _id ?? Rv_Data_API_v1_Identifier()}
+    get {_id ?? Rv_Data_API_v1_Identifier()}
     set {_id = newValue}
   }
   /// Returns true if `id` has been explicitly set.
-  public var hasID: Bool {return self._id != nil}
+  public var hasID: Bool {self._id != nil}
   /// Clears the value of `id`. Subsequent reads from it will return its default value.
   public mutating func clearID() {self._id = nil}
 
@@ -850,7 +850,7 @@ public struct Rv_Data_API_v1_TimerValue: Sendable {
 
   public var unknownFields = SwiftProtobuf.UnknownStorage()
 
-  public enum API_v1_TimerState: SwiftProtobuf.Enum, Swift.CaseIterable {
+  public nonisolated enum API_v1_TimerState: SwiftProtobuf.Enum, Swift.CaseIterable {
     public typealias RawValue = Int
     case stopped // = 0
     case running // = 1
@@ -901,7 +901,7 @@ public struct Rv_Data_API_v1_TimerValue: Sendable {
   fileprivate var _id: Rv_Data_API_v1_Identifier? = nil
 }
 
-public struct Rv_Data_API_v1_Color: Sendable {
+public nonisolated struct Rv_Data_API_v1_Color: Sendable {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
   // methods supported on all messages.
@@ -919,17 +919,17 @@ public struct Rv_Data_API_v1_Color: Sendable {
   public init() {}
 }
 
-public struct Rv_Data_API_v1_Look: Sendable {
+public nonisolated struct Rv_Data_API_v1_Look: Sendable {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
   // methods supported on all messages.
 
   public var id: Rv_Data_API_v1_Identifier {
-    get {return _id ?? Rv_Data_API_v1_Identifier()}
+    get {_id ?? Rv_Data_API_v1_Identifier()}
     set {_id = newValue}
   }
   /// Returns true if `id` has been explicitly set.
-  public var hasID: Bool {return self._id != nil}
+  public var hasID: Bool {self._id != nil}
   /// Clears the value of `id`. Subsequent reads from it will return its default value.
   public mutating func clearID() {self._id = nil}
 
@@ -942,7 +942,7 @@ public struct Rv_Data_API_v1_Look: Sendable {
   fileprivate var _id: Rv_Data_API_v1_Identifier? = nil
 }
 
-public struct Rv_Data_API_v1_Screen: Sendable {
+public nonisolated struct Rv_Data_API_v1_Screen: Sendable {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
   // methods supported on all messages.
@@ -968,26 +968,26 @@ public struct Rv_Data_API_v1_Screen: Sendable {
   public init() {}
 }
 
-public struct Rv_Data_API_v1_Macro: Sendable {
+public nonisolated struct Rv_Data_API_v1_Macro: Sendable {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
   // methods supported on all messages.
 
   public var id: Rv_Data_API_v1_Identifier {
-    get {return _id ?? Rv_Data_API_v1_Identifier()}
+    get {_id ?? Rv_Data_API_v1_Identifier()}
     set {_id = newValue}
   }
   /// Returns true if `id` has been explicitly set.
-  public var hasID: Bool {return self._id != nil}
+  public var hasID: Bool {self._id != nil}
   /// Clears the value of `id`. Subsequent reads from it will return its default value.
   public mutating func clearID() {self._id = nil}
 
   public var color: Rv_Data_API_v1_Color {
-    get {return _color ?? Rv_Data_API_v1_Color()}
+    get {_color ?? Rv_Data_API_v1_Color()}
     set {_color = newValue}
   }
   /// Returns true if `color` has been explicitly set.
-  public var hasColor: Bool {return self._color != nil}
+  public var hasColor: Bool {self._color != nil}
   /// Clears the value of `color`. Subsequent reads from it will return its default value.
   public mutating func clearColor() {self._color = nil}
 
@@ -999,7 +999,7 @@ public struct Rv_Data_API_v1_Macro: Sendable {
   fileprivate var _color: Rv_Data_API_v1_Color? = nil
 }
 
-public struct Rv_Data_API_v1_GroupMember: Sendable {
+public nonisolated struct Rv_Data_API_v1_GroupMember: Sendable {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
   // methods supported on all messages.
@@ -1013,7 +1013,7 @@ public struct Rv_Data_API_v1_GroupMember: Sendable {
   public init() {}
 }
 
-public struct Rv_Data_API_v1_GroupMemberStatus: Sendable {
+public nonisolated struct Rv_Data_API_v1_GroupMemberStatus: Sendable {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
   // methods supported on all messages.
@@ -1036,7 +1036,7 @@ public struct Rv_Data_API_v1_GroupMemberStatus: Sendable {
 
   public var unknownFields = SwiftProtobuf.UnknownStorage()
 
-  public enum API_v1_GroupMemberStatus_Platform: SwiftProtobuf.Enum, Swift.CaseIterable {
+  public nonisolated enum API_v1_GroupMemberStatus_Platform: SwiftProtobuf.Enum, Swift.CaseIterable {
     public typealias RawValue = Int
     case platformUnknown // = 0
     case platformMacos // = 1
@@ -1078,7 +1078,7 @@ public struct Rv_Data_API_v1_GroupMemberStatus: Sendable {
 
   }
 
-  public enum API_v1_GroupMemberStatus_ConnectionStatus: SwiftProtobuf.Enum, Swift.CaseIterable {
+  public nonisolated enum API_v1_GroupMemberStatus_ConnectionStatus: SwiftProtobuf.Enum, Swift.CaseIterable {
     public typealias RawValue = Int
     case connectionStatusUnknown // = 0
     case connectionStatusConnected // = 1
@@ -1119,17 +1119,17 @@ public struct Rv_Data_API_v1_GroupMemberStatus: Sendable {
   public init() {}
 }
 
-public struct Rv_Data_API_v1_GroupDefinition: Sendable {
+public nonisolated struct Rv_Data_API_v1_GroupDefinition: Sendable {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
   // methods supported on all messages.
 
   public var timestamp: Rv_Data_Timestamp {
-    get {return _timestamp ?? Rv_Data_Timestamp()}
+    get {_timestamp ?? Rv_Data_Timestamp()}
     set {_timestamp = newValue}
   }
   /// Returns true if `timestamp` has been explicitly set.
-  public var hasTimestamp: Bool {return self._timestamp != nil}
+  public var hasTimestamp: Bool {self._timestamp != nil}
   /// Clears the value of `timestamp`. Subsequent reads from it will return its default value.
   public mutating func clearTimestamp() {self._timestamp = nil}
 
@@ -1140,11 +1140,11 @@ public struct Rv_Data_API_v1_GroupDefinition: Sendable {
   public var members: [Rv_Data_API_v1_GroupMember] = []
 
   public var groupIdentifier: Rv_Data_UUID {
-    get {return _groupIdentifier ?? Rv_Data_UUID()}
+    get {_groupIdentifier ?? Rv_Data_UUID()}
     set {_groupIdentifier = newValue}
   }
   /// Returns true if `groupIdentifier` has been explicitly set.
-  public var hasGroupIdentifier: Bool {return self._groupIdentifier != nil}
+  public var hasGroupIdentifier: Bool {self._groupIdentifier != nil}
   /// Clears the value of `groupIdentifier`. Subsequent reads from it will return its default value.
   public mutating func clearGroupIdentifier() {self._groupIdentifier = nil}
 
@@ -1156,7 +1156,7 @@ public struct Rv_Data_API_v1_GroupDefinition: Sendable {
   fileprivate var _groupIdentifier: Rv_Data_UUID? = nil
 }
 
-public struct Rv_Data_API_v1_Error_Response: Sendable {
+public nonisolated struct Rv_Data_API_v1_Error_Response: Sendable {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
   // methods supported on all messages.
@@ -1165,7 +1165,7 @@ public struct Rv_Data_API_v1_Error_Response: Sendable {
 
   public var unknownFields = SwiftProtobuf.UnknownStorage()
 
-  public enum API_v1_Error_Type: SwiftProtobuf.Enum, Swift.CaseIterable {
+  public nonisolated enum API_v1_Error_Type: SwiftProtobuf.Enum, Swift.CaseIterable {
     public typealias RawValue = Int
     case notFound // = 0
     case badRequest // = 1
@@ -1210,17 +1210,17 @@ public struct Rv_Data_API_v1_Error_Response: Sendable {
   public init() {}
 }
 
-public struct Rv_Data_API_v1_CaptureSettings: Sendable {
+public nonisolated struct Rv_Data_API_v1_CaptureSettings: Sendable {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
   // methods supported on all messages.
 
   public var source: Rv_Data_UUID {
-    get {return _source ?? Rv_Data_UUID()}
+    get {_source ?? Rv_Data_UUID()}
     set {_source = newValue}
   }
   /// Returns true if `source` has been explicitly set.
-  public var hasSource: Bool {return self._source != nil}
+  public var hasSource: Bool {self._source != nil}
   /// Clears the value of `source`. Subsequent reads from it will return its default value.
   public mutating func clearSource() {self._source = nil}
 
@@ -1254,7 +1254,7 @@ public struct Rv_Data_API_v1_CaptureSettings: Sendable {
 
   public var unknownFields = SwiftProtobuf.UnknownStorage()
 
-  public enum OneOf_Destination: Equatable, Sendable {
+  public nonisolated enum OneOf_Destination: Equatable, Sendable {
     case disk(Rv_Data_API_v1_DiskCapture)
     case rtmp(Rv_Data_API_v1_RTMPCapture)
     case resi(Rv_Data_API_v1_ResiCapture)
@@ -1266,7 +1266,7 @@ public struct Rv_Data_API_v1_CaptureSettings: Sendable {
   fileprivate var _source: Rv_Data_UUID? = nil
 }
 
-public struct Rv_Data_API_v1_Size: Sendable {
+public nonisolated struct Rv_Data_API_v1_Size: Sendable {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
   // methods supported on all messages.
@@ -1280,7 +1280,7 @@ public struct Rv_Data_API_v1_Size: Sendable {
   public init() {}
 }
 
-public struct Rv_Data_API_v1_AudioRouting: Sendable {
+public nonisolated struct Rv_Data_API_v1_AudioRouting: Sendable {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
   // methods supported on all messages.
@@ -1292,7 +1292,7 @@ public struct Rv_Data_API_v1_AudioRouting: Sendable {
   public init() {}
 }
 
-public struct Rv_Data_API_v1_DiskCapture: Sendable {
+public nonisolated struct Rv_Data_API_v1_DiskCapture: Sendable {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
   // methods supported on all messages.
@@ -1302,11 +1302,11 @@ public struct Rv_Data_API_v1_DiskCapture: Sendable {
   public var codec: String = String()
 
   public var resolution: Rv_Data_API_v1_Size {
-    get {return _resolution ?? Rv_Data_API_v1_Size()}
+    get {_resolution ?? Rv_Data_API_v1_Size()}
     set {_resolution = newValue}
   }
   /// Returns true if `resolution` has been explicitly set.
-  public var hasResolution: Bool {return self._resolution != nil}
+  public var hasResolution: Bool {self._resolution != nil}
   /// Clears the value of `resolution`. Subsequent reads from it will return its default value.
   public mutating func clearResolution() {self._resolution = nil}
 
@@ -1319,7 +1319,7 @@ public struct Rv_Data_API_v1_DiskCapture: Sendable {
   fileprivate var _resolution: Rv_Data_API_v1_Size? = nil
 }
 
-public struct Rv_Data_API_v1_RTMPCapture: Sendable {
+public nonisolated struct Rv_Data_API_v1_RTMPCapture: Sendable {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
   // methods supported on all messages.
@@ -1339,7 +1339,7 @@ public struct Rv_Data_API_v1_RTMPCapture: Sendable {
   public init() {}
 }
 
-public struct Rv_Data_API_v1_ResiCapture: Sendable {
+public nonisolated struct Rv_Data_API_v1_ResiCapture: Sendable {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
   // methods supported on all messages.
@@ -1357,17 +1357,17 @@ public struct Rv_Data_API_v1_ResiCapture: Sendable {
   public init() {}
 }
 
-public struct Rv_Data_API_v1_Presentation: Sendable {
+public nonisolated struct Rv_Data_API_v1_Presentation: Sendable {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
   // methods supported on all messages.
 
   public var id: Rv_Data_API_v1_Identifier {
-    get {return _id ?? Rv_Data_API_v1_Identifier()}
+    get {_id ?? Rv_Data_API_v1_Identifier()}
     set {_id = newValue}
   }
   /// Returns true if `id` has been explicitly set.
-  public var hasID: Bool {return self._id != nil}
+  public var hasID: Bool {self._id != nil}
   /// Clears the value of `id`. Subsequent reads from it will return its default value.
   public mutating func clearID() {self._id = nil}
 
@@ -1381,7 +1381,7 @@ public struct Rv_Data_API_v1_Presentation: Sendable {
 
   public var unknownFields = SwiftProtobuf.UnknownStorage()
 
-  public enum Destination: SwiftProtobuf.Enum, Swift.CaseIterable {
+  public nonisolated enum Destination: SwiftProtobuf.Enum, Swift.CaseIterable {
     public typealias RawValue = Int
     case presentation // = 0
     case announcements // = 1
@@ -1415,7 +1415,7 @@ public struct Rv_Data_API_v1_Presentation: Sendable {
 
   }
 
-  public struct SlideGroup: Sendable {
+  public nonisolated struct SlideGroup: Sendable {
     // SwiftProtobuf.Message conformance is added in an extension below. See the
     // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
     // methods supported on all messages.
@@ -1423,11 +1423,11 @@ public struct Rv_Data_API_v1_Presentation: Sendable {
     public var name: String = String()
 
     public var color: Rv_Data_API_v1_Color {
-      get {return _color ?? Rv_Data_API_v1_Color()}
+      get {_color ?? Rv_Data_API_v1_Color()}
       set {_color = newValue}
     }
     /// Returns true if `color` has been explicitly set.
-    public var hasColor: Bool {return self._color != nil}
+    public var hasColor: Bool {self._color != nil}
     /// Clears the value of `color`. Subsequent reads from it will return its default value.
     public mutating func clearColor() {self._color = nil}
 
@@ -1435,7 +1435,7 @@ public struct Rv_Data_API_v1_Presentation: Sendable {
 
     public var unknownFields = SwiftProtobuf.UnknownStorage()
 
-    public struct Slide: Sendable {
+    public nonisolated struct Slide: Sendable {
       // SwiftProtobuf.Message conformance is added in an extension below. See the
       // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
       // methods supported on all messages.
@@ -1449,11 +1449,11 @@ public struct Rv_Data_API_v1_Presentation: Sendable {
       public var label: String = String()
 
       public var size: Rv_Data_API_v1_Size {
-        get {return _size ?? Rv_Data_API_v1_Size()}
+        get {_size ?? Rv_Data_API_v1_Size()}
         set {_size = newValue}
       }
       /// Returns true if `size` has been explicitly set.
-      public var hasSize: Bool {return self._size != nil}
+      public var hasSize: Bool {self._size != nil}
       /// Clears the value of `size`. Subsequent reads from it will return its default value.
       public mutating func clearSize() {self._size = nil}
 
@@ -1474,7 +1474,7 @@ public struct Rv_Data_API_v1_Presentation: Sendable {
   fileprivate var _id: Rv_Data_API_v1_Identifier? = nil
 }
 
-public struct Rv_Data_API_v1_StageLayoutMap: Sendable {
+public nonisolated struct Rv_Data_API_v1_StageLayoutMap: Sendable {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
   // methods supported on all messages.
@@ -1483,26 +1483,26 @@ public struct Rv_Data_API_v1_StageLayoutMap: Sendable {
 
   public var unknownFields = SwiftProtobuf.UnknownStorage()
 
-  public struct Entry: Sendable {
+  public nonisolated struct Entry: Sendable {
     // SwiftProtobuf.Message conformance is added in an extension below. See the
     // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
     // methods supported on all messages.
 
     public var screen: Rv_Data_API_v1_Identifier {
-      get {return _screen ?? Rv_Data_API_v1_Identifier()}
+      get {_screen ?? Rv_Data_API_v1_Identifier()}
       set {_screen = newValue}
     }
     /// Returns true if `screen` has been explicitly set.
-    public var hasScreen: Bool {return self._screen != nil}
+    public var hasScreen: Bool {self._screen != nil}
     /// Clears the value of `screen`. Subsequent reads from it will return its default value.
     public mutating func clearScreen() {self._screen = nil}
 
     public var layout: Rv_Data_API_v1_Identifier {
-      get {return _layout ?? Rv_Data_API_v1_Identifier()}
+      get {_layout ?? Rv_Data_API_v1_Identifier()}
       set {_layout = newValue}
     }
     /// Returns true if `layout` has been explicitly set.
-    public var hasLayout: Bool {return self._layout != nil}
+    public var hasLayout: Bool {self._layout != nil}
     /// Clears the value of `layout`. Subsequent reads from it will return its default value.
     public mutating func clearLayout() {self._layout = nil}
 
@@ -1517,17 +1517,17 @@ public struct Rv_Data_API_v1_StageLayoutMap: Sendable {
   public init() {}
 }
 
-public struct Rv_Data_API_v1_ThemeGroup: Sendable {
+public nonisolated struct Rv_Data_API_v1_ThemeGroup: Sendable {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
   // methods supported on all messages.
 
   public var id: Rv_Data_API_v1_Identifier {
-    get {return _id ?? Rv_Data_API_v1_Identifier()}
+    get {_id ?? Rv_Data_API_v1_Identifier()}
     set {_id = newValue}
   }
   /// Returns true if `id` has been explicitly set.
-  public var hasID: Bool {return self._id != nil}
+  public var hasID: Bool {self._id != nil}
   /// Clears the value of `id`. Subsequent reads from it will return its default value.
   public mutating func clearID() {self._id = nil}
 
@@ -1542,17 +1542,17 @@ public struct Rv_Data_API_v1_ThemeGroup: Sendable {
   fileprivate var _id: Rv_Data_API_v1_Identifier? = nil
 }
 
-public struct Rv_Data_API_v1_Theme: Sendable {
+public nonisolated struct Rv_Data_API_v1_Theme: Sendable {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
   // methods supported on all messages.
 
   public var id: Rv_Data_API_v1_Identifier {
-    get {return _id ?? Rv_Data_API_v1_Identifier()}
+    get {_id ?? Rv_Data_API_v1_Identifier()}
     set {_id = newValue}
   }
   /// Returns true if `id` has been explicitly set.
-  public var hasID: Bool {return self._id != nil}
+  public var hasID: Bool {self._id != nil}
   /// Clears the value of `id`. Subsequent reads from it will return its default value.
   public mutating func clearID() {self._id = nil}
 
@@ -1565,35 +1565,35 @@ public struct Rv_Data_API_v1_Theme: Sendable {
   fileprivate var _id: Rv_Data_API_v1_Identifier? = nil
 }
 
-public struct Rv_Data_API_v1_ThemeSlide: Sendable {
+public nonisolated struct Rv_Data_API_v1_ThemeSlide: Sendable {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
   // methods supported on all messages.
 
   public var id: Rv_Data_API_v1_Identifier {
-    get {return _id ?? Rv_Data_API_v1_Identifier()}
+    get {_id ?? Rv_Data_API_v1_Identifier()}
     set {_id = newValue}
   }
   /// Returns true if `id` has been explicitly set.
-  public var hasID: Bool {return self._id != nil}
+  public var hasID: Bool {self._id != nil}
   /// Clears the value of `id`. Subsequent reads from it will return its default value.
   public mutating func clearID() {self._id = nil}
 
   public var size: Rv_Data_API_v1_Size {
-    get {return _size ?? Rv_Data_API_v1_Size()}
+    get {_size ?? Rv_Data_API_v1_Size()}
     set {_size = newValue}
   }
   /// Returns true if `size` has been explicitly set.
-  public var hasSize: Bool {return self._size != nil}
+  public var hasSize: Bool {self._size != nil}
   /// Clears the value of `size`. Subsequent reads from it will return its default value.
   public mutating func clearSize() {self._size = nil}
 
   public var background: Rv_Data_API_v1_Color {
-    get {return _background ?? Rv_Data_API_v1_Color()}
+    get {_background ?? Rv_Data_API_v1_Color()}
     set {_background = newValue}
   }
   /// Returns true if `background` has been explicitly set.
-  public var hasBackground: Bool {return self._background != nil}
+  public var hasBackground: Bool {self._background != nil}
   /// Clears the value of `background`. Subsequent reads from it will return its default value.
   public mutating func clearBackground() {self._background = nil}
 
@@ -1606,7 +1606,7 @@ public struct Rv_Data_API_v1_ThemeSlide: Sendable {
   fileprivate var _background: Rv_Data_API_v1_Color? = nil
 }
 
-public struct Rv_Data_API_v1_SlideDisplayDetails: Sendable {
+public nonisolated struct Rv_Data_API_v1_SlideDisplayDetails: Sendable {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
   // methods supported on all messages.
@@ -1622,26 +1622,26 @@ public struct Rv_Data_API_v1_SlideDisplayDetails: Sendable {
   public init() {}
 }
 
-public struct Rv_Data_API_v1_ScreenConfig: Sendable {
+public nonisolated struct Rv_Data_API_v1_ScreenConfig: Sendable {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
   // methods supported on all messages.
 
   public var id: Rv_Data_API_v1_Identifier {
-    get {return _id ?? Rv_Data_API_v1_Identifier()}
+    get {_id ?? Rv_Data_API_v1_Identifier()}
     set {_id = newValue}
   }
   /// Returns true if `id` has been explicitly set.
-  public var hasID: Bool {return self._id != nil}
+  public var hasID: Bool {self._id != nil}
   /// Clears the value of `id`. Subsequent reads from it will return its default value.
   public mutating func clearID() {self._id = nil}
 
   public var size: Rv_Data_API_v1_Size {
-    get {return _size ?? Rv_Data_API_v1_Size()}
+    get {_size ?? Rv_Data_API_v1_Size()}
     set {_size = newValue}
   }
   /// Returns true if `size` has been explicitly set.
-  public var hasSize: Bool {return self._size != nil}
+  public var hasSize: Bool {self._size != nil}
   /// Clears the value of `size`. Subsequent reads from it will return its default value.
   public mutating func clearSize() {self._size = nil}
 
@@ -1649,7 +1649,7 @@ public struct Rv_Data_API_v1_ScreenConfig: Sendable {
 
   public var unknownFields = SwiftProtobuf.UnknownStorage()
 
-  public enum API_v1_ScreenType: SwiftProtobuf.Enum, Swift.CaseIterable {
+  public nonisolated enum API_v1_ScreenType: SwiftProtobuf.Enum, Swift.CaseIterable {
     public typealias RawValue = Int
     case audience // = 0
     case stage // = 1
@@ -1689,17 +1689,17 @@ public struct Rv_Data_API_v1_ScreenConfig: Sendable {
   fileprivate var _size: Rv_Data_API_v1_Size? = nil
 }
 
-public struct Rv_Data_API_v1_PropData: Sendable {
+public nonisolated struct Rv_Data_API_v1_PropData: Sendable {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
   // methods supported on all messages.
 
   public var id: Rv_Data_API_v1_Identifier {
-    get {return _id ?? Rv_Data_API_v1_Identifier()}
+    get {_id ?? Rv_Data_API_v1_Identifier()}
     set {_id = newValue}
   }
   /// Returns true if `id` has been explicitly set.
-  public var hasID: Bool {return self._id != nil}
+  public var hasID: Bool {self._id != nil}
   /// Clears the value of `id`. Subsequent reads from it will return its default value.
   public mutating func clearID() {self._id = nil}
 
@@ -1714,9 +1714,9 @@ public struct Rv_Data_API_v1_PropData: Sendable {
 
 // MARK: - Code below here is support for the SwiftProtobuf runtime.
 
-fileprivate let _protobuf_package = "rv.data"
+fileprivate nonisolated let _protobuf_package = "rv.data"
 
-extension Rv_Data_API_v1_Identifier: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+nonisolated extension Rv_Data_API_v1_Identifier: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   public static let protoMessageName: String = _protobuf_package + ".API_v1_Identifier"
   public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{1}uuid\0\u{1}name\0\u{1}index\0")
 
@@ -1756,7 +1756,7 @@ extension Rv_Data_API_v1_Identifier: SwiftProtobuf.Message, SwiftProtobuf._Messa
   }
 }
 
-extension Rv_Data_API_v1_SlideIndex: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+nonisolated extension Rv_Data_API_v1_SlideIndex: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   public static let protoMessageName: String = _protobuf_package + ".API_v1_SlideIndex"
   public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{1}index\0\u{3}presentation_id\0")
 
@@ -1795,7 +1795,7 @@ extension Rv_Data_API_v1_SlideIndex: SwiftProtobuf.Message, SwiftProtobuf._Messa
   }
 }
 
-extension Rv_Data_API_v1_Playlist: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+nonisolated extension Rv_Data_API_v1_Playlist: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   public static let protoMessageName: String = _protobuf_package + ".API_v1_Playlist"
   public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{1}id\0\u{1}type\0\u{1}children\0")
 
@@ -1839,11 +1839,11 @@ extension Rv_Data_API_v1_Playlist: SwiftProtobuf.Message, SwiftProtobuf._Message
   }
 }
 
-extension Rv_Data_API_v1_Playlist.API_v1_PlaylistType: SwiftProtobuf._ProtoNameProviding {
+nonisolated extension Rv_Data_API_v1_Playlist.API_v1_PlaylistType: SwiftProtobuf._ProtoNameProviding {
   public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{2}\0group\0\u{1}playlist\0")
 }
 
-extension Rv_Data_API_v1_PlaylistAndItem: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+nonisolated extension Rv_Data_API_v1_PlaylistAndItem: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   public static let protoMessageName: String = _protobuf_package + ".API_v1_PlaylistAndItem"
   public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{1}playlist\0\u{1}item\0")
 
@@ -1882,7 +1882,7 @@ extension Rv_Data_API_v1_PlaylistAndItem: SwiftProtobuf.Message, SwiftProtobuf._
   }
 }
 
-extension Rv_Data_API_v1_MediaPlaylistItem: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+nonisolated extension Rv_Data_API_v1_MediaPlaylistItem: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   public static let protoMessageName: String = _protobuf_package + ".API_v1_MediaPlaylistItem"
   public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{1}id\0\u{1}type\0\u{1}artist\0\u{1}duration\0")
 
@@ -1931,11 +1931,11 @@ extension Rv_Data_API_v1_MediaPlaylistItem: SwiftProtobuf.Message, SwiftProtobuf
   }
 }
 
-extension Rv_Data_API_v1_MediaPlaylistItem.API_v1_MediaPlaylistItemType: SwiftProtobuf._ProtoNameProviding {
+nonisolated extension Rv_Data_API_v1_MediaPlaylistItem.API_v1_MediaPlaylistItemType: SwiftProtobuf._ProtoNameProviding {
   public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{2}\0audio\0\u{1}image\0\u{1}video\0")
 }
 
-extension Rv_Data_API_v1_PlaylistItem: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+nonisolated extension Rv_Data_API_v1_PlaylistItem: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   public static let protoMessageName: String = _protobuf_package + ".API_v1_PlaylistItem"
   public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{1}id\0\u{1}type\0\u{3}is_hidden\0\u{3}is_pco\0\u{3}header_color\0\u{1}duration\0")
 
@@ -1994,11 +1994,11 @@ extension Rv_Data_API_v1_PlaylistItem: SwiftProtobuf.Message, SwiftProtobuf._Mes
   }
 }
 
-extension Rv_Data_API_v1_PlaylistItem.API_v1_PlaylistItemType: SwiftProtobuf._ProtoNameProviding {
+nonisolated extension Rv_Data_API_v1_PlaylistItem.API_v1_PlaylistItemType: SwiftProtobuf._ProtoNameProviding {
   public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{2}\0presentation\0\u{1}placeholder\0\u{1}header\0\u{1}media\0\u{1}audio\0\u{1}livevideo\0")
 }
 
-extension Rv_Data_API_v1_ClearGroup: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+nonisolated extension Rv_Data_API_v1_ClearGroup: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   public static let protoMessageName: String = _protobuf_package + ".API_v1_ClearGroup"
   public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{1}id\0\u{1}icon\0\u{1}tint\0\u{1}layers\0\u{3}stop_timeline_announcements\0\u{3}stop_timeline_presentation\0\u{3}clear_next_presentation\0")
 
@@ -2062,11 +2062,11 @@ extension Rv_Data_API_v1_ClearGroup: SwiftProtobuf.Message, SwiftProtobuf._Messa
   }
 }
 
-extension Rv_Data_API_v1_ClearGroup.API_v1_ClearGroupLayerType: SwiftProtobuf._ProtoNameProviding {
+nonisolated extension Rv_Data_API_v1_ClearGroup.API_v1_ClearGroupLayerType: SwiftProtobuf._ProtoNameProviding {
   public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{2}\0music\0\u{1}audio_effects\0\u{1}props\0\u{1}messages\0\u{1}announcements\0\u{1}presentation\0\u{1}presentation_media\0\u{1}video_input\0")
 }
 
-extension Rv_Data_API_v1_Message: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+nonisolated extension Rv_Data_API_v1_Message: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   public static let protoMessageName: String = _protobuf_package + ".API_v1_Message"
   public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{1}id\0\u{1}message\0\u{1}tokens\0\u{1}theme\0")
 
@@ -2115,7 +2115,7 @@ extension Rv_Data_API_v1_Message: SwiftProtobuf.Message, SwiftProtobuf._MessageI
   }
 }
 
-extension Rv_Data_API_v1_Message.API_v1_MessageToken: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+nonisolated extension Rv_Data_API_v1_Message.API_v1_MessageToken: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   public static let protoMessageName: String = Rv_Data_API_v1_Message.protoMessageName + ".API_v1_MessageToken"
   public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{1}name\0\u{1}text\0\u{1}timer\0\u{1}clock\0")
 
@@ -2204,7 +2204,7 @@ extension Rv_Data_API_v1_Message.API_v1_MessageToken: SwiftProtobuf.Message, Swi
   }
 }
 
-extension Rv_Data_API_v1_Message.API_v1_MessageToken.API_v1_TextToken: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+nonisolated extension Rv_Data_API_v1_Message.API_v1_MessageToken.API_v1_TextToken: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   public static let protoMessageName: String = Rv_Data_API_v1_Message.API_v1_MessageToken.protoMessageName + ".API_v1_TextToken"
   public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{1}text\0")
 
@@ -2234,7 +2234,7 @@ extension Rv_Data_API_v1_Message.API_v1_MessageToken.API_v1_TextToken: SwiftProt
   }
 }
 
-extension Rv_Data_API_v1_Message.API_v1_MessageToken.API_v1_TimerToken: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+nonisolated extension Rv_Data_API_v1_Message.API_v1_MessageToken.API_v1_TimerToken: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   public static let protoMessageName: String = Rv_Data_API_v1_Message.API_v1_MessageToken.protoMessageName + ".API_v1_TimerToken"
   public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{1}id\0\u{3}allows_overrun\0\u{1}countdown\0\u{3}count_down_to_time\0\u{1}elapsed\0\u{1}format\0")
 
@@ -2333,7 +2333,7 @@ extension Rv_Data_API_v1_Message.API_v1_MessageToken.API_v1_TimerToken: SwiftPro
   }
 }
 
-extension Rv_Data_API_v1_Message.API_v1_MessageToken.API_v1_ClockToken: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+nonisolated extension Rv_Data_API_v1_Message.API_v1_MessageToken.API_v1_ClockToken: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   public static let protoMessageName: String = Rv_Data_API_v1_Message.API_v1_MessageToken.protoMessageName + ".API_v1_ClockToken"
   public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{1}date\0\u{1}time\0\u{3}is_24_hours\0")
 
@@ -2373,11 +2373,11 @@ extension Rv_Data_API_v1_Message.API_v1_MessageToken.API_v1_ClockToken: SwiftPro
   }
 }
 
-extension Rv_Data_API_v1_Message.API_v1_MessageToken.API_v1_ClockToken.API_v1_ClockTokenFormat: SwiftProtobuf._ProtoNameProviding {
+nonisolated extension Rv_Data_API_v1_Message.API_v1_MessageToken.API_v1_ClockToken.API_v1_ClockTokenFormat: SwiftProtobuf._ProtoNameProviding {
   public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{2}\0none\0\u{1}short\0\u{1}medium\0\u{1}long\0\u{1}full\0")
 }
 
-extension Rv_Data_API_v1_Timer: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+nonisolated extension Rv_Data_API_v1_Timer: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   public static let protoMessageName: String = _protobuf_package + ".API_v1_Timer"
   public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{1}id\0\u{3}allows_overrun\0\u{1}countdown\0\u{3}count_down_to_time\0\u{1}elapsed\0")
 
@@ -2471,7 +2471,7 @@ extension Rv_Data_API_v1_Timer: SwiftProtobuf.Message, SwiftProtobuf._MessageImp
   }
 }
 
-extension Rv_Data_API_v1_Timer.API_v1_Timer_Countdown: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+nonisolated extension Rv_Data_API_v1_Timer.API_v1_Timer_Countdown: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   public static let protoMessageName: String = Rv_Data_API_v1_Timer.protoMessageName + ".API_v1_Timer_Countdown"
   public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{1}duration\0")
 
@@ -2501,7 +2501,7 @@ extension Rv_Data_API_v1_Timer.API_v1_Timer_Countdown: SwiftProtobuf.Message, Sw
   }
 }
 
-extension Rv_Data_API_v1_Timer.API_v1_Timer_CountdownToTime: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+nonisolated extension Rv_Data_API_v1_Timer.API_v1_Timer_CountdownToTime: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   public static let protoMessageName: String = Rv_Data_API_v1_Timer.protoMessageName + ".API_v1_Timer_CountdownToTime"
   public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{3}time_of_day\0\u{1}period\0")
 
@@ -2536,11 +2536,11 @@ extension Rv_Data_API_v1_Timer.API_v1_Timer_CountdownToTime: SwiftProtobuf.Messa
   }
 }
 
-extension Rv_Data_API_v1_Timer.API_v1_Timer_CountdownToTime.API_v1_TimePeriod: SwiftProtobuf._ProtoNameProviding {
+nonisolated extension Rv_Data_API_v1_Timer.API_v1_Timer_CountdownToTime.API_v1_TimePeriod: SwiftProtobuf._ProtoNameProviding {
   public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{2}\0am\0\u{1}pm\0\u{1}is_24_hour\0")
 }
 
-extension Rv_Data_API_v1_Timer.API_v1_Timer_Elapsed: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+nonisolated extension Rv_Data_API_v1_Timer.API_v1_Timer_Elapsed: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   public static let protoMessageName: String = Rv_Data_API_v1_Timer.protoMessageName + ".API_v1_Timer_Elapsed"
   public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{3}start_time\0\u{3}end_time\0\u{3}has_end_time\0")
 
@@ -2580,7 +2580,7 @@ extension Rv_Data_API_v1_Timer.API_v1_Timer_Elapsed: SwiftProtobuf.Message, Swif
   }
 }
 
-extension Rv_Data_API_v1_TimerFormat: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+nonisolated extension Rv_Data_API_v1_TimerFormat: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   public static let protoMessageName: String = _protobuf_package + ".API_v1_TimerFormat"
   public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{2}\u{6}hour\0\u{1}minute\0\u{1}second\0\u{1}millisecond\0")
 
@@ -2625,11 +2625,11 @@ extension Rv_Data_API_v1_TimerFormat: SwiftProtobuf.Message, SwiftProtobuf._Mess
   }
 }
 
-extension Rv_Data_API_v1_TimerFormat.API_v1_TimerUnitDisplayFormat: SwiftProtobuf._ProtoNameProviding {
+nonisolated extension Rv_Data_API_v1_TimerFormat.API_v1_TimerUnitDisplayFormat: SwiftProtobuf._ProtoNameProviding {
   public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{2}\0none\0\u{1}short\0\u{1}long\0\u{1}remove_short\0\u{1}remove_long\0")
 }
 
-extension Rv_Data_API_v1_TimerValue: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+nonisolated extension Rv_Data_API_v1_TimerValue: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   public static let protoMessageName: String = _protobuf_package + ".API_v1_TimerValue"
   public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{1}id\0\u{1}time\0\u{1}state\0")
 
@@ -2673,11 +2673,11 @@ extension Rv_Data_API_v1_TimerValue: SwiftProtobuf.Message, SwiftProtobuf._Messa
   }
 }
 
-extension Rv_Data_API_v1_TimerValue.API_v1_TimerState: SwiftProtobuf._ProtoNameProviding {
+nonisolated extension Rv_Data_API_v1_TimerValue.API_v1_TimerState: SwiftProtobuf._ProtoNameProviding {
   public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{2}\0stopped\0\u{1}running\0\u{1}complete\0\u{1}overrunning\0\u{1}overran\0")
 }
 
-extension Rv_Data_API_v1_Color: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+nonisolated extension Rv_Data_API_v1_Color: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   public static let protoMessageName: String = _protobuf_package + ".API_v1_Color"
   public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{1}red\0\u{1}green\0\u{1}blue\0\u{1}alpha\0")
 
@@ -2722,7 +2722,7 @@ extension Rv_Data_API_v1_Color: SwiftProtobuf.Message, SwiftProtobuf._MessageImp
   }
 }
 
-extension Rv_Data_API_v1_Look: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+nonisolated extension Rv_Data_API_v1_Look: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   public static let protoMessageName: String = _protobuf_package + ".API_v1_Look"
   public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{1}id\0\u{1}screens\0")
 
@@ -2761,7 +2761,7 @@ extension Rv_Data_API_v1_Look: SwiftProtobuf.Message, SwiftProtobuf._MessageImpl
   }
 }
 
-extension Rv_Data_API_v1_Screen: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+nonisolated extension Rv_Data_API_v1_Screen: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   public static let protoMessageName: String = _protobuf_package + ".API_v1_Screen"
   public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{3}video_input\0\u{1}media\0\u{1}slide\0\u{1}announcements\0\u{1}props\0\u{1}messages\0\u{1}presentation\0\u{1}mask\0")
 
@@ -2826,7 +2826,7 @@ extension Rv_Data_API_v1_Screen: SwiftProtobuf.Message, SwiftProtobuf._MessageIm
   }
 }
 
-extension Rv_Data_API_v1_Macro: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+nonisolated extension Rv_Data_API_v1_Macro: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   public static let protoMessageName: String = _protobuf_package + ".API_v1_Macro"
   public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{1}id\0\u{1}color\0")
 
@@ -2865,7 +2865,7 @@ extension Rv_Data_API_v1_Macro: SwiftProtobuf.Message, SwiftProtobuf._MessageImp
   }
 }
 
-extension Rv_Data_API_v1_GroupMember: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+nonisolated extension Rv_Data_API_v1_GroupMember: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   public static let protoMessageName: String = _protobuf_package + ".API_v1_GroupMember"
   public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{1}ip\0\u{1}port\0")
 
@@ -2900,7 +2900,7 @@ extension Rv_Data_API_v1_GroupMember: SwiftProtobuf.Message, SwiftProtobuf._Mess
   }
 }
 
-extension Rv_Data_API_v1_GroupMemberStatus: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+nonisolated extension Rv_Data_API_v1_GroupMemberStatus: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   public static let protoMessageName: String = _protobuf_package + ".API_v1_GroupMemberStatus"
   public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{1}ip\0\u{1}port\0\u{1}name\0\u{1}platform\0\u{3}os_version\0\u{3}host_description\0\u{3}api_version\0\u{3}connection_status\0")
 
@@ -2965,15 +2965,15 @@ extension Rv_Data_API_v1_GroupMemberStatus: SwiftProtobuf.Message, SwiftProtobuf
   }
 }
 
-extension Rv_Data_API_v1_GroupMemberStatus.API_v1_GroupMemberStatus_Platform: SwiftProtobuf._ProtoNameProviding {
+nonisolated extension Rv_Data_API_v1_GroupMemberStatus.API_v1_GroupMemberStatus_Platform: SwiftProtobuf._ProtoNameProviding {
   public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{2}\0PLATFORM_UNKNOWN\0\u{1}PLATFORM_MACOS\0\u{1}PLATFORM_WIN32\0\u{1}PLATFORM_WEB\0")
 }
 
-extension Rv_Data_API_v1_GroupMemberStatus.API_v1_GroupMemberStatus_ConnectionStatus: SwiftProtobuf._ProtoNameProviding {
+nonisolated extension Rv_Data_API_v1_GroupMemberStatus.API_v1_GroupMemberStatus_ConnectionStatus: SwiftProtobuf._ProtoNameProviding {
   public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{2}\0CONNECTION_STATUS_UNKNOWN\0\u{1}CONNECTION_STATUS_CONNECTED\0\u{1}CONNECTION_STATUS_DISCONNECTED\0")
 }
 
-extension Rv_Data_API_v1_GroupDefinition: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+nonisolated extension Rv_Data_API_v1_GroupDefinition: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   public static let protoMessageName: String = _protobuf_package + ".API_v1_GroupDefinition"
   public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{1}timestamp\0\u{1}secret\0\u{1}name\0\u{1}members\0\u{3}group_identifier\0")
 
@@ -3027,7 +3027,7 @@ extension Rv_Data_API_v1_GroupDefinition: SwiftProtobuf.Message, SwiftProtobuf._
   }
 }
 
-extension Rv_Data_API_v1_Error_Response: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+nonisolated extension Rv_Data_API_v1_Error_Response: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   public static let protoMessageName: String = _protobuf_package + ".API_v1_Error_Response"
   public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{1}error\0")
 
@@ -3057,11 +3057,11 @@ extension Rv_Data_API_v1_Error_Response: SwiftProtobuf.Message, SwiftProtobuf._M
   }
 }
 
-extension Rv_Data_API_v1_Error_Response.API_v1_Error_Type: SwiftProtobuf._ProtoNameProviding {
+nonisolated extension Rv_Data_API_v1_Error_Response.API_v1_Error_Type: SwiftProtobuf._ProtoNameProviding {
   public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{2}\0NOT_FOUND\0\u{1}BAD_REQUEST\0\u{1}INTERNAL_ERROR\0\u{1}UNAUTHORIZED\0")
 }
 
-extension Rv_Data_API_v1_CaptureSettings: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+nonisolated extension Rv_Data_API_v1_CaptureSettings: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   public static let protoMessageName: String = _protobuf_package + ".API_v1_CaptureSettings"
   public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{1}source\0\u{3}audio_routing\0\u{1}disk\0\u{1}rtmp\0\u{1}resi\0")
 
@@ -3155,7 +3155,7 @@ extension Rv_Data_API_v1_CaptureSettings: SwiftProtobuf.Message, SwiftProtobuf._
   }
 }
 
-extension Rv_Data_API_v1_Size: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+nonisolated extension Rv_Data_API_v1_Size: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   public static let protoMessageName: String = _protobuf_package + ".API_v1_Size"
   public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{1}width\0\u{1}height\0")
 
@@ -3190,7 +3190,7 @@ extension Rv_Data_API_v1_Size: SwiftProtobuf.Message, SwiftProtobuf._MessageImpl
   }
 }
 
-extension Rv_Data_API_v1_AudioRouting: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+nonisolated extension Rv_Data_API_v1_AudioRouting: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   public static let protoMessageName: String = _protobuf_package + ".API_v1_AudioRouting"
   public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{1}map\0")
 
@@ -3220,7 +3220,7 @@ extension Rv_Data_API_v1_AudioRouting: SwiftProtobuf.Message, SwiftProtobuf._Mes
   }
 }
 
-extension Rv_Data_API_v1_DiskCapture: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+nonisolated extension Rv_Data_API_v1_DiskCapture: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   public static let protoMessageName: String = _protobuf_package + ".API_v1_DiskCapture"
   public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{3}file_location\0\u{1}codec\0\u{1}resolution\0\u{3}frame_rate\0")
 
@@ -3269,7 +3269,7 @@ extension Rv_Data_API_v1_DiskCapture: SwiftProtobuf.Message, SwiftProtobuf._Mess
   }
 }
 
-extension Rv_Data_API_v1_RTMPCapture: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+nonisolated extension Rv_Data_API_v1_RTMPCapture: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   public static let protoMessageName: String = _protobuf_package + ".API_v1_RTMPCapture"
   public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{1}server\0\u{1}key\0\u{1}encoding\0\u{3}save_local\0\u{3}file_location\0")
 
@@ -3319,7 +3319,7 @@ extension Rv_Data_API_v1_RTMPCapture: SwiftProtobuf.Message, SwiftProtobuf._Mess
   }
 }
 
-extension Rv_Data_API_v1_ResiCapture: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+nonisolated extension Rv_Data_API_v1_ResiCapture: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   public static let protoMessageName: String = _protobuf_package + ".API_v1_ResiCapture"
   public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{3}event_name\0\u{3}event_description\0\u{3}destination_group\0\u{1}encoding\0")
 
@@ -3364,7 +3364,7 @@ extension Rv_Data_API_v1_ResiCapture: SwiftProtobuf.Message, SwiftProtobuf._Mess
   }
 }
 
-extension Rv_Data_API_v1_Presentation: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+nonisolated extension Rv_Data_API_v1_Presentation: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   public static let protoMessageName: String = _protobuf_package + ".API_v1_Presentation"
   public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{1}id\0\u{1}groups\0\u{3}has_timeline\0\u{3}presentation_path\0\u{1}destination\0")
 
@@ -3418,11 +3418,11 @@ extension Rv_Data_API_v1_Presentation: SwiftProtobuf.Message, SwiftProtobuf._Mes
   }
 }
 
-extension Rv_Data_API_v1_Presentation.Destination: SwiftProtobuf._ProtoNameProviding {
+nonisolated extension Rv_Data_API_v1_Presentation.Destination: SwiftProtobuf._ProtoNameProviding {
   public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{2}\0presentation\0\u{1}announcements\0")
 }
 
-extension Rv_Data_API_v1_Presentation.SlideGroup: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+nonisolated extension Rv_Data_API_v1_Presentation.SlideGroup: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   public static let protoMessageName: String = Rv_Data_API_v1_Presentation.protoMessageName + ".SlideGroup"
   public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{1}name\0\u{1}color\0\u{1}slides\0")
 
@@ -3466,7 +3466,7 @@ extension Rv_Data_API_v1_Presentation.SlideGroup: SwiftProtobuf.Message, SwiftPr
   }
 }
 
-extension Rv_Data_API_v1_Presentation.SlideGroup.Slide: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+nonisolated extension Rv_Data_API_v1_Presentation.SlideGroup.Slide: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   public static let protoMessageName: String = Rv_Data_API_v1_Presentation.SlideGroup.protoMessageName + ".Slide"
   public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{1}enabled\0\u{1}notes\0\u{1}text\0\u{2}\u{2}label\0\u{1}size\0")
 
@@ -3520,7 +3520,7 @@ extension Rv_Data_API_v1_Presentation.SlideGroup.Slide: SwiftProtobuf.Message, S
   }
 }
 
-extension Rv_Data_API_v1_StageLayoutMap: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+nonisolated extension Rv_Data_API_v1_StageLayoutMap: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   public static let protoMessageName: String = _protobuf_package + ".API_v1_StageLayoutMap"
   public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{1}entries\0")
 
@@ -3550,7 +3550,7 @@ extension Rv_Data_API_v1_StageLayoutMap: SwiftProtobuf.Message, SwiftProtobuf._M
   }
 }
 
-extension Rv_Data_API_v1_StageLayoutMap.Entry: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+nonisolated extension Rv_Data_API_v1_StageLayoutMap.Entry: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   public static let protoMessageName: String = Rv_Data_API_v1_StageLayoutMap.protoMessageName + ".Entry"
   public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{1}screen\0\u{1}layout\0")
 
@@ -3589,7 +3589,7 @@ extension Rv_Data_API_v1_StageLayoutMap.Entry: SwiftProtobuf.Message, SwiftProto
   }
 }
 
-extension Rv_Data_API_v1_ThemeGroup: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+nonisolated extension Rv_Data_API_v1_ThemeGroup: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   public static let protoMessageName: String = _protobuf_package + ".API_v1_ThemeGroup"
   public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{1}id\0\u{1}groups\0\u{1}themes\0")
 
@@ -3633,7 +3633,7 @@ extension Rv_Data_API_v1_ThemeGroup: SwiftProtobuf.Message, SwiftProtobuf._Messa
   }
 }
 
-extension Rv_Data_API_v1_Theme: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+nonisolated extension Rv_Data_API_v1_Theme: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   public static let protoMessageName: String = _protobuf_package + ".API_v1_Theme"
   public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{1}id\0\u{1}slides\0")
 
@@ -3672,7 +3672,7 @@ extension Rv_Data_API_v1_Theme: SwiftProtobuf.Message, SwiftProtobuf._MessageImp
   }
 }
 
-extension Rv_Data_API_v1_ThemeSlide: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+nonisolated extension Rv_Data_API_v1_ThemeSlide: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   public static let protoMessageName: String = _protobuf_package + ".API_v1_ThemeSlide"
   public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{1}id\0\u{1}size\0\u{1}background\0")
 
@@ -3716,7 +3716,7 @@ extension Rv_Data_API_v1_ThemeSlide: SwiftProtobuf.Message, SwiftProtobuf._Messa
   }
 }
 
-extension Rv_Data_API_v1_SlideDisplayDetails: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+nonisolated extension Rv_Data_API_v1_SlideDisplayDetails: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   public static let protoMessageName: String = _protobuf_package + ".API_v1_SlideDisplayDetails"
   public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{1}text\0\u{1}notes\0\u{1}uuid\0")
 
@@ -3756,7 +3756,7 @@ extension Rv_Data_API_v1_SlideDisplayDetails: SwiftProtobuf.Message, SwiftProtob
   }
 }
 
-extension Rv_Data_API_v1_ScreenConfig: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+nonisolated extension Rv_Data_API_v1_ScreenConfig: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   public static let protoMessageName: String = _protobuf_package + ".API_v1_ScreenConfig"
   public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{1}id\0\u{1}size\0\u{3}screen_type\0")
 
@@ -3800,11 +3800,11 @@ extension Rv_Data_API_v1_ScreenConfig: SwiftProtobuf.Message, SwiftProtobuf._Mes
   }
 }
 
-extension Rv_Data_API_v1_ScreenConfig.API_v1_ScreenType: SwiftProtobuf._ProtoNameProviding {
+nonisolated extension Rv_Data_API_v1_ScreenConfig.API_v1_ScreenType: SwiftProtobuf._ProtoNameProviding {
   public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{2}\0audience\0\u{1}stage\0")
 }
 
-extension Rv_Data_API_v1_PropData: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+nonisolated extension Rv_Data_API_v1_PropData: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   public static let protoMessageName: String = _protobuf_package + ".API_v1_PropData"
   public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{1}id\0\u{3}is_active\0")
 

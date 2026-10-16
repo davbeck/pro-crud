@@ -1,10 +1,13 @@
 import Foundation
 import SwiftProtobuf
 
-struct ProtobufSchema {
-	struct MessageDescriptor {
+struct ProtobufSchema: Sendable {
+	struct MessageDescriptor: Sendable {
 		var name: String
 		var fields: [FieldDescriptor]
+		var oneofNames: [String] = []
+		var isMapEntry = false
+		var isNativeAtomic = false
 
 		var fieldsByName: [String: FieldDescriptor] {
 			var result: [String: FieldDescriptor] = [:]
@@ -16,7 +19,7 @@ struct ProtobufSchema {
 		}
 	}
 
-	struct FieldDescriptor: Equatable {
+	struct FieldDescriptor: Equatable, Sendable {
 		var protoName: String
 		var jsonName: String
 		var number: Int
@@ -24,15 +27,34 @@ struct ProtobufSchema {
 		var typeName: String?
 		var isRepeated: Bool
 		var oneof: Int?
+		var nativeMapKey: String?
+		var isNativeTree = false
+		var isNativeContainer = false
 
 		var isMessage: Bool {
 			type == .message
 		}
 	}
 
-	static func bundled() throws -> ProtobufSchema {
-		let data = try BundledProtobufSchema.data()
-		return try ProtobufSchema(descriptorSet: Google_Protobuf_FileDescriptorSet(serializedBytes: data))
+	static func bundled(version: ProPresenterTargetVersion = .v21) throws -> ProtobufSchema {
+		try (version == .v21 ? legacy : native).get()
+	}
+
+	private static let legacy = Result { try load(.v21) }
+	private static let native = Result { try load(.v22) }
+	/// Exact upstream 21.4 evidence, independent of the retained generated model.
+	/// Do not substitute this for the patcher's descriptor: its Swift view still
+	/// deliberately leaves newer fields opaque, including timeline field 3.
+	static func baseline21() throws -> Self {
+		try baseline.get()
+	}
+
+	private static let baseline = Result {
+		try Self(descriptorSet: Google_Protobuf_FileDescriptorSet(serializedBytes: BundledProtobufSchema.baseline21()))
+	}
+
+	private static func load(_ version: ProPresenterTargetVersion) throws -> Self {
+		try Self(descriptorSet: Google_Protobuf_FileDescriptorSet(serializedBytes: BundledProtobufSchema.data(version: version)))
 	}
 
 	var descriptorSet: Google_Protobuf_FileDescriptorSet
@@ -42,7 +64,7 @@ struct ProtobufSchema {
 		self.descriptorSet = descriptorSet
 		var messages: [String: MessageDescriptor] = [:]
 		for file in descriptorSet.file {
-			Self.add(messages: file.messageType, prefix: file.package, into: &messages)
+			try Self.add(messages: file.messageType, prefix: file.package, into: &messages)
 		}
 		self.messages = messages
 	}
@@ -97,11 +119,12 @@ struct ProtobufSchema {
 		messages source: [Google_Protobuf_DescriptorProto],
 		prefix: String,
 		into result: inout [String: MessageDescriptor],
-	) {
+	) throws {
 		for message in source {
 			let typeName = prefix.isEmpty ? message.name : "\(prefix).\(message.name)"
-			let fields = message.field.map { field in
-				FieldDescriptor(
+			let fields = try message.field.map { field in
+				let options = try ProtobufJSONPatcher.WireField.parse(field.options.serializedData())
+				return FieldDescriptor(
 					protoName: field.name,
 					jsonName: field.jsonName.isEmpty ? jsonName(for: field.name) : field.jsonName,
 					number: Int(field.number),
@@ -109,10 +132,15 @@ struct ProtobufSchema {
 					typeName: field.typeName.isEmpty ? nil : String(field.typeName.drop(while: { $0 == "." })),
 					isRepeated: field.label == .repeated,
 					oneof: field.hasOneofIndex ? Int(field.oneofIndex) : nil,
+					nativeMapKey: options.first(where: { $0.number == 51302 })?.payload.flatMap { String(data: $0, encoding: .utf8) },
+					isNativeTree: options.first(where: { $0.number == 51304 })?.varint == 1,
+					isNativeContainer: options.first(where: { $0.number == 51303 })?.varint == 1,
 				)
 			}
-			result[typeName] = MessageDescriptor(name: typeName, fields: fields)
-			add(messages: message.nestedType, prefix: typeName, into: &result)
+			let options = try ProtobufJSONPatcher.WireField.parse(message.options.serializedData())
+			result[typeName] = MessageDescriptor(name: typeName, fields: fields, oneofNames: message.oneofDecl.map(\.name), isMapEntry: message.options.mapEntry,
+			                                     isNativeAtomic: options.first(where: { $0.number == 51200 })?.varint == 1)
+			try add(messages: message.nestedType, prefix: typeName, into: &result)
 		}
 	}
 

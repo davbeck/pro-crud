@@ -15,12 +15,12 @@ import SwiftProtobuf
 // incompatible with the version of SwiftProtobuf to which you are linking.
 // Please ensure that you are building against the same version of the API
 // that was used to generate this file.
-fileprivate struct _GeneratedWithProtocGenSwiftVersion: SwiftProtobuf.ProtobufAPIVersionCheck {
+fileprivate nonisolated struct _GeneratedWithProtocGenSwiftVersion: SwiftProtobuf.ProtobufAPIVersionCheck {
   struct _2: SwiftProtobuf.ProtobufAPIVersion_2 {}
   typealias Version = _2
 }
 
-public struct Rv_Data_Slide: Sendable {
+public nonisolated struct Rv_Data_Slide: Sendable {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
   // methods supported on all messages.
@@ -34,103 +34,103 @@ public struct Rv_Data_Slide: Sendable {
   public var drawsBackgroundColor: Bool = false
 
   public var backgroundColor: Rv_Data_Color {
-    get {return _backgroundColor ?? Rv_Data_Color()}
+    get {_backgroundColor ?? Rv_Data_Color()}
     set {_backgroundColor = newValue}
   }
   /// Returns true if `backgroundColor` has been explicitly set.
-  public var hasBackgroundColor: Bool {return self._backgroundColor != nil}
+  public var hasBackgroundColor: Bool {self._backgroundColor != nil}
   /// Clears the value of `backgroundColor`. Subsequent reads from it will return its default value.
   public mutating func clearBackgroundColor() {self._backgroundColor = nil}
 
   public var size: Rv_Data_Graphics.Size {
-    get {return _size ?? Rv_Data_Graphics.Size()}
+    get {_size ?? Rv_Data_Graphics.Size()}
     set {_size = newValue}
   }
   /// Returns true if `size` has been explicitly set.
-  public var hasSize: Bool {return self._size != nil}
+  public var hasSize: Bool {self._size != nil}
   /// Clears the value of `size`. Subsequent reads from it will return its default value.
   public mutating func clearSize() {self._size = nil}
 
   public var uuid: Rv_Data_UUID {
-    get {return _uuid ?? Rv_Data_UUID()}
+    get {_uuid ?? Rv_Data_UUID()}
     set {_uuid = newValue}
   }
   /// Returns true if `uuid` has been explicitly set.
-  public var hasUuid: Bool {return self._uuid != nil}
+  public var hasUuid: Bool {self._uuid != nil}
   /// Clears the value of `uuid`. Subsequent reads from it will return its default value.
   public mutating func clearUuid() {self._uuid = nil}
 
   public var unknownFields = SwiftProtobuf.UnknownStorage()
 
-  public struct Element: @unchecked Sendable {
+  public nonisolated struct Element: @unchecked Sendable {
     // SwiftProtobuf.Message conformance is added in an extension below. See the
     // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
     // methods supported on all messages.
 
     public var element: Rv_Data_Graphics.Element {
-      get {return _storage._element ?? Rv_Data_Graphics.Element()}
+      get {_storage._element ?? Rv_Data_Graphics.Element()}
       set {_uniqueStorage()._element = newValue}
     }
     /// Returns true if `element` has been explicitly set.
-    public var hasElement: Bool {return _storage._element != nil}
+    public var hasElement: Bool {_storage._element != nil}
     /// Clears the value of `element`. Subsequent reads from it will return its default value.
     public mutating func clearElement() {_uniqueStorage()._element = nil}
 
     public var buildIn: Rv_Data_Slide.Element.Build {
-      get {return _storage._buildIn ?? Rv_Data_Slide.Element.Build()}
+      get {_storage._buildIn ?? Rv_Data_Slide.Element.Build()}
       set {_uniqueStorage()._buildIn = newValue}
     }
     /// Returns true if `buildIn` has been explicitly set.
-    public var hasBuildIn: Bool {return _storage._buildIn != nil}
+    public var hasBuildIn: Bool {_storage._buildIn != nil}
     /// Clears the value of `buildIn`. Subsequent reads from it will return its default value.
     public mutating func clearBuildIn() {_uniqueStorage()._buildIn = nil}
 
     public var buildOut: Rv_Data_Slide.Element.Build {
-      get {return _storage._buildOut ?? Rv_Data_Slide.Element.Build()}
+      get {_storage._buildOut ?? Rv_Data_Slide.Element.Build()}
       set {_uniqueStorage()._buildOut = newValue}
     }
     /// Returns true if `buildOut` has been explicitly set.
-    public var hasBuildOut: Bool {return _storage._buildOut != nil}
+    public var hasBuildOut: Bool {_storage._buildOut != nil}
     /// Clears the value of `buildOut`. Subsequent reads from it will return its default value.
     public mutating func clearBuildOut() {_uniqueStorage()._buildOut = nil}
 
     public var info: UInt32 {
-      get {return _storage._info}
+      get {_storage._info}
       set {_uniqueStorage()._info = newValue}
     }
 
     public var revealType: Rv_Data_Slide.Element.TextRevealType {
-      get {return _storage._revealType}
+      get {_storage._revealType}
       set {_uniqueStorage()._revealType = newValue}
     }
 
     public var dataLinks: [Rv_Data_Slide.Element.DataLink] {
-      get {return _storage._dataLinks}
+      get {_storage._dataLinks}
       set {_uniqueStorage()._dataLinks = newValue}
     }
 
     public var childBuilds: [Rv_Data_Slide.Element.ChildBuild] {
-      get {return _storage._childBuilds}
+      get {_storage._childBuilds}
       set {_uniqueStorage()._childBuilds = newValue}
     }
 
     public var revealFromIndex: UInt32 {
-      get {return _storage._revealFromIndex}
+      get {_storage._revealFromIndex}
       set {_uniqueStorage()._revealFromIndex = newValue}
     }
 
     public var textScroller: Rv_Data_Slide.Element.TextScroller {
-      get {return _storage._textScroller ?? Rv_Data_Slide.Element.TextScroller()}
+      get {_storage._textScroller ?? Rv_Data_Slide.Element.TextScroller()}
       set {_uniqueStorage()._textScroller = newValue}
     }
     /// Returns true if `textScroller` has been explicitly set.
-    public var hasTextScroller: Bool {return _storage._textScroller != nil}
+    public var hasTextScroller: Bool {_storage._textScroller != nil}
     /// Clears the value of `textScroller`. Subsequent reads from it will return its default value.
     public mutating func clearTextScroller() {_uniqueStorage()._textScroller = nil}
 
     public var unknownFields = SwiftProtobuf.UnknownStorage()
 
-    public enum TextRevealType: SwiftProtobuf.Enum, Swift.CaseIterable {
+    public nonisolated enum TextRevealType: SwiftProtobuf.Enum, Swift.CaseIterable {
       public typealias RawValue = Int
       case none // = 0
       case bullet // = 1
@@ -168,26 +168,26 @@ public struct Rv_Data_Slide: Sendable {
 
     }
 
-    public struct Build: Sendable {
+    public nonisolated struct Build: Sendable {
       // SwiftProtobuf.Message conformance is added in an extension below. See the
       // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
       // methods supported on all messages.
 
       public var uuid: Rv_Data_UUID {
-        get {return _uuid ?? Rv_Data_UUID()}
+        get {_uuid ?? Rv_Data_UUID()}
         set {_uuid = newValue}
       }
       /// Returns true if `uuid` has been explicitly set.
-      public var hasUuid: Bool {return self._uuid != nil}
+      public var hasUuid: Bool {self._uuid != nil}
       /// Clears the value of `uuid`. Subsequent reads from it will return its default value.
       public mutating func clearUuid() {self._uuid = nil}
 
       public var elementUuid: Rv_Data_UUID {
-        get {return _elementUuid ?? Rv_Data_UUID()}
+        get {_elementUuid ?? Rv_Data_UUID()}
         set {_elementUuid = newValue}
       }
       /// Returns true if `elementUuid` has been explicitly set.
-      public var hasElementUuid: Bool {return self._elementUuid != nil}
+      public var hasElementUuid: Bool {self._elementUuid != nil}
       /// Clears the value of `elementUuid`. Subsequent reads from it will return its default value.
       public mutating func clearElementUuid() {self._elementUuid = nil}
 
@@ -196,17 +196,17 @@ public struct Rv_Data_Slide: Sendable {
       public var delayTime: Double = 0
 
       public var transition: Rv_Data_Transition {
-        get {return _transition ?? Rv_Data_Transition()}
+        get {_transition ?? Rv_Data_Transition()}
         set {_transition = newValue}
       }
       /// Returns true if `transition` has been explicitly set.
-      public var hasTransition: Bool {return self._transition != nil}
+      public var hasTransition: Bool {self._transition != nil}
       /// Clears the value of `transition`. Subsequent reads from it will return its default value.
       public mutating func clearTransition() {self._transition = nil}
 
       public var unknownFields = SwiftProtobuf.UnknownStorage()
 
-      public enum Start: SwiftProtobuf.Enum, Swift.CaseIterable {
+      public nonisolated enum Start: SwiftProtobuf.Enum, Swift.CaseIterable {
         public typealias RawValue = Int
         case onClick // = 0
         case withPrevious // = 1
@@ -255,17 +255,17 @@ public struct Rv_Data_Slide: Sendable {
       fileprivate var _transition: Rv_Data_Transition? = nil
     }
 
-    public struct ChildBuild: Sendable {
+    public nonisolated struct ChildBuild: Sendable {
       // SwiftProtobuf.Message conformance is added in an extension below. See the
       // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
       // methods supported on all messages.
 
       public var uuid: Rv_Data_UUID {
-        get {return _uuid ?? Rv_Data_UUID()}
+        get {_uuid ?? Rv_Data_UUID()}
         set {_uuid = newValue}
       }
       /// Returns true if `uuid` has been explicitly set.
-      public var hasUuid: Bool {return self._uuid != nil}
+      public var hasUuid: Bool {self._uuid != nil}
       /// Clears the value of `uuid`. Subsequent reads from it will return its default value.
       public mutating func clearUuid() {self._uuid = nil}
 
@@ -277,7 +277,7 @@ public struct Rv_Data_Slide: Sendable {
 
       public var unknownFields = SwiftProtobuf.UnknownStorage()
 
-      public enum Start: SwiftProtobuf.Enum, Swift.CaseIterable {
+      public nonisolated enum Start: SwiftProtobuf.Enum, Swift.CaseIterable {
         public typealias RawValue = Int
         case onClick // = 0
         case withPrevious // = 1
@@ -324,7 +324,7 @@ public struct Rv_Data_Slide: Sendable {
       fileprivate var _uuid: Rv_Data_UUID? = nil
     }
 
-    public struct DataLink: Sendable {
+    public nonisolated struct DataLink: Sendable {
       // SwiftProtobuf.Message conformance is added in an extension below. See the
       // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
       // methods supported on all messages.
@@ -597,7 +597,7 @@ public struct Rv_Data_Slide: Sendable {
 
       public var unknownFields = SwiftProtobuf.UnknownStorage()
 
-      public enum OneOf_PropertyType: Equatable, Sendable {
+      public nonisolated enum OneOf_PropertyType: Equatable, Sendable {
         case ticker(Rv_Data_Slide.Element.DataLink.Ticker)
         case alternateText(Rv_Data_Slide.Element.DataLink.AlternateElementText)
         case timerText(Rv_Data_Slide.Element.DataLink.TimerText)
@@ -634,17 +634,17 @@ public struct Rv_Data_Slide: Sendable {
 
       }
 
-      public struct RSSFeed: Sendable {
+      public nonisolated struct RSSFeed: Sendable {
         // SwiftProtobuf.Message conformance is added in an extension below. See the
         // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
         // methods supported on all messages.
 
         public var url: Rv_Data_URL {
-          get {return _url ?? Rv_Data_URL()}
+          get {_url ?? Rv_Data_URL()}
           set {_url = newValue}
         }
         /// Returns true if `url` has been explicitly set.
-        public var hasURL: Bool {return self._url != nil}
+        public var hasURL: Bool {self._url != nil}
         /// Clears the value of `url`. Subsequent reads from it will return its default value.
         public mutating func clearURL() {self._url = nil}
 
@@ -654,7 +654,7 @@ public struct Rv_Data_Slide: Sendable {
 
         public var unknownFields = SwiftProtobuf.UnknownStorage()
 
-        public enum ContentType: SwiftProtobuf.Enum, Swift.CaseIterable {
+        public nonisolated enum ContentType: SwiftProtobuf.Enum, Swift.CaseIterable {
           public typealias RawValue = Int
           case titleOnly // = 0
           case titleAndDescription // = 1
@@ -693,17 +693,17 @@ public struct Rv_Data_Slide: Sendable {
         fileprivate var _url: Rv_Data_URL? = nil
       }
 
-      public struct FileFeed: Sendable {
+      public nonisolated struct FileFeed: Sendable {
         // SwiftProtobuf.Message conformance is added in an extension below. See the
         // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
         // methods supported on all messages.
 
         public var url: Rv_Data_URL {
-          get {return _url ?? Rv_Data_URL()}
+          get {_url ?? Rv_Data_URL()}
           set {_url = newValue}
         }
         /// Returns true if `url` has been explicitly set.
-        public var hasURL: Bool {return self._url != nil}
+        public var hasURL: Bool {self._url != nil}
         /// Clears the value of `url`. Subsequent reads from it will return its default value.
         public mutating func clearURL() {self._url = nil}
 
@@ -714,7 +714,7 @@ public struct Rv_Data_Slide: Sendable {
         fileprivate var _url: Rv_Data_URL? = nil
       }
 
-      public struct Ticker: Sendable {
+      public nonisolated struct Ticker: Sendable {
         // SwiftProtobuf.Message conformance is added in an extension below. See the
         // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
         // methods supported on all messages.
@@ -755,14 +755,14 @@ public struct Rv_Data_Slide: Sendable {
 
         public var unknownFields = SwiftProtobuf.UnknownStorage()
 
-        public enum OneOf_SourceType: Equatable, Sendable {
+        public nonisolated enum OneOf_SourceType: Equatable, Sendable {
           case textType(Rv_Data_Slide.Element.DataLink.Ticker.TextType)
           case rssType(Rv_Data_Slide.Element.DataLink.Ticker.RSSType)
           case fileType(Rv_Data_Slide.Element.DataLink.Ticker.FileType)
 
         }
 
-        public struct TextType: Sendable {
+        public nonisolated struct TextType: Sendable {
           // SwiftProtobuf.Message conformance is added in an extension below. See the
           // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
           // methods supported on all messages.
@@ -774,17 +774,17 @@ public struct Rv_Data_Slide: Sendable {
           public init() {}
         }
 
-        public struct RSSType: Sendable {
+        public nonisolated struct RSSType: Sendable {
           // SwiftProtobuf.Message conformance is added in an extension below. See the
           // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
           // methods supported on all messages.
 
           public var url: Rv_Data_URL {
-            get {return _url ?? Rv_Data_URL()}
+            get {_url ?? Rv_Data_URL()}
             set {_url = newValue}
           }
           /// Returns true if `url` has been explicitly set.
-          public var hasURL: Bool {return self._url != nil}
+          public var hasURL: Bool {self._url != nil}
           /// Clears the value of `url`. Subsequent reads from it will return its default value.
           public mutating func clearURL() {self._url = nil}
 
@@ -792,7 +792,7 @@ public struct Rv_Data_Slide: Sendable {
 
           public var unknownFields = SwiftProtobuf.UnknownStorage()
 
-          public enum ContentType: SwiftProtobuf.Enum, Swift.CaseIterable {
+          public nonisolated enum ContentType: SwiftProtobuf.Enum, Swift.CaseIterable {
             public typealias RawValue = Int
             case titleOnly // = 0
             case titleAndDescription // = 1
@@ -831,17 +831,17 @@ public struct Rv_Data_Slide: Sendable {
           fileprivate var _url: Rv_Data_URL? = nil
         }
 
-        public struct FileType: Sendable {
+        public nonisolated struct FileType: Sendable {
           // SwiftProtobuf.Message conformance is added in an extension below. See the
           // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
           // methods supported on all messages.
 
           public var url: Rv_Data_URL {
-            get {return _url ?? Rv_Data_URL()}
+            get {_url ?? Rv_Data_URL()}
             set {_url = newValue}
           }
           /// Returns true if `url` has been explicitly set.
-          public var hasURL: Bool {return self._url != nil}
+          public var hasURL: Bool {self._url != nil}
           /// Clears the value of `url`. Subsequent reads from it will return its default value.
           public mutating func clearURL() {self._url = nil}
 
@@ -855,17 +855,17 @@ public struct Rv_Data_Slide: Sendable {
         public init() {}
       }
 
-      public struct AlternateElementText: Sendable {
+      public nonisolated struct AlternateElementText: Sendable {
         // SwiftProtobuf.Message conformance is added in an extension below. See the
         // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
         // methods supported on all messages.
 
         public var otherElementUuid: Rv_Data_UUID {
-          get {return _otherElementUuid ?? Rv_Data_UUID()}
+          get {_otherElementUuid ?? Rv_Data_UUID()}
           set {_otherElementUuid = newValue}
         }
         /// Returns true if `otherElementUuid` has been explicitly set.
-        public var hasOtherElementUuid: Bool {return self._otherElementUuid != nil}
+        public var hasOtherElementUuid: Bool {self._otherElementUuid != nil}
         /// Clears the value of `otherElementUuid`. Subsequent reads from it will return its default value.
         public mutating func clearOtherElementUuid() {self._otherElementUuid = nil}
 
@@ -877,7 +877,7 @@ public struct Rv_Data_Slide: Sendable {
 
         public var unknownFields = SwiftProtobuf.UnknownStorage()
 
-        public enum TextTransformOption: SwiftProtobuf.Enum, Swift.CaseIterable {
+        public nonisolated enum TextTransformOption: SwiftProtobuf.Enum, Swift.CaseIterable {
           public typealias RawValue = Int
           case none // = 0
           case removeLineReturns // = 1
@@ -924,7 +924,7 @@ public struct Rv_Data_Slide: Sendable {
         fileprivate var _otherElementUuid: Rv_Data_UUID? = nil
       }
 
-      public struct CCLIText: Sendable {
+      public nonisolated struct CCLIText: Sendable {
         // SwiftProtobuf.Message conformance is added in an extension below. See the
         // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
         // methods supported on all messages.
@@ -934,7 +934,7 @@ public struct Rv_Data_Slide: Sendable {
         public init() {}
       }
 
-      public struct ColorTrigger: Sendable {
+      public nonisolated struct ColorTrigger: Sendable {
         // SwiftProtobuf.Message conformance is added in an extension below. See the
         // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
         // methods supported on all messages.
@@ -942,11 +942,11 @@ public struct Rv_Data_Slide: Sendable {
         public var time: Double = 0
 
         public var color: Rv_Data_Color {
-          get {return _color ?? Rv_Data_Color()}
+          get {_color ?? Rv_Data_Color()}
           set {_color = newValue}
         }
         /// Returns true if `color` has been explicitly set.
-        public var hasColor: Bool {return self._color != nil}
+        public var hasColor: Bool {self._color != nil}
         /// Clears the value of `color`. Subsequent reads from it will return its default value.
         public mutating func clearColor() {self._color = nil}
 
@@ -957,28 +957,28 @@ public struct Rv_Data_Slide: Sendable {
         fileprivate var _color: Rv_Data_Color? = nil
       }
 
-      public struct TimerText: Sendable {
+      public nonisolated struct TimerText: Sendable {
         // SwiftProtobuf.Message conformance is added in an extension below. See the
         // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
         // methods supported on all messages.
 
         public var timerUuid: Rv_Data_UUID {
-          get {return _timerUuid ?? Rv_Data_UUID()}
+          get {_timerUuid ?? Rv_Data_UUID()}
           set {_timerUuid = newValue}
         }
         /// Returns true if `timerUuid` has been explicitly set.
-        public var hasTimerUuid: Bool {return self._timerUuid != nil}
+        public var hasTimerUuid: Bool {self._timerUuid != nil}
         /// Clears the value of `timerUuid`. Subsequent reads from it will return its default value.
         public mutating func clearTimerUuid() {self._timerUuid = nil}
 
         public var timerName: String = String()
 
         public var timerFormat: Rv_Data_Timer.Format {
-          get {return _timerFormat ?? Rv_Data_Timer.Format()}
+          get {_timerFormat ?? Rv_Data_Timer.Format()}
           set {_timerFormat = newValue}
         }
         /// Returns true if `timerFormat` has been explicitly set.
-        public var hasTimerFormat: Bool {return self._timerFormat != nil}
+        public var hasTimerFormat: Bool {self._timerFormat != nil}
         /// Clears the value of `timerFormat`. Subsequent reads from it will return its default value.
         public mutating func clearTimerFormat() {self._timerFormat = nil}
 
@@ -994,7 +994,7 @@ public struct Rv_Data_Slide: Sendable {
         fileprivate var _timerFormat: Rv_Data_Timer.Format? = nil
       }
 
-      public struct ClockText: Sendable {
+      public nonisolated struct ClockText: Sendable {
         // SwiftProtobuf.Message conformance is added in an extension below. See the
         // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
         // methods supported on all messages.
@@ -1002,11 +1002,11 @@ public struct Rv_Data_Slide: Sendable {
         public var clockFormatString: String = String()
 
         public var format: Rv_Data_Clock.Format {
-          get {return _format ?? Rv_Data_Clock.Format()}
+          get {_format ?? Rv_Data_Clock.Format()}
           set {_format = newValue}
         }
         /// Returns true if `format` has been explicitly set.
-        public var hasFormat: Bool {return self._format != nil}
+        public var hasFormat: Bool {self._format != nil}
         /// Clears the value of `format`. Subsequent reads from it will return its default value.
         public mutating func clearFormat() {self._format = nil}
 
@@ -1017,7 +1017,7 @@ public struct Rv_Data_Slide: Sendable {
         fileprivate var _format: Rv_Data_Clock.Format? = nil
       }
 
-      public struct ChordChart: Sendable {
+      public nonisolated struct ChordChart: Sendable {
         // SwiftProtobuf.Message conformance is added in an extension below. See the
         // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
         // methods supported on all messages.
@@ -1027,17 +1027,17 @@ public struct Rv_Data_Slide: Sendable {
         public init() {}
       }
 
-      public struct OutputScreen: Sendable {
+      public nonisolated struct OutputScreen: Sendable {
         // SwiftProtobuf.Message conformance is added in an extension below. See the
         // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
         // methods supported on all messages.
 
         public var screenID: Rv_Data_UUID {
-          get {return _screenID ?? Rv_Data_UUID()}
+          get {_screenID ?? Rv_Data_UUID()}
           set {_screenID = newValue}
         }
         /// Returns true if `screenID` has been explicitly set.
-        public var hasScreenID: Bool {return self._screenID != nil}
+        public var hasScreenID: Bool {self._screenID != nil}
         /// Clears the value of `screenID`. Subsequent reads from it will return its default value.
         public mutating func clearScreenID() {self._screenID = nil}
 
@@ -1050,7 +1050,7 @@ public struct Rv_Data_Slide: Sendable {
         fileprivate var _screenID: Rv_Data_UUID? = nil
       }
 
-      public struct PCOLive: Sendable {
+      public nonisolated struct PCOLive: Sendable {
         // SwiftProtobuf.Message conformance is added in an extension below. See the
         // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
         // methods supported on all messages.
@@ -1061,7 +1061,7 @@ public struct Rv_Data_Slide: Sendable {
 
         public var unknownFields = SwiftProtobuf.UnknownStorage()
 
-        public enum Theme: SwiftProtobuf.Enum, Swift.CaseIterable {
+        public nonisolated enum Theme: SwiftProtobuf.Enum, Swift.CaseIterable {
           public typealias RawValue = Int
           case pcoliveThemeLight // = 0
           case pcoliveThemeDark // = 1
@@ -1095,7 +1095,7 @@ public struct Rv_Data_Slide: Sendable {
 
         }
 
-        public enum CountdownType: SwiftProtobuf.Enum, Swift.CaseIterable {
+        public nonisolated enum CountdownType: SwiftProtobuf.Enum, Swift.CaseIterable {
           public typealias RawValue = Int
           case fullItemLength // = 0
           case endItemOnTime // = 1
@@ -1136,17 +1136,17 @@ public struct Rv_Data_Slide: Sendable {
         public init() {}
       }
 
-      public struct AlternateElementFill: Sendable {
+      public nonisolated struct AlternateElementFill: Sendable {
         // SwiftProtobuf.Message conformance is added in an extension below. See the
         // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
         // methods supported on all messages.
 
         public var otherElementUuid: Rv_Data_UUID {
-          get {return _otherElementUuid ?? Rv_Data_UUID()}
+          get {_otherElementUuid ?? Rv_Data_UUID()}
           set {_otherElementUuid = newValue}
         }
         /// Returns true if `otherElementUuid` has been explicitly set.
-        public var hasOtherElementUuid: Bool {return self._otherElementUuid != nil}
+        public var hasOtherElementUuid: Bool {self._otherElementUuid != nil}
         /// Clears the value of `otherElementUuid`. Subsequent reads from it will return its default value.
         public mutating func clearOtherElementUuid() {self._otherElementUuid = nil}
 
@@ -1159,7 +1159,7 @@ public struct Rv_Data_Slide: Sendable {
         fileprivate var _otherElementUuid: Rv_Data_UUID? = nil
       }
 
-      public struct VisibilityLink: Sendable {
+      public nonisolated struct VisibilityLink: Sendable {
         // SwiftProtobuf.Message conformance is added in an extension below. See the
         // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
         // methods supported on all messages.
@@ -1170,7 +1170,7 @@ public struct Rv_Data_Slide: Sendable {
 
         public var unknownFields = SwiftProtobuf.UnknownStorage()
 
-        public enum VisibilityCriterion: SwiftProtobuf.Enum, Swift.CaseIterable {
+        public nonisolated enum VisibilityCriterion: SwiftProtobuf.Enum, Swift.CaseIterable {
           public typealias RawValue = Int
           case all // = 0
           case any // = 1
@@ -1208,7 +1208,7 @@ public struct Rv_Data_Slide: Sendable {
 
         }
 
-        public struct Condition: Sendable {
+        public nonisolated struct Condition: Sendable {
           // SwiftProtobuf.Message conformance is added in an extension below. See the
           // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
           // methods supported on all messages.
@@ -1265,7 +1265,7 @@ public struct Rv_Data_Slide: Sendable {
 
           public var unknownFields = SwiftProtobuf.UnknownStorage()
 
-          public enum OneOf_ConditionType: Equatable, Sendable {
+          public nonisolated enum OneOf_ConditionType: Equatable, Sendable {
             case elementVisibility(Rv_Data_Slide.Element.DataLink.VisibilityLink.Condition.ElementVisibility)
             case timerVisibility(Rv_Data_Slide.Element.DataLink.VisibilityLink.Condition.TimerVisibility)
             case videoCountdownVisibility(Rv_Data_Slide.Element.DataLink.VisibilityLink.Condition.VideoCountdownVisibility)
@@ -1275,17 +1275,17 @@ public struct Rv_Data_Slide: Sendable {
 
           }
 
-          public struct ElementVisibility: Sendable {
+          public nonisolated struct ElementVisibility: Sendable {
             // SwiftProtobuf.Message conformance is added in an extension below. See the
             // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
             // methods supported on all messages.
 
             public var otherElementUuid: Rv_Data_UUID {
-              get {return _otherElementUuid ?? Rv_Data_UUID()}
+              get {_otherElementUuid ?? Rv_Data_UUID()}
               set {_otherElementUuid = newValue}
             }
             /// Returns true if `otherElementUuid` has been explicitly set.
-            public var hasOtherElementUuid: Bool {return self._otherElementUuid != nil}
+            public var hasOtherElementUuid: Bool {self._otherElementUuid != nil}
             /// Clears the value of `otherElementUuid`. Subsequent reads from it will return its default value.
             public mutating func clearOtherElementUuid() {self._otherElementUuid = nil}
 
@@ -1295,7 +1295,7 @@ public struct Rv_Data_Slide: Sendable {
 
             public var unknownFields = SwiftProtobuf.UnknownStorage()
 
-            public enum ElementVisibilityCriterion: SwiftProtobuf.Enum, Swift.CaseIterable {
+            public nonisolated enum ElementVisibilityCriterion: SwiftProtobuf.Enum, Swift.CaseIterable {
               public typealias RawValue = Int
               case hasText // = 0
               case hasNoText // = 1
@@ -1334,17 +1334,17 @@ public struct Rv_Data_Slide: Sendable {
             fileprivate var _otherElementUuid: Rv_Data_UUID? = nil
           }
 
-          public struct TimerVisibility: Sendable {
+          public nonisolated struct TimerVisibility: Sendable {
             // SwiftProtobuf.Message conformance is added in an extension below. See the
             // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
             // methods supported on all messages.
 
             public var timerUuid: Rv_Data_UUID {
-              get {return _timerUuid ?? Rv_Data_UUID()}
+              get {_timerUuid ?? Rv_Data_UUID()}
               set {_timerUuid = newValue}
             }
             /// Returns true if `timerUuid` has been explicitly set.
-            public var hasTimerUuid: Bool {return self._timerUuid != nil}
+            public var hasTimerUuid: Bool {self._timerUuid != nil}
             /// Clears the value of `timerUuid`. Subsequent reads from it will return its default value.
             public mutating func clearTimerUuid() {self._timerUuid = nil}
 
@@ -1354,7 +1354,7 @@ public struct Rv_Data_Slide: Sendable {
 
             public var unknownFields = SwiftProtobuf.UnknownStorage()
 
-            public enum TimerVisibilityCriterion: SwiftProtobuf.Enum, Swift.CaseIterable {
+            public nonisolated enum TimerVisibilityCriterion: SwiftProtobuf.Enum, Swift.CaseIterable {
               public typealias RawValue = Int
               case hasTimeRemaining // = 0
               case hasExpired // = 1
@@ -1401,7 +1401,7 @@ public struct Rv_Data_Slide: Sendable {
             fileprivate var _timerUuid: Rv_Data_UUID? = nil
           }
 
-          public struct VideoCountdownVisibility: Sendable {
+          public nonisolated struct VideoCountdownVisibility: Sendable {
             // SwiftProtobuf.Message conformance is added in an extension below. See the
             // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
             // methods supported on all messages.
@@ -1410,7 +1410,7 @@ public struct Rv_Data_Slide: Sendable {
 
             public var unknownFields = SwiftProtobuf.UnknownStorage()
 
-            public enum VideoCountdownVisibilityCriterion: SwiftProtobuf.Enum, Swift.CaseIterable {
+            public nonisolated enum VideoCountdownVisibilityCriterion: SwiftProtobuf.Enum, Swift.CaseIterable {
               public typealias RawValue = Int
               case hasTimeRemaining // = 0
               case hasExpired // = 1
@@ -1463,7 +1463,7 @@ public struct Rv_Data_Slide: Sendable {
             public init() {}
           }
 
-          public struct AudioCountdownVisibility: Sendable {
+          public nonisolated struct AudioCountdownVisibility: Sendable {
             // SwiftProtobuf.Message conformance is added in an extension below. See the
             // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
             // methods supported on all messages.
@@ -1472,7 +1472,7 @@ public struct Rv_Data_Slide: Sendable {
 
             public var unknownFields = SwiftProtobuf.UnknownStorage()
 
-            public enum AudioCountdownVisibilityCriterion: SwiftProtobuf.Enum, Swift.CaseIterable {
+            public nonisolated enum AudioCountdownVisibilityCriterion: SwiftProtobuf.Enum, Swift.CaseIterable {
               public typealias RawValue = Int
               case hasTimeRemaining // = 0
               case hasExpired // = 1
@@ -1525,7 +1525,7 @@ public struct Rv_Data_Slide: Sendable {
             public init() {}
           }
 
-          public struct CaptureSessionVisibility: Sendable {
+          public nonisolated struct CaptureSessionVisibility: Sendable {
             // SwiftProtobuf.Message conformance is added in an extension below. See the
             // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
             // methods supported on all messages.
@@ -1534,7 +1534,7 @@ public struct Rv_Data_Slide: Sendable {
 
             public var unknownFields = SwiftProtobuf.UnknownStorage()
 
-            public enum CaptureSessionVisibilityCriterion: SwiftProtobuf.Enum, Swift.CaseIterable {
+            public nonisolated enum CaptureSessionVisibilityCriterion: SwiftProtobuf.Enum, Swift.CaseIterable {
               public typealias RawValue = Int
               case active // = 0
               case inactive // = 1
@@ -1571,7 +1571,7 @@ public struct Rv_Data_Slide: Sendable {
             public init() {}
           }
 
-          public struct VideoInputVisibility: Sendable {
+          public nonisolated struct VideoInputVisibility: Sendable {
             // SwiftProtobuf.Message conformance is added in an extension below. See the
             // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
             // methods supported on all messages.
@@ -1582,7 +1582,7 @@ public struct Rv_Data_Slide: Sendable {
 
             public var unknownFields = SwiftProtobuf.UnknownStorage()
 
-            public enum VideoInputVisibilityCriterion: SwiftProtobuf.Enum, Swift.CaseIterable {
+            public nonisolated enum VideoInputVisibilityCriterion: SwiftProtobuf.Enum, Swift.CaseIterable {
               public typealias RawValue = Int
               case active // = 0
               case inactive // = 1
@@ -1625,7 +1625,7 @@ public struct Rv_Data_Slide: Sendable {
         public init() {}
       }
 
-      public struct SlideText: Sendable {
+      public nonisolated struct SlideText: Sendable {
         // SwiftProtobuf.Message conformance is added in an extension below. See the
         // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
         // methods supported on all messages.
@@ -1642,7 +1642,7 @@ public struct Rv_Data_Slide: Sendable {
 
         public var unknownFields = SwiftProtobuf.UnknownStorage()
 
-        public enum SlideSourceType: SwiftProtobuf.Enum, Swift.CaseIterable {
+        public nonisolated enum SlideSourceType: SwiftProtobuf.Enum, Swift.CaseIterable {
           public typealias RawValue = Int
           case currentSlide // = 0
           case nextSlide // = 1
@@ -1676,7 +1676,7 @@ public struct Rv_Data_Slide: Sendable {
 
         }
 
-        public enum TextSourceOption: SwiftProtobuf.Enum, Swift.CaseIterable {
+        public nonisolated enum TextSourceOption: SwiftProtobuf.Enum, Swift.CaseIterable {
           public typealias RawValue = Int
           case text // = 0
           case notes // = 1
@@ -1714,7 +1714,7 @@ public struct Rv_Data_Slide: Sendable {
 
         }
 
-        public enum TextTransformOption: SwiftProtobuf.Enum, Swift.CaseIterable {
+        public nonisolated enum TextTransformOption: SwiftProtobuf.Enum, Swift.CaseIterable {
           public typealias RawValue = Int
           case none // = 0
           case removeLineReturns // = 1
@@ -1759,7 +1759,7 @@ public struct Rv_Data_Slide: Sendable {
         public init() {}
       }
 
-      public struct SlideImage: Sendable {
+      public nonisolated struct SlideImage: Sendable {
         // SwiftProtobuf.Message conformance is added in an extension below. See the
         // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
         // methods supported on all messages.
@@ -1768,7 +1768,7 @@ public struct Rv_Data_Slide: Sendable {
 
         public var unknownFields = SwiftProtobuf.UnknownStorage()
 
-        public enum SlideSourceType: SwiftProtobuf.Enum, Swift.CaseIterable {
+        public nonisolated enum SlideSourceType: SwiftProtobuf.Enum, Swift.CaseIterable {
           public typealias RawValue = Int
           case currentSlide // = 0
           case nextSlide // = 1
@@ -1805,7 +1805,7 @@ public struct Rv_Data_Slide: Sendable {
         public init() {}
       }
 
-      public struct StageMessage: Sendable {
+      public nonisolated struct StageMessage: Sendable {
         // SwiftProtobuf.Message conformance is added in an extension below. See the
         // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
         // methods supported on all messages.
@@ -1813,11 +1813,11 @@ public struct Rv_Data_Slide: Sendable {
         public var shouldFlash: Bool = false
 
         public var flashColor: Rv_Data_Color {
-          get {return _flashColor ?? Rv_Data_Color()}
+          get {_flashColor ?? Rv_Data_Color()}
           set {_flashColor = newValue}
         }
         /// Returns true if `flashColor` has been explicitly set.
-        public var hasFlashColor: Bool {return self._flashColor != nil}
+        public var hasFlashColor: Bool {self._flashColor != nil}
         /// Clears the value of `flashColor`. Subsequent reads from it will return its default value.
         public mutating func clearFlashColor() {self._flashColor = nil}
 
@@ -1828,17 +1828,17 @@ public struct Rv_Data_Slide: Sendable {
         fileprivate var _flashColor: Rv_Data_Color? = nil
       }
 
-      public struct VideoCountdown: Sendable {
+      public nonisolated struct VideoCountdown: Sendable {
         // SwiftProtobuf.Message conformance is added in an extension below. See the
         // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
         // methods supported on all messages.
 
         public var timerFormat: Rv_Data_Timer.Format {
-          get {return _timerFormat ?? Rv_Data_Timer.Format()}
+          get {_timerFormat ?? Rv_Data_Timer.Format()}
           set {_timerFormat = newValue}
         }
         /// Returns true if `timerFormat` has been explicitly set.
-        public var hasTimerFormat: Bool {return self._timerFormat != nil}
+        public var hasTimerFormat: Bool {self._timerFormat != nil}
         /// Clears the value of `timerFormat`. Subsequent reads from it will return its default value.
         public mutating func clearTimerFormat() {self._timerFormat = nil}
 
@@ -1852,7 +1852,7 @@ public struct Rv_Data_Slide: Sendable {
 
         public var unknownFields = SwiftProtobuf.UnknownStorage()
 
-        public enum VideoCountdownSource: SwiftProtobuf.Enum, Swift.CaseIterable {
+        public nonisolated enum VideoCountdownSource: SwiftProtobuf.Enum, Swift.CaseIterable {
           public typealias RawValue = Int
           case presentation // = 0
           case announcement // = 1
@@ -1891,17 +1891,17 @@ public struct Rv_Data_Slide: Sendable {
         fileprivate var _timerFormat: Rv_Data_Timer.Format? = nil
       }
 
-      public struct AudioCountdown: Sendable {
+      public nonisolated struct AudioCountdown: Sendable {
         // SwiftProtobuf.Message conformance is added in an extension below. See the
         // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
         // methods supported on all messages.
 
         public var timerFormat: Rv_Data_Timer.Format {
-          get {return _timerFormat ?? Rv_Data_Timer.Format()}
+          get {_timerFormat ?? Rv_Data_Timer.Format()}
           set {_timerFormat = newValue}
         }
         /// Returns true if `timerFormat` has been explicitly set.
-        public var hasTimerFormat: Bool {return self._timerFormat != nil}
+        public var hasTimerFormat: Bool {self._timerFormat != nil}
         /// Clears the value of `timerFormat`. Subsequent reads from it will return its default value.
         public mutating func clearTimerFormat() {self._timerFormat = nil}
 
@@ -1918,7 +1918,7 @@ public struct Rv_Data_Slide: Sendable {
         fileprivate var _timerFormat: Rv_Data_Timer.Format? = nil
       }
 
-      public struct GroupName: Sendable {
+      public nonisolated struct GroupName: Sendable {
         // SwiftProtobuf.Message conformance is added in an extension below. See the
         // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
         // methods supported on all messages.
@@ -1927,7 +1927,7 @@ public struct Rv_Data_Slide: Sendable {
 
         public var unknownFields = SwiftProtobuf.UnknownStorage()
 
-        public enum GroupSourceType: SwiftProtobuf.Enum, Swift.CaseIterable {
+        public nonisolated enum GroupSourceType: SwiftProtobuf.Enum, Swift.CaseIterable {
           public typealias RawValue = Int
           case currentSlide // = 0
           case nextSlide // = 1
@@ -1968,7 +1968,7 @@ public struct Rv_Data_Slide: Sendable {
         public init() {}
       }
 
-      public struct GroupColor: Sendable {
+      public nonisolated struct GroupColor: Sendable {
         // SwiftProtobuf.Message conformance is added in an extension below. See the
         // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
         // methods supported on all messages.
@@ -1977,7 +1977,7 @@ public struct Rv_Data_Slide: Sendable {
 
         public var unknownFields = SwiftProtobuf.UnknownStorage()
 
-        public enum GroupSourceType: SwiftProtobuf.Enum, Swift.CaseIterable {
+        public nonisolated enum GroupSourceType: SwiftProtobuf.Enum, Swift.CaseIterable {
           public typealias RawValue = Int
           case currentSlide // = 0
           case nextSlide // = 1
@@ -2018,7 +2018,7 @@ public struct Rv_Data_Slide: Sendable {
         public init() {}
       }
 
-      public struct SlideLabelText: Sendable {
+      public nonisolated struct SlideLabelText: Sendable {
         // SwiftProtobuf.Message conformance is added in an extension below. See the
         // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
         // methods supported on all messages.
@@ -2027,7 +2027,7 @@ public struct Rv_Data_Slide: Sendable {
 
         public var unknownFields = SwiftProtobuf.UnknownStorage()
 
-        public enum SlideLabelSource: SwiftProtobuf.Enum, Swift.CaseIterable {
+        public nonisolated enum SlideLabelSource: SwiftProtobuf.Enum, Swift.CaseIterable {
           public typealias RawValue = Int
           case currentSlide // = 0
           case nextSlide // = 1
@@ -2064,7 +2064,7 @@ public struct Rv_Data_Slide: Sendable {
         public init() {}
       }
 
-      public struct SlideLabelColor: Sendable {
+      public nonisolated struct SlideLabelColor: Sendable {
         // SwiftProtobuf.Message conformance is added in an extension below. See the
         // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
         // methods supported on all messages.
@@ -2073,7 +2073,7 @@ public struct Rv_Data_Slide: Sendable {
 
         public var unknownFields = SwiftProtobuf.UnknownStorage()
 
-        public enum SlideLabelSource: SwiftProtobuf.Enum, Swift.CaseIterable {
+        public nonisolated enum SlideLabelSource: SwiftProtobuf.Enum, Swift.CaseIterable {
           public typealias RawValue = Int
           case currentSlide // = 0
           case nextSlide // = 1
@@ -2110,7 +2110,7 @@ public struct Rv_Data_Slide: Sendable {
         public init() {}
       }
 
-      public struct PresentationNotes: Sendable {
+      public nonisolated struct PresentationNotes: Sendable {
         // SwiftProtobuf.Message conformance is added in an extension below. See the
         // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
         // methods supported on all messages.
@@ -2120,7 +2120,7 @@ public struct Rv_Data_Slide: Sendable {
         public init() {}
       }
 
-      public struct Presentation: Sendable {
+      public nonisolated struct Presentation: Sendable {
         // SwiftProtobuf.Message conformance is added in an extension below. See the
         // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
         // methods supported on all messages.
@@ -2129,7 +2129,7 @@ public struct Rv_Data_Slide: Sendable {
 
         public var unknownFields = SwiftProtobuf.UnknownStorage()
 
-        public enum PresentationSource: SwiftProtobuf.Enum, Swift.CaseIterable {
+        public nonisolated enum PresentationSource: SwiftProtobuf.Enum, Swift.CaseIterable {
           public typealias RawValue = Int
           case presentation // = 0
           case announcement // = 1
@@ -2166,7 +2166,7 @@ public struct Rv_Data_Slide: Sendable {
         public init() {}
       }
 
-      public struct PlaylistItem: Sendable {
+      public nonisolated struct PlaylistItem: Sendable {
         // SwiftProtobuf.Message conformance is added in an extension below. See the
         // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
         // methods supported on all messages.
@@ -2177,7 +2177,7 @@ public struct Rv_Data_Slide: Sendable {
 
         public var unknownFields = SwiftProtobuf.UnknownStorage()
 
-        public enum PlaylistItemSourceType: SwiftProtobuf.Enum, Swift.CaseIterable {
+        public nonisolated enum PlaylistItemSourceType: SwiftProtobuf.Enum, Swift.CaseIterable {
           public typealias RawValue = Int
           case current // = 0
           case next // = 1
@@ -2226,7 +2226,7 @@ public struct Rv_Data_Slide: Sendable {
         public init() {}
       }
 
-      public struct AutoAdvanceTimeRemaining: Sendable {
+      public nonisolated struct AutoAdvanceTimeRemaining: Sendable {
         // SwiftProtobuf.Message conformance is added in an extension below. See the
         // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
         // methods supported on all messages.
@@ -2234,17 +2234,17 @@ public struct Rv_Data_Slide: Sendable {
         public var autoAdvanceSource: Rv_Data_Slide.Element.DataLink.AutoAdvanceTimeRemaining.AutoAdvanceSource = .presentation
 
         public var timerFormat: Rv_Data_Timer.Format {
-          get {return _timerFormat ?? Rv_Data_Timer.Format()}
+          get {_timerFormat ?? Rv_Data_Timer.Format()}
           set {_timerFormat = newValue}
         }
         /// Returns true if `timerFormat` has been explicitly set.
-        public var hasTimerFormat: Bool {return self._timerFormat != nil}
+        public var hasTimerFormat: Bool {self._timerFormat != nil}
         /// Clears the value of `timerFormat`. Subsequent reads from it will return its default value.
         public mutating func clearTimerFormat() {self._timerFormat = nil}
 
         public var unknownFields = SwiftProtobuf.UnknownStorage()
 
-        public enum AutoAdvanceSource: SwiftProtobuf.Enum, Swift.CaseIterable {
+        public nonisolated enum AutoAdvanceSource: SwiftProtobuf.Enum, Swift.CaseIterable {
           public typealias RawValue = Int
           case presentation // = 0
           case announcement // = 1
@@ -2283,7 +2283,7 @@ public struct Rv_Data_Slide: Sendable {
         fileprivate var _timerFormat: Rv_Data_Timer.Format? = nil
       }
 
-      public struct CaptureStatusText: Sendable {
+      public nonisolated struct CaptureStatusText: Sendable {
         // SwiftProtobuf.Message conformance is added in an extension below. See the
         // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
         // methods supported on all messages.
@@ -2308,13 +2308,13 @@ public struct Rv_Data_Slide: Sendable {
 
         public var unknownFields = SwiftProtobuf.UnknownStorage()
 
-        public enum OneOf_TextType: Equatable, Sendable {
+        public nonisolated enum OneOf_TextType: Equatable, Sendable {
           case statusText(Rv_Data_Slide.Element.DataLink.CaptureStatusText.StatusText)
           case elapsedTime(Rv_Data_Slide.Element.DataLink.CaptureStatusText.ElapsedTime)
 
         }
 
-        public struct StatusText: Sendable {
+        public nonisolated struct StatusText: Sendable {
           // SwiftProtobuf.Message conformance is added in an extension below. See the
           // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
           // methods supported on all messages.
@@ -2324,17 +2324,17 @@ public struct Rv_Data_Slide: Sendable {
           public init() {}
         }
 
-        public struct ElapsedTime: Sendable {
+        public nonisolated struct ElapsedTime: Sendable {
           // SwiftProtobuf.Message conformance is added in an extension below. See the
           // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
           // methods supported on all messages.
 
           public var timerFormat: Rv_Data_Timer.Format {
-            get {return _timerFormat ?? Rv_Data_Timer.Format()}
+            get {_timerFormat ?? Rv_Data_Timer.Format()}
             set {_timerFormat = newValue}
           }
           /// Returns true if `timerFormat` has been explicitly set.
-          public var hasTimerFormat: Bool {return self._timerFormat != nil}
+          public var hasTimerFormat: Bool {self._timerFormat != nil}
           /// Clears the value of `timerFormat`. Subsequent reads from it will return its default value.
           public mutating func clearTimerFormat() {self._timerFormat = nil}
 
@@ -2348,7 +2348,7 @@ public struct Rv_Data_Slide: Sendable {
         public init() {}
       }
 
-      public struct CaptureStatusColor: Sendable {
+      public nonisolated struct CaptureStatusColor: Sendable {
         // SwiftProtobuf.Message conformance is added in an extension below. See the
         // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
         // methods supported on all messages.
@@ -2358,7 +2358,7 @@ public struct Rv_Data_Slide: Sendable {
         public init() {}
       }
 
-      public struct SlideCount: Sendable {
+      public nonisolated struct SlideCount: Sendable {
         // SwiftProtobuf.Message conformance is added in an extension below. See the
         // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
         // methods supported on all messages.
@@ -2367,7 +2367,7 @@ public struct Rv_Data_Slide: Sendable {
 
         public var unknownFields = SwiftProtobuf.UnknownStorage()
 
-        public enum SlideCountSourceType: SwiftProtobuf.Enum, Swift.CaseIterable {
+        public nonisolated enum SlideCountSourceType: SwiftProtobuf.Enum, Swift.CaseIterable {
           public typealias RawValue = Int
           case current // = 0
           case remaining // = 1
@@ -2408,7 +2408,7 @@ public struct Rv_Data_Slide: Sendable {
         public init() {}
       }
 
-      public struct PlaybackMarkerIdentifier: Sendable {
+      public nonisolated struct PlaybackMarkerIdentifier: Sendable {
         // SwiftProtobuf.Message conformance is added in an extension below. See the
         // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
         // methods supported on all messages.
@@ -2421,7 +2421,7 @@ public struct Rv_Data_Slide: Sendable {
 
         public var unknownFields = SwiftProtobuf.UnknownStorage()
 
-        public enum Destination: SwiftProtobuf.Enum, Swift.CaseIterable {
+        public nonisolated enum Destination: SwiftProtobuf.Enum, Swift.CaseIterable {
           public typealias RawValue = Int
           case playbackMarkerDestinationPresentation // = 0
           case playbackMarkerDestinationAnnouncement // = 1
@@ -2459,7 +2459,7 @@ public struct Rv_Data_Slide: Sendable {
 
         }
 
-        public enum TypeEnum: SwiftProtobuf.Enum, Swift.CaseIterable {
+        public nonisolated enum TypeEnum: SwiftProtobuf.Enum, Swift.CaseIterable {
           public typealias RawValue = Int
           case playbackMarkerIdentifierFirst // = 0
           case playbackMarkerIdentifierPrevious // = 1
@@ -2508,17 +2508,17 @@ public struct Rv_Data_Slide: Sendable {
         public init() {}
       }
 
-      public struct PlaybackMarkerText: Sendable {
+      public nonisolated struct PlaybackMarkerText: Sendable {
         // SwiftProtobuf.Message conformance is added in an extension below. See the
         // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
         // methods supported on all messages.
 
         public var identifier: Rv_Data_Slide.Element.DataLink.PlaybackMarkerIdentifier {
-          get {return _identifier ?? Rv_Data_Slide.Element.DataLink.PlaybackMarkerIdentifier()}
+          get {_identifier ?? Rv_Data_Slide.Element.DataLink.PlaybackMarkerIdentifier()}
           set {_identifier = newValue}
         }
         /// Returns true if `identifier` has been explicitly set.
-        public var hasIdentifier: Bool {return self._identifier != nil}
+        public var hasIdentifier: Bool {self._identifier != nil}
         /// Clears the value of `identifier`. Subsequent reads from it will return its default value.
         public mutating func clearIdentifier() {self._identifier = nil}
 
@@ -2544,13 +2544,13 @@ public struct Rv_Data_Slide: Sendable {
 
         public var unknownFields = SwiftProtobuf.UnknownStorage()
 
-        public enum OneOf_TextType: Equatable, Sendable {
+        public nonisolated enum OneOf_TextType: Equatable, Sendable {
           case name(Rv_Data_Slide.Element.DataLink.PlaybackMarkerText.Name)
           case time(Rv_Data_Slide.Element.DataLink.PlaybackMarkerText.Time)
 
         }
 
-        public struct Name: Sendable {
+        public nonisolated struct Name: Sendable {
           // SwiftProtobuf.Message conformance is added in an extension below. See the
           // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
           // methods supported on all messages.
@@ -2560,17 +2560,17 @@ public struct Rv_Data_Slide: Sendable {
           public init() {}
         }
 
-        public struct Time: Sendable {
+        public nonisolated struct Time: Sendable {
           // SwiftProtobuf.Message conformance is added in an extension below. See the
           // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
           // methods supported on all messages.
 
           public var format: Rv_Data_Timer.Format {
-            get {return _format ?? Rv_Data_Timer.Format()}
+            get {_format ?? Rv_Data_Timer.Format()}
             set {_format = newValue}
           }
           /// Returns true if `format` has been explicitly set.
-          public var hasFormat: Bool {return self._format != nil}
+          public var hasFormat: Bool {self._format != nil}
           /// Clears the value of `format`. Subsequent reads from it will return its default value.
           public mutating func clearFormat() {self._format = nil}
 
@@ -2586,7 +2586,7 @@ public struct Rv_Data_Slide: Sendable {
         fileprivate var _identifier: Rv_Data_Slide.Element.DataLink.PlaybackMarkerIdentifier? = nil
       }
 
-      public struct ChordProChart: Sendable {
+      public nonisolated struct ChordProChart: Sendable {
         // SwiftProtobuf.Message conformance is added in an extension below. See the
         // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
         // methods supported on all messages.
@@ -2596,7 +2596,7 @@ public struct Rv_Data_Slide: Sendable {
         public init() {}
       }
 
-      public struct TimecodeText: Sendable {
+      public nonisolated struct TimecodeText: Sendable {
         // SwiftProtobuf.Message conformance is added in an extension below. See the
         // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
         // methods supported on all messages.
@@ -2606,7 +2606,7 @@ public struct Rv_Data_Slide: Sendable {
         public init() {}
       }
 
-      public struct TimecodeStatus: Sendable {
+      public nonisolated struct TimecodeStatus: Sendable {
         // SwiftProtobuf.Message conformance is added in an extension below. See the
         // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
         // methods supported on all messages.
@@ -2619,7 +2619,7 @@ public struct Rv_Data_Slide: Sendable {
       public init() {}
     }
 
-    public struct TextScroller: Sendable {
+    public nonisolated struct TextScroller: Sendable {
       // SwiftProtobuf.Message conformance is added in an extension below. See the
       // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
       // methods supported on all messages.
@@ -2642,7 +2642,7 @@ public struct Rv_Data_Slide: Sendable {
 
       public var unknownFields = SwiftProtobuf.UnknownStorage()
 
-      public enum Direction: SwiftProtobuf.Enum, Swift.CaseIterable {
+      public nonisolated enum Direction: SwiftProtobuf.Enum, Swift.CaseIterable {
         public typealias RawValue = Int
         case left // = 0
         case right // = 1
@@ -2701,9 +2701,9 @@ public struct Rv_Data_Slide: Sendable {
 
 // MARK: - Code below here is support for the SwiftProtobuf runtime.
 
-fileprivate let _protobuf_package = "rv.data"
+fileprivate nonisolated let _protobuf_package = "rv.data"
 
-extension Rv_Data_Slide: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+nonisolated extension Rv_Data_Slide: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   public static let protoMessageName: String = _protobuf_package + ".Slide"
   public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{1}elements\0\u{3}element_build_order\0\u{1}guidelines\0\u{3}draws_background_color\0\u{3}background_color\0\u{1}size\0\u{1}uuid\0")
 
@@ -2767,7 +2767,7 @@ extension Rv_Data_Slide: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementa
   }
 }
 
-extension Rv_Data_Slide.Element: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+nonisolated extension Rv_Data_Slide.Element: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   public static let protoMessageName: String = Rv_Data_Slide.protoMessageName + ".Element"
   public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{1}element\0\u{3}build_in\0\u{3}build_out\0\u{1}info\0\u{3}reveal_type\0\u{3}data_links\0\u{1}childBuilds\0\u{3}reveal_from_index\0\u{3}text_scroller\0")
 
@@ -2893,11 +2893,11 @@ extension Rv_Data_Slide.Element: SwiftProtobuf.Message, SwiftProtobuf._MessageIm
   }
 }
 
-extension Rv_Data_Slide.Element.TextRevealType: SwiftProtobuf._ProtoNameProviding {
+nonisolated extension Rv_Data_Slide.Element.TextRevealType: SwiftProtobuf._ProtoNameProviding {
   public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{2}\0TEXT_REVEAL_TYPE_NONE\0\u{1}TEXT_REVEAL_TYPE_BULLET\0\u{1}TEXT_REVEAL_TYPE_UNDERLINE\0")
 }
 
-extension Rv_Data_Slide.Element.Build: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+nonisolated extension Rv_Data_Slide.Element.Build: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   public static let protoMessageName: String = Rv_Data_Slide.Element.protoMessageName + ".Build"
   public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{1}uuid\0\u{1}elementUUID\0\u{1}start\0\u{1}delayTime\0\u{1}transition\0")
 
@@ -2951,11 +2951,11 @@ extension Rv_Data_Slide.Element.Build: SwiftProtobuf.Message, SwiftProtobuf._Mes
   }
 }
 
-extension Rv_Data_Slide.Element.Build.Start: SwiftProtobuf._ProtoNameProviding {
+nonisolated extension Rv_Data_Slide.Element.Build.Start: SwiftProtobuf._ProtoNameProviding {
   public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{2}\0START_ON_CLICK\0\u{1}START_WITH_PREVIOUS\0\u{1}START_AFTER_PREVIOUS\0\u{1}START_WITH_SLIDE\0")
 }
 
-extension Rv_Data_Slide.Element.ChildBuild: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+nonisolated extension Rv_Data_Slide.Element.ChildBuild: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   public static let protoMessageName: String = Rv_Data_Slide.Element.protoMessageName + ".ChildBuild"
   public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{1}uuid\0\u{1}start\0\u{1}delayTime\0\u{1}index\0")
 
@@ -3004,11 +3004,11 @@ extension Rv_Data_Slide.Element.ChildBuild: SwiftProtobuf.Message, SwiftProtobuf
   }
 }
 
-extension Rv_Data_Slide.Element.ChildBuild.Start: SwiftProtobuf._ProtoNameProviding {
+nonisolated extension Rv_Data_Slide.Element.ChildBuild.Start: SwiftProtobuf._ProtoNameProviding {
   public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{2}\0START_ON_CLICK\0\u{1}START_WITH_PREVIOUS\0\u{1}START_AFTER_PREVIOUS\0\u{1}START_WITH_SLIDE\0")
 }
 
-extension Rv_Data_Slide.Element.DataLink: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+nonisolated extension Rv_Data_Slide.Element.DataLink: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   public static let protoMessageName: String = Rv_Data_Slide.Element.protoMessageName + ".DataLink"
   public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{1}ticker\0\u{3}alternate_text\0\u{3}timer_text\0\u{3}clock_text\0\u{3}chord_chart\0\u{3}output_screen\0\u{3}pco_live\0\u{3}alternate_fill\0\u{3}visibility_link\0\u{3}slide_text\0\u{3}stage_message\0\u{3}video_countdown\0\u{3}slide_image\0\u{3}ccli_text\0\u{3}group_name\0\u{3}group_color\0\u{3}presentation_notes\0\u{3}playlist_item\0\u{3}auto_advance_time_remaining\0\u{3}capture_status_text\0\u{3}capture_status_color\0\u{3}slide_count\0\u{3}audio_countdown\0\u{1}presentation\0\u{3}slide_Label_Text\0\u{3}slide_Label_Color\0\u{3}rss_feed\0\u{3}file_feed\0\u{3}chord_pro_chart\0\u{3}playback_marker_text\0\u{4}\u{2}playback_marker_color\0\u{3}timecode_text\0\u{3}timecode_status\0")
 
@@ -3602,7 +3602,7 @@ extension Rv_Data_Slide.Element.DataLink: SwiftProtobuf.Message, SwiftProtobuf._
   }
 }
 
-extension Rv_Data_Slide.Element.DataLink.RSSFeed: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+nonisolated extension Rv_Data_Slide.Element.DataLink.RSSFeed: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   public static let protoMessageName: String = Rv_Data_Slide.Element.DataLink.protoMessageName + ".RSSFeed"
   public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{1}url\0\u{1}content\0\u{3}text_delimiter\0")
 
@@ -3646,11 +3646,11 @@ extension Rv_Data_Slide.Element.DataLink.RSSFeed: SwiftProtobuf.Message, SwiftPr
   }
 }
 
-extension Rv_Data_Slide.Element.DataLink.RSSFeed.ContentType: SwiftProtobuf._ProtoNameProviding {
+nonisolated extension Rv_Data_Slide.Element.DataLink.RSSFeed.ContentType: SwiftProtobuf._ProtoNameProviding {
   public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{2}\0CONTENT_TYPE_TITLE_ONLY\0\u{1}CONTENT_TYPE_TITLE_AND_DESCRIPTION\0")
 }
 
-extension Rv_Data_Slide.Element.DataLink.FileFeed: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+nonisolated extension Rv_Data_Slide.Element.DataLink.FileFeed: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   public static let protoMessageName: String = Rv_Data_Slide.Element.DataLink.protoMessageName + ".FileFeed"
   public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{1}url\0")
 
@@ -3684,7 +3684,7 @@ extension Rv_Data_Slide.Element.DataLink.FileFeed: SwiftProtobuf.Message, SwiftP
   }
 }
 
-extension Rv_Data_Slide.Element.DataLink.Ticker: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+nonisolated extension Rv_Data_Slide.Element.DataLink.Ticker: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   public static let protoMessageName: String = Rv_Data_Slide.Element.DataLink.protoMessageName + ".Ticker"
   public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{3}text_type\0\u{3}rss_type\0\u{3}file_type\0\u{3}play_rate\0\u{3}should_loop\0\u{3}loop_delay\0\u{3}text_delimiter\0")
 
@@ -3788,7 +3788,7 @@ extension Rv_Data_Slide.Element.DataLink.Ticker: SwiftProtobuf.Message, SwiftPro
   }
 }
 
-extension Rv_Data_Slide.Element.DataLink.Ticker.TextType: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+nonisolated extension Rv_Data_Slide.Element.DataLink.Ticker.TextType: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   public static let protoMessageName: String = Rv_Data_Slide.Element.DataLink.Ticker.protoMessageName + ".TextType"
   public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{1}text\0")
 
@@ -3818,7 +3818,7 @@ extension Rv_Data_Slide.Element.DataLink.Ticker.TextType: SwiftProtobuf.Message,
   }
 }
 
-extension Rv_Data_Slide.Element.DataLink.Ticker.RSSType: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+nonisolated extension Rv_Data_Slide.Element.DataLink.Ticker.RSSType: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   public static let protoMessageName: String = Rv_Data_Slide.Element.DataLink.Ticker.protoMessageName + ".RSSType"
   public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{1}url\0\u{1}content\0")
 
@@ -3857,11 +3857,11 @@ extension Rv_Data_Slide.Element.DataLink.Ticker.RSSType: SwiftProtobuf.Message, 
   }
 }
 
-extension Rv_Data_Slide.Element.DataLink.Ticker.RSSType.ContentType: SwiftProtobuf._ProtoNameProviding {
+nonisolated extension Rv_Data_Slide.Element.DataLink.Ticker.RSSType.ContentType: SwiftProtobuf._ProtoNameProviding {
   public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{2}\0CONTENT_TYPE_TITLE_ONLY\0\u{1}CONTENT_TYPE_TITLE_AND_DESCRIPTION\0")
 }
 
-extension Rv_Data_Slide.Element.DataLink.Ticker.FileType: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+nonisolated extension Rv_Data_Slide.Element.DataLink.Ticker.FileType: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   public static let protoMessageName: String = Rv_Data_Slide.Element.DataLink.Ticker.protoMessageName + ".FileType"
   public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{1}url\0")
 
@@ -3895,7 +3895,7 @@ extension Rv_Data_Slide.Element.DataLink.Ticker.FileType: SwiftProtobuf.Message,
   }
 }
 
-extension Rv_Data_Slide.Element.DataLink.AlternateElementText: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+nonisolated extension Rv_Data_Slide.Element.DataLink.AlternateElementText: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   public static let protoMessageName: String = Rv_Data_Slide.Element.DataLink.protoMessageName + ".AlternateElementText"
   public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{3}other_element_uuid\0\u{3}other_element_name\0\u{3}text_transform_options\0\u{3}text_transform\0")
 
@@ -3944,11 +3944,11 @@ extension Rv_Data_Slide.Element.DataLink.AlternateElementText: SwiftProtobuf.Mes
   }
 }
 
-extension Rv_Data_Slide.Element.DataLink.AlternateElementText.TextTransformOption: SwiftProtobuf._ProtoNameProviding {
+nonisolated extension Rv_Data_Slide.Element.DataLink.AlternateElementText.TextTransformOption: SwiftProtobuf._ProtoNameProviding {
   public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{2}\0TEXT_TRANSFORM_OPTION_NONE\0\u{1}TEXT_TRANSFORM_OPTION_REMOVE_LINE_RETURNS\0\u{1}TEXT_TRANSFORM_OPTION_ONE_WORD_PER_LINE\0\u{1}TEXT_TRANSFORM_OPTION_ONE_CHARACTER_PER_LINE\0")
 }
 
-extension Rv_Data_Slide.Element.DataLink.CCLIText: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+nonisolated extension Rv_Data_Slide.Element.DataLink.CCLIText: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   public static let protoMessageName: String = Rv_Data_Slide.Element.DataLink.protoMessageName + ".CCLIText"
   public static let _protobuf_nameMap = SwiftProtobuf._NameMap()
 
@@ -3967,7 +3967,7 @@ extension Rv_Data_Slide.Element.DataLink.CCLIText: SwiftProtobuf.Message, SwiftP
   }
 }
 
-extension Rv_Data_Slide.Element.DataLink.ColorTrigger: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+nonisolated extension Rv_Data_Slide.Element.DataLink.ColorTrigger: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   public static let protoMessageName: String = Rv_Data_Slide.Element.DataLink.protoMessageName + ".ColorTrigger"
   public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{1}time\0\u{1}color\0")
 
@@ -4006,7 +4006,7 @@ extension Rv_Data_Slide.Element.DataLink.ColorTrigger: SwiftProtobuf.Message, Sw
   }
 }
 
-extension Rv_Data_Slide.Element.DataLink.TimerText: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+nonisolated extension Rv_Data_Slide.Element.DataLink.TimerText: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   public static let protoMessageName: String = Rv_Data_Slide.Element.DataLink.protoMessageName + ".TimerText"
   public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{3}timer_uuid\0\u{3}timer_name\0\u{3}timer_format\0\u{3}timer_format_string\0\u{3}color_triggers\0")
 
@@ -4060,7 +4060,7 @@ extension Rv_Data_Slide.Element.DataLink.TimerText: SwiftProtobuf.Message, Swift
   }
 }
 
-extension Rv_Data_Slide.Element.DataLink.ClockText: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+nonisolated extension Rv_Data_Slide.Element.DataLink.ClockText: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   public static let protoMessageName: String = Rv_Data_Slide.Element.DataLink.protoMessageName + ".ClockText"
   public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{3}clock_format_string\0\u{2}\u{4}format\0")
 
@@ -4099,7 +4099,7 @@ extension Rv_Data_Slide.Element.DataLink.ClockText: SwiftProtobuf.Message, Swift
   }
 }
 
-extension Rv_Data_Slide.Element.DataLink.ChordChart: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+nonisolated extension Rv_Data_Slide.Element.DataLink.ChordChart: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   public static let protoMessageName: String = Rv_Data_Slide.Element.DataLink.protoMessageName + ".ChordChart"
   public static let _protobuf_nameMap = SwiftProtobuf._NameMap()
 
@@ -4118,7 +4118,7 @@ extension Rv_Data_Slide.Element.DataLink.ChordChart: SwiftProtobuf.Message, Swif
   }
 }
 
-extension Rv_Data_Slide.Element.DataLink.OutputScreen: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+nonisolated extension Rv_Data_Slide.Element.DataLink.OutputScreen: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   public static let protoMessageName: String = Rv_Data_Slide.Element.DataLink.protoMessageName + ".OutputScreen"
   public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{3}screen_id\0\u{3}screen_name\0")
 
@@ -4157,7 +4157,7 @@ extension Rv_Data_Slide.Element.DataLink.OutputScreen: SwiftProtobuf.Message, Sw
   }
 }
 
-extension Rv_Data_Slide.Element.DataLink.PCOLive: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+nonisolated extension Rv_Data_Slide.Element.DataLink.PCOLive: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   public static let protoMessageName: String = Rv_Data_Slide.Element.DataLink.protoMessageName + ".PCOLive"
   public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{2}\u{2}theme\0\u{3}countdown_type\0")
 
@@ -4192,15 +4192,15 @@ extension Rv_Data_Slide.Element.DataLink.PCOLive: SwiftProtobuf.Message, SwiftPr
   }
 }
 
-extension Rv_Data_Slide.Element.DataLink.PCOLive.Theme: SwiftProtobuf._ProtoNameProviding {
+nonisolated extension Rv_Data_Slide.Element.DataLink.PCOLive.Theme: SwiftProtobuf._ProtoNameProviding {
   public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{2}\0PCOLIVE_THEME_LIGHT\0\u{1}PCOLIVE_THEME_DARK\0")
 }
 
-extension Rv_Data_Slide.Element.DataLink.PCOLive.CountdownType: SwiftProtobuf._ProtoNameProviding {
+nonisolated extension Rv_Data_Slide.Element.DataLink.PCOLive.CountdownType: SwiftProtobuf._ProtoNameProviding {
   public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{2}\0COUNTDOWN_TYPE_FULL_ITEM_LENGTH\0\u{1}COUNTDOWN_TYPE_END_ITEM_ON_TIME\0\u{1}COUNTDOWN_TYPE_END_SERVICE_ON_TIME\0")
 }
 
-extension Rv_Data_Slide.Element.DataLink.AlternateElementFill: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+nonisolated extension Rv_Data_Slide.Element.DataLink.AlternateElementFill: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   public static let protoMessageName: String = Rv_Data_Slide.Element.DataLink.protoMessageName + ".AlternateElementFill"
   public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{3}other_element_uuid\0\u{3}other_element_name\0")
 
@@ -4239,7 +4239,7 @@ extension Rv_Data_Slide.Element.DataLink.AlternateElementFill: SwiftProtobuf.Mes
   }
 }
 
-extension Rv_Data_Slide.Element.DataLink.VisibilityLink: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+nonisolated extension Rv_Data_Slide.Element.DataLink.VisibilityLink: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   public static let protoMessageName: String = Rv_Data_Slide.Element.DataLink.protoMessageName + ".VisibilityLink"
   public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{3}visibility_criterion\0\u{1}conditions\0")
 
@@ -4274,11 +4274,11 @@ extension Rv_Data_Slide.Element.DataLink.VisibilityLink: SwiftProtobuf.Message, 
   }
 }
 
-extension Rv_Data_Slide.Element.DataLink.VisibilityLink.VisibilityCriterion: SwiftProtobuf._ProtoNameProviding {
+nonisolated extension Rv_Data_Slide.Element.DataLink.VisibilityLink.VisibilityCriterion: SwiftProtobuf._ProtoNameProviding {
   public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{2}\0VISIBILITY_CRITERION_ALL\0\u{1}VISIBILITY_CRITERION_ANY\0\u{1}VISIBILITY_CRITERION_NONE\0")
 }
 
-extension Rv_Data_Slide.Element.DataLink.VisibilityLink.Condition: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+nonisolated extension Rv_Data_Slide.Element.DataLink.VisibilityLink.Condition: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   public static let protoMessageName: String = Rv_Data_Slide.Element.DataLink.VisibilityLink.protoMessageName + ".Condition"
   public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{3}element_visibility\0\u{3}timer_visibility\0\u{3}video_countdown_visibility\0\u{3}capture_session_visibility\0\u{3}video_input_visibility\0\u{3}audio_countdown_visibility\0")
 
@@ -4413,7 +4413,7 @@ extension Rv_Data_Slide.Element.DataLink.VisibilityLink.Condition: SwiftProtobuf
   }
 }
 
-extension Rv_Data_Slide.Element.DataLink.VisibilityLink.Condition.ElementVisibility: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+nonisolated extension Rv_Data_Slide.Element.DataLink.VisibilityLink.Condition.ElementVisibility: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   public static let protoMessageName: String = Rv_Data_Slide.Element.DataLink.VisibilityLink.Condition.protoMessageName + ".ElementVisibility"
   public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{3}other_element_uuid\0\u{3}other_element_name\0\u{3}visibility_criterion\0")
 
@@ -4457,11 +4457,11 @@ extension Rv_Data_Slide.Element.DataLink.VisibilityLink.Condition.ElementVisibil
   }
 }
 
-extension Rv_Data_Slide.Element.DataLink.VisibilityLink.Condition.ElementVisibility.ElementVisibilityCriterion: SwiftProtobuf._ProtoNameProviding {
+nonisolated extension Rv_Data_Slide.Element.DataLink.VisibilityLink.Condition.ElementVisibility.ElementVisibilityCriterion: SwiftProtobuf._ProtoNameProviding {
   public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{2}\0ELEMENT_VISIBILITY_CRITERION_HAS_TEXT\0\u{1}ELEMENT_VISIBILITY_CRITERION_HAS_NO_TEXT\0")
 }
 
-extension Rv_Data_Slide.Element.DataLink.VisibilityLink.Condition.TimerVisibility: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+nonisolated extension Rv_Data_Slide.Element.DataLink.VisibilityLink.Condition.TimerVisibility: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   public static let protoMessageName: String = Rv_Data_Slide.Element.DataLink.VisibilityLink.Condition.protoMessageName + ".TimerVisibility"
   public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{3}timer_uuid\0\u{3}timer_name\0\u{3}visibility_criterion\0")
 
@@ -4505,11 +4505,11 @@ extension Rv_Data_Slide.Element.DataLink.VisibilityLink.Condition.TimerVisibilit
   }
 }
 
-extension Rv_Data_Slide.Element.DataLink.VisibilityLink.Condition.TimerVisibility.TimerVisibilityCriterion: SwiftProtobuf._ProtoNameProviding {
+nonisolated extension Rv_Data_Slide.Element.DataLink.VisibilityLink.Condition.TimerVisibility.TimerVisibilityCriterion: SwiftProtobuf._ProtoNameProviding {
   public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{2}\0TIMER_VISIBILITY_CRITERION_HAS_TIME_REMAINING\0\u{1}TIMER_VISIBILITY_CRITERION_HAS_EXPIRED\0\u{1}TIMER_VISIBILITY_CRITERION_IS_RUNNING\0\u{1}TIMER_VISIBILITY_CRITERION_NOT_RUNNING\0")
 }
 
-extension Rv_Data_Slide.Element.DataLink.VisibilityLink.Condition.VideoCountdownVisibility: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+nonisolated extension Rv_Data_Slide.Element.DataLink.VisibilityLink.Condition.VideoCountdownVisibility: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   public static let protoMessageName: String = Rv_Data_Slide.Element.DataLink.VisibilityLink.Condition.protoMessageName + ".VideoCountdownVisibility"
   public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{3}visibility_criterion\0")
 
@@ -4539,11 +4539,11 @@ extension Rv_Data_Slide.Element.DataLink.VisibilityLink.Condition.VideoCountdown
   }
 }
 
-extension Rv_Data_Slide.Element.DataLink.VisibilityLink.Condition.VideoCountdownVisibility.VideoCountdownVisibilityCriterion: SwiftProtobuf._ProtoNameProviding {
+nonisolated extension Rv_Data_Slide.Element.DataLink.VisibilityLink.Condition.VideoCountdownVisibility.VideoCountdownVisibilityCriterion: SwiftProtobuf._ProtoNameProviding {
   public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{2}\0VIDEO_COUNTDOWN_VISIBILITY_CRITERION_HAS_TIME_REMAINING\0\u{1}VIDEO_COUNTDOWN_VISIBILITY_CRITERION_HAS_EXPIRED\0\u{1}VIDEO_COUNTDOWN_VISIBILITY_CRITERION_IS_RUNNING\0\u{1}VIDEO_COUNTDOWN_VISIBILITY_CRITERION_NOT_RUNNING\0\u{1}VIDEO_COUNTDOWN_VISIBILITY_CRITERION_LOOPING\0\u{1}VIDEO_COUNTDOWN_VISIBILITY_CRITERION_NOT_LOOPING\0")
 }
 
-extension Rv_Data_Slide.Element.DataLink.VisibilityLink.Condition.AudioCountdownVisibility: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+nonisolated extension Rv_Data_Slide.Element.DataLink.VisibilityLink.Condition.AudioCountdownVisibility: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   public static let protoMessageName: String = Rv_Data_Slide.Element.DataLink.VisibilityLink.Condition.protoMessageName + ".AudioCountdownVisibility"
   public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{3}visibility_criterion\0")
 
@@ -4573,11 +4573,11 @@ extension Rv_Data_Slide.Element.DataLink.VisibilityLink.Condition.AudioCountdown
   }
 }
 
-extension Rv_Data_Slide.Element.DataLink.VisibilityLink.Condition.AudioCountdownVisibility.AudioCountdownVisibilityCriterion: SwiftProtobuf._ProtoNameProviding {
+nonisolated extension Rv_Data_Slide.Element.DataLink.VisibilityLink.Condition.AudioCountdownVisibility.AudioCountdownVisibilityCriterion: SwiftProtobuf._ProtoNameProviding {
   public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{2}\0AUDIO_COUNTDOWN_VISIBILITY_CRITERION_HAS_TIME_REMAINING\0\u{1}AUDIO_COUNTDOWN_VISIBILITY_CRITERION_HAS_EXPIRED\0\u{1}AUDIO_COUNTDOWN_VISIBILITY_CRITERION_IS_RUNNING\0\u{1}AUDIO_COUNTDOWN_VISIBILITY_CRITERION_NOT_RUNNING\0\u{1}AUDIO_COUNTDOWN_VISIBILITY_CRITERION_LOOPING\0\u{1}AUDIO_COUNTDOWN_VISIBILITY_CRITERION_NOT_LOOPING\0")
 }
 
-extension Rv_Data_Slide.Element.DataLink.VisibilityLink.Condition.CaptureSessionVisibility: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+nonisolated extension Rv_Data_Slide.Element.DataLink.VisibilityLink.Condition.CaptureSessionVisibility: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   public static let protoMessageName: String = Rv_Data_Slide.Element.DataLink.VisibilityLink.Condition.protoMessageName + ".CaptureSessionVisibility"
   public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{3}visibility_criterion\0")
 
@@ -4607,11 +4607,11 @@ extension Rv_Data_Slide.Element.DataLink.VisibilityLink.Condition.CaptureSession
   }
 }
 
-extension Rv_Data_Slide.Element.DataLink.VisibilityLink.Condition.CaptureSessionVisibility.CaptureSessionVisibilityCriterion: SwiftProtobuf._ProtoNameProviding {
+nonisolated extension Rv_Data_Slide.Element.DataLink.VisibilityLink.Condition.CaptureSessionVisibility.CaptureSessionVisibilityCriterion: SwiftProtobuf._ProtoNameProviding {
   public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{2}\0CAPTURE_SESSION_VISIBILITY_CRITERION_ACTIVE\0\u{1}CAPTURE_SESSION_VISIBILITY_CRITERION_INACTIVE\0")
 }
 
-extension Rv_Data_Slide.Element.DataLink.VisibilityLink.Condition.VideoInputVisibility: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+nonisolated extension Rv_Data_Slide.Element.DataLink.VisibilityLink.Condition.VideoInputVisibility: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   public static let protoMessageName: String = Rv_Data_Slide.Element.DataLink.VisibilityLink.Condition.protoMessageName + ".VideoInputVisibility"
   public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{3}video_input_index\0\u{3}visibility_criterion\0")
 
@@ -4646,11 +4646,11 @@ extension Rv_Data_Slide.Element.DataLink.VisibilityLink.Condition.VideoInputVisi
   }
 }
 
-extension Rv_Data_Slide.Element.DataLink.VisibilityLink.Condition.VideoInputVisibility.VideoInputVisibilityCriterion: SwiftProtobuf._ProtoNameProviding {
+nonisolated extension Rv_Data_Slide.Element.DataLink.VisibilityLink.Condition.VideoInputVisibility.VideoInputVisibilityCriterion: SwiftProtobuf._ProtoNameProviding {
   public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{2}\0VIDEO_INPUT_VISIBILITY_CRITERION_ACTIVE\0\u{1}VIDEO_INPUT_VISIBILITY_CRITERION_INACTIVE\0")
 }
 
-extension Rv_Data_Slide.Element.DataLink.SlideText: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+nonisolated extension Rv_Data_Slide.Element.DataLink.SlideText: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   public static let protoMessageName: String = Rv_Data_Slide.Element.DataLink.protoMessageName + ".SlideText"
   public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{3}source_slide\0\u{3}source_option\0\u{3}preserve_notes_format\0\u{3}name_to_match\0\u{3}element_text_transform\0")
 
@@ -4700,19 +4700,19 @@ extension Rv_Data_Slide.Element.DataLink.SlideText: SwiftProtobuf.Message, Swift
   }
 }
 
-extension Rv_Data_Slide.Element.DataLink.SlideText.SlideSourceType: SwiftProtobuf._ProtoNameProviding {
+nonisolated extension Rv_Data_Slide.Element.DataLink.SlideText.SlideSourceType: SwiftProtobuf._ProtoNameProviding {
   public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{2}\0SLIDE_SOURCE_TYPE_CURRENT_SLIDE\0\u{1}SLIDE_SOURCE_TYPE_NEXT_SLIDE\0")
 }
 
-extension Rv_Data_Slide.Element.DataLink.SlideText.TextSourceOption: SwiftProtobuf._ProtoNameProviding {
+nonisolated extension Rv_Data_Slide.Element.DataLink.SlideText.TextSourceOption: SwiftProtobuf._ProtoNameProviding {
   public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{2}\0TEXT_SOURCE_OPTION_TEXT\0\u{1}TEXT_SOURCE_OPTION_NOTES\0\u{1}TEXT_SOURCE_OPTION_ELEMENT_MATCHING_NAME\0")
 }
 
-extension Rv_Data_Slide.Element.DataLink.SlideText.TextTransformOption: SwiftProtobuf._ProtoNameProviding {
+nonisolated extension Rv_Data_Slide.Element.DataLink.SlideText.TextTransformOption: SwiftProtobuf._ProtoNameProviding {
   public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{2}\0TEXT_TRANSFORM_OPTION_NONE\0\u{1}TEXT_TRANSFORM_OPTION_REMOVE_LINE_RETURNS\0\u{1}TEXT_TRANSFORM_OPTION_ONE_WORD_PER_LINE\0\u{1}TEXT_TRANSFORM_OPTION_ONE_CHARACTER_PER_LINE\0")
 }
 
-extension Rv_Data_Slide.Element.DataLink.SlideImage: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+nonisolated extension Rv_Data_Slide.Element.DataLink.SlideImage: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   public static let protoMessageName: String = Rv_Data_Slide.Element.DataLink.protoMessageName + ".SlideImage"
   public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{3}source_slide\0")
 
@@ -4742,11 +4742,11 @@ extension Rv_Data_Slide.Element.DataLink.SlideImage: SwiftProtobuf.Message, Swif
   }
 }
 
-extension Rv_Data_Slide.Element.DataLink.SlideImage.SlideSourceType: SwiftProtobuf._ProtoNameProviding {
+nonisolated extension Rv_Data_Slide.Element.DataLink.SlideImage.SlideSourceType: SwiftProtobuf._ProtoNameProviding {
   public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{2}\0SLIDE_SOURCE_TYPE_CURRENT_SLIDE\0\u{1}SLIDE_SOURCE_TYPE_NEXT_SLIDE\0")
 }
 
-extension Rv_Data_Slide.Element.DataLink.StageMessage: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+nonisolated extension Rv_Data_Slide.Element.DataLink.StageMessage: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   public static let protoMessageName: String = Rv_Data_Slide.Element.DataLink.protoMessageName + ".StageMessage"
   public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{3}should_flash\0\u{3}flash_color\0")
 
@@ -4785,7 +4785,7 @@ extension Rv_Data_Slide.Element.DataLink.StageMessage: SwiftProtobuf.Message, Sw
   }
 }
 
-extension Rv_Data_Slide.Element.DataLink.VideoCountdown: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+nonisolated extension Rv_Data_Slide.Element.DataLink.VideoCountdown: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   public static let protoMessageName: String = Rv_Data_Slide.Element.DataLink.protoMessageName + ".VideoCountdown"
   public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{3}timer_format\0\u{3}timer_format_string\0\u{3}color_triggers\0\u{3}ignore_looping_videos\0\u{3}video_countdown_source\0")
 
@@ -4839,11 +4839,11 @@ extension Rv_Data_Slide.Element.DataLink.VideoCountdown: SwiftProtobuf.Message, 
   }
 }
 
-extension Rv_Data_Slide.Element.DataLink.VideoCountdown.VideoCountdownSource: SwiftProtobuf._ProtoNameProviding {
+nonisolated extension Rv_Data_Slide.Element.DataLink.VideoCountdown.VideoCountdownSource: SwiftProtobuf._ProtoNameProviding {
   public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{2}\0VIDEO_COUNTDOWN_SOURCE_PRESENTATION\0\u{1}VIDEO_COUNTDOWN_SOURCE_ANNOUNCEMENT\0")
 }
 
-extension Rv_Data_Slide.Element.DataLink.AudioCountdown: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+nonisolated extension Rv_Data_Slide.Element.DataLink.AudioCountdown: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   public static let protoMessageName: String = Rv_Data_Slide.Element.DataLink.protoMessageName + ".AudioCountdown"
   public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{3}timer_format\0\u{3}timer_format_string\0\u{3}color_triggers\0\u{3}ignore_looping_audio\0")
 
@@ -4892,7 +4892,7 @@ extension Rv_Data_Slide.Element.DataLink.AudioCountdown: SwiftProtobuf.Message, 
   }
 }
 
-extension Rv_Data_Slide.Element.DataLink.GroupName: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+nonisolated extension Rv_Data_Slide.Element.DataLink.GroupName: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   public static let protoMessageName: String = Rv_Data_Slide.Element.DataLink.protoMessageName + ".GroupName"
   public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{1}groupSource\0")
 
@@ -4922,11 +4922,11 @@ extension Rv_Data_Slide.Element.DataLink.GroupName: SwiftProtobuf.Message, Swift
   }
 }
 
-extension Rv_Data_Slide.Element.DataLink.GroupName.GroupSourceType: SwiftProtobuf._ProtoNameProviding {
+nonisolated extension Rv_Data_Slide.Element.DataLink.GroupName.GroupSourceType: SwiftProtobuf._ProtoNameProviding {
   public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{2}\0GROUP_SOURCE_TYPE_CURRENT_SLIDE\0\u{1}GROUP_SOURCE_TYPE_NEXT_SLIDE\0\u{1}GROUP_SOURCE_TYPE_NEXT_GROUP\0")
 }
 
-extension Rv_Data_Slide.Element.DataLink.GroupColor: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+nonisolated extension Rv_Data_Slide.Element.DataLink.GroupColor: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   public static let protoMessageName: String = Rv_Data_Slide.Element.DataLink.protoMessageName + ".GroupColor"
   public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{1}groupSource\0")
 
@@ -4956,11 +4956,11 @@ extension Rv_Data_Slide.Element.DataLink.GroupColor: SwiftProtobuf.Message, Swif
   }
 }
 
-extension Rv_Data_Slide.Element.DataLink.GroupColor.GroupSourceType: SwiftProtobuf._ProtoNameProviding {
+nonisolated extension Rv_Data_Slide.Element.DataLink.GroupColor.GroupSourceType: SwiftProtobuf._ProtoNameProviding {
   public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{2}\0GROUP_SOURCE_TYPE_CURRENT_SLIDE\0\u{1}GROUP_SOURCE_TYPE_NEXT_SLIDE\0\u{1}GROUP_SOURCE_TYPE_NEXT_GROUP\0")
 }
 
-extension Rv_Data_Slide.Element.DataLink.SlideLabelText: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+nonisolated extension Rv_Data_Slide.Element.DataLink.SlideLabelText: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   public static let protoMessageName: String = Rv_Data_Slide.Element.DataLink.protoMessageName + ".SlideLabelText"
   public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{3}slide_label_source\0")
 
@@ -4990,11 +4990,11 @@ extension Rv_Data_Slide.Element.DataLink.SlideLabelText: SwiftProtobuf.Message, 
   }
 }
 
-extension Rv_Data_Slide.Element.DataLink.SlideLabelText.SlideLabelSource: SwiftProtobuf._ProtoNameProviding {
+nonisolated extension Rv_Data_Slide.Element.DataLink.SlideLabelText.SlideLabelSource: SwiftProtobuf._ProtoNameProviding {
   public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{2}\0SLIDE_LABEL_SOURCE_CURRENT_SLIDE\0\u{1}SLIDE_LABEL_SOURCE_NEXT_SLIDE\0")
 }
 
-extension Rv_Data_Slide.Element.DataLink.SlideLabelColor: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+nonisolated extension Rv_Data_Slide.Element.DataLink.SlideLabelColor: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   public static let protoMessageName: String = Rv_Data_Slide.Element.DataLink.protoMessageName + ".SlideLabelColor"
   public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{3}slide_label_source\0")
 
@@ -5024,11 +5024,11 @@ extension Rv_Data_Slide.Element.DataLink.SlideLabelColor: SwiftProtobuf.Message,
   }
 }
 
-extension Rv_Data_Slide.Element.DataLink.SlideLabelColor.SlideLabelSource: SwiftProtobuf._ProtoNameProviding {
+nonisolated extension Rv_Data_Slide.Element.DataLink.SlideLabelColor.SlideLabelSource: SwiftProtobuf._ProtoNameProviding {
   public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{2}\0SLIDE_LABEL_SOURCE_CURRENT_SLIDE\0\u{1}SLIDE_LABEL_SOURCE_NEXT_SLIDE\0")
 }
 
-extension Rv_Data_Slide.Element.DataLink.PresentationNotes: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+nonisolated extension Rv_Data_Slide.Element.DataLink.PresentationNotes: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   public static let protoMessageName: String = Rv_Data_Slide.Element.DataLink.protoMessageName + ".PresentationNotes"
   public static let _protobuf_nameMap = SwiftProtobuf._NameMap()
 
@@ -5047,7 +5047,7 @@ extension Rv_Data_Slide.Element.DataLink.PresentationNotes: SwiftProtobuf.Messag
   }
 }
 
-extension Rv_Data_Slide.Element.DataLink.Presentation: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+nonisolated extension Rv_Data_Slide.Element.DataLink.Presentation: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   public static let protoMessageName: String = Rv_Data_Slide.Element.DataLink.protoMessageName + ".Presentation"
   public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{3}presentation_source\0")
 
@@ -5077,11 +5077,11 @@ extension Rv_Data_Slide.Element.DataLink.Presentation: SwiftProtobuf.Message, Sw
   }
 }
 
-extension Rv_Data_Slide.Element.DataLink.Presentation.PresentationSource: SwiftProtobuf._ProtoNameProviding {
+nonisolated extension Rv_Data_Slide.Element.DataLink.Presentation.PresentationSource: SwiftProtobuf._ProtoNameProviding {
   public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{2}\0PRESENTATION_SOURCE_PRESENTATION\0\u{1}PRESENTATION_SOURCE_ANNOUNCEMENT\0")
 }
 
-extension Rv_Data_Slide.Element.DataLink.PlaylistItem: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+nonisolated extension Rv_Data_Slide.Element.DataLink.PlaylistItem: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   public static let protoMessageName: String = Rv_Data_Slide.Element.DataLink.protoMessageName + ".PlaylistItem"
   public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{1}playlistItemSource\0\u{1}showArrangement\0")
 
@@ -5116,11 +5116,11 @@ extension Rv_Data_Slide.Element.DataLink.PlaylistItem: SwiftProtobuf.Message, Sw
   }
 }
 
-extension Rv_Data_Slide.Element.DataLink.PlaylistItem.PlaylistItemSourceType: SwiftProtobuf._ProtoNameProviding {
+nonisolated extension Rv_Data_Slide.Element.DataLink.PlaylistItem.PlaylistItemSourceType: SwiftProtobuf._ProtoNameProviding {
   public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{2}\0PLAYLIST_ITEM_SOURCE_TYPE_CURRENT\0\u{1}PLAYLIST_ITEM_SOURCE_TYPE_NEXT\0\u{1}PLAYLIST_ITEM_SOURCE_TYPE_CURRENT_HEADER\0\u{1}PLAYLIST_ITEM_SOURCE_TYPE_NEXT_HEADER\0\u{1}PLAYLIST_ITEM_SOURCE_TYPE_PARENT_PLAYLIST\0")
 }
 
-extension Rv_Data_Slide.Element.DataLink.AutoAdvanceTimeRemaining: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+nonisolated extension Rv_Data_Slide.Element.DataLink.AutoAdvanceTimeRemaining: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   public static let protoMessageName: String = Rv_Data_Slide.Element.DataLink.protoMessageName + ".AutoAdvanceTimeRemaining"
   public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{3}auto_advance_source\0\u{3}timer_format\0")
 
@@ -5159,11 +5159,11 @@ extension Rv_Data_Slide.Element.DataLink.AutoAdvanceTimeRemaining: SwiftProtobuf
   }
 }
 
-extension Rv_Data_Slide.Element.DataLink.AutoAdvanceTimeRemaining.AutoAdvanceSource: SwiftProtobuf._ProtoNameProviding {
+nonisolated extension Rv_Data_Slide.Element.DataLink.AutoAdvanceTimeRemaining.AutoAdvanceSource: SwiftProtobuf._ProtoNameProviding {
   public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{2}\0AUTO_ADVANCE_SOURCE_PRESENTATION\0\u{1}AUTO_ADVANCE_SOURCE_ANNOUNCEMENT\0")
 }
 
-extension Rv_Data_Slide.Element.DataLink.CaptureStatusText: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+nonisolated extension Rv_Data_Slide.Element.DataLink.CaptureStatusText: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   public static let protoMessageName: String = Rv_Data_Slide.Element.DataLink.protoMessageName + ".CaptureStatusText"
   public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{3}status_text\0\u{3}elapsed_time\0")
 
@@ -5230,7 +5230,7 @@ extension Rv_Data_Slide.Element.DataLink.CaptureStatusText: SwiftProtobuf.Messag
   }
 }
 
-extension Rv_Data_Slide.Element.DataLink.CaptureStatusText.StatusText: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+nonisolated extension Rv_Data_Slide.Element.DataLink.CaptureStatusText.StatusText: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   public static let protoMessageName: String = Rv_Data_Slide.Element.DataLink.CaptureStatusText.protoMessageName + ".StatusText"
   public static let _protobuf_nameMap = SwiftProtobuf._NameMap()
 
@@ -5249,7 +5249,7 @@ extension Rv_Data_Slide.Element.DataLink.CaptureStatusText.StatusText: SwiftProt
   }
 }
 
-extension Rv_Data_Slide.Element.DataLink.CaptureStatusText.ElapsedTime: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+nonisolated extension Rv_Data_Slide.Element.DataLink.CaptureStatusText.ElapsedTime: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   public static let protoMessageName: String = Rv_Data_Slide.Element.DataLink.CaptureStatusText.protoMessageName + ".ElapsedTime"
   public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{3}timer_format\0")
 
@@ -5283,7 +5283,7 @@ extension Rv_Data_Slide.Element.DataLink.CaptureStatusText.ElapsedTime: SwiftPro
   }
 }
 
-extension Rv_Data_Slide.Element.DataLink.CaptureStatusColor: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+nonisolated extension Rv_Data_Slide.Element.DataLink.CaptureStatusColor: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   public static let protoMessageName: String = Rv_Data_Slide.Element.DataLink.protoMessageName + ".CaptureStatusColor"
   public static let _protobuf_nameMap = SwiftProtobuf._NameMap()
 
@@ -5302,7 +5302,7 @@ extension Rv_Data_Slide.Element.DataLink.CaptureStatusColor: SwiftProtobuf.Messa
   }
 }
 
-extension Rv_Data_Slide.Element.DataLink.SlideCount: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+nonisolated extension Rv_Data_Slide.Element.DataLink.SlideCount: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   public static let protoMessageName: String = Rv_Data_Slide.Element.DataLink.protoMessageName + ".SlideCount"
   public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{1}slideCountSourceType\0")
 
@@ -5332,11 +5332,11 @@ extension Rv_Data_Slide.Element.DataLink.SlideCount: SwiftProtobuf.Message, Swif
   }
 }
 
-extension Rv_Data_Slide.Element.DataLink.SlideCount.SlideCountSourceType: SwiftProtobuf._ProtoNameProviding {
+nonisolated extension Rv_Data_Slide.Element.DataLink.SlideCount.SlideCountSourceType: SwiftProtobuf._ProtoNameProviding {
   public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{2}\0SLIDE_COUNT_SOURCE_TYPE_CURRENT\0\u{1}SLIDE_COUNT_SOURCE_TYPE_REMAINING\0\u{1}SLIDE_COUNT_SOURCE_TYPE_TOTAL\0")
 }
 
-extension Rv_Data_Slide.Element.DataLink.PlaybackMarkerIdentifier: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+nonisolated extension Rv_Data_Slide.Element.DataLink.PlaybackMarkerIdentifier: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   public static let protoMessageName: String = Rv_Data_Slide.Element.DataLink.protoMessageName + ".PlaybackMarkerIdentifier"
   public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{1}destination\0\u{1}type\0\u{1}name\0")
 
@@ -5376,15 +5376,15 @@ extension Rv_Data_Slide.Element.DataLink.PlaybackMarkerIdentifier: SwiftProtobuf
   }
 }
 
-extension Rv_Data_Slide.Element.DataLink.PlaybackMarkerIdentifier.Destination: SwiftProtobuf._ProtoNameProviding {
+nonisolated extension Rv_Data_Slide.Element.DataLink.PlaybackMarkerIdentifier.Destination: SwiftProtobuf._ProtoNameProviding {
   public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{2}\0PLAYBACK_MARKER_DESTINATION_PRESENTATION\0\u{1}PLAYBACK_MARKER_DESTINATION_ANNOUNCEMENT\0\u{1}PLAYBACK_MARKER_DESTINATION_AUDIO\0")
 }
 
-extension Rv_Data_Slide.Element.DataLink.PlaybackMarkerIdentifier.TypeEnum: SwiftProtobuf._ProtoNameProviding {
+nonisolated extension Rv_Data_Slide.Element.DataLink.PlaybackMarkerIdentifier.TypeEnum: SwiftProtobuf._ProtoNameProviding {
   public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{2}\0PLAYBACK_MARKER_IDENTIFIER_FIRST\0\u{1}PLAYBACK_MARKER_IDENTIFIER_PREVIOUS\0\u{1}PLAYBACK_MARKER_IDENTIFIER_NEXT\0\u{1}PLAYBACK_MARKER_IDENTIFIER_LAST\0\u{1}PLAYBACK_MARKER_IDENTIFIER_NAME\0")
 }
 
-extension Rv_Data_Slide.Element.DataLink.PlaybackMarkerText: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+nonisolated extension Rv_Data_Slide.Element.DataLink.PlaybackMarkerText: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   public static let protoMessageName: String = Rv_Data_Slide.Element.DataLink.protoMessageName + ".PlaybackMarkerText"
   public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{1}identifier\0\u{1}name\0\u{1}time\0\u{3}should_use_marker_color\0")
 
@@ -5461,7 +5461,7 @@ extension Rv_Data_Slide.Element.DataLink.PlaybackMarkerText: SwiftProtobuf.Messa
   }
 }
 
-extension Rv_Data_Slide.Element.DataLink.PlaybackMarkerText.Name: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+nonisolated extension Rv_Data_Slide.Element.DataLink.PlaybackMarkerText.Name: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   public static let protoMessageName: String = Rv_Data_Slide.Element.DataLink.PlaybackMarkerText.protoMessageName + ".Name"
   public static let _protobuf_nameMap = SwiftProtobuf._NameMap()
 
@@ -5480,7 +5480,7 @@ extension Rv_Data_Slide.Element.DataLink.PlaybackMarkerText.Name: SwiftProtobuf.
   }
 }
 
-extension Rv_Data_Slide.Element.DataLink.PlaybackMarkerText.Time: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+nonisolated extension Rv_Data_Slide.Element.DataLink.PlaybackMarkerText.Time: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   public static let protoMessageName: String = Rv_Data_Slide.Element.DataLink.PlaybackMarkerText.protoMessageName + ".Time"
   public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{1}format\0")
 
@@ -5514,7 +5514,7 @@ extension Rv_Data_Slide.Element.DataLink.PlaybackMarkerText.Time: SwiftProtobuf.
   }
 }
 
-extension Rv_Data_Slide.Element.DataLink.ChordProChart: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+nonisolated extension Rv_Data_Slide.Element.DataLink.ChordProChart: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   public static let protoMessageName: String = Rv_Data_Slide.Element.DataLink.protoMessageName + ".ChordProChart"
   public static let _protobuf_nameMap = SwiftProtobuf._NameMap()
 
@@ -5533,7 +5533,7 @@ extension Rv_Data_Slide.Element.DataLink.ChordProChart: SwiftProtobuf.Message, S
   }
 }
 
-extension Rv_Data_Slide.Element.DataLink.TimecodeText: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+nonisolated extension Rv_Data_Slide.Element.DataLink.TimecodeText: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   public static let protoMessageName: String = Rv_Data_Slide.Element.DataLink.protoMessageName + ".TimecodeText"
   public static let _protobuf_nameMap = SwiftProtobuf._NameMap()
 
@@ -5552,7 +5552,7 @@ extension Rv_Data_Slide.Element.DataLink.TimecodeText: SwiftProtobuf.Message, Sw
   }
 }
 
-extension Rv_Data_Slide.Element.DataLink.TimecodeStatus: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+nonisolated extension Rv_Data_Slide.Element.DataLink.TimecodeStatus: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   public static let protoMessageName: String = Rv_Data_Slide.Element.DataLink.protoMessageName + ".TimecodeStatus"
   public static let _protobuf_nameMap = SwiftProtobuf._NameMap()
 
@@ -5571,7 +5571,7 @@ extension Rv_Data_Slide.Element.DataLink.TimecodeStatus: SwiftProtobuf.Message, 
   }
 }
 
-extension Rv_Data_Slide.Element.TextScroller: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+nonisolated extension Rv_Data_Slide.Element.TextScroller: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   public static let protoMessageName: String = Rv_Data_Slide.Element.protoMessageName + ".TextScroller"
   public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{3}should_scroll\0\u{3}scroll_rate\0\u{3}should_repeat\0\u{3}repeat_distance\0\u{3}scrolling_direction\0\u{3}starts_off_screen\0\u{3}fade_left\0\u{3}fade_right\0")
 
@@ -5636,6 +5636,6 @@ extension Rv_Data_Slide.Element.TextScroller: SwiftProtobuf.Message, SwiftProtob
   }
 }
 
-extension Rv_Data_Slide.Element.TextScroller.Direction: SwiftProtobuf._ProtoNameProviding {
+nonisolated extension Rv_Data_Slide.Element.TextScroller.Direction: SwiftProtobuf._ProtoNameProviding {
   public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{2}\0DIRECTION_LEFT\0\u{1}DIRECTION_RIGHT\0\u{1}DIRECTION_UP\0\u{1}DIRECTION_DOWN\0")
 }

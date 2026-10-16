@@ -60,6 +60,7 @@ enum TypographyFixture {
 		var presentation = DocumentFactory.presentation(
 			name: "Typography",
 			canvasSize: CGSize(width: canvasWidth, height: canvasHeight),
+			targetVersion: .v21,
 		)
 		presentation.uuid = uuid(1)
 		presentation.cues = try cues.enumerated().map { index, cue in

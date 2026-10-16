@@ -666,14 +666,23 @@ enum DesignSystemFixture {
 			attributes[.strokeWidth] = strokeWidth
 		}
 		let attributed = NSAttributedString(string: content, attributes: attributes)
-		let rtf = try attributed.data(
+		let exportedRTF = try attributed.data(
 			from: NSRange(location: 0, length: attributed.length),
 			documentAttributes: [.documentType: NSAttributedString.DocumentType.rtf],
 		)
+		// AppKit 2870 and 2907 produce identical content for all 140 text slots;
+		// only this informational writer header differs. Keep the independently
+		// authored bundled Theme byte-stable across those host OS versions.
+		var rtf = String(decoding: exportedRTF, as: UTF8.self)
+		if let end = rtf.firstIndex(of: "\n"),
+		   let version = rtf[..<end].range(of: #"\\cocoartf[0-9]+"#, options: .regularExpression)
+		{
+			rtf.replaceSubrange(version, with: #"\cocoartf2870"#)
+		}
 
 		var slideElement = shape(name, bounds: bounds, identifiers: identifiers)
 		var element = slideElement.element
-		element.text.rtfData = rtf
+		element.text.rtfData = Data(rtf.utf8)
 		element.text.verticalAlignment = .middle
 		element.text.scaleBehavior = .scaleFontDown
 		element.text.isSuperscriptStandardized = true
@@ -762,7 +771,7 @@ enum DesignSystemFixture {
 		for group in groups {
 			let themeURL = workspace.appendingPathComponent(group.relativePath)
 			try FileManager.default.createDirectory(at: themeURL.deletingLastPathComponent(), withIntermediateDirectories: true)
-			var theme = DocumentFactory.theme()
+			var theme = DocumentFactory.theme(targetVersion: .v21)
 			theme.slides = group.templates
 			try theme.serializedData().write(to: themeURL, options: .atomic)
 		}

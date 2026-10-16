@@ -8,7 +8,11 @@
 // For information on using the generated types, please see the documentation:
 //   https://github.com/apple/swift-protobuf/
 
+#if canImport(FoundationEssentials)
+import FoundationEssentials
+#else
 import Foundation
+#endif
 import SwiftProtobuf
 
 // If the compiler emits an error on this type, it is because this file
@@ -16,183 +20,183 @@ import SwiftProtobuf
 // incompatible with the version of SwiftProtobuf to which you are linking.
 // Please ensure that you are building against the same version of the API
 // that was used to generate this file.
-fileprivate struct _GeneratedWithProtocGenSwiftVersion: SwiftProtobuf.ProtobufAPIVersionCheck {
+fileprivate nonisolated struct _GeneratedWithProtocGenSwiftVersion: SwiftProtobuf.ProtobufAPIVersionCheck {
   struct _2: SwiftProtobuf.ProtobufAPIVersion_2 {}
   typealias Version = _2
 }
 
 /// Editable presentation root. Cue groups, rather than the stored cues array alone,
 /// establish the observed default slide order.
-public struct Rv_Data_Presentation: @unchecked Sendable {
+public nonisolated struct Rv_Data_Presentation: @unchecked Sendable {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
   // methods supported on all messages.
 
   public var applicationInfo: Rv_Data_ApplicationInfo {
-    get {return _storage._applicationInfo ?? Rv_Data_ApplicationInfo()}
+    get {_storage._applicationInfo ?? Rv_Data_ApplicationInfo()}
     set {_uniqueStorage()._applicationInfo = newValue}
   }
   /// Returns true if `applicationInfo` has been explicitly set.
-  public var hasApplicationInfo: Bool {return _storage._applicationInfo != nil}
+  public var hasApplicationInfo: Bool {_storage._applicationInfo != nil}
   /// Clears the value of `applicationInfo`. Subsequent reads from it will return its default value.
   public mutating func clearApplicationInfo() {_uniqueStorage()._applicationInfo = nil}
 
   public var uuid: Rv_Data_UUID {
-    get {return _storage._uuid ?? Rv_Data_UUID()}
+    get {_storage._uuid ?? Rv_Data_UUID()}
     set {_uniqueStorage()._uuid = newValue}
   }
   /// Returns true if `uuid` has been explicitly set.
-  public var hasUuid: Bool {return _storage._uuid != nil}
+  public var hasUuid: Bool {_storage._uuid != nil}
   /// Clears the value of `uuid`. Subsequent reads from it will return its default value.
   public mutating func clearUuid() {_uniqueStorage()._uuid = nil}
 
   public var name: String {
-    get {return _storage._name}
+    get {_storage._name}
     set {_uniqueStorage()._name = newValue}
   }
 
   public var lastDateUsed: Rv_Data_Timestamp {
-    get {return _storage._lastDateUsed ?? Rv_Data_Timestamp()}
+    get {_storage._lastDateUsed ?? Rv_Data_Timestamp()}
     set {_uniqueStorage()._lastDateUsed = newValue}
   }
   /// Returns true if `lastDateUsed` has been explicitly set.
-  public var hasLastDateUsed: Bool {return _storage._lastDateUsed != nil}
+  public var hasLastDateUsed: Bool {_storage._lastDateUsed != nil}
   /// Clears the value of `lastDateUsed`. Subsequent reads from it will return its default value.
   public mutating func clearLastDateUsed() {_uniqueStorage()._lastDateUsed = nil}
 
   public var lastModifiedDate: Rv_Data_Timestamp {
-    get {return _storage._lastModifiedDate ?? Rv_Data_Timestamp()}
+    get {_storage._lastModifiedDate ?? Rv_Data_Timestamp()}
     set {_uniqueStorage()._lastModifiedDate = newValue}
   }
   /// Returns true if `lastModifiedDate` has been explicitly set.
-  public var hasLastModifiedDate: Bool {return _storage._lastModifiedDate != nil}
+  public var hasLastModifiedDate: Bool {_storage._lastModifiedDate != nil}
   /// Clears the value of `lastModifiedDate`. Subsequent reads from it will return its default value.
   public mutating func clearLastModifiedDate() {_uniqueStorage()._lastModifiedDate = nil}
 
   public var category: String {
-    get {return _storage._category}
+    get {_storage._category}
     set {_uniqueStorage()._category = newValue}
   }
 
   public var notes: String {
-    get {return _storage._notes}
+    get {_storage._notes}
     set {_uniqueStorage()._notes = newValue}
   }
 
   public var background: Rv_Data_Background {
-    get {return _storage._background ?? Rv_Data_Background()}
+    get {_storage._background ?? Rv_Data_Background()}
     set {_uniqueStorage()._background = newValue}
   }
   /// Returns true if `background` has been explicitly set.
-  public var hasBackground: Bool {return _storage._background != nil}
+  public var hasBackground: Bool {_storage._background != nil}
   /// Clears the value of `background`. Subsequent reads from it will return its default value.
   public mutating func clearBackground() {_uniqueStorage()._background = nil}
 
   public var chordChart: Rv_Data_URL {
-    get {return _storage._chordChart ?? Rv_Data_URL()}
+    get {_storage._chordChart ?? Rv_Data_URL()}
     set {_uniqueStorage()._chordChart = newValue}
   }
   /// Returns true if `chordChart` has been explicitly set.
-  public var hasChordChart: Bool {return _storage._chordChart != nil}
+  public var hasChordChart: Bool {_storage._chordChart != nil}
   /// Clears the value of `chordChart`. Subsequent reads from it will return its default value.
   public mutating func clearChordChart() {_uniqueStorage()._chordChart = nil}
 
   public var selectedArrangement: Rv_Data_UUID {
-    get {return _storage._selectedArrangement ?? Rv_Data_UUID()}
+    get {_storage._selectedArrangement ?? Rv_Data_UUID()}
     set {_uniqueStorage()._selectedArrangement = newValue}
   }
   /// Returns true if `selectedArrangement` has been explicitly set.
-  public var hasSelectedArrangement: Bool {return _storage._selectedArrangement != nil}
+  public var hasSelectedArrangement: Bool {_storage._selectedArrangement != nil}
   /// Clears the value of `selectedArrangement`. Subsequent reads from it will return its default value.
   public mutating func clearSelectedArrangement() {_uniqueStorage()._selectedArrangement = nil}
 
   public var arrangements: [Rv_Data_Presentation.Arrangement] {
-    get {return _storage._arrangements}
+    get {_storage._arrangements}
     set {_uniqueStorage()._arrangements = newValue}
   }
 
   /// Groups contain cue UUIDs in their stored display/export order.
   public var cueGroups: [Rv_Data_Presentation.CueGroup] {
-    get {return _storage._cueGroups}
+    get {_storage._cueGroups}
     set {_uniqueStorage()._cueGroups = newValue}
   }
 
   /// Cues are addressed by UUID and may include ungrouped values.
   public var cues: [Rv_Data_Cue] {
-    get {return _storage._cues}
+    get {_storage._cues}
     set {_uniqueStorage()._cues = newValue}
   }
 
   public var ccli: Rv_Data_Presentation.CCLI {
-    get {return _storage._ccli ?? Rv_Data_Presentation.CCLI()}
+    get {_storage._ccli ?? Rv_Data_Presentation.CCLI()}
     set {_uniqueStorage()._ccli = newValue}
   }
   /// Returns true if `ccli` has been explicitly set.
-  public var hasCcli: Bool {return _storage._ccli != nil}
+  public var hasCcli: Bool {_storage._ccli != nil}
   /// Clears the value of `ccli`. Subsequent reads from it will return its default value.
   public mutating func clearCcli() {_uniqueStorage()._ccli = nil}
 
   public var bibleReference: Rv_Data_Presentation.BibleReference {
-    get {return _storage._bibleReference ?? Rv_Data_Presentation.BibleReference()}
+    get {_storage._bibleReference ?? Rv_Data_Presentation.BibleReference()}
     set {_uniqueStorage()._bibleReference = newValue}
   }
   /// Returns true if `bibleReference` has been explicitly set.
-  public var hasBibleReference: Bool {return _storage._bibleReference != nil}
+  public var hasBibleReference: Bool {_storage._bibleReference != nil}
   /// Clears the value of `bibleReference`. Subsequent reads from it will return its default value.
   public mutating func clearBibleReference() {_uniqueStorage()._bibleReference = nil}
 
   public var socialMedia: Rv_Data_Presentation.SocialMedia {
-    get {return _storage._socialMedia ?? Rv_Data_Presentation.SocialMedia()}
+    get {_storage._socialMedia ?? Rv_Data_Presentation.SocialMedia()}
     set {_uniqueStorage()._socialMedia = newValue}
   }
   /// Returns true if `socialMedia` has been explicitly set.
-  public var hasSocialMedia: Bool {return _storage._socialMedia != nil}
+  public var hasSocialMedia: Bool {_storage._socialMedia != nil}
   /// Clears the value of `socialMedia`. Subsequent reads from it will return its default value.
   public mutating func clearSocialMedia() {_uniqueStorage()._socialMedia = nil}
 
   public var timeline: Rv_Data_Presentation.Timeline {
-    get {return _storage._timeline ?? Rv_Data_Presentation.Timeline()}
+    get {_storage._timeline ?? Rv_Data_Presentation.Timeline()}
     set {_uniqueStorage()._timeline = newValue}
   }
   /// Returns true if `timeline` has been explicitly set.
-  public var hasTimeline: Bool {return _storage._timeline != nil}
+  public var hasTimeline: Bool {_storage._timeline != nil}
   /// Clears the value of `timeline`. Subsequent reads from it will return its default value.
   public mutating func clearTimeline() {_uniqueStorage()._timeline = nil}
 
   public var transition: Rv_Data_Transition {
-    get {return _storage._transition ?? Rv_Data_Transition()}
+    get {_storage._transition ?? Rv_Data_Transition()}
     set {_uniqueStorage()._transition = newValue}
   }
   /// Returns true if `transition` has been explicitly set.
-  public var hasTransition: Bool {return _storage._transition != nil}
+  public var hasTransition: Bool {_storage._transition != nil}
   /// Clears the value of `transition`. Subsequent reads from it will return its default value.
   public mutating func clearTransition() {_uniqueStorage()._transition = nil}
 
   public var contentDestination: Rv_Data_Presentation.ContentDestination {
-    get {return _storage._contentDestination}
+    get {_storage._contentDestination}
     set {_uniqueStorage()._contentDestination = newValue}
   }
 
   public var multiTracksLicensing: Rv_Data_Presentation.MultiTracksLicensing {
-    get {return _storage._multiTracksLicensing ?? Rv_Data_Presentation.MultiTracksLicensing()}
+    get {_storage._multiTracksLicensing ?? Rv_Data_Presentation.MultiTracksLicensing()}
     set {_uniqueStorage()._multiTracksLicensing = newValue}
   }
   /// Returns true if `multiTracksLicensing` has been explicitly set.
-  public var hasMultiTracksLicensing: Bool {return _storage._multiTracksLicensing != nil}
+  public var hasMultiTracksLicensing: Bool {_storage._multiTracksLicensing != nil}
   /// Clears the value of `multiTracksLicensing`. Subsequent reads from it will return its default value.
   public mutating func clearMultiTracksLicensing() {_uniqueStorage()._multiTracksLicensing = nil}
 
   public var musicKey: String {
-    get {return _storage._musicKey}
+    get {_storage._musicKey}
     set {_uniqueStorage()._musicKey = newValue}
   }
 
   public var music: Rv_Data_Presentation.Music {
-    get {return _storage._music ?? Rv_Data_Presentation.Music()}
+    get {_storage._music ?? Rv_Data_Presentation.Music()}
     set {_uniqueStorage()._music = newValue}
   }
   /// Returns true if `music` has been explicitly set.
-  public var hasMusic: Bool {return _storage._music != nil}
+  public var hasMusic: Bool {_storage._music != nil}
   /// Clears the value of `music`. Subsequent reads from it will return its default value.
   public mutating func clearMusic() {_uniqueStorage()._music = nil}
 
@@ -211,12 +215,12 @@ public struct Rv_Data_Presentation: @unchecked Sendable {
 
   public var unknownFields = SwiftProtobuf.UnknownStorage()
 
-  public enum OneOf_SlideShow: Equatable, Sendable {
+  public nonisolated enum OneOf_SlideShow: Equatable, Sendable {
     case slideShowDuration(Double)
 
   }
 
-  public enum ContentDestination: SwiftProtobuf.Enum, Swift.CaseIterable {
+  public nonisolated enum ContentDestination: SwiftProtobuf.Enum, Swift.CaseIterable {
     public typealias RawValue = Int
     case global // = 0
     case announcements // = 1
@@ -250,7 +254,7 @@ public struct Rv_Data_Presentation: @unchecked Sendable {
 
   }
 
-  public struct CCLI: Sendable {
+  public nonisolated struct CCLI: Sendable {
     // SwiftProtobuf.Message conformance is added in an extension below. See the
     // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
     // methods supported on all messages.
@@ -278,7 +282,7 @@ public struct Rv_Data_Presentation: @unchecked Sendable {
     public init() {}
   }
 
-  public struct BibleReference: Sendable {
+  public nonisolated struct BibleReference: Sendable {
     // SwiftProtobuf.Message conformance is added in an extension below. See the
     // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
     // methods supported on all messages.
@@ -288,20 +292,20 @@ public struct Rv_Data_Presentation: @unchecked Sendable {
     public var bookName: String = String()
 
     public var chapterRange: Rv_Data_IntRange {
-      get {return _chapterRange ?? Rv_Data_IntRange()}
+      get {_chapterRange ?? Rv_Data_IntRange()}
       set {_chapterRange = newValue}
     }
     /// Returns true if `chapterRange` has been explicitly set.
-    public var hasChapterRange: Bool {return self._chapterRange != nil}
+    public var hasChapterRange: Bool {self._chapterRange != nil}
     /// Clears the value of `chapterRange`. Subsequent reads from it will return its default value.
     public mutating func clearChapterRange() {self._chapterRange = nil}
 
     public var verseRange: Rv_Data_IntRange {
-      get {return _verseRange ?? Rv_Data_IntRange()}
+      get {_verseRange ?? Rv_Data_IntRange()}
       set {_verseRange = newValue}
     }
     /// Returns true if `verseRange` has been explicitly set.
-    public var hasVerseRange: Bool {return self._verseRange != nil}
+    public var hasVerseRange: Bool {self._verseRange != nil}
     /// Clears the value of `verseRange`. Subsequent reads from it will return its default value.
     public mutating func clearVerseRange() {self._verseRange = nil}
 
@@ -321,7 +325,7 @@ public struct Rv_Data_Presentation: @unchecked Sendable {
     fileprivate var _verseRange: Rv_Data_IntRange? = nil
   }
 
-  public struct SocialMedia: Sendable {
+  public nonisolated struct SocialMedia: Sendable {
     // SwiftProtobuf.Message conformance is added in an extension below. See the
     // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
     // methods supported on all messages.
@@ -329,11 +333,11 @@ public struct Rv_Data_Presentation: @unchecked Sendable {
     public var term: String = String()
 
     public var time: Rv_Data_Timestamp {
-      get {return _time ?? Rv_Data_Timestamp()}
+      get {_time ?? Rv_Data_Timestamp()}
       set {_time = newValue}
     }
     /// Returns true if `time` has been explicitly set.
-    public var hasTime: Bool {return self._time != nil}
+    public var hasTime: Bool {self._time != nil}
     /// Clears the value of `time`. Subsequent reads from it will return its default value.
     public mutating func clearTime() {self._time = nil}
 
@@ -344,7 +348,7 @@ public struct Rv_Data_Presentation: @unchecked Sendable {
     fileprivate var _time: Rv_Data_Timestamp? = nil
   }
 
-  public struct Timeline: Sendable {
+  public nonisolated struct Timeline: Sendable {
     // SwiftProtobuf.Message conformance is added in an extension below. See the
     // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
     // methods supported on all messages.
@@ -356,11 +360,11 @@ public struct Rv_Data_Presentation: @unchecked Sendable {
     public var loop: Bool = false
 
     public var audioAction: Rv_Data_Action {
-      get {return _audioAction ?? Rv_Data_Action()}
+      get {_audioAction ?? Rv_Data_Action()}
       set {_audioAction = newValue}
     }
     /// Returns true if `audioAction` has been explicitly set.
-    public var hasAudioAction: Bool {return self._audioAction != nil}
+    public var hasAudioAction: Bool {self._audioAction != nil}
     /// Clears the value of `audioAction`. Subsequent reads from it will return its default value.
     public mutating func clearAudioAction() {self._audioAction = nil}
 
@@ -372,7 +376,7 @@ public struct Rv_Data_Presentation: @unchecked Sendable {
 
     public var unknownFields = SwiftProtobuf.UnknownStorage()
 
-    public struct Cue: Sendable {
+    public nonisolated struct Cue: Sendable {
       // SwiftProtobuf.Message conformance is added in an extension below. See the
       // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
       // methods supported on all messages.
@@ -401,7 +405,7 @@ public struct Rv_Data_Presentation: @unchecked Sendable {
 
       public var unknownFields = SwiftProtobuf.UnknownStorage()
 
-      public enum OneOf_TriggerInfo: Equatable, Sendable {
+      public nonisolated enum OneOf_TriggerInfo: Equatable, Sendable {
         case cueID(Rv_Data_UUID)
         case action(Rv_Data_Action)
 
@@ -415,17 +419,17 @@ public struct Rv_Data_Presentation: @unchecked Sendable {
     fileprivate var _audioAction: Rv_Data_Action? = nil
   }
 
-  public struct Arrangement: Sendable {
+  public nonisolated struct Arrangement: Sendable {
     // SwiftProtobuf.Message conformance is added in an extension below. See the
     // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
     // methods supported on all messages.
 
     public var uuid: Rv_Data_UUID {
-      get {return _uuid ?? Rv_Data_UUID()}
+      get {_uuid ?? Rv_Data_UUID()}
       set {_uuid = newValue}
     }
     /// Returns true if `uuid` has been explicitly set.
-    public var hasUuid: Bool {return self._uuid != nil}
+    public var hasUuid: Bool {self._uuid != nil}
     /// Clears the value of `uuid`. Subsequent reads from it will return its default value.
     public mutating func clearUuid() {self._uuid = nil}
 
@@ -441,17 +445,17 @@ public struct Rv_Data_Presentation: @unchecked Sendable {
   }
 
   /// A group definition paired with the ordered UUID references it owns.
-  public struct CueGroup: Sendable {
+  public nonisolated struct CueGroup: Sendable {
     // SwiftProtobuf.Message conformance is added in an extension below. See the
     // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
     // methods supported on all messages.
 
     public var group: Rv_Data_Group {
-      get {return _group ?? Rv_Data_Group()}
+      get {_group ?? Rv_Data_Group()}
       set {_group = newValue}
     }
     /// Returns true if `group` has been explicitly set.
-    public var hasGroup: Bool {return self._group != nil}
+    public var hasGroup: Bool {self._group != nil}
     /// Clears the value of `group`. Subsequent reads from it will return its default value.
     public mutating func clearGroup() {self._group = nil}
 
@@ -464,7 +468,7 @@ public struct Rv_Data_Presentation: @unchecked Sendable {
     fileprivate var _group: Rv_Data_Group? = nil
   }
 
-  public struct MultiTracksLicensing: Sendable {
+  public nonisolated struct MultiTracksLicensing: Sendable {
     // SwiftProtobuf.Message conformance is added in an extension below. See the
     // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
     // methods supported on all messages.
@@ -474,20 +478,20 @@ public struct Rv_Data_Presentation: @unchecked Sendable {
     public var customerIdentifier: String = String()
 
     public var expirationDate: Rv_Data_Timestamp {
-      get {return _expirationDate ?? Rv_Data_Timestamp()}
+      get {_expirationDate ?? Rv_Data_Timestamp()}
       set {_expirationDate = newValue}
     }
     /// Returns true if `expirationDate` has been explicitly set.
-    public var hasExpirationDate: Bool {return self._expirationDate != nil}
+    public var hasExpirationDate: Bool {self._expirationDate != nil}
     /// Clears the value of `expirationDate`. Subsequent reads from it will return its default value.
     public mutating func clearExpirationDate() {self._expirationDate = nil}
 
     public var licenseExpiration: Rv_Data_Timestamp {
-      get {return _licenseExpiration ?? Rv_Data_Timestamp()}
+      get {_licenseExpiration ?? Rv_Data_Timestamp()}
       set {_licenseExpiration = newValue}
     }
     /// Returns true if `licenseExpiration` has been explicitly set.
-    public var hasLicenseExpiration: Bool {return self._licenseExpiration != nil}
+    public var hasLicenseExpiration: Bool {self._licenseExpiration != nil}
     /// Clears the value of `licenseExpiration`. Subsequent reads from it will return its default value.
     public mutating func clearLicenseExpiration() {self._licenseExpiration = nil}
 
@@ -495,7 +499,7 @@ public struct Rv_Data_Presentation: @unchecked Sendable {
 
     public var unknownFields = SwiftProtobuf.UnknownStorage()
 
-    public enum Subscription: SwiftProtobuf.Enum, Swift.CaseIterable {
+    public nonisolated enum Subscription: SwiftProtobuf.Enum, Swift.CaseIterable {
       public typealias RawValue = Int
       case chartPro // = 0
       case slidePro // = 1
@@ -535,7 +539,7 @@ public struct Rv_Data_Presentation: @unchecked Sendable {
     fileprivate var _licenseExpiration: Rv_Data_Timestamp? = nil
   }
 
-  public struct Music: Sendable {
+  public nonisolated struct Music: Sendable {
     // SwiftProtobuf.Message conformance is added in an extension below. See the
     // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
     // methods supported on all messages.
@@ -545,20 +549,20 @@ public struct Rv_Data_Presentation: @unchecked Sendable {
     public var userMusicKey: String = String()
 
     public var original: Rv_Data_MusicKeyScale {
-      get {return _original ?? Rv_Data_MusicKeyScale()}
+      get {_original ?? Rv_Data_MusicKeyScale()}
       set {_original = newValue}
     }
     /// Returns true if `original` has been explicitly set.
-    public var hasOriginal: Bool {return self._original != nil}
+    public var hasOriginal: Bool {self._original != nil}
     /// Clears the value of `original`. Subsequent reads from it will return its default value.
     public mutating func clearOriginal() {self._original = nil}
 
     public var user: Rv_Data_MusicKeyScale {
-      get {return _user ?? Rv_Data_MusicKeyScale()}
+      get {_user ?? Rv_Data_MusicKeyScale()}
       set {_user = newValue}
     }
     /// Returns true if `user` has been explicitly set.
-    public var hasUser: Bool {return self._user != nil}
+    public var hasUser: Bool {self._user != nil}
     /// Clears the value of `user`. Subsequent reads from it will return its default value.
     public mutating func clearUser() {self._user = nil}
 
@@ -577,9 +581,9 @@ public struct Rv_Data_Presentation: @unchecked Sendable {
 
 // MARK: - Code below here is support for the SwiftProtobuf runtime.
 
-fileprivate let _protobuf_package = "rv.data"
+fileprivate nonisolated let _protobuf_package = "rv.data"
 
-extension Rv_Data_Presentation: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+nonisolated extension Rv_Data_Presentation: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   public static let protoMessageName: String = _protobuf_package + ".Presentation"
   public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{3}application_info\0\u{1}uuid\0\u{1}name\0\u{3}last_date_used\0\u{3}last_modified_date\0\u{1}category\0\u{1}notes\0\u{1}background\0\u{3}chord_chart\0\u{3}selected_arrangement\0\u{1}arrangements\0\u{3}cue_groups\0\u{1}cues\0\u{1}ccli\0\u{3}bible_reference\0\u{3}social_media\0\u{1}timeline\0\u{1}transition\0\u{3}content_destination\0\u{3}slide_show_duration\0\u{3}multi_tracks_licensing\0\u{3}music_key\0\u{1}music\0")
 
@@ -810,11 +814,11 @@ extension Rv_Data_Presentation: SwiftProtobuf.Message, SwiftProtobuf._MessageImp
   }
 }
 
-extension Rv_Data_Presentation.ContentDestination: SwiftProtobuf._ProtoNameProviding {
+nonisolated extension Rv_Data_Presentation.ContentDestination: SwiftProtobuf._ProtoNameProviding {
   public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{2}\0CONTENT_DESTINATION_GLOBAL\0\u{1}CONTENT_DESTINATION_ANNOUNCEMENTS\0")
 }
 
-extension Rv_Data_Presentation.CCLI: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+nonisolated extension Rv_Data_Presentation.CCLI: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   public static let protoMessageName: String = Rv_Data_Presentation.protoMessageName + ".CCLI"
   public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{1}author\0\u{3}artist_credits\0\u{3}song_title\0\u{1}publisher\0\u{3}copyright_year\0\u{3}song_number\0\u{1}display\0\u{1}album\0\u{1}artwork\0")
 
@@ -884,7 +888,7 @@ extension Rv_Data_Presentation.CCLI: SwiftProtobuf.Message, SwiftProtobuf._Messa
   }
 }
 
-extension Rv_Data_Presentation.BibleReference: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+nonisolated extension Rv_Data_Presentation.BibleReference: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   public static let protoMessageName: String = Rv_Data_Presentation.protoMessageName + ".BibleReference"
   public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{3}book_index\0\u{3}book_name\0\u{3}chapter_range\0\u{3}verse_range\0\u{3}translation_name\0\u{3}translation_display_abbreviation\0\u{3}translation_internal_abbreviation\0\u{3}book_key\0")
 
@@ -953,7 +957,7 @@ extension Rv_Data_Presentation.BibleReference: SwiftProtobuf.Message, SwiftProto
   }
 }
 
-extension Rv_Data_Presentation.SocialMedia: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+nonisolated extension Rv_Data_Presentation.SocialMedia: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   public static let protoMessageName: String = Rv_Data_Presentation.protoMessageName + ".SocialMedia"
   public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{1}term\0\u{1}time\0")
 
@@ -992,7 +996,7 @@ extension Rv_Data_Presentation.SocialMedia: SwiftProtobuf.Message, SwiftProtobuf
   }
 }
 
-extension Rv_Data_Presentation.Timeline: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+nonisolated extension Rv_Data_Presentation.Timeline: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   public static let protoMessageName: String = Rv_Data_Presentation.protoMessageName + ".Timeline"
   public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{1}cues\0\u{2}\u{4}duration\0\u{1}loop\0\u{4}\u{2}audio_action\0\u{3}timecode_enable\0\u{3}timecode_offset\0\u{3}cues_v2\0")
 
@@ -1056,7 +1060,7 @@ extension Rv_Data_Presentation.Timeline: SwiftProtobuf.Message, SwiftProtobuf._M
   }
 }
 
-extension Rv_Data_Presentation.Timeline.Cue: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+nonisolated extension Rv_Data_Presentation.Timeline.Cue: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   public static let protoMessageName: String = Rv_Data_Presentation.Timeline.protoMessageName + ".Cue"
   public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{3}trigger_time\0\u{3}cue_id\0\u{1}name\0\u{1}action\0")
 
@@ -1128,7 +1132,7 @@ extension Rv_Data_Presentation.Timeline.Cue: SwiftProtobuf.Message, SwiftProtobu
   }
 }
 
-extension Rv_Data_Presentation.Arrangement: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+nonisolated extension Rv_Data_Presentation.Arrangement: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   public static let protoMessageName: String = Rv_Data_Presentation.protoMessageName + ".Arrangement"
   public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{1}uuid\0\u{1}name\0\u{3}group_identifiers\0")
 
@@ -1172,7 +1176,7 @@ extension Rv_Data_Presentation.Arrangement: SwiftProtobuf.Message, SwiftProtobuf
   }
 }
 
-extension Rv_Data_Presentation.CueGroup: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+nonisolated extension Rv_Data_Presentation.CueGroup: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   public static let protoMessageName: String = Rv_Data_Presentation.protoMessageName + ".CueGroup"
   public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{1}group\0\u{3}cue_identifiers\0")
 
@@ -1211,7 +1215,7 @@ extension Rv_Data_Presentation.CueGroup: SwiftProtobuf.Message, SwiftProtobuf._M
   }
 }
 
-extension Rv_Data_Presentation.MultiTracksLicensing: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+nonisolated extension Rv_Data_Presentation.MultiTracksLicensing: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   public static let protoMessageName: String = Rv_Data_Presentation.protoMessageName + ".MultiTracksLicensing"
   public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{3}song_identifier\0\u{3}customer_identifier\0\u{3}expiration_date\0\u{3}license_expiration\0\u{1}subscription\0")
 
@@ -1265,11 +1269,11 @@ extension Rv_Data_Presentation.MultiTracksLicensing: SwiftProtobuf.Message, Swif
   }
 }
 
-extension Rv_Data_Presentation.MultiTracksLicensing.Subscription: SwiftProtobuf._ProtoNameProviding {
+nonisolated extension Rv_Data_Presentation.MultiTracksLicensing.Subscription: SwiftProtobuf._ProtoNameProviding {
   public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{2}\0SUBSCRIPTION_CHART_PRO\0\u{1}SUBSCRIPTION_SLIDE_PRO\0")
 }
 
-extension Rv_Data_Presentation.Music: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+nonisolated extension Rv_Data_Presentation.Music: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   public static let protoMessageName: String = Rv_Data_Presentation.protoMessageName + ".Music"
   public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{3}original_music_key\0\u{3}user_music_key\0\u{1}original\0\u{1}user\0")
 

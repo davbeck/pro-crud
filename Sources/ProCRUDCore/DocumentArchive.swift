@@ -22,6 +22,7 @@ public enum DocumentArchiveError: Error, CustomStringConvertible, Sendable {
 public struct BundleResult: Sendable {
 	public var archiveURL: URL
 	public var warnings: [String]
+	public var compatibility: DocumentCompatibilityReport
 }
 
 public enum DocumentArchive {
@@ -44,12 +45,14 @@ public enum DocumentArchive {
 		to requestedOutputURL: URL? = nil,
 		replace: Bool = false,
 		limits: ArchiveLimits = .default,
+		targetVersion: ProPresenterTargetVersion = .v22,
 	) throws -> URL {
 		try bundleWithReport(
 			inputURL,
 			to: requestedOutputURL,
 			replace: replace,
 			limits: limits,
+			targetVersion: targetVersion,
 		).archiveURL
 	}
 
@@ -58,6 +61,7 @@ public enum DocumentArchive {
 		to requestedOutputURL: URL? = nil,
 		replace: Bool = false,
 		limits: ArchiveLimits = .default,
+		targetVersion: ProPresenterTargetVersion = .v22,
 	) throws -> BundleResult {
 		try limits.validate()
 		let deadline = ArchiveDeadline(timeout: limits.processingTimeout)
@@ -77,6 +81,8 @@ public enum DocumentArchive {
 		)
 		let workingDirectory = workspace.directory
 		defer { try? FileManager.default.removeItem(at: workingDirectory) }
+		let compatibility = try DocumentCompatibility.analyzeExportContents(in: workingDirectory, target: targetVersion)
+		try compatibility.requireSupported()
 		try deadline.check()
 		let entries = try DocumentLoader.recursiveFiles(in: workingDirectory)
 			.map { try DocumentLoader.relativePath(of: $0, in: workingDirectory) }
@@ -89,7 +95,7 @@ public enum DocumentArchive {
 			limits: limits,
 			deadline: deadline,
 		)
-		return BundleResult(archiveURL: outputURL, warnings: workspace.warnings)
+		return BundleResult(archiveURL: outputURL, warnings: workspace.warnings, compatibility: compatibility)
 	}
 
 	private static func outputURL(for kind: DocumentKind, inputURL: URL, requested: URL?) throws -> URL {
@@ -229,6 +235,7 @@ public enum DocumentArchive {
 		case .media, .foregroundMedia, .backgroundMedia:
 			var mediaType = action.media
 			var media = mediaType.element
+			guard try MediaReference(media: media).dependencyKind != .remoteStream else { return }
 			try rewrite(
 				mediaURL: &media.url,
 				sourceRoot: sourceRoot,
@@ -269,6 +276,7 @@ public enum DocumentArchive {
 		for elementIndex in slide.elements.indices {
 			var element = slide.elements[elementIndex].element
 			if case var .media(media)? = element.fill.fillType {
+				guard try MediaReference(media: media).dependencyKind != .remoteStream else { continue }
 				try rewrite(
 					mediaURL: &media.url,
 					sourceRoot: sourceRoot,
@@ -407,6 +415,7 @@ public enum DocumentArchive {
 			throw ArchiveError.unsupportedEntryType(entry: inputURL.path)
 		}
 		if values.isDirectory != true {
+			try WorkspaceInspector.requireLegacyAccess(at: inputURL)
 			guard inputURL.pathExtension.lowercased() == "pro" else { throw DocumentLoadError.expectedRawDocument(inputURL) }
 			try validateWorkspacePath(inputURL.lastPathComponent, limits: limits)
 			let validationBudget = ArchiveCopyBudget(limits: limits, deadline: deadline)
@@ -414,6 +423,7 @@ public enum DocumentArchive {
 			_ = try DocumentLoader.loadRaw(inputURL, kind: .presentation)
 			return Layout(kind: .presentation)
 		}
+		try WorkspaceInspector.requireSingleDocumentDirectory(inputURL)
 		let validationBudget = ArchiveCopyBudget(limits: limits, deadline: deadline)
 		let files = try DocumentLoader.recursiveFiles(in: inputURL)
 		var paths: [(url: URL, relative: String)] = []
@@ -430,8 +440,8 @@ public enum DocumentArchive {
 		let playlistURL = rootFiles.first { $0.lastPathComponent == "data" }
 		let themes = paths.filter { $0.url.lastPathComponent == "Theme" }.map(\.url)
 		let matches = [
-			rootPresentations.count == 1 && playlistURL == nil && themes.isEmpty ? DocumentKind.presentation : nil,
-			!rootPresentations.isEmpty && playlistURL != nil && themes.isEmpty ? .playlist : nil,
+			!rootPresentations.isEmpty && playlistURL == nil && themes.isEmpty ? DocumentKind.presentation : nil,
+			playlistURL != nil && themes.isEmpty ? .playlist : nil,
 			rootPresentations.isEmpty && playlistURL == nil && !themes.isEmpty ? .theme : nil,
 		].compactMap(\.self)
 		guard matches.count == 1, let kind = matches.first else {
@@ -439,8 +449,10 @@ public enum DocumentArchive {
 		}
 		switch kind {
 		case .presentation:
-			try deadline.check()
-			_ = try DocumentLoader.loadRaw(rootPresentations[0], kind: .presentation)
+			for presentation in rootPresentations {
+				try deadline.check()
+				_ = try DocumentLoader.loadRaw(presentation, kind: .presentation)
+			}
 		case .playlist:
 			guard let playlistURL else { throw DocumentLoadError.unsupportedInput(inputURL) }
 			try deadline.check()

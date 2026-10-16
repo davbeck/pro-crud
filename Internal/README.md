@@ -11,6 +11,20 @@ unresolved hypotheses, experiment procedures, and progress history here.
 
 ## Format Research
 
+- [ProPresenter 22 support plan](Plans/ProPresenter22Support.md): staged
+  interchange, native workspace, schema, media, rendering and release work.
+- [Implementation status](Plans/ProPresenter22ImplementationStatus.md): completed
+  stages, validation and remaining local implementation; Cloud is deferred.
+- [Native reader evidence](Research/Format/ProPresenter22Reader.md) and
+  [versioned native acceptance](Testing/ProPresenterNativeAcceptance.md).
+- [Local persistence acceptance](Research/Format/ProPresenter22LocalPersistence.md):
+  native update/receipt hashing, atomic local metadata writes, restart, continued
+  native editing, re-export and rollback fixtures.
+- ProPresenter 22 investigation: [storage and migration](Research/Format/ProPresenter22Storage.md),
+  [code audit](Research/Format/ProPresenter22CodeAudit.md),
+  [public/API/schema audit](Research/Format/ProPresenter22Public.md), and
+  [native interchange experiments](Research/Format/ProPresenter22NativeExperiments.md).
+
 [Fixture export workflow](../Fixtures/ProPresenter/README.md) describes native
 reference generation and snapshot installation.
 

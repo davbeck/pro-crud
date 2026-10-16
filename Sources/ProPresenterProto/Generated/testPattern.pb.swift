@@ -15,12 +15,12 @@ import SwiftProtobuf
 // incompatible with the version of SwiftProtobuf to which you are linking.
 // Please ensure that you are building against the same version of the API
 // that was used to generate this file.
-fileprivate struct _GeneratedWithProtocGenSwiftVersion: SwiftProtobuf.ProtobufAPIVersionCheck {
+fileprivate nonisolated struct _GeneratedWithProtocGenSwiftVersion: SwiftProtobuf.ProtobufAPIVersionCheck {
   struct _2: SwiftProtobuf.ProtobufAPIVersion_2 {}
   typealias Version = _2
 }
 
-public struct Rv_Data_TestPattern: Sendable {
+public nonisolated struct Rv_Data_TestPattern: Sendable {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
   // methods supported on all messages.
@@ -55,14 +55,14 @@ public struct Rv_Data_TestPattern: Sendable {
 
   public var unknownFields = SwiftProtobuf.UnknownStorage()
 
-  public enum OneOf_PatternProperties: Equatable, Sendable {
+  public nonisolated enum OneOf_PatternProperties: Equatable, Sendable {
     case blendGrid(Rv_Data_TestPattern.BlendGrid)
     case customColor(Rv_Data_TestPattern.CustomColor)
     case intensity(Rv_Data_TestPattern.IntensityColor)
 
   }
 
-  public enum TypeEnum: SwiftProtobuf.Enum, Swift.CaseIterable {
+  public nonisolated enum TypeEnum: SwiftProtobuf.Enum, Swift.CaseIterable {
     public typealias RawValue = Int
     case unknown // = 0
     case blendGrid // = 1
@@ -120,7 +120,7 @@ public struct Rv_Data_TestPattern: Sendable {
 
   }
 
-  public struct BlendGrid: Sendable {
+  public nonisolated struct BlendGrid: Sendable {
     // SwiftProtobuf.Message conformance is added in an extension below. See the
     // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
     // methods supported on all messages.
@@ -140,17 +140,17 @@ public struct Rv_Data_TestPattern: Sendable {
     public init() {}
   }
 
-  public struct CustomColor: Sendable {
+  public nonisolated struct CustomColor: Sendable {
     // SwiftProtobuf.Message conformance is added in an extension below. See the
     // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
     // methods supported on all messages.
 
     public var color: Rv_Data_Color {
-      get {return _color ?? Rv_Data_Color()}
+      get {_color ?? Rv_Data_Color()}
       set {_color = newValue}
     }
     /// Returns true if `color` has been explicitly set.
-    public var hasColor: Bool {return self._color != nil}
+    public var hasColor: Bool {self._color != nil}
     /// Clears the value of `color`. Subsequent reads from it will return its default value.
     public mutating func clearColor() {self._color = nil}
 
@@ -161,7 +161,7 @@ public struct Rv_Data_TestPattern: Sendable {
     fileprivate var _color: Rv_Data_Color? = nil
   }
 
-  public struct IntensityColor: Sendable {
+  public nonisolated struct IntensityColor: Sendable {
     // SwiftProtobuf.Message conformance is added in an extension below. See the
     // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
     // methods supported on all messages.
@@ -178,9 +178,9 @@ public struct Rv_Data_TestPattern: Sendable {
 
 // MARK: - Code below here is support for the SwiftProtobuf runtime.
 
-fileprivate let _protobuf_package = "rv.data"
+fileprivate nonisolated let _protobuf_package = "rv.data"
 
-extension Rv_Data_TestPattern: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+nonisolated extension Rv_Data_TestPattern: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   public static let protoMessageName: String = _protobuf_package + ".TestPattern"
   public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{1}type\0\u{3}blend_grid\0\u{3}custom_color\0\u{1}intensity\0")
 
@@ -269,11 +269,11 @@ extension Rv_Data_TestPattern: SwiftProtobuf.Message, SwiftProtobuf._MessageImpl
   }
 }
 
-extension Rv_Data_TestPattern.TypeEnum: SwiftProtobuf._ProtoNameProviding {
+nonisolated extension Rv_Data_TestPattern.TypeEnum: SwiftProtobuf._ProtoNameProviding {
   public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{2}\0TYPE_UNKNOWN\0\u{1}TYPE_BLEND_GRID\0\u{1}TYPE_COLOR_BARS\0\u{1}TYPE_FOCUS\0\u{1}TYPE_GRAY_SCALE\0\u{1}TYPE_BLACK_COLOR\0\u{1}TYPE_WHITE_COLOR\0\u{1}TYPE_CUSTOM_COLOR\0")
 }
 
-extension Rv_Data_TestPattern.BlendGrid: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+nonisolated extension Rv_Data_TestPattern.BlendGrid: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   public static let protoMessageName: String = Rv_Data_TestPattern.protoMessageName + ".BlendGrid"
   public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{3}draw_grid\0\u{3}draw_circles\0\u{3}draw_lines\0\u{3}invert_colors\0\u{3}grid_spacing\0")
 
@@ -323,7 +323,7 @@ extension Rv_Data_TestPattern.BlendGrid: SwiftProtobuf.Message, SwiftProtobuf._M
   }
 }
 
-extension Rv_Data_TestPattern.CustomColor: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+nonisolated extension Rv_Data_TestPattern.CustomColor: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   public static let protoMessageName: String = Rv_Data_TestPattern.protoMessageName + ".CustomColor"
   public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{1}color\0")
 
@@ -357,7 +357,7 @@ extension Rv_Data_TestPattern.CustomColor: SwiftProtobuf.Message, SwiftProtobuf.
   }
 }
 
-extension Rv_Data_TestPattern.IntensityColor: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+nonisolated extension Rv_Data_TestPattern.IntensityColor: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   public static let protoMessageName: String = Rv_Data_TestPattern.protoMessageName + ".IntensityColor"
   public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{1}intensity\0")
 

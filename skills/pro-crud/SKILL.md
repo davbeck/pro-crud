@@ -11,6 +11,156 @@ or component paths.
 
 ## Workflow
 
+Resolve the exact workspace storage before using workspace paths:
+`pro-crud workspace inspect /exact/root`. ProPresenter 22 native workspaces
+use SQLite/Loro. Most document edits require native export/import. Use
+**File → Export → Legacy Workspace**, or export a Presentation Bundle,
+Playlist, or Theme, and work on those exports. Legacy Workspace exports are
+point-in-time snapshots. The retained older workspace is independent; editing
+it does not update the active native workspace. Select a document inside a
+legacy workspace rather than treating the whole workspace as one archive.
+Presentation Bundles can contain several presentations. `render` loads each
+with shared media and separate output folders. For a document edit, expand the
+bundle and select its exact `.pro` payload; single-document operations reject
+ambiguous collections. Re-bundle an extracted directory of supported root
+presentations with `bundle DIRECTORY --output FILE.probundle`; all payloads are
+validated before output changes. Native media/configuration capability gates
+still apply.
+
+For native storage, use `workspace inventory ROOT` for stream identities and
+availability, and `workspace dump ROOT` for typed diagnostic Loro content.
+Use `workspace contents ROOT` for library references, presentation/group and
+arrangement order, and playlist trees. `workspace inventory ROOT --projections`
+checks mapped Presentation/Theme, playlist and configuration views, including
+independent client streams. Statuses include document ID and scope. Unknown
+fields and unavailable content remain explicit; this does not enable
+configuration export/editing.
+Export a standard playlist and its media-free Presentation dependencies with
+`workspace export-playlist ROOT --playlist PLAYLIST_NODE_UUID --output PATH`.
+Select the tree node UUID from `workspace contents`; repeated links and hidden
+items remain intact. Connected/provider items, media and other action
+dependencies return capability errors. Use native export for those cases.
+For supported content, export an exact
+shared stream with `workspace export ROOT --stream UUID --output PATH`; output
+is a separate `.pro` or `Theme` file and defaults to target 22. Media identity
+conversions remain gated; this command does not copy assets. Use native export
+when a capability diagnostic requires it.
+Shared and client streams are separate. Diagnostic output is not editable
+protobuf JSON; use native export/import for unsupported edits and media writes.
+Preview a supported native Presentation directly with
+`render ROOT --native-stream UUID --output SEPARATE_PATH`; this preserves native
+history and rejects unsupported active media/features before replacing output.
+Native schema-1 local images and video thumbnails resolve their selected source
+against the workspace/resource root. A stale URL or same-basename file is not a
+fallback. HDR, blur, provider/live/web/HLS sources and other unqualified native
+media settings remain gated; preview does not qualify media editing/packaging.
+`workspace media ROOT` inspects native occurrence/asset
+identities and local file availability, with uninspected streams explicit.
+It includes macro/prop collections, stage layouts, playlist templates and
+shared/client Workspace graphs alongside Presentations, Themes and playlists.
+Use each occurrence's document ID and scope to identify its source.
+Add `--asset-store` to inspect native Asset/Reference records and distinguish
+declared asset IDs from materialized associations. File availability remains a
+separate result; an association difference does not authorize rewriting IDs.
+Add `--hash-files` when local content hashes are needed.
+Qualified schema-1 video-source HLS actions can be preserved in target-22 raw
+edits, exports and bundles. Streams are never downloaded by these workflows;
+static rendering reports an unsupported runtime source. Other native media
+editing/packaging gates still apply.
+`workspace configuration ROOT` lists saved/live Looks, screens and Theme links.
+For a selected Theme slide without media, preview a native Look with
+`render PRESENTATION --workspace ROOT --look UUID --screen UUID`. This reads
+stored native streams without an app/API connection. A disabled-screen warning
+does not enable that output.
+Use `workspace discover --registry PATH` to list registered identities without
+selecting an active workspace.
+Use `workspace discover --preferences PLIST_PATH` for legacy macOS registration
+hints, including custom or unavailable roots. Inspect the chosen root explicitly:
+an active preference or minimum-version hint can still describe a retained copy
+after upgrade. Pass one discovery source at a time.
+For a registered local native workspace, `workspace set-copyright-title ROOT
+--stream UUID --registry PATH --title TEXT` atomically edits the existing
+Presentation's CCLI song title. Select the shared Presentation stream UUID;
+stop ProPresenter and its workspace helpers before this operation. An empty
+string clears the title, and a matching title makes no change. This preserves
+native history and local registration.
+Use `workspace set-slide-notes ROOT --stream UUID --action SLIDE_ACTION_UUID
+--registry PATH --text TEXT` for native Slide Notes, or `--rtf FILE` for rich
+text. The action UUID identifies the Presentation slide action, distinct from
+the cue and base-slide UUIDs. Matching text is a no-op; empty text clears notes.
+The same offline/local checks apply.
+Use `workspace set-text ROOT --stream UUID --action SLIDE_ACTION_UUID
+--element ELEMENT_UUID --registry PATH --text TEXT` to replace a static native
+slide element's text using its default formatting, or `--rtf FILE` to supply
+complete rich text. Matching plain text preserves existing rich formatting.
+Replacing content clears old range attributes and updates the first-run font
+metadata. Native elements with delivery or element builds are currently rejected.
+The same offline/local checks apply.
+Use `workspace move-cue ROOT --stream UUID --cue CUE_UUID --after ANCHOR_CUE_UUID
+--registry PATH` to move an existing cue after another in the same group. This
+retains the existing cue and placement identities, content and arrangements.
+The same offline/local checks apply; self/already-after moves make no change.
+Use `workspace rename-cue-group ROOT --stream UUID --group GROUP_UUID --name TEXT
+--registry PATH` to rename an existing group while preserving its identity,
+color, hotkey and arrangements.
+Use `workspace set-arrangement-groups ROOT --stream UUID --arrangement UUID
+--group GROUP_UUID --group GROUP_UUID --registry PATH` to set explicit ordered
+group occurrences; repeat `--group` for each occurrence or use `--clear` for an
+empty arrangement. Both use the same offline/local checks and retain native
+history. For several supported operations, use `workspace apply ROOT --file
+NATIVE_EDITS.json --registry PATH`. Its version-1 manifest contains `operations`
+with explicit `stream` UUID and `op` fields; see the installed format reference
+for operation-specific fields. All operations prepare before one atomic commit,
+with ordered edits within each Presentation, one receipt per changed document
+and no changes if any operation fails. RTF paths are relative to the manifest.
+Batch `split-cue-group` uses a `cue` UUID after the first cue of its group, a new
+`group` UUID, an existing `templateGroup` UUID in the same Presentation and an
+explicit `name`. The selected cue and following cues form a new group directly
+after the source group, preserving Master order and cue-node identities. Color,
+hotkey and application-group link are copied from the template and retained
+with the new name. Unmapped template metadata blocks copying. Existing
+arrangements stay unchanged; add `set-arrangement-groups` in the same batch when
+the new group belongs in an arrangement. Matching stable-ID replay makes no
+change. This operation does not create an empty group or split at its first cue.
+Native batches also accept `rename-arrangement` with `arrangement` UUID and
+`name`, and `select-arrangement` with `arrangement` UUID or explicit JSON `null`
+for Master. Naming preserves the group sequence; selection preserves all
+arrangements. Matching names/selections make no change.
+Use batch `add-arrangement` with a new `arrangement` UUID, `name`, explicit
+`groups` UUID array and `select` Boolean. Repeat groups or pass an empty array.
+Use `duplicate-arrangement` with source `arrangement`, new `newArrangement`
+UUID, explicit `name` and `select`. Both append, retain existing content and
+accept a matching replay as a no-op; conflicting UUID reuse is rejected.
+Duplication rejects unmapped source-arrangement fields. Inspect links with
+`workspace arrangement-references ROOT` before batch `remove-arrangement` with
+an existing `arrangement` UUID. Deletion selects Master if necessary and rejects
+remaining links or uninspected scopes. Batch `clear-document-action-arrangement`
+with an `action` UUID clears only a Presentation cue document-action selector;
+combine explicit unlinking and deletion in one batch. Remove other links in
+ProPresenter first. Document-action targets may remain unresolved; matching
+selectors still protect their arrangement definitions.
+Batch `remove-media-action` accepts an `action` UUID in a cue with a presentation
+slide. It retains the cue/other actions and makes an absent UUID a no-op. A cue's
+active after-action completion selector blocks removal of its source action.
+This removes the action, preserves media files and lets ProPresenter update its
+reference records on reopen. Media-only cue removal and native media replacement
+remain gated.
+Use `workspace transfer-cue ROOT --stream UUID --cue CUE_UUID --group GROUP_UUID
+--registry PATH` to transfer ownership into an existing group. Omit `--after` to
+append or name a cue in the destination group. Cue and placement identities are
+retained. Moving the last cue removes the emptied group and its arrangement
+occurrences, matching native 22 behavior; unmapped content blocks that deletion.
+The same offline/local checks apply. Cloud editing and other native edit families
+remain unsupported.
+
+New creation and bundle exports default to target 22. Use `--target-version 21`
+on `create presentation`, `create theme`, `create playlist`, or `bundle` for a
+21 compatibility profile. Inspect `compatibility INPUT --target-version 21`
+before a downgrade. Unknown features can block conversion; preserved bytes do
+not imply that an older app executes them. Use `--json` on create/bundle for the
+selected profile and diagnostics. Plain edits and edit batches preserve the
+source representation; `--output` alone does not convert it.
+
 1. Before editing a live ProPresenter library, confirm ProPresenter is not
    running; if it is, ask the user to quit it. Use a copied or disposable
    document for experiments.
@@ -314,7 +464,9 @@ copied or rendered; do not ignore it.
 
 ## Media identity
 
-Treat a media UUID as the asset identity, not as path metadata. Never use
+Supported legacy-style interchange media uses its UUID as the asset identity.
+Native 22 separates occurrence UUID and asset UUID; inspect those roles with
+`workspace media` and retain the native editing/packaging gates. Never use
 `edit patch` to change only `rv.data.Media.url` when replacing content.
 
 - Use `edit set-media --source FILE` for a new local asset. It generates a new

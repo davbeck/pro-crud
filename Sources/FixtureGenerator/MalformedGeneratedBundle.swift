@@ -66,7 +66,7 @@ enum MalformedGeneratedBundleFixture {
 			Array(elements.dropFirst()) + Array(elements.prefix(1))
 		}
 
-		var presentation = DocumentFactory.presentation(name: "Malformed Generated Bundle")
+		var presentation = DocumentFactory.presentation(name: "Malformed Generated Bundle", targetVersion: .v21)
 		presentation.uuid = uuid(1)
 		presentation.cues = zip(names.indices, names).map { index, name in
 			cue(index: index, name: name, elements: slideElements[index])

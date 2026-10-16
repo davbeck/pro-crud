@@ -1,0 +1,112 @@
+{
+  "application": "ProPresenter",
+  "version": "22",
+  "build": "369098875",
+  "osVersion": "27.0.1",
+  "date": "2026-10-15",
+  "documentID": "58884c2c-1eb4-50f8-99ac-c88b29cb0f34",
+  "source": "Owned copy of NativeMediaIdentity bundle; native Add Media Action > From Finder with existing owned LogoTransparent.png, exact native removal controls for media/backgroundMedia actions, helper restart lifecycle, production atomic removal/title batch, exact native reopen, continued native Group > Chorus 4 and independent Presentation export",
+  "note": "The native add command appends an action; it does not replace the pre-existing media action. ReferenceLifecycle.json contains selected read-only native model values, with UUID spelling normalized by the reader.",
+  "files": [
+    {
+      "path": "CLIManifest.json",
+      "sha256": "75b0336f2fe4a096f989a0a49521ba0869308ba0f67f8a7b74ac6051d276692d"
+    },
+    {
+      "path": "NativeReexport.pro",
+      "sha256": "efe8e1db6a1f857c7b487fe28ab8f2517379a1d8a6b4c595a6b420577b8f9c8a"
+    },
+    {
+      "path": "ReferenceLifecycle.json",
+      "sha256": "5dca07e9efc9e634fa58be476f2057a51b5a60d8e261431fabe0fd407ad21b31"
+    },
+    {
+      "path": "cli-after.loro",
+      "sha256": "70056537ec12cea4b7ed4886d124d92b7bfeeeb749b0e3d4a1b6a74e47e4bd1b"
+    },
+    {
+      "path": "cli-after.vector",
+      "sha256": "18c35abdfc42eddb32c69852b711e5f08fdd3b1eed41d50fca99aed9fc5406ba"
+    },
+    {
+      "path": "cli-before.loro",
+      "sha256": "a8087eb37319bcefa35b0728cccf43d8c87790cfd8e52549734003a44ed359e1"
+    },
+    {
+      "path": "cli-before.vector",
+      "sha256": "2d17342443dca30dc7f3464c70817fa72d88dcc87abeaee4386a72fc9ede4ac0"
+    },
+    {
+      "path": "native-after.loro",
+      "sha256": "f1636cd6edaed96246833d2aee7b519d11647c4f1869830acee6a471f37b2cfe"
+    },
+    {
+      "path": "native-after.vector",
+      "sha256": "cc8667516baa68a9e33c8c4d99afc4e1e8757c73529c4e7ad6988c6f0f6ab877"
+    },
+    {
+      "path": "native-background-after.loro",
+      "sha256": "a8087eb37319bcefa35b0728cccf43d8c87790cfd8e52549734003a44ed359e1"
+    },
+    {
+      "path": "native-background-after.vector",
+      "sha256": "2d17342443dca30dc7f3464c70817fa72d88dcc87abeaee4386a72fc9ede4ac0"
+    },
+    {
+      "path": "native-background-before.loro",
+      "sha256": "700abdda28bcc2169707a11b5210061e9c6684f2d4c39ec6a110c3ea425de4f0"
+    },
+    {
+      "path": "native-background-before.vector",
+      "sha256": "ed7025a2ed3504f2163982a62508aff98a7b9daf1557b4f36936480e63090aab"
+    },
+    {
+      "path": "native-before.loro",
+      "sha256": "8ceb6e29d0a212541593f414451fb4219d4c236ae9da1c1d10f9c8761b999345"
+    },
+    {
+      "path": "native-before.vector",
+      "sha256": "f753944c63c1946090255ad77acb62e031b807b8e16c75f345c613a04f4ba098"
+    },
+    {
+      "path": "native-cli-open.loro",
+      "sha256": "70056537ec12cea4b7ed4886d124d92b7bfeeeb749b0e3d4a1b6a74e47e4bd1b"
+    },
+    {
+      "path": "native-cli-open.vector",
+      "sha256": "18c35abdfc42eddb32c69852b711e5f08fdd3b1eed41d50fca99aed9fc5406ba"
+    },
+    {
+      "path": "native-continued.loro",
+      "sha256": "7be3c3f4f9f4f972bae76ec477428312c3492223d54c66fa742d37fb936b1679"
+    },
+    {
+      "path": "native-continued.vector",
+      "sha256": "7c7efc97ec5795bb3477337239621748614bb67540ee42ee8da3cb1ab1f25c72"
+    },
+    {
+      "path": "native-removal-before.loro",
+      "sha256": "f1636cd6edaed96246833d2aee7b519d11647c4f1869830acee6a471f37b2cfe"
+    },
+    {
+      "path": "native-removal-before.vector",
+      "sha256": "cc8667516baa68a9e33c8c4d99afc4e1e8757c73529c4e7ad6988c6f0f6ab877"
+    },
+    {
+      "path": "native-removed-reopened.loro",
+      "sha256": "700abdda28bcc2169707a11b5210061e9c6684f2d4c39ec6a110c3ea425de4f0"
+    },
+    {
+      "path": "native-removed-reopened.vector",
+      "sha256": "ed7025a2ed3504f2163982a62508aff98a7b9daf1557b4f36936480e63090aab"
+    },
+    {
+      "path": "native-removed.loro",
+      "sha256": "700abdda28bcc2169707a11b5210061e9c6684f2d4c39ec6a110c3ea425de4f0"
+    },
+    {
+      "path": "native-removed.vector",
+      "sha256": "ed7025a2ed3504f2163982a62508aff98a7b9daf1557b4f36936480e63090aab"
+    }
+  ]
+}

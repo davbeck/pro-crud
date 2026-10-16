@@ -15,12 +15,12 @@ import SwiftProtobuf
 // incompatible with the version of SwiftProtobuf to which you are linking.
 // Please ensure that you are building against the same version of the API
 // that was used to generate this file.
-fileprivate struct _GeneratedWithProtocGenSwiftVersion: SwiftProtobuf.ProtobufAPIVersionCheck {
+fileprivate nonisolated struct _GeneratedWithProtocGenSwiftVersion: SwiftProtobuf.ProtobufAPIVersionCheck {
   struct _2: SwiftProtobuf.ProtobufAPIVersion_2 {}
   typealias Version = _2
 }
 
-public struct Rv_Data_Calendar: Sendable {
+public nonisolated struct Rv_Data_Calendar: Sendable {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
   // methods supported on all messages.
@@ -31,17 +31,17 @@ public struct Rv_Data_Calendar: Sendable {
 
   public var unknownFields = SwiftProtobuf.UnknownStorage()
 
-  public struct Event: Sendable {
+  public nonisolated struct Event: Sendable {
     // SwiftProtobuf.Message conformance is added in an extension below. See the
     // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
     // methods supported on all messages.
 
     public var uuid: Rv_Data_UUID {
-      get {return _uuid ?? Rv_Data_UUID()}
+      get {_uuid ?? Rv_Data_UUID()}
       set {_uuid = newValue}
     }
     /// Returns true if `uuid` has been explicitly set.
-    public var hasUuid: Bool {return self._uuid != nil}
+    public var hasUuid: Bool {self._uuid != nil}
     /// Clears the value of `uuid`. Subsequent reads from it will return its default value.
     public mutating func clearUuid() {self._uuid = nil}
 
@@ -50,39 +50,39 @@ public struct Rv_Data_Calendar: Sendable {
     public var description_p: String = String()
 
     public var date: Rv_Data_Timestamp {
-      get {return _date ?? Rv_Data_Timestamp()}
+      get {_date ?? Rv_Data_Timestamp()}
       set {_date = newValue}
     }
     /// Returns true if `date` has been explicitly set.
-    public var hasDate: Bool {return self._date != nil}
+    public var hasDate: Bool {self._date != nil}
     /// Clears the value of `date`. Subsequent reads from it will return its default value.
     public mutating func clearDate() {self._date = nil}
 
     public var recurrenceDays: [Rv_Data_Calendar.Event.DayOfWeek] = []
 
     public var recurrenceLimitDate: Rv_Data_Timestamp {
-      get {return _recurrenceLimitDate ?? Rv_Data_Timestamp()}
+      get {_recurrenceLimitDate ?? Rv_Data_Timestamp()}
       set {_recurrenceLimitDate = newValue}
     }
     /// Returns true if `recurrenceLimitDate` has been explicitly set.
-    public var hasRecurrenceLimitDate: Bool {return self._recurrenceLimitDate != nil}
+    public var hasRecurrenceLimitDate: Bool {self._recurrenceLimitDate != nil}
     /// Clears the value of `recurrenceLimitDate`. Subsequent reads from it will return its default value.
     public mutating func clearRecurrenceLimitDate() {self._recurrenceLimitDate = nil}
 
     public var recurrenceExcludedDates: [Rv_Data_Timestamp] = []
 
     public var action: Rv_Data_Calendar.Event.Action {
-      get {return _action ?? Rv_Data_Calendar.Event.Action()}
+      get {_action ?? Rv_Data_Calendar.Event.Action()}
       set {_action = newValue}
     }
     /// Returns true if `action` has been explicitly set.
-    public var hasAction: Bool {return self._action != nil}
+    public var hasAction: Bool {self._action != nil}
     /// Clears the value of `action`. Subsequent reads from it will return its default value.
     public mutating func clearAction() {self._action = nil}
 
     public var unknownFields = SwiftProtobuf.UnknownStorage()
 
-    public enum DayOfWeek: SwiftProtobuf.Enum, Swift.CaseIterable {
+    public nonisolated enum DayOfWeek: SwiftProtobuf.Enum, Swift.CaseIterable {
       public typealias RawValue = Int
       case unknown // = 0
       case sunday // = 1
@@ -140,7 +140,7 @@ public struct Rv_Data_Calendar: Sendable {
 
     }
 
-    public struct Action: Sendable {
+    public nonisolated struct Action: Sendable {
       // SwiftProtobuf.Message conformance is added in an extension below. See the
       // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
       // methods supported on all messages.
@@ -148,11 +148,11 @@ public struct Rv_Data_Calendar: Sendable {
       public var type: UInt32 = 0
 
       public var uuid: Rv_Data_UUID {
-        get {return _uuid ?? Rv_Data_UUID()}
+        get {_uuid ?? Rv_Data_UUID()}
         set {_uuid = newValue}
       }
       /// Returns true if `uuid` has been explicitly set.
-      public var hasUuid: Bool {return self._uuid != nil}
+      public var hasUuid: Bool {self._uuid != nil}
       /// Clears the value of `uuid`. Subsequent reads from it will return its default value.
       public mutating func clearUuid() {self._uuid = nil}
 
@@ -176,32 +176,32 @@ public struct Rv_Data_Calendar: Sendable {
 
       public var unknownFields = SwiftProtobuf.UnknownStorage()
 
-      public enum OneOf_ActionType: Equatable, Sendable {
+      public nonisolated enum OneOf_ActionType: Equatable, Sendable {
         case playlist(Rv_Data_Calendar.Event.Action.Playlist)
         case macro(Rv_Data_Calendar.Event.Action.Macro)
 
       }
 
-      public struct Playlist: Sendable {
+      public nonisolated struct Playlist: Sendable {
         // SwiftProtobuf.Message conformance is added in an extension below. See the
         // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
         // methods supported on all messages.
 
         public var playlistUuid: Rv_Data_UUID {
-          get {return _playlistUuid ?? Rv_Data_UUID()}
+          get {_playlistUuid ?? Rv_Data_UUID()}
           set {_playlistUuid = newValue}
         }
         /// Returns true if `playlistUuid` has been explicitly set.
-        public var hasPlaylistUuid: Bool {return self._playlistUuid != nil}
+        public var hasPlaylistUuid: Bool {self._playlistUuid != nil}
         /// Clears the value of `playlistUuid`. Subsequent reads from it will return its default value.
         public mutating func clearPlaylistUuid() {self._playlistUuid = nil}
 
         public var playlistItemUuid: Rv_Data_UUID {
-          get {return _playlistItemUuid ?? Rv_Data_UUID()}
+          get {_playlistItemUuid ?? Rv_Data_UUID()}
           set {_playlistItemUuid = newValue}
         }
         /// Returns true if `playlistItemUuid` has been explicitly set.
-        public var hasPlaylistItemUuid: Bool {return self._playlistItemUuid != nil}
+        public var hasPlaylistItemUuid: Bool {self._playlistItemUuid != nil}
         /// Clears the value of `playlistItemUuid`. Subsequent reads from it will return its default value.
         public mutating func clearPlaylistItemUuid() {self._playlistItemUuid = nil}
 
@@ -213,17 +213,17 @@ public struct Rv_Data_Calendar: Sendable {
         fileprivate var _playlistItemUuid: Rv_Data_UUID? = nil
       }
 
-      public struct Macro: Sendable {
+      public nonisolated struct Macro: Sendable {
         // SwiftProtobuf.Message conformance is added in an extension below. See the
         // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
         // methods supported on all messages.
 
         public var identification: Rv_Data_CollectionElementType {
-          get {return _identification ?? Rv_Data_CollectionElementType()}
+          get {_identification ?? Rv_Data_CollectionElementType()}
           set {_identification = newValue}
         }
         /// Returns true if `identification` has been explicitly set.
-        public var hasIdentification: Bool {return self._identification != nil}
+        public var hasIdentification: Bool {self._identification != nil}
         /// Clears the value of `identification`. Subsequent reads from it will return its default value.
         public mutating func clearIdentification() {self._identification = nil}
 
@@ -252,9 +252,9 @@ public struct Rv_Data_Calendar: Sendable {
 
 // MARK: - Code below here is support for the SwiftProtobuf runtime.
 
-fileprivate let _protobuf_package = "rv.data"
+fileprivate nonisolated let _protobuf_package = "rv.data"
 
-extension Rv_Data_Calendar: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+nonisolated extension Rv_Data_Calendar: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   public static let protoMessageName: String = _protobuf_package + ".Calendar"
   public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{1}events\0\u{1}active\0")
 
@@ -289,7 +289,7 @@ extension Rv_Data_Calendar: SwiftProtobuf.Message, SwiftProtobuf._MessageImpleme
   }
 }
 
-extension Rv_Data_Calendar.Event: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+nonisolated extension Rv_Data_Calendar.Event: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   public static let protoMessageName: String = Rv_Data_Calendar.protoMessageName + ".Event"
   public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{1}uuid\0\u{1}name\0\u{1}description\0\u{1}date\0\u{3}recurrence_days\0\u{3}recurrence_limit_date\0\u{3}recurrence_excluded_dates\0\u{1}action\0")
 
@@ -358,11 +358,11 @@ extension Rv_Data_Calendar.Event: SwiftProtobuf.Message, SwiftProtobuf._MessageI
   }
 }
 
-extension Rv_Data_Calendar.Event.DayOfWeek: SwiftProtobuf._ProtoNameProviding {
+nonisolated extension Rv_Data_Calendar.Event.DayOfWeek: SwiftProtobuf._ProtoNameProviding {
   public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{2}\0DAY_OF_WEEK_UNKNOWN\0\u{1}DAY_OF_WEEK_SUNDAY\0\u{1}DAY_OF_WEEK_MONDAY\0\u{1}DAY_OF_WEEK_TUESDAY\0\u{1}DAY_OF_WEEK_WEDNESDAY\0\u{1}DAY_OF_WEEK_THURSDAY\0\u{1}DAY_OF_WEEK_FRIDAY\0\u{1}DAY_OF_WEEK_SATURDAY\0")
 }
 
-extension Rv_Data_Calendar.Event.Action: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+nonisolated extension Rv_Data_Calendar.Event.Action: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   public static let protoMessageName: String = Rv_Data_Calendar.Event.protoMessageName + ".Action"
   public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{1}type\0\u{1}uuid\0\u{1}playlist\0\u{1}macro\0")
 
@@ -439,7 +439,7 @@ extension Rv_Data_Calendar.Event.Action: SwiftProtobuf.Message, SwiftProtobuf._M
   }
 }
 
-extension Rv_Data_Calendar.Event.Action.Playlist: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+nonisolated extension Rv_Data_Calendar.Event.Action.Playlist: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   public static let protoMessageName: String = Rv_Data_Calendar.Event.Action.protoMessageName + ".Playlist"
   public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{3}playlist_uuid\0\u{3}playlist_item_uuid\0")
 
@@ -478,7 +478,7 @@ extension Rv_Data_Calendar.Event.Action.Playlist: SwiftProtobuf.Message, SwiftPr
   }
 }
 
-extension Rv_Data_Calendar.Event.Action.Macro: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+nonisolated extension Rv_Data_Calendar.Event.Action.Macro: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   public static let protoMessageName: String = Rv_Data_Calendar.Event.Action.protoMessageName + ".Macro"
   public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{1}identification\0")
 

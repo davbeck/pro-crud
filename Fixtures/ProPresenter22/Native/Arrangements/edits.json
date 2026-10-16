@@ -1,0 +1,16 @@
+{
+  "version": 1,
+  "operations": [
+    {
+      "stream": "bfa7b647-93ab-5ee6-b397-ec61b08bcfee",
+      "op": "rename-arrangement",
+      "arrangement": "C049469C-FC98-4BAA-BAF3-290846452E5D",
+      "name": "CLI Arrangement \u2014 caf\u00e9"
+    },
+    {
+      "stream": "bfa7b647-93ab-5ee6-b397-ec61b08bcfee",
+      "op": "select-arrangement",
+      "arrangement": "C049469C-FC98-4BAA-BAF3-290846452E5D"
+    }
+  ]
+}

@@ -1,0 +1,91 @@
+{
+  "application": "ProPresenter",
+  "version": "22",
+  "build": "369098875",
+  "osVersion": "27.0.1",
+  "date": "2026-10-15",
+  "documentID": "bfa7b647-93ab-5ee6-b397-ec61b08bcfee",
+  "source": "Owned local test Presentation; native controls, production CLI batch, actual native reopen/continuation and File > Export > Presentation",
+  "files": [
+    {
+      "path": "CLIManifest.json",
+      "sha256": "d3f80c6d815843687479a3eca6ae498a1648dbc7ebd83c4b7dee419d7346405e"
+    },
+    {
+      "path": "NativeReexport.pro",
+      "sha256": "aeca9e62a6242dba33f633238293289daa3948a68596f4f63b2f35244aa34840"
+    },
+    {
+      "path": "cli-after.loro",
+      "sha256": "1c29495c42c0cbecbac5f62cf842487b3a0e2da924274f68e871c93fa51b01d8"
+    },
+    {
+      "path": "cli-after.vector",
+      "sha256": "1db06275f21844c7612dfd4647825b59818c50cb0da6026346f12c627dfb6519"
+    },
+    {
+      "path": "cli-before.loro",
+      "sha256": "72232117a905a9275264a272dcc27bed73de61df214b72625d34e5f027caa721"
+    },
+    {
+      "path": "cli-before.vector",
+      "sha256": "ab22285824b09556e4712388ae70b93ee0a40b099a2bd7d0561749455be5d696"
+    },
+    {
+      "path": "native-before.loro",
+      "sha256": "2779a728770bb0bd554c3a67a249a7448179f34e6de20353b8f62593b48b2095"
+    },
+    {
+      "path": "native-before.vector",
+      "sha256": "2e5897d57cf4be0a432f348477a37882273a95e7b9afd63a5db7e66c83743f6b"
+    },
+    {
+      "path": "native-continued.loro",
+      "sha256": "9c2a1b8492e5b5363cdaec2c8e80d2f3f82e78af73aef200ae086447b0f26e53"
+    },
+    {
+      "path": "native-continued.vector",
+      "sha256": "aa31528baebf00f4bb3d6882300dce87dddcb8c7f7ad5b2ccd588da49c81bcb9"
+    },
+    {
+      "path": "native-created.loro",
+      "sha256": "35bcc530372f0cefbe72089e483b3d2378b5189824062c6c99409b3f185dbd97"
+    },
+    {
+      "path": "native-created.vector",
+      "sha256": "c824a565e17147dc6eec963e103381860ed9a9b86af8065a3056e5df4a5cf2ab"
+    },
+    {
+      "path": "native-deleted.loro",
+      "sha256": "a3029395b84641edace26f2a2573c3b8f8b77ec2ac19977965ff9643a4cb8354"
+    },
+    {
+      "path": "native-deleted.vector",
+      "sha256": "dfc915a0ca37f3e1453b4d717e3f3a05fd0af2851391c220397a0c3c05cf657c"
+    },
+    {
+      "path": "native-duplicated.loro",
+      "sha256": "72232117a905a9275264a272dcc27bed73de61df214b72625d34e5f027caa721"
+    },
+    {
+      "path": "native-duplicated.vector",
+      "sha256": "ab22285824b09556e4712388ae70b93ee0a40b099a2bd7d0561749455be5d696"
+    },
+    {
+      "path": "native-empty-selected.loro",
+      "sha256": "e11c5a4d1b520c0dd896e4eb2575f794ea25005c14b856af82fd63ba386ebd8a"
+    },
+    {
+      "path": "native-empty-selected.vector",
+      "sha256": "aa3b1c9af2cf511c7af2301af9515f0a7ecc9a3081c18ce67cfd47260527da27"
+    },
+    {
+      "path": "native-open.loro",
+      "sha256": "1c29495c42c0cbecbac5f62cf842487b3a0e2da924274f68e871c93fa51b01d8"
+    },
+    {
+      "path": "native-open.vector",
+      "sha256": "1db06275f21844c7612dfd4647825b59818c50cb0da6026346f12c627dfb6519"
+    }
+  ]
+}

@@ -22,6 +22,8 @@ public struct RenderingDiagnostic: Sendable, Equatable, CustomStringConvertible 
 		case invalidTextCustomAttributeRange = "rendering.invalid-text-custom-attribute-range"
 		case missingMediaURL = "rendering.missing-media-url"
 		case unresolvedMedia = "rendering.unresolved-media"
+		case unsupportedNativeMedia = "rendering.unsupported-native-media"
+		case unsupportedRuntimeMedia = "rendering.unsupported-runtime-media"
 	}
 
 	public enum Severity: String, Sendable {
@@ -97,6 +99,17 @@ public extension PresentationDocument {
 				componentPath: cuePath,
 				message: "Cue has \(slideActionIndices.count) presentation-slide actions; the renderer uses only the first slide.",
 			))
+		}
+
+		for (index, action) in cue.actions.enumerated() {
+			guard let media = action.renderableMedia else { continue }
+			let actionPath = ComponentPathBuilder.repeatedPath(
+				parent: cuePath,
+				field: "actions",
+				storageIndex: index,
+				identities: actionIdentities,
+			)
+			results.append(contentsOf: mediaDiagnostics(media, at: "\(actionPath)/media/element"))
 		}
 
 		guard let actionIndex = slideActionIndices.first else { return results }
@@ -232,16 +245,7 @@ public extension PresentationDocument {
 			results.append(contentsOf: textDiagnostics(element.text, at: "\(elementPath)/text", isPresent: element.hasText))
 			results.append(contentsOf: mediaDiagnostics(element, at: elementPath))
 		}
-		for (index, action) in cue.actions.enumerated() {
-			guard let media = action.renderableMedia else { continue }
-			let actionPath = ComponentPathBuilder.repeatedPath(
-				parent: cuePath,
-				field: "actions",
-				storageIndex: index,
-				identities: actionIdentities,
-			)
-			results.append(contentsOf: mediaDiagnostics(media, at: "\(actionPath)/media/element"))
-		}
+
 		return results
 	}
 
@@ -296,6 +300,17 @@ public extension PresentationDocument {
 	}
 
 	private func mediaDiagnostics(_ media: Rv_Data_Media, at path: String) -> [RenderingDiagnostic] {
+		do {
+			if try MediaReference(media: media).dependencyKind == .remoteStream {
+				return [.init(code: .unsupportedRuntimeMedia, severity: .error, componentPath: path, message: "Static rendering does not support HLS stream playback.")]
+			}
+			if try NativeMediaRendering.requiresAdapter(media) {
+				_ = try NativeMediaRendering.compatibilityMedia(media, contextRoot: mediaDirectory, path: path)
+				return []
+			}
+		} catch {
+			return [.init(code: .unsupportedNativeMedia, severity: .error, componentPath: path, message: String(describing: error))]
+		}
 		let source = media.url.renderPath
 		guard !source.isEmpty else {
 			return [RenderingDiagnostic(

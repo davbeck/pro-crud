@@ -15,12 +15,12 @@ import SwiftProtobuf
 // incompatible with the version of SwiftProtobuf to which you are linking.
 // Please ensure that you are building against the same version of the API
 // that was used to generate this file.
-fileprivate struct _GeneratedWithProtocGenSwiftVersion: SwiftProtobuf.ProtobufAPIVersionCheck {
+fileprivate nonisolated struct _GeneratedWithProtocGenSwiftVersion: SwiftProtobuf.ProtobufAPIVersionCheck {
   struct _2: SwiftProtobuf.ProtobufAPIVersion_2 {}
   typealias Version = _2
 }
 
-public struct Rv_Data_LiveVideoPlaylist: Sendable {
+public nonisolated struct Rv_Data_LiveVideoPlaylist: Sendable {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
   // methods supported on all messages.
@@ -28,20 +28,20 @@ public struct Rv_Data_LiveVideoPlaylist: Sendable {
   public var actions: [Rv_Data_Action] = []
 
   public var targetedLayerUuid: Rv_Data_UUID {
-    get {return _targetedLayerUuid ?? Rv_Data_UUID()}
+    get {_targetedLayerUuid ?? Rv_Data_UUID()}
     set {_targetedLayerUuid = newValue}
   }
   /// Returns true if `targetedLayerUuid` has been explicitly set.
-  public var hasTargetedLayerUuid: Bool {return self._targetedLayerUuid != nil}
+  public var hasTargetedLayerUuid: Bool {self._targetedLayerUuid != nil}
   /// Clears the value of `targetedLayerUuid`. Subsequent reads from it will return its default value.
   public mutating func clearTargetedLayerUuid() {self._targetedLayerUuid = nil}
 
   public var uuid: Rv_Data_UUID {
-    get {return _uuid ?? Rv_Data_UUID()}
+    get {_uuid ?? Rv_Data_UUID()}
     set {_uuid = newValue}
   }
   /// Returns true if `uuid` has been explicitly set.
-  public var hasUuid: Bool {return self._uuid != nil}
+  public var hasUuid: Bool {self._uuid != nil}
   /// Clears the value of `uuid`. Subsequent reads from it will return its default value.
   public mutating func clearUuid() {self._uuid = nil}
 
@@ -55,9 +55,9 @@ public struct Rv_Data_LiveVideoPlaylist: Sendable {
 
 // MARK: - Code below here is support for the SwiftProtobuf runtime.
 
-fileprivate let _protobuf_package = "rv.data"
+fileprivate nonisolated let _protobuf_package = "rv.data"
 
-extension Rv_Data_LiveVideoPlaylist: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+nonisolated extension Rv_Data_LiveVideoPlaylist: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   public static let protoMessageName: String = _protobuf_package + ".LiveVideoPlaylist"
   public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{1}actions\0\u{3}targeted_layer_UUID\0\u{1}uuid\0")
 

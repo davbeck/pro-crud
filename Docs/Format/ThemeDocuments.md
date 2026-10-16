@@ -285,6 +285,11 @@ font-family and bold/italic differences relative to the source's modal font,
 relative run sizes, and properties whose values vary within the source box. It
 does not claim complete native precedence for every Cocoa attribute.
 
+The typed protobuf view includes the 21.4 ligature-style, character-size-mode
+and original-font custom metadata fields. Static glyph rendering still follows
+the stored RTF; decoding these fields does not emulate dynamic character-size
+behavior. Original-font metadata is preserved without additional rescaling.
+
 Meaningful source `custom_attributes` are copied using UTF-16 ranges, clipped
 to the unchanged source string, and dropped if their clipped range is empty.
 Range-only entries are discarded, and meaningful template placeholder ranges
@@ -405,6 +410,15 @@ does not contact or mutate a running ProPresenter instance. It uses
 `runtimeLook`, resolves only selected slides when `--slide` is present, and
 never includes template actions. The Look's persisted background/foreground
 switches are reported but are not yet separated in the file renderer.
+
+For a native 22 workspace, the same command resolves saved/shared or live/client
+Looks and the selected Theme stream from one consistent database snapshot.
+Selected slides containing media remain gated pending native media rebasing;
+unused slides and ignored Theme actions do not block a media-free selection.
+ROOT_CURRENT_RESOURCE in a Workspace Look refers to that workspace, separately
+from a Theme element's own resource directory. Stored disabled-screen state
+produces a warning without enabling output. Missing local configuration can use
+valid shared logical dimensions; missing Theme/template identities fail explicitly.
 
 ## Compatibility Limits
 

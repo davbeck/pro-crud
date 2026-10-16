@@ -1,5 +1,12 @@
 # ProPresenter Rendering Fixtures
 
+Keep versioned exports independent. Existing references below remain the 21.4
+oracle. The 22 corpus is documented in `../ProPresenter22/README.md`; collect
+fresh 22 Slide Images with exact app/build, OS, fonts and export settings in a
+separate reference set. Do not replace 21.4 references to make a 22 rendering
+comparison pass. Contributor environment preflight and helper/account isolation
+are documented in `../../Internal/Testing/ProPresenterNativeAcceptance.md`.
+
 This directory holds the ProPresenter rendering fixtures and their embedded
 media dependencies. See `../README.md` for the fixture layout.
 

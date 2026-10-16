@@ -15,89 +15,89 @@ import SwiftProtobuf
 // incompatible with the version of SwiftProtobuf to which you are linking.
 // Please ensure that you are building against the same version of the API
 // that was used to generate this file.
-fileprivate struct _GeneratedWithProtocGenSwiftVersion: SwiftProtobuf.ProtobufAPIVersionCheck {
+fileprivate nonisolated struct _GeneratedWithProtocGenSwiftVersion: SwiftProtobuf.ProtobufAPIVersionCheck {
   struct _2: SwiftProtobuf.ProtobufAPIVersion_2 {}
   typealias Version = _2
 }
 
-public struct Rv_Data_ProPresenterWorkspace: @unchecked Sendable {
+public nonisolated struct Rv_Data_ProPresenterWorkspace: @unchecked Sendable {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
   // methods supported on all messages.
 
   public var proScreens: [Rv_Data_ProPresenterScreen] {
-    get {return _storage._proScreens}
+    get {_storage._proScreens}
     set {_uniqueStorage()._proScreens = newValue}
   }
 
   public var audienceLooks: [Rv_Data_ProAudienceLook] {
-    get {return _storage._audienceLooks}
+    get {_storage._audienceLooks}
     set {_uniqueStorage()._audienceLooks = newValue}
   }
 
   public var liveAudienceLook: Rv_Data_ProAudienceLook {
-    get {return _storage._liveAudienceLook ?? Rv_Data_ProAudienceLook()}
+    get {_storage._liveAudienceLook ?? Rv_Data_ProAudienceLook()}
     set {_uniqueStorage()._liveAudienceLook = newValue}
   }
   /// Returns true if `liveAudienceLook` has been explicitly set.
-  public var hasLiveAudienceLook: Bool {return _storage._liveAudienceLook != nil}
+  public var hasLiveAudienceLook: Bool {_storage._liveAudienceLook != nil}
   /// Clears the value of `liveAudienceLook`. Subsequent reads from it will return its default value.
   public mutating func clearLiveAudienceLook() {_uniqueStorage()._liveAudienceLook = nil}
 
   public var masks: [Rv_Data_ProMask] {
-    get {return _storage._masks}
+    get {_storage._masks}
     set {_uniqueStorage()._masks = newValue}
   }
 
   public var videoInputs: [Rv_Data_VideoInput] {
-    get {return _storage._videoInputs}
+    get {_storage._videoInputs}
     set {_uniqueStorage()._videoInputs = newValue}
   }
 
   public var stageLayoutMappings: [Rv_Data_Stage.ScreenAssignment] {
-    get {return _storage._stageLayoutMappings}
+    get {_storage._stageLayoutMappings}
     set {_uniqueStorage()._stageLayoutMappings = newValue}
   }
 
   public var audioSettings: Rv_Data_Audio.SettingsDocument {
-    get {return _storage._audioSettings ?? Rv_Data_Audio.SettingsDocument()}
+    get {_storage._audioSettings ?? Rv_Data_Audio.SettingsDocument()}
     set {_uniqueStorage()._audioSettings = newValue}
   }
   /// Returns true if `audioSettings` has been explicitly set.
-  public var hasAudioSettings: Bool {return _storage._audioSettings != nil}
+  public var hasAudioSettings: Bool {_storage._audioSettings != nil}
   /// Clears the value of `audioSettings`. Subsequent reads from it will return its default value.
   public mutating func clearAudioSettings() {_uniqueStorage()._audioSettings = nil}
 
   public var selectedLibraryName: String {
-    get {return _storage._selectedLibraryName}
+    get {_storage._selectedLibraryName}
     set {_uniqueStorage()._selectedLibraryName = newValue}
   }
 
   public var recordSettings: Rv_Data_Recording.SettingsDocument {
-    get {return _storage._recordSettings ?? Rv_Data_Recording.SettingsDocument()}
+    get {_storage._recordSettings ?? Rv_Data_Recording.SettingsDocument()}
     set {_uniqueStorage()._recordSettings = newValue}
   }
   /// Returns true if `recordSettings` has been explicitly set.
-  public var hasRecordSettings: Bool {return _storage._recordSettings != nil}
+  public var hasRecordSettings: Bool {_storage._recordSettings != nil}
   /// Clears the value of `recordSettings`. Subsequent reads from it will return its default value.
   public mutating func clearRecordSettings() {_uniqueStorage()._recordSettings = nil}
 
   public var digitalAudioSetup: Rv_Data_DigitalAudio.Setup {
-    get {return _storage._digitalAudioSetup ?? Rv_Data_DigitalAudio.Setup()}
+    get {_storage._digitalAudioSetup ?? Rv_Data_DigitalAudio.Setup()}
     set {_uniqueStorage()._digitalAudioSetup = newValue}
   }
   /// Returns true if `digitalAudioSetup` has been explicitly set.
-  public var hasDigitalAudioSetup: Bool {return _storage._digitalAudioSetup != nil}
+  public var hasDigitalAudioSetup: Bool {_storage._digitalAudioSetup != nil}
   /// Clears the value of `digitalAudioSetup`. Subsequent reads from it will return its default value.
   public mutating func clearDigitalAudioSetup() {_uniqueStorage()._digitalAudioSetup = nil}
 
   public var audioInputs: [Rv_Data_AudioInput] {
-    get {return _storage._audioInputs}
+    get {_storage._audioInputs}
     set {_uniqueStorage()._audioInputs = newValue}
   }
 
   public var audioInputTransitionTime: Double {
-    get {return _storage._audioInputTransitionTime}
+    get {_storage._audioInputTransitionTime}
     set {_uniqueStorage()._audioInputTransitionTime = newValue}
   }
 
@@ -110,9 +110,9 @@ public struct Rv_Data_ProPresenterWorkspace: @unchecked Sendable {
 
 // MARK: - Code below here is support for the SwiftProtobuf runtime.
 
-fileprivate let _protobuf_package = "rv.data"
+fileprivate nonisolated let _protobuf_package = "rv.data"
 
-extension Rv_Data_ProPresenterWorkspace: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+nonisolated extension Rv_Data_ProPresenterWorkspace: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   public static let protoMessageName: String = _protobuf_package + ".ProPresenterWorkspace"
   public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{3}pro_screens\0\u{3}audience_looks\0\u{3}live_audience_look\0\u{1}masks\0\u{1}videoInputs\0\u{3}stage_layout_mappings\0\u{3}audio_settings\0\u{3}selected_library_name\0\u{3}record_settings\0\u{3}digital_audio_setup\0\u{3}audio_inputs\0\u{3}audio_input_transition_time\0")
 

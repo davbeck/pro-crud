@@ -15,164 +15,164 @@ import SwiftProtobuf
 // incompatible with the version of SwiftProtobuf to which you are linking.
 // Please ensure that you are building against the same version of the API
 // that was used to generate this file.
-fileprivate struct _GeneratedWithProtocGenSwiftVersion: SwiftProtobuf.ProtobufAPIVersionCheck {
+fileprivate nonisolated struct _GeneratedWithProtocGenSwiftVersion: SwiftProtobuf.ProtobufAPIVersionCheck {
   struct _2: SwiftProtobuf.ProtobufAPIVersion_2 {}
   typealias Version = _2
 }
 
-public struct Rv_Data_Workspace: @unchecked Sendable {
+public nonisolated struct Rv_Data_Workspace: @unchecked Sendable {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
   // methods supported on all messages.
 
   public var uuid: Rv_Data_UUID {
-    get {return _storage._uuid ?? Rv_Data_UUID()}
+    get {_storage._uuid ?? Rv_Data_UUID()}
     set {_uniqueStorage()._uuid = newValue}
   }
   /// Returns true if `uuid` has been explicitly set.
-  public var hasUuid: Bool {return _storage._uuid != nil}
+  public var hasUuid: Bool {_storage._uuid != nil}
   /// Clears the value of `uuid`. Subsequent reads from it will return its default value.
   public mutating func clearUuid() {_uniqueStorage()._uuid = nil}
 
   public var muted: Bool {
-    get {return _storage._muted}
+    get {_storage._muted}
     set {_uniqueStorage()._muted = newValue}
   }
 
   public var hidden: Bool {
-    get {return _storage._hidden}
+    get {_storage._hidden}
     set {_uniqueStorage()._hidden = newValue}
   }
 
   public var editorBackground: Rv_Data_Workspace.EditorBackground {
-    get {return _storage._editorBackground ?? Rv_Data_Workspace.EditorBackground()}
+    get {_storage._editorBackground ?? Rv_Data_Workspace.EditorBackground()}
     set {_uniqueStorage()._editorBackground = newValue}
   }
   /// Returns true if `editorBackground` has been explicitly set.
-  public var hasEditorBackground: Bool {return _storage._editorBackground != nil}
+  public var hasEditorBackground: Bool {_storage._editorBackground != nil}
   /// Clears the value of `editorBackground`. Subsequent reads from it will return its default value.
   public mutating func clearEditorBackground() {_uniqueStorage()._editorBackground = nil}
 
   public var effectPresetUuid: Rv_Data_UUID {
-    get {return _storage._effectPresetUuid ?? Rv_Data_UUID()}
+    get {_storage._effectPresetUuid ?? Rv_Data_UUID()}
     set {_uniqueStorage()._effectPresetUuid = newValue}
   }
   /// Returns true if `effectPresetUuid` has been explicitly set.
-  public var hasEffectPresetUuid: Bool {return _storage._effectPresetUuid != nil}
+  public var hasEffectPresetUuid: Bool {_storage._effectPresetUuid != nil}
   /// Clears the value of `effectPresetUuid`. Subsequent reads from it will return its default value.
   public mutating func clearEffectPresetUuid() {_uniqueStorage()._effectPresetUuid = nil}
 
   public var effectBuildDuration: Double {
-    get {return _storage._effectBuildDuration}
+    get {_storage._effectBuildDuration}
     set {_uniqueStorage()._effectBuildDuration = newValue}
   }
 
   public var transition: Rv_Data_Transition {
-    get {return _storage._transition ?? Rv_Data_Transition()}
+    get {_storage._transition ?? Rv_Data_Transition()}
     set {_uniqueStorage()._transition = newValue}
   }
   /// Returns true if `transition` has been explicitly set.
-  public var hasTransition: Bool {return _storage._transition != nil}
+  public var hasTransition: Bool {_storage._transition != nil}
   /// Clears the value of `transition`. Subsequent reads from it will return its default value.
   public mutating func clearTransition() {_uniqueStorage()._transition = nil}
 
   public var activeMaskUuid: Rv_Data_UUID {
-    get {return _storage._activeMaskUuid ?? Rv_Data_UUID()}
+    get {_storage._activeMaskUuid ?? Rv_Data_UUID()}
     set {_uniqueStorage()._activeMaskUuid = newValue}
   }
   /// Returns true if `activeMaskUuid` has been explicitly set.
-  public var hasActiveMaskUuid: Bool {return _storage._activeMaskUuid != nil}
+  public var hasActiveMaskUuid: Bool {_storage._activeMaskUuid != nil}
   /// Clears the value of `activeMaskUuid`. Subsequent reads from it will return its default value.
   public mutating func clearActiveMaskUuid() {_uniqueStorage()._activeMaskUuid = nil}
 
   public var playlist: Rv_Data_Playlist {
-    get {return _storage._playlist ?? Rv_Data_Playlist()}
+    get {_storage._playlist ?? Rv_Data_Playlist()}
     set {_uniqueStorage()._playlist = newValue}
   }
   /// Returns true if `playlist` has been explicitly set.
-  public var hasPlaylist: Bool {return _storage._playlist != nil}
+  public var hasPlaylist: Bool {_storage._playlist != nil}
   /// Clears the value of `playlist`. Subsequent reads from it will return its default value.
   public mutating func clearPlaylist() {_uniqueStorage()._playlist = nil}
 
   public var unitScaling: Rv_Data_Workspace.UnitScaling {
-    get {return _storage._unitScaling ?? Rv_Data_Workspace.UnitScaling()}
+    get {_storage._unitScaling ?? Rv_Data_Workspace.UnitScaling()}
     set {_uniqueStorage()._unitScaling = newValue}
   }
   /// Returns true if `unitScaling` has been explicitly set.
-  public var hasUnitScaling: Bool {return _storage._unitScaling != nil}
+  public var hasUnitScaling: Bool {_storage._unitScaling != nil}
   /// Clears the value of `unitScaling`. Subsequent reads from it will return its default value.
   public mutating func clearUnitScaling() {_uniqueStorage()._unitScaling = nil}
 
   public var effects: [Rv_Data_Effect] {
-    get {return _storage._effects}
+    get {_storage._effects}
     set {_uniqueStorage()._effects = newValue}
   }
 
   public var masks: [Rv_Data_Mask] {
-    get {return _storage._masks}
+    get {_storage._masks}
     set {_uniqueStorage()._masks = newValue}
   }
 
   public var screens: [Rv_Data_Screen] {
-    get {return _storage._screens}
+    get {_storage._screens}
     set {_uniqueStorage()._screens = newValue}
   }
 
   public var edgeBlends: [Rv_Data_EdgeBlend] {
-    get {return _storage._edgeBlends}
+    get {_storage._edgeBlends}
     set {_uniqueStorage()._edgeBlends = newValue}
   }
 
   public var layers: [Rv_Data_Layer] {
-    get {return _storage._layers}
+    get {_storage._layers}
     set {_uniqueStorage()._layers = newValue}
   }
 
   public var targetSets: [Rv_Data_TargetSet] {
-    get {return _storage._targetSets}
+    get {_storage._targetSets}
     set {_uniqueStorage()._targetSets = newValue}
   }
 
   public var hotKeys: [Rv_Data_HotKey] {
-    get {return _storage._hotKeys}
+    get {_storage._hotKeys}
     set {_uniqueStorage()._hotKeys = newValue}
   }
 
   public var calendar: Rv_Data_Calendar {
-    get {return _storage._calendar ?? Rv_Data_Calendar()}
+    get {_storage._calendar ?? Rv_Data_Calendar()}
     set {_uniqueStorage()._calendar = newValue}
   }
   /// Returns true if `calendar` has been explicitly set.
-  public var hasCalendar: Bool {return _storage._calendar != nil}
+  public var hasCalendar: Bool {_storage._calendar != nil}
   /// Clears the value of `calendar`. Subsequent reads from it will return its default value.
   public mutating func clearCalendar() {_uniqueStorage()._calendar = nil}
 
   public var alignmentGuides: [Rv_Data_AlignmentGuide] {
-    get {return _storage._alignmentGuides}
+    get {_storage._alignmentGuides}
     set {_uniqueStorage()._alignmentGuides = newValue}
   }
 
   public var liveVideoPlaylist: Rv_Data_LiveVideoPlaylist {
-    get {return _storage._liveVideoPlaylist ?? Rv_Data_LiveVideoPlaylist()}
+    get {_storage._liveVideoPlaylist ?? Rv_Data_LiveVideoPlaylist()}
     set {_uniqueStorage()._liveVideoPlaylist = newValue}
   }
   /// Returns true if `liveVideoPlaylist` has been explicitly set.
-  public var hasLiveVideoPlaylist: Bool {return _storage._liveVideoPlaylist != nil}
+  public var hasLiveVideoPlaylist: Bool {_storage._liveVideoPlaylist != nil}
   /// Clears the value of `liveVideoPlaylist`. Subsequent reads from it will return its default value.
   public mutating func clearLiveVideoPlaylist() {_uniqueStorage()._liveVideoPlaylist = nil}
 
   public var outputPreviewDisplay: Rv_Data_OutputDisplay {
-    get {return _storage._outputPreviewDisplay ?? Rv_Data_OutputDisplay()}
+    get {_storage._outputPreviewDisplay ?? Rv_Data_OutputDisplay()}
     set {_uniqueStorage()._outputPreviewDisplay = newValue}
   }
   /// Returns true if `outputPreviewDisplay` has been explicitly set.
-  public var hasOutputPreviewDisplay: Bool {return _storage._outputPreviewDisplay != nil}
+  public var hasOutputPreviewDisplay: Bool {_storage._outputPreviewDisplay != nil}
   /// Clears the value of `outputPreviewDisplay`. Subsequent reads from it will return its default value.
   public mutating func clearOutputPreviewDisplay() {_uniqueStorage()._outputPreviewDisplay = nil}
 
   public var unknownFields = SwiftProtobuf.UnknownStorage()
 
-  public struct EditorBackground: Sendable {
+  public nonisolated struct EditorBackground: Sendable {
     // SwiftProtobuf.Message conformance is added in an extension below. See the
     // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
     // methods supported on all messages.
@@ -180,20 +180,20 @@ public struct Rv_Data_Workspace: @unchecked Sendable {
     public var enabled: Bool = false
 
     public var frame: Rv_Data_Graphics.Rect {
-      get {return _frame ?? Rv_Data_Graphics.Rect()}
+      get {_frame ?? Rv_Data_Graphics.Rect()}
       set {_frame = newValue}
     }
     /// Returns true if `frame` has been explicitly set.
-    public var hasFrame: Bool {return self._frame != nil}
+    public var hasFrame: Bool {self._frame != nil}
     /// Clears the value of `frame`. Subsequent reads from it will return its default value.
     public mutating func clearFrame() {self._frame = nil}
 
     public var url: Rv_Data_URL {
-      get {return _url ?? Rv_Data_URL()}
+      get {_url ?? Rv_Data_URL()}
       set {_url = newValue}
     }
     /// Returns true if `url` has been explicitly set.
-    public var hasURL: Bool {return self._url != nil}
+    public var hasURL: Bool {self._url != nil}
     /// Clears the value of `url`. Subsequent reads from it will return its default value.
     public mutating func clearURL() {self._url = nil}
 
@@ -207,7 +207,7 @@ public struct Rv_Data_Workspace: @unchecked Sendable {
     fileprivate var _url: Rv_Data_URL? = nil
   }
 
-  public struct UnitScaling: Sendable {
+  public nonisolated struct UnitScaling: Sendable {
     // SwiftProtobuf.Message conformance is added in an extension below. See the
     // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
     // methods supported on all messages.
@@ -220,7 +220,7 @@ public struct Rv_Data_Workspace: @unchecked Sendable {
 
     public var unknownFields = SwiftProtobuf.UnknownStorage()
 
-    public enum UnitType: SwiftProtobuf.Enum, Swift.CaseIterable {
+    public nonisolated enum UnitType: SwiftProtobuf.Enum, Swift.CaseIterable {
       public typealias RawValue = Int
       case points // = 0
       case millimeters // = 1
@@ -280,9 +280,9 @@ public struct Rv_Data_Workspace: @unchecked Sendable {
 
 // MARK: - Code below here is support for the SwiftProtobuf runtime.
 
-fileprivate let _protobuf_package = "rv.data"
+fileprivate nonisolated let _protobuf_package = "rv.data"
 
-extension Rv_Data_Workspace: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+nonisolated extension Rv_Data_Workspace: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   public static let protoMessageName: String = _protobuf_package + ".Workspace"
   public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{1}uuid\0\u{1}muted\0\u{1}hidden\0\u{3}editor_background\0\u{3}effect_preset_uuid\0\u{3}effect_build_duration\0\u{1}transition\0\u{3}active_mask_uuid\0\u{1}playlist\0\u{3}unit_scaling\0\u{2}\u{6}effects\0\u{1}masks\0\u{1}screens\0\u{3}edge_blends\0\u{1}layers\0\u{3}target_sets\0\u{3}hot_keys\0\u{1}calendar\0\u{3}alignment_guides\0\u{3}live_video_playlist\0\u{3}output_preview_display\0")
 
@@ -492,7 +492,7 @@ extension Rv_Data_Workspace: SwiftProtobuf.Message, SwiftProtobuf._MessageImplem
   }
 }
 
-extension Rv_Data_Workspace.EditorBackground: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+nonisolated extension Rv_Data_Workspace.EditorBackground: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   public static let protoMessageName: String = Rv_Data_Workspace.protoMessageName + ".EditorBackground"
   public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{1}enabled\0\u{1}frame\0\u{1}url\0\u{1}opacity\0")
 
@@ -541,7 +541,7 @@ extension Rv_Data_Workspace.EditorBackground: SwiftProtobuf.Message, SwiftProtob
   }
 }
 
-extension Rv_Data_Workspace.UnitScaling: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+nonisolated extension Rv_Data_Workspace.UnitScaling: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   public static let protoMessageName: String = Rv_Data_Workspace.protoMessageName + ".UnitScaling"
   public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{1}length\0\u{1}unit\0\u{1}points\0")
 
@@ -581,6 +581,6 @@ extension Rv_Data_Workspace.UnitScaling: SwiftProtobuf.Message, SwiftProtobuf._M
   }
 }
 
-extension Rv_Data_Workspace.UnitScaling.UnitType: SwiftProtobuf._ProtoNameProviding {
+nonisolated extension Rv_Data_Workspace.UnitScaling.UnitType: SwiftProtobuf._ProtoNameProviding {
   public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{2}\0UNIT_TYPE_POINTS\0\u{1}UNIT_TYPE_MILLIMETERS\0\u{1}UNIT_TYPE_CENTIMETERS\0\u{1}UNIT_TYPE_METERS\0\u{1}UNIT_TYPE_INCHES\0\u{1}UNIT_TYPE_FEET\0")
 }

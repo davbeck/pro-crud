@@ -113,6 +113,7 @@ final class SetMediaBatchTransaction {
 	init(workspaceURL: URL, entries: [SetMediaBatchEntry]) throws {
 		let fileManager = FileManager.default
 		let workspaceURL = workspaceURL.standardizedFileURL
+		try WorkspaceInspector.requireLegacyAccess(at: workspaceURL)
 		try Self.requireNonSymlink(workspaceURL, description: "workspace")
 		var isDirectory: ObjCBool = false
 		guard fileManager.fileExists(atPath: workspaceURL.path, isDirectory: &isDirectory), isDirectory.boolValue else {

@@ -13,16 +13,30 @@ private struct CreateOptions {
 	var output: String
 	var name: String
 	var replace: Bool
+	var targetVersion: ProPresenterTargetVersion
+	var json: Bool
 
 	func write(_ payload: DocumentPayload) throws {
 		let outputURL = URL(fileURLWithPath: output)
+		let document = ProPresenterDocument(payload: payload, origin: .raw(outputURL))
+		let compatibility = try DocumentCompatibility.analyze(document, target: targetVersion)
 		try DocumentWriter.writeRaw(
-			ProPresenterDocument(payload: payload, origin: .raw(outputURL)),
+			document,
 			to: outputURL,
 			replace: replace,
+			targetVersion: targetVersion,
 		)
-		print("Created \(outputURL.path)")
+		if json {
+			try print(prettyJSON(CreationResult(path: outputURL.path, compatibility: compatibility)))
+		} else {
+			print("Created \(outputURL.path) (target \(targetVersion.rawValue))")
+		}
 	}
+}
+
+private struct CreationResult: Encodable {
+	var path: String
+	var compatibility: DocumentCompatibilityReport
 }
 
 struct CreatePresentation: ParsableCommand {
@@ -36,13 +50,15 @@ struct CreatePresentation: ParsableCommand {
 	@Option(help: "Exact template name or source path when the theme contains multiple templates.") var template: String?
 	@Flag(help: "Copy the selected template's actions into the initial cue.") var includeTemplateActions = false
 	@Flag(help: "Replace an existing output file.") var replace = false
+	@OptionGroup var target: TargetVersionOptions
+	@Flag(help: "Print the created path and compatibility profile as JSON.") var json = false
 
 	func run() throws {
 		let outputURL = URL(fileURLWithPath: output)
 		guard outputURL.pathExtension.lowercased() == "pro" else {
 			throw ValidationError("Presentation output must use a .pro extension.")
 		}
-		var presentation = try DocumentFactory.presentation(name: name, canvasSize: DocumentFactory.canvasSize(size))
+		var presentation = try DocumentFactory.presentation(name: name, canvasSize: DocumentFactory.canvasSize(size), targetVersion: target.targetVersion)
 		var templateMediaURLs: Set<String> = []
 		var retainedTemplateCandidates: [ThemeTemplateSource.Candidate] = []
 		if let theme {
@@ -71,13 +87,14 @@ struct CreatePresentation: ParsableCommand {
 		guard replace || !FileManager.default.fileExists(atPath: outputURL.path) else {
 			throw CocoaError(.fileWriteFileExists)
 		}
+		try DocumentCompatibility.analyze(ProPresenterDocument(payload: .presentation(presentation), origin: .raw(outputURL)), target: target.targetVersion).requireSupported()
 		try withExtendedLifetime(retainedTemplateCandidates) {
 			try TemplateMediaMaterializer.materialize(
 				in: &presentation,
 				absoluteURLs: templateMediaURLs,
 				destinationDirectory: outputURL.deletingLastPathComponent(),
 			)
-			try CreateOptions(output: output, name: name, replace: replace).write(.presentation(presentation))
+			try CreateOptions(output: output, name: name, replace: replace, targetVersion: target.targetVersion, json: json).write(.presentation(presentation))
 		}
 	}
 }
@@ -88,12 +105,14 @@ struct CreateTheme: ParsableCommand {
 	@Option(help: "Output Theme file path.") var output: String
 	@Option(help: "Theme name retained by the containing folder.") var name: String = "Untitled Theme"
 	@Flag(help: "Replace an existing output file.") var replace = false
+	@OptionGroup var target: TargetVersionOptions
+	@Flag(help: "Print the created path and compatibility profile as JSON.") var json = false
 
 	func run() throws {
 		guard URL(fileURLWithPath: output).lastPathComponent == "Theme" else {
 			throw ValidationError("Theme output must be named Theme.")
 		}
-		try CreateOptions(output: output, name: name, replace: replace).write(.theme(DocumentFactory.theme()))
+		try CreateOptions(output: output, name: name, replace: replace, targetVersion: target.targetVersion, json: json).write(.theme(DocumentFactory.theme(targetVersion: target.targetVersion)))
 	}
 }
 
@@ -103,11 +122,13 @@ struct CreatePlaylist: ParsableCommand {
 	@Option(help: "Output data file path.") var output: String
 	@Option(help: "Playlist name.") var name: String = "Untitled Playlist"
 	@Flag(help: "Replace an existing output file.") var replace = false
+	@OptionGroup var target: TargetVersionOptions
+	@Flag(help: "Print the created path and compatibility profile as JSON.") var json = false
 
 	func run() throws {
 		guard URL(fileURLWithPath: output).lastPathComponent == "data" else {
 			throw ValidationError("Playlist output must be named data.")
 		}
-		try CreateOptions(output: output, name: name, replace: replace).write(.playlist(DocumentFactory.playlist(name: name)))
+		try CreateOptions(output: output, name: name, replace: replace, targetVersion: target.targetVersion, json: json).write(.playlist(DocumentFactory.playlist(name: name, targetVersion: target.targetVersion)))
 	}
 }
