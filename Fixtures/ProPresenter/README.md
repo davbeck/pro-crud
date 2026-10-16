@@ -24,6 +24,12 @@ Every generated presentation uses an 854 by 480 canvas. Isolated elements are
 scaled and centered within that canvas so transparent pixels do not dominate
 snapshot comparisons.
 
+All 15 Shape Effects comparisons, including the five feather variants, pass at
+the unchanged 0.99 pixel and 0.99 perceptual precision. Exact interior-alpha
+assertions additionally protect translucent fills and stroke interiors. The
+feather investigation and independent native checks are recorded in
+`../../Internal/Research/Format/RenderingIssues/README.md`.
+
 ## Typography fixture
 
 `Typography/Typography.probundle` is a standalone, media-free six-slide

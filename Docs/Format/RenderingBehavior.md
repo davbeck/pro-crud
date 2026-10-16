@@ -229,8 +229,11 @@ width. Its mask is independent of the paint opacity and the gaps in a dashed
 stroke. Fill and stroke receive the mask before compositing, preserving a
 partially transparent fill and the inside edge of a stroke-only shape. The
 stored radius is normalized to the smaller element dimension. The renderer
-uses a geometric inset and Core Graphics blur; the outer falloff still differs
-from the ProPresenter 21.4 exports at the rendering fixture precision.
+insets the vector path, blurs its fill and continuous stroke into a grayscale
+mask, and clips the original paint through that mask. Mask rasterization uses
+top-down coordinates, fractional path bounds, and rounded bitmap dimensions.
+The star and polygon fill, solid-stroke, and dashed-stroke variants match the
+ProPresenter 21.4 exports at 0.99 pixel and 0.99 perceptual precision.
 
 ## Media Sampling
 

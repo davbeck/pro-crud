@@ -933,89 +933,59 @@ public final class PresentationRenderer {
 		let radius = CGFloat(element.feather.radius) * min(rect.width, rect.height)
 		guard radius > 0 else { return }
 
-		let padding = ceil(radius * 3)
-		let destinationOrigin = CGPoint(x: floor(rect.minX) - padding, y: floor(rect.minY) - padding)
-		let localOrigin = CGPoint(x: rect.minX - destinationOrigin.x, y: rect.minY - destinationOrigin.y)
-		let imageSize = CGSize(width: ceil(localOrigin.x + rect.width + padding), height: ceil(localOrigin.y + rect.height + padding))
-		guard let bitmap = NSBitmapImageRep(
-			bitmapDataPlanes: nil,
-			pixelsWide: Int(imageSize.width),
-			pixelsHigh: Int(imageSize.height),
-			bitsPerSample: 8,
-			samplesPerPixel: 4,
-			hasAlpha: true,
-			isPlanar: false,
-			colorSpaceName: .deviceRGB,
-			bytesPerRow: 0,
-			bitsPerPixel: 0,
-		), let bitmapContext = NSGraphicsContext(bitmapImageRep: bitmap) else {
-			return
-		}
-		bitmap.size = imageSize
-		bitmap.bitmapData?.initialize(repeating: 0, count: bitmap.bytesPerRow * bitmap.pixelsHigh)
-
-		let localRect = CGRect(origin: localOrigin, size: rect.size)
-		let previousContext = NSGraphicsContext.current
-		var appearances: [CIImage] = []
-		for isStroke in [false, true] {
-			var appearance = element
-			appearance.fill.enable = !isStroke && element.fill.enable
-			appearance.stroke.enable = isStroke && element.stroke.enable
-			bitmap.bitmapData?.initialize(repeating: 0, count: bitmap.bytesPerRow * bitmap.pixelsHigh)
-			NSGraphicsContext.current = bitmapContext
-			drawRawElementAppearance(
-				appearance,
-				in: localRect,
-				canvasSize: canvasSize,
-				path: drawingPath(for: element.path, in: localRect),
-				lineFillMask: lineFillMask,
-				withShadow: withShadow,
-			)
-			if let image = bitmap.cgImage {
-				appearances.append(CIImage(cgImage: image))
-			}
-		}
-		NSGraphicsContext.current = previousContext
-
-		// Feather the outside of the shape, including its stroke envelope. The
-		// mask is opaque regardless of fill opacity or gaps in a dashed stroke.
-		bitmap.bitmapData?.initialize(repeating: 0, count: bitmap.bytesPerRow * bitmap.pixelsHigh)
-		NSGraphicsContext.current = bitmapContext
-		let maskPath = drawingPath(for: element.path, in: localRect)
-		NSColor.white.setFill()
-		maskPath.fill()
+		let path = drawingPath(for: element.path, in: rect)
+		// Native feather masks use top-down coordinates. Preserve fractional
+		// path bounds and round only the bitmap dimensions, not its origin.
+		var flip = CGAffineTransform(scaleX: 1, y: -1)
+		guard let maskPath = path.cgPath.copy(using: &flip) else { return }
 		let strokeWidth = element.stroke.enable ? CGFloat(element.stroke.width) : 0
-		let insetStroke = strokeWidth - 2 * radius
-		maskPath.lineWidth = abs(insetStroke)
-		maskPath.lineJoinStyle = .round
-		if insetStroke < 0 {
-			bitmapContext.cgContext.setBlendMode(.clear)
-		} else {
-			NSColor.white.setStroke()
-		}
-		maskPath.stroke()
-		bitmapContext.cgContext.setBlendMode(.normal)
-		NSGraphicsContext.current = previousContext
-		guard let maskImage = bitmap.cgImage else { return }
-		bitmap.bitmapData?.initialize(repeating: 0, count: bitmap.bytesPerRow * bitmap.pixelsHigh)
-		bitmapContext.cgContext.saveGState()
-		bitmapContext.cgContext.setShadow(offset: CGSize(width: imageSize.width, height: 0), blur: radius, color: NSColor.white.cgColor)
-		bitmapContext.cgContext.draw(maskImage, in: CGRect(x: -imageSize.width, y: 0, width: imageSize.width, height: imageSize.height))
-		bitmapContext.cgContext.restoreGState()
-		guard let blurredImage = bitmap.cgImage else { return }
-		let blurred = CIImage(cgImage: blurredImage)
+		let envelope = strokeWidth > 0
+			? maskPath.copy(strokingWithWidth: strokeWidth, lineCap: .butt, lineJoin: .miter, miterLimit: 10)
+			: maskPath
+		let bounds = envelope.boundingBoxOfPath
+		let width = Int(bounds.width.rounded())
+		let height = Int(bounds.height.rounded())
+		guard let maskContext = CGContext(
+			data: nil,
+			width: width,
+			height: height,
+			bitsPerComponent: 8,
+			bytesPerRow: 0,
+			space: CGColorSpaceCreateDeviceGray(),
+			bitmapInfo: CGImageAlphaInfo.none.rawValue,
+		) else { return }
 
-		for source in appearances {
-			let feathered = source.applyingFilter(
-				"CISourceInCompositing",
-				parameters: [kCIInputBackgroundImageKey: blurred],
-			)
-			guard let image = CIContext().createCGImage(feathered, from: source.extent) else { return }
-			NSGraphicsContext.current?.cgContext.draw(
-				image,
-				in: CGRect(origin: destinationOrigin, size: imageSize),
-			)
+		let border = maskPath.copy(strokingWithWidth: radius * 2, lineCap: .butt, lineJoin: .miter, miterLimit: 10)
+		let inset = maskPath.subtracting(border)
+		// Draw the inset vector path offscreen and retain only its blurred
+		// shadow. Rasterizing before the blur changes subpixel edge coverage.
+		let displacement = bounds.width * 2
+		maskContext.translateBy(x: -bounds.minX + displacement, y: -bounds.minY)
+		maskContext.setShadow(offset: CGSize(width: -displacement, height: 0), blur: radius, color: CGColor(gray: 1, alpha: 1))
+		maskContext.setFillColor(CGColor(gray: 1, alpha: 1))
+		maskContext.addPath(inset)
+		maskContext.fillPath()
+		if strokeWidth > 0 {
+			// The mask includes a continuous stroke even when the paint is dashed.
+			maskContext.addPath(inset.copy(strokingWithWidth: strokeWidth, lineCap: .butt, lineJoin: .miter, miterLimit: 10))
+			maskContext.fillPath()
 		}
+		guard let mask = maskContext.makeImage() else { return }
+
+		let context = NSGraphicsContext.current?.cgContext
+		context?.saveGState()
+		defer { context?.restoreGState() }
+		context?.scaleBy(x: 1, y: -1)
+		context?.clip(to: CGRect(origin: bounds.origin, size: CGSize(width: width, height: height)), mask: mask)
+		context?.scaleBy(x: 1, y: -1)
+		drawRawElementAppearance(
+			element,
+			in: rect,
+			canvasSize: canvasSize,
+			path: path,
+			lineFillMask: lineFillMask,
+			withShadow: withShadow,
+		)
 	}
 
 	private func drawRawElementAppearance(

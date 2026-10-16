@@ -18,35 +18,58 @@ reference PNG, comparison strategy, precision, or perceptual precision changed.
 
 Both expected-failure wrappers were removed.
 
-## Feather opacity correction and remaining falloff
+## Feather falloff resolved
 
-The former feather filter eroded the painted image itself. This squared the
-alpha of a translucent fill and eroded both edges of a stroke-only shape.
-The native exports instead retain the filled outer envelope as a mask, even
-when the fill is disabled or the stroke has gaps. Fill and stroke need separate
-mask application before compositing: masking their already-composited result
-changes their overlap color and opacity.
+The first pass corrected the former filter's squared fill alpha and eroded
+stroke interiors, but left five whole-image comparisons below the required
+precision. The follow-up fixes the remaining mask rasterization and compositing.
 
-The renderer now uses that opaque envelope, a geometric inset, and a Core
-Graphics blur at the stored radius. Exact native pixel-alpha checks protect
-fill opacity and stroke interiors independently of the remaining whole-image
-failures. At pixel (600, 240), slide 14's reference alpha is 204; the former
-renderer produced 163. At (600, 340), slide 12's solid stroke must remain opaque.
+The mask now comes from an inset **vector** path. The renderer draws its fill
+and a continuous miter-joined stroke as separate blurred shadows into an 8-bit
+device-gray bitmap. Stroke width remains independent of the inset, and dash
+patterns affect the paint rather than the mask. Core Graphics clipping applies
+that mask while drawing the original fill and stroke, retaining their opacity
+and native premultiplied color rounding.
+
+Two coordinate details matter: the mask is generated in top-down coordinates,
+and its bounds keep their fractional origin while bitmap width and height are
+rounded to the nearest pixel. Building a bottom-up mask, snapping its origin,
+or rasterizing before the blur introduces different subpixel coverage. These
+rules apply to the geometry without fixture-specific offsets or blur constants.
+The inset is implemented with Core Graphics path subtraction and miter joins.
 
 Whole-image matching fractions at the unchanged perceptual precision **0.99**:
 
-| Shape Effects slide | Before | After | Required |
+| Shape Effects slide | Before follow-up | After | Required |
 | --- | ---: | ---: | ---: |
-| 11, fill | 0.9714505 | 0.9763295 | 0.99 |
-| 12, solid stroke | 0.9223288 | 0.9784958 | 0.99 |
-| 13, dashed stroke | 0.9551620 | 0.9888222 | 0.99 |
-| 14, fill + solid stroke | 0.7915081 | 0.9806450 | 0.99 |
-| 15, fill + dashed stroke | 0.8101849 | 0.9896809 | 0.99 |
+| 11, fill | 0.9763295 | 0.9995072 | 0.99 |
+| 12, solid stroke | 0.9784958 | 0.9989803 | 0.99 |
+| 13, dashed stroke | 0.9888222 | 0.9994218 | 0.99 |
+| 14, fill + solid stroke | 0.9806450 | 0.9993340 | 0.99 |
+| 15, fill + dashed stroke | 0.9896809 | 0.9994170 | 0.99 |
 
-All five remain explicit known issues. Radius rounding, alternate blur kernels,
-and backing-resolution experiments did not establish full parity and their
-experimental switches were removed. These results do not qualify combined
-feather-and-shadow behavior or feathered line-fill masks.
+All five expected-failure wrappers were removed. The existing exact alpha
+assertions remain: slide 14's fill at (600, 240) is 204, and slide 12's inside
+stroke at (600, 340) is opaque. Combined feather-and-shadow behavior and
+feathered line-fill masks are not independently qualified by these fixtures.
+
+### Independent native check
+
+On October 16, the existing `07 - Shape Effects` presentation in the authorized
+local ProPresenter **22 beta build 369098875**, macOS **27.0.1**, was exported via
+**File → Export → Slide Images**, **PNG (without slide background color)**,
+with **Include Media Actions** enabled. The export contains 15 images at 854×480
+in `/tmp/pro-crud-feather-native22`. Slides 11, 12, and 14 are pixel-identical to
+the checked-in 21.4 references. Slides 13 and 15 retain small dash-boundary
+variations; the tests continue to use the original 21.4 exports unchanged.
+The previously selected `ProCRUDTarget22Acceptance-3` presentation was restored.
+No library content or output configuration was changed.
+
+Read-only inspection of the installed build's mask routine confirmed grayscale
+storage, separate vector fill/stroke shadow passes, fractional bounds and rounded
+dimensions. Standalone diagnostic renderings validated these observations
+against the independent exports before integration. No application binary,
+disassembly, or diagnostic rendering was added to the repository.
 
 ## Video fill
 
@@ -89,14 +112,14 @@ and font-descriptor preservation did not reproduce the native pixels exactly.
 No guessed native-22 offset or version-specific renderer branch was retained.
 The original exact native comparison remains a known issue.
 
-Seven of the original nine known issues remain: five feather falloff cases,
-video fill, and native 22 rich text. This is partial progress, not full parity.
+Two of the original nine known issues remain: video fill and native 22 rich
+text. The five feather comparisons are now ordinary passing tests.
 
 ## Validation
 
-The final core run passed 506 tests with the seven known issues above. The CLI
-target passed all 100 tests after rebuilding its embedded documentation. A
-prior combined run stalled in macOS FontRegistry lookups during CLI fixture
-creation; the retry used normal parallel execution without test serialization.
-The focused rendering run also passed the new exact feather-opacity assertions.
-SwiftFormat and strict SwiftLint passed for the changed Swift files.
+The final full `swift test` run passed 506 core tests with the two unrelated
+known issues above, all 100 CLI tests, and the environment-preflight test.
+The focused Shape Effects run passed all 16 tests, including the five feather
+comparisons and exact feather-opacity assertions, with no known issues.
+Tests used normal parallel execution without serialization. SwiftFormat ran
+on the changed Swift files, and strict SwiftLint passed for the repository.
