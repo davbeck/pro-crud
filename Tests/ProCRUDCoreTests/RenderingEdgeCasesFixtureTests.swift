@@ -46,13 +46,7 @@ struct RenderingEdgeCasesFixtureTests {
 			#expect(bitmap.pixelsHigh == 1080)
 			let rendered = NSImage(size: bitmap.size)
 			rendered.addRepresentation(bitmap)
-			if cue.name == "Alternate Text Links" {
-				withKnownIssue {
-					assertRenderingSnapshot(rendered, number: index + 1)
-				}
-			} else {
-				assertRenderingSnapshot(rendered, number: index + 1)
-			}
+			assertRenderingSnapshot(rendered, number: index + 1)
 		}
 	}
 

@@ -317,6 +317,23 @@ struct ShapesRenderingFixtureTests {
 
 @Suite("Shape Effects", .snapshots(diffTool: .ksdiff), .timeLimit(.minutes(1)))
 struct ShapeEffectsRenderingFixtureTests {
+	@Test("Feather preserves paint opacity and the inside edge of a stroke")
+	func featherPreservesPaintOpacity() throws {
+		let presentations = try PresentationLoader.loadPresentations(from: fixtureURL("ProPresenter/ReferenceSlides.proPlaylist"))
+		let document = try #require(presentations.first { $0.sourceName.hasSuffix("Shape Effects") }?.document)
+		let references = URL(fileURLWithPath: #filePath).deletingLastPathComponent()
+			.appendingPathComponent("__Snapshots__/RenderingFixtureTests")
+		// Interior samples from the independent native exports. These assertions
+		// remain strict while the separate whole-image falloff comparisons fail.
+		for (slideNumber, x, y) in [(11, 600, 240), (12, 600, 340), (14, 600, 240), (14, 600, 340), (15, 600, 240)] {
+			let actual = try PresentationRenderer(document: document).render(cue: document.orderedCues[slideNumber - 1])
+			let reference = try #require(NSBitmapImageRep(data: Data(contentsOf: references.appendingPathComponent("rendersShapeEffectsSlide.slide-\(slideNumber).png"))))
+			let expectedAlpha = try #require(reference.colorAt(x: x, y: y)).alphaComponent
+			let actualAlpha = try #require(actual.colorAt(x: x, y: y)).alphaComponent
+			#expect(actualAlpha == expectedAlpha, "Slide \(slideNumber), pixel (\(x), \(y))")
+		}
+	}
+
 	@Test("Standard - Fill")
 	func standardFill() throws {
 		try assertRenderingFixture(
@@ -375,7 +392,7 @@ struct ShapeEffectsRenderingFixtureTests {
 
 	@Test("Feather - Fill + Solid Stroke")
 	func featherFillSolidStroke() {
-		withKnownIssue {
+		withKnownIssue("Outer feather falloff still differs from ProPresenter 21.4; paint opacity has separate exact assertions.") {
 			try assertRenderingFixture(
 				in: "Shape Effects",
 				slideNumber: 14,
@@ -385,7 +402,7 @@ struct ShapeEffectsRenderingFixtureTests {
 
 	@Test("Feather - Dashed Stroke")
 	func featherDashedStroke() {
-		withKnownIssue {
+		withKnownIssue("Outer feather falloff still differs from ProPresenter 21.4; paint opacity has separate exact assertions.") {
 			try assertRenderingFixture(
 				in: "Shape Effects",
 				slideNumber: 13,
@@ -395,7 +412,7 @@ struct ShapeEffectsRenderingFixtureTests {
 
 	@Test("Feather - Fill + Dashed Stroke")
 	func featherFillDashedStroke() {
-		withKnownIssue {
+		withKnownIssue("Outer feather falloff still differs from ProPresenter 21.4; paint opacity has separate exact assertions.") {
 			try assertRenderingFixture(
 				in: "Shape Effects",
 				slideNumber: 15,
@@ -405,7 +422,7 @@ struct ShapeEffectsRenderingFixtureTests {
 
 	@Test("Feather - Fill")
 	func featherFill() {
-		withKnownIssue {
+		withKnownIssue("Outer feather falloff still differs from ProPresenter 21.4; paint opacity has separate exact assertions.") {
 			try assertRenderingFixture(
 				in: "Shape Effects",
 				slideNumber: 11,
@@ -423,7 +440,7 @@ struct ShapeEffectsRenderingFixtureTests {
 
 	@Test("Feather - Solid Stroke")
 	func featherSolidStroke() {
-		withKnownIssue {
+		withKnownIssue("Outer feather falloff still differs from ProPresenter 21.4; paint opacity has separate exact assertions.") {
 			try assertRenderingFixture(
 				in: "Shape Effects",
 				slideNumber: 12,
@@ -505,14 +522,12 @@ struct MediaBackgroundsRenderingFixtureTests {
 	}
 
 	@Test("Image - Fit")
-	func imageFit() {
-		withKnownIssue {
-			try assertRenderingFixture(
-				in: "Media Backgrounds",
-				slideNumber: 3,
-				precision: 0.98,
-			)
-		}
+	func imageFit() throws {
+		try assertRenderingFixture(
+			in: "Media Backgrounds",
+			slideNumber: 3,
+			precision: 0.98,
+		)
 	}
 
 	@Test("Image - Crop, Rotate, and Flip")

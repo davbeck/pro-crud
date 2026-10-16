@@ -203,15 +203,6 @@ public final class PresentationRenderer {
 		}
 
 		if let slide {
-			let hasAlternateTextLinks = slide.elements.contains { slideElement in
-				slideElement.dataLinks.contains { dataLink in
-					if case .alternateText? = dataLink.propertyType {
-						true
-					} else {
-						false
-					}
-				}
-			}
 			for slideElement in slide.elements.reversed() {
 				let element = elementResolvingAlternateText(for: slideElement, in: slide)
 				let hasAlternateTextLink = slideElement.dataLinks.contains(where: { dataLink in
@@ -221,25 +212,9 @@ public final class PresentationRenderer {
 						false
 					}
 				})
+				draw(element: element, canvasSize: canvasSize)
 				if hasAlternateTextLink {
-					let textVerticalOffset = alternateTextLinkVerticalOffset(
-						for: element.text,
-					)
-					draw(
-						element: element,
-						canvasSize: canvasSize,
-						textVerticalOffset: textVerticalOffset,
-					)
-					drawAlternateTextLinkOutline(
-						around: element,
-						canvasSize: canvasSize,
-					)
-				} else {
-					draw(
-						element: element,
-						canvasSize: canvasSize,
-						textVerticalOffset: hasAlternateTextLinks && element.hasText ? 1 : 0,
-					)
+					drawAlternateTextLinkOutline(around: element, canvasSize: canvasSize)
 				}
 			}
 		}
@@ -298,15 +273,6 @@ public final class PresentationRenderer {
 				identities: actionIdentities,
 			) + "/slide/presentation/base_slide"
 			let elementIdentities = slide.elements.map(\.element.uuid.string)
-			let hasAlternateTextLinks = slide.elements.contains { slideElement in
-				slideElement.dataLinks.contains { dataLink in
-					if case .alternateText? = dataLink.propertyType {
-						true
-					} else {
-						false
-					}
-				}
-			}
 			for elementIndex in slide.elements.indices.reversed() {
 				let slideElement = slide.elements[elementIndex]
 				let element = elementResolvingAlternateText(for: slideElement, in: slide)
@@ -321,11 +287,8 @@ public final class PresentationRenderer {
 						false
 					}
 				}
-				let textVerticalOffset = hasAlternateTextLink
-					? alternateTextLinkVerticalOffset(for: element.text)
-					: hasAlternateTextLinks && element.hasText ? 1 : 0
 				let text = element.hasText && !element.text.rtfData.isEmpty
-					? try textDescription(element.text, in: bounds.offsetBy(dx: 0, dy: textVerticalOffset))
+					? try textDescription(element.text, in: bounds)
 					: nil
 				let lineFillMask: Rv_Data_Graphics.Text.LineFillMask? = if case let .textLineMask(mask)? = element.mask, mask.enabled {
 					mask
@@ -699,13 +662,6 @@ public final class PresentationRenderer {
 		outline.stroke()
 	}
 
-	private func alternateTextLinkVerticalOffset(for text: Rv_Data_Graphics.Text) -> CGFloat {
-		guard let attributedString = attributedString(from: text) else {
-			return 1
-		}
-		return attributedString.string.contains("\n") ? 5 : 1
-	}
-
 	private func elementResolvingAlternateText(
 		for slideElement: Rv_Data_Slide.Element,
 		in slide: Rv_Data_Slide,
@@ -810,7 +766,6 @@ public final class PresentationRenderer {
 	private func draw(
 		element: Rv_Data_Graphics.Element,
 		canvasSize: CGSize,
-		textVerticalOffset: CGFloat = 0,
 	) {
 		guard !element.hidden else { return }
 
@@ -869,7 +824,7 @@ public final class PresentationRenderer {
 		if element.hasText, !element.text.rtfData.isEmpty {
 			draw(
 				text: element.text,
-				in: rect.offsetBy(dx: 0, dy: textVerticalOffset),
+				in: rect,
 				lineFill: element.hasFill && element.fill.enable ? element.fill : nil,
 				lineFillMask: lineFillMask,
 			)
@@ -1001,39 +956,66 @@ public final class PresentationRenderer {
 
 		let localRect = CGRect(origin: localOrigin, size: rect.size)
 		let previousContext = NSGraphicsContext.current
-		NSGraphicsContext.current = bitmapContext
-		drawRawElementAppearance(
-			element,
-			in: localRect,
-			canvasSize: canvasSize,
-			path: drawingPath(for: element.path, in: localRect),
-			lineFillMask: lineFillMask,
-			withShadow: withShadow,
-		)
+		var appearances: [CIImage] = []
+		for isStroke in [false, true] {
+			var appearance = element
+			appearance.fill.enable = !isStroke && element.fill.enable
+			appearance.stroke.enable = isStroke && element.stroke.enable
+			bitmap.bitmapData?.initialize(repeating: 0, count: bitmap.bytesPerRow * bitmap.pixelsHigh)
+			NSGraphicsContext.current = bitmapContext
+			drawRawElementAppearance(
+				appearance,
+				in: localRect,
+				canvasSize: canvasSize,
+				path: drawingPath(for: element.path, in: localRect),
+				lineFillMask: lineFillMask,
+				withShadow: withShadow,
+			)
+			if let image = bitmap.cgImage {
+				appearances.append(CIImage(cgImage: image))
+			}
+		}
 		NSGraphicsContext.current = previousContext
 
-		guard let sourceImage = bitmap.cgImage else { return }
-		let source = CIImage(cgImage: sourceImage)
-		// ProPresenter's normalized radius maps to an inset mask followed by a softer blur.
-		let insetRadius = max(1, Int(radius.rounded()))
-		let blurRadius = radius * 0.49
-		let inset = source.applyingFilter(
-			"CIMorphologyMinimum",
-			parameters: [kCIInputRadiusKey: insetRadius],
-		)
-		let blurred = inset
-			.clampedToExtent()
-			.applyingFilter("CIGaussianBlur", parameters: [kCIInputRadiusKey: blurRadius])
-			.cropped(to: source.extent)
-		let feathered = source.applyingFilter(
-			"CISourceInCompositing",
-			parameters: [kCIInputBackgroundImageKey: blurred],
-		)
-		guard let image = CIContext().createCGImage(feathered, from: source.extent) else { return }
-		NSGraphicsContext.current?.cgContext.draw(
-			image,
-			in: CGRect(origin: destinationOrigin, size: imageSize),
-		)
+		// Feather the outside of the shape, including its stroke envelope. The
+		// mask is opaque regardless of fill opacity or gaps in a dashed stroke.
+		bitmap.bitmapData?.initialize(repeating: 0, count: bitmap.bytesPerRow * bitmap.pixelsHigh)
+		NSGraphicsContext.current = bitmapContext
+		let maskPath = drawingPath(for: element.path, in: localRect)
+		NSColor.white.setFill()
+		maskPath.fill()
+		let strokeWidth = element.stroke.enable ? CGFloat(element.stroke.width) : 0
+		let insetStroke = strokeWidth - 2 * radius
+		maskPath.lineWidth = abs(insetStroke)
+		maskPath.lineJoinStyle = .round
+		if insetStroke < 0 {
+			bitmapContext.cgContext.setBlendMode(.clear)
+		} else {
+			NSColor.white.setStroke()
+		}
+		maskPath.stroke()
+		bitmapContext.cgContext.setBlendMode(.normal)
+		NSGraphicsContext.current = previousContext
+		guard let maskImage = bitmap.cgImage else { return }
+		bitmap.bitmapData?.initialize(repeating: 0, count: bitmap.bytesPerRow * bitmap.pixelsHigh)
+		bitmapContext.cgContext.saveGState()
+		bitmapContext.cgContext.setShadow(offset: CGSize(width: imageSize.width, height: 0), blur: radius, color: NSColor.white.cgColor)
+		bitmapContext.cgContext.draw(maskImage, in: CGRect(x: -imageSize.width, y: 0, width: imageSize.width, height: imageSize.height))
+		bitmapContext.cgContext.restoreGState()
+		guard let blurredImage = bitmap.cgImage else { return }
+		let blurred = CIImage(cgImage: blurredImage)
+
+		for source in appearances {
+			let feathered = source.applyingFilter(
+				"CISourceInCompositing",
+				parameters: [kCIInputBackgroundImageKey: blurred],
+			)
+			guard let image = CIContext().createCGImage(feathered, from: source.extent) else { return }
+			NSGraphicsContext.current?.cgContext.draw(
+				image,
+				in: CGRect(origin: destinationOrigin, size: imageSize),
+			)
+		}
 	}
 
 	private func drawRawElementAppearance(
@@ -1354,17 +1336,28 @@ public final class PresentationRenderer {
 			x: drawing.flippedHorizontally ? -1 : 1,
 			y: drawing.flippedVertically ? -1 : 1,
 		)
-		image.draw(
-			in: CGRect(
-				x: -sourceRect.width / 2,
-				y: -sourceRect.height / 2,
-				width: sourceRect.width,
-				height: sourceRect.height,
-			),
-			from: sourceRect,
-			operation: .sourceOver,
-			fraction: 1,
-		)
+		let scaleX = (quarterTurn ? target.height : target.width) / sourceRect.width
+		let scaleY = (quarterTurn ? target.width : target.height) / sourceRect.height
+		if scaleX > 1 || scaleY > 1 {
+			// ProPresenter enlarges media with linear texture sampling. AppKit's
+			// enlargement leaves harder color boundaries than the native export.
+			guard let cgImage = image.cgImage(forProposedRect: nil, context: nil, hints: nil) else { return }
+			let resampled = CIImage(cgImage: cgImage).transformed(by: CGAffineTransform(scaleX: scaleX, y: scaleY))
+			guard let sampled = CIContext(options: [.workingColorSpace: NSNull()]).createCGImage(resampled, from: resampled.extent) else { return }
+			context?.draw(sampled, in: CGRect(
+				x: -sourceRect.width / 2 - sourceRect.minX,
+				y: -sourceRect.height / 2 - sourceRect.minY,
+				width: sourceSize.width,
+				height: sourceSize.height,
+			))
+		} else {
+			image.draw(
+				in: CGRect(x: -sourceRect.width / 2, y: -sourceRect.height / 2, width: sourceRect.width, height: sourceRect.height),
+				from: sourceRect,
+				operation: .sourceOver,
+				fraction: 1,
+			)
+		}
 	}
 
 	private func mediaRect(
@@ -1517,19 +1510,15 @@ public final class PresentationRenderer {
 		rect = rect.insetBy(dx: 5, dy: 5)
 
 		let fitted = fittedText(attributedString, in: rect.size, scaleBehavior: text.scaleBehavior)
-		let layoutSize: CGSize
-		switch text.scaleBehavior {
-		case .none, .adjustContainerHeight:
-			layoutSize = CGSize(width: rect.width, height: .greatestFiniteMagnitude)
-		case .scaleFontDown, .scaleFontUp, .scaleFontUpDown, .UNRECOGNIZED:
-			layoutSize = rect.size
-		}
+		// Fit uses typographic height without default leading. Measure every line
+		// for placement, even when its full line fragment exceeds that fit height.
+		let layoutSize = text.scaleBehavior == .scaleFontUp ? rect.size : CGSize(width: rect.width, height: .greatestFiniteMagnitude)
 		let used = textLayoutBounds(for: fitted, in: layoutSize)
 
 		var drawRect = rect
 		var centeredCorrection: CGFloat = 0
 		var containerWasExpanded = false
-		if text.scaleBehavior == .none || text.scaleBehavior == .adjustContainerHeight {
+		if text.scaleBehavior != .scaleFontUp {
 			let expandedHeight = max(drawRect.height, ceil(used.height))
 			containerWasExpanded = expandedHeight > drawRect.height
 			let expansion = expandedHeight - drawRect.height
@@ -1638,10 +1627,14 @@ public final class PresentationRenderer {
 		}
 		attributedString.enumerateAttribute(.strokeWidth, in: fullRange) { value, range, _ in
 			guard let width = value as? NSNumber, width.doubleValue != 0 else { return }
-			strokePass.addAttribute(.strokeWidth, value: abs(width.doubleValue) * 2, range: range)
+			let strokeWidth = width.doubleValue < 0 ? -width.doubleValue * 2 : width.doubleValue
+			strokePass.addAttribute(.strokeWidth, value: strokeWidth, range: range)
 			fillPass.removeAttribute(.strokeWidth, range: range)
 			fillPass.removeAttribute(.strokeColor, range: range)
-			shadowPass.addAttribute(.strokeWidth, value: -abs(width.doubleValue) * 2, range: range)
+			if width.doubleValue > 0 {
+				fillPass.addAttribute(.foregroundColor, value: NSColor.clear, range: range)
+			}
+			shadowPass.addAttribute(.strokeWidth, value: width.doubleValue < 0 ? -strokeWidth : strokeWidth, range: range)
 		}
 
 		if hasShadow {
@@ -1844,7 +1837,7 @@ public final class PresentationRenderer {
 	private func text(_ attributedString: NSAttributedString, fitsIn size: CGSize) -> Bool {
 		let textStorage = NSTextStorage(attributedString: attributedString)
 		let layoutManager = NSLayoutManager()
-		let textContainer = NSTextContainer(size: size)
+		let textContainer = NSTextContainer(size: CGSize(width: size.width, height: .greatestFiniteMagnitude))
 		textContainer.lineFragmentPadding = 0
 		layoutManager.addTextContainer(textContainer)
 		textStorage.addLayoutManager(layoutManager)

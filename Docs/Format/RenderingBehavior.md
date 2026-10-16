@@ -188,8 +188,9 @@ Paragraph alignment, line spacing, tabs, and indents encoded in Cocoa RTF are pr
 
 Alternate-text data links resolve the source by element UUID, retain the target element's RTF formatting and layout, and replace the target content using the stored transform. `NONE` retains line returns and `REMOVE_LINE_RETURNS` replaces them with spaces. The renderer retains the native outline treatment. `ONE_WORD_PER_LINE` and `ONE_CHARACTER_PER_LINE` retain the stored target
 text in the renderer because their native transforms are not supported.
-Alternate-text output can differ from ProPresenter in scale-to-fit and outline
-positioning.
+Scale-down placement measures every line before vertical centering. Positive
+RTF stroke widths draw an outline without a fill; negative widths retain the
+combined fill-and-stroke treatment.
 
 `Graphics.Text.scale_behavior` controls font resizing:
 
@@ -205,7 +206,7 @@ For stroked text, the shadow follows the combined fill-and-stroke silhouette.
 Renderers that split text into separate stroke and fill passes need one shadow
 pass behind both visible passes rather than dropping or duplicating the shadow.
 
-When font scaling is applied to mixed-size RTF, ProPresenter scales runs proportionally instead of flattening all runs to one size. Fit measurement must use an AppKit text container so clipped glyph ranges are not accepted as fitting text.
+When font scaling is applied to mixed-size RTF, ProPresenter scales runs proportionally instead of flattening all runs to one size. Scale-down fit measurement uses an unbounded-height AppKit text container at the available width, then checks the complete typographic height. Placement also measures the full line fragments, including their leading, rather than only the lines visible in a height-constrained container.
 
 ## Line Masks
 
@@ -223,7 +224,19 @@ height offsets is not established.
 
 ## Shape Feathering
 
-Enabled shape feathering is an inside alpha feather that applies to the combined fill and stroke appearance. ProPresenter first insets the alpha mask, then applies a Gaussian falloff; pixels outside the original shape remain transparent. The stored radius is normalized to the smaller element dimension, so the renderer converts it to canvas points before producing the feathered mask.
+Enabled shape feathering fades the outer shape envelope, including the stroke
+width. Its mask is independent of the paint opacity and the gaps in a dashed
+stroke. Fill and stroke receive the mask before compositing, preserving a
+partially transparent fill and the inside edge of a stroke-only shape. The
+stored radius is normalized to the smaller element dimension. The renderer
+uses a geometric inset and Core Graphics blur; the outer falloff still differs
+from the ProPresenter 21.4 exports at the rendering fixture precision.
+
+## Media Sampling
+
+Enlarged image media uses linear texture sampling before placement. Reducing
+media retains the AppKit sampling path; video-fill sampling still differs from
+the native reference.
 
 ## Video Frames
 

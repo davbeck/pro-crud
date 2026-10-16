@@ -60,11 +60,10 @@ single-line box), nonzero and full-turn rotations with clipping, a rounded
 rectangle at 0.5 roundness, and alternate-text links with line-return removal,
 opacity, outline, and scale-down interactions.
 
-Slides 1 through 3 match the native exports at the fixture precision. Slide 4
-retains a known snapshot difference in scale-to-fit/link-outline positioning;
-its separate structural and effective-rendering tests still verify source UUID
-resolution, line-return transforms, target formatting, opacity, and outline
-metadata.
+All four slides match the native exports at the unchanged 0.99 pixel and
+0.99 perceptual precision. Slide 4 additionally has structural and
+effective-rendering tests for source UUID resolution, line-return transforms,
+target formatting, opacity, and outline metadata.
 
 Its reference images belong only in
 `Tests/ProCRUDCoreTests/__Snapshots__/RenderingEdgeCasesFixtureTests/` and are
