@@ -64,11 +64,9 @@ struct Render: ParsableCommand {
 		let slideIndices = try selectedSlideIndices(in: documents)
 		let templateResolution = try resolveTemplates(in: documents, slideIndices: slideIndices, nativeSnapshot: nativeSnapshot)
 		documents = templateResolution.documents
-		if nativeSnapshot != nil {
-			// Reject unsupported native representations before --replace removes an
-			// existing output. Use the same selected slides as the actual render.
-			_ = try PresentationRenderer.effectiveRendering(documents: documents.map(\.document), slideIndices: slideIndices)
-		}
+		// Reject unsupported representations before --replace removes an
+		// existing output. Use the same selected slides as the actual render.
+		_ = try PresentationRenderer.effectiveRendering(documents: documents.map(\.document), slideIndices: slideIndices)
 		for report in templateResolution.reports {
 			for warning in report.warnings {
 				print("Warning [template \(report.templateName)]: \(warning)")
