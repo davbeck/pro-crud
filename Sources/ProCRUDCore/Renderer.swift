@@ -1417,6 +1417,7 @@ public final class PresentationRenderer {
 		var drawRect: CGRect
 		var layoutBounds: CGRect
 		var centeredCorrection: CGFloat
+		var nativeLayout: NativeTextLayout?
 	}
 
 	private func draw(
@@ -1438,7 +1439,11 @@ public final class PresentationRenderer {
 			)
 		}
 
-		drawAttributedText(layout.drawnText, in: layout.drawRect)
+		if let nativeLayout = layout.nativeLayout {
+			nativeLayout.draw(in: layout.contentRect, offset: layout.contentRect.minY - layout.drawRect.minY)
+		} else {
+			drawAttributedText(layout.drawnText, in: layout.drawRect)
+		}
 	}
 
 	private func effectiveTextLayout(
@@ -1477,6 +1482,22 @@ public final class PresentationRenderer {
 		)
 		rect.origin.x += CGFloat(margins.left - margins.right) / 2
 		rect.origin.y += CGFloat(margins.top - margins.bottom) / 2
+		if document.presentation.applicationInfo.applicationVersion.majorVersion == 22,
+		   text.scaleBehavior == .none
+		{
+			let nativeLayout = NativeTextLayout(preparedText, width: rect.width)
+			let offset = nativeLayout.offset(in: rect.height, alignment: text.verticalAlignment)
+			return EffectiveTextLayout(
+				preparedText: preparedText,
+				fittedText: preparedText,
+				drawnText: preparedText,
+				contentRect: rect,
+				drawRect: rect.offsetBy(dx: 0, dy: -offset),
+				layoutBounds: nativeLayout.alignmentBounds,
+				centeredCorrection: 0,
+				nativeLayout: nativeLayout,
+			)
+		}
 		rect = rect.insetBy(dx: 5, dy: 5)
 
 		let fitted = fittedText(attributedString, in: rect.size, scaleBehavior: text.scaleBehavior)

@@ -80,16 +80,18 @@ export uses the four Master slides even when the repeated arrangement is
 selected. Helvetica Neue and Apple Color Emoji resolve locally; the native
 Presentation export introduces the explicit emoji fallback described above.
 
-The CLI renders the intended cyan bold-italic text and emoji, but its layout
-has a horizontal and vertical offset. An sRGB premultiplied RGBA comparison
-finds **55,935 differing bytes** at the same 854×480 dimensions. The existing
-renderer unconditionally applies a five-point inset; this is a candidate cause
-of the horizontal difference, not yet a qualified version-dependent rule.
-Vertical centering also needs an independent layout experiment. The fresh
-native PNG is retained and a precise comparison records this as an explicit
-known issue. Existing 21 images/tolerances and renderer logic are unchanged.
-Native persistence and visual app acceptance do not imply pixel-exact CLI text
-rendering in 22.
+The native 22 unscaled-text layout now removes the legacy inset and uses
+cap-height-centered baselines and font-derived line bodies for vertical
+alignment. Both this middle-aligned export and the independent top-aligned
+export have exactly matching occupied-pixel sets, including the emoji. See
+[the alignment investigation](RenderingIssues/README.md#independent-native-22-alignment-probe).
+
+The sRGB premultiplied RGBA comparison improved from **55,935 differing bytes**
+to **96 bytes at 32 letter-edge pixels**, at the same 854×480 dimensions. The
+remaining glyph antialiasing difference stays an explicit known issue in the
+original exact comparison. Existing references, tolerances, and 21 rendering
+behavior are unchanged. Native persistence and visual app acceptance do not
+imply pixel-exact CLI text rendering in 22.
 
 ## Retained hashes (SHA-256)
 

@@ -182,7 +182,14 @@ Generated text should use platform-native Cocoa RTF when targeting ProPresenter 
 
 `Graphics.Text.vertical_alignment` is applied within the text element's bounds after measuring the attributed string. Top, middle, and bottom alignment are independent of RTF paragraph alignment.
 
-ProPresenter lays out text with a 5-point inset on every edge. In the flipped AppKit bitmap context, bottom alignment must be inverted to preserve ProPresenter's visual direction. Cocoa RTF shadow offsets are already interpreted in the matching direction by AppKit and should be preserved.
+The ProPresenter 21.4 layout uses a 5-point inset on every edge. In the flipped AppKit bitmap context, bottom alignment must be inverted to preserve ProPresenter's visual direction. Cocoa RTF shadow offsets are already interpreted in the matching direction by AppKit and should be preserved.
+
+For ProPresenter 22 documents with font scaling disabled, the renderer uses no
+intrinsic text inset. Baselines center each line's cap height within a body
+that accommodates its font descenders; vertical alignment uses the union of
+those line bodies. This also accounts for mixed text and emoji fonts. Text is
+clipped to its content bounds. Glyph antialiasing is not yet pixel-exact with
+native 22 exports. Other scaling modes retain the existing layout behavior.
 
 Paragraph alignment, line spacing, tabs, and indents encoded in Cocoa RTF are preserved. Literal bullet or numbered-list markers in the RTF string render as normal text. Native lists use both paragraph `textLists` metadata and RTF `\\listtext` destinations. AppKit otherwise discards that destination, so the renderer restores it as ordinary RTF before decoding. This preserves the marker's own styling and its native tab sequence, including depth-specific nested-list indentation. For lists without a native destination, the renderer synthesizes a marker and two tabs as a compatibility fallback.
 

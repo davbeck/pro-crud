@@ -105,20 +105,42 @@ occupy y=65…98 and y=111…144. The retained middle-aligned native reference h
 rows y=209…242 and y=256…289. Both start at x=67. The baseline renderer starts
 at x=72 / x=71 and y=203…236 / y=249…282.
 
-This confirms the horizontal-inset and fractional vertical-placement
-mismatches. It does not establish a general replacement rule: direct string
-drawing, TextKit glyph drawing, local text bitmaps, Retina backing bitmaps,
-and font-descriptor preservation did not reproduce the native pixels exactly.
-No guessed native-22 offset or version-specific renderer branch was retained.
-The original exact native comparison remains a known issue.
+The subsequent alignment investigation established the native font-metric
+model for unscaled text. TextKit uses zero line-fragment padding. For each line,
+the body height is the maximum of its fonts' default line heights and
+`maximumCapHeight - 2 * minimumDescender`. Its baseline centers the cap height
+within that body, after the line's leading. Vertical alignment uses the union
+of these bodies, including the first body's negative origin when an emoji's
+metrics exceed the default line fragment. The glyph pass uses the element's
+local, flipped coordinate system and clips to its content bounds.
+
+For this fixture, the first body starts at y=-11.5001625 and the used text ends
+at y=91.04425048828125. The resulting middle-aligned drawing origin is
+y=200.22795600585937 in slide coordinates; top alignment starts at
+y=55.944606944444445. These are derived from the fonts and container, not
+fixture-specific offsets. Both retained exports now have exactly the same
+occupied-pixel sets as the renderer, including the emoji. A regression test
+checks both independent exports. ProPresenter 21 rendering and 22 font-scaling
+paths retain their existing behavior.
+
+The full sRGB premultiplied-byte comparison improved from 55,935 differing
+bytes to 96 bytes at 32 letter-edge pixels. The remaining alpha differences
+are identical for top and middle alignment. Font normalization, graphics
+context color spaces/channel order, glyph batching, font smoothing and
+subpixel flags, paragraph normalization, and additional glyph passes did not
+eliminate them. None of those unsuccessful changes was retained. The original
+full-color comparison remains a known issue with precision and
+perceptualPrecision unchanged at 1; no reference images were changed.
 
 Two of the original nine known issues remain: video fill and native 22 rich
 text. The five feather comparisons are now ordinary passing tests.
 
 ## Validation
 
-The final full `swift test` run passed 506 core tests with the two unrelated
-known issues above, all 100 CLI tests, and the environment-preflight test.
+The full `swift test` run after the native 22 alignment correction passed
+507 core tests with the two remaining known issues above, all 100 CLI tests,
+and the environment-preflight test. The new placement test passed both top
+and middle alignment cases against the independent native exports.
 The focused Shape Effects run passed all 16 tests, including the five feather
 comparisons and exact feather-opacity assertions, with no known issues.
 Tests used normal parallel execution without serialization. SwiftFormat ran

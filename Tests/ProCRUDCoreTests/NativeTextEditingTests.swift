@@ -72,13 +72,32 @@ struct NativeTextEditingTests {
 		#expect(exportedRTF.attribute(.foregroundColor, at: 0, effectiveRange: nil) as? NSColor == originalRTF.attribute(.foregroundColor, at: 0, effectiveRange: nil) as? NSColor)
 	}
 
-	@Test func richTextRenderingRetainsTheNative22LayoutDifference() throws {
+	@Test(arguments: [Rv_Data_Graphics.Text.VerticalAlignment.top, .middle])
+	func unscaledTextMatchesNative22InkPlacement(alignment: Rv_Data_Graphics.Text.VerticalAlignment) throws {
+		let document = try PresentationLoader.load(from: fixtures.appendingPathComponent("RichNativeReexport.pro"))
+		var cue = document.orderedCues[3]
+		cue.actions[0].slide.presentation.baseSlide.elements[0].element.text.verticalAlignment = alignment
+		let bitmap = try PresentationRenderer(document: document).render(cue: cue)
+		let root = URL(fileURLWithPath: #filePath).deletingLastPathComponent().deletingLastPathComponent().deletingLastPathComponent()
+		let referenceURL = alignment == .top
+			? root.appendingPathComponent("Internal/Research/Format/RenderingIssues/Native22TopAlignment.png")
+			: fixtures.appendingPathComponent("RichNativeSlide.png")
+		let reference = try #require(NSBitmapImageRep(data: Data(contentsOf: referenceURL)))
+		#expect(bitmap.size == reference.size)
+		// Verify placement independently of the still-failing full-color comparison
+		// below. No occupied pixel may move, appear, or disappear.
+		let actualImage = try #require(bitmap.cgImage)
+		let referenceImage = try #require(reference.cgImage)
+		#expect(try occupiedPixels(in: actualImage) == occupiedPixels(in: referenceImage))
+	}
+
+	@Test func richTextRenderingRetainsTheNative22GlyphRasterDifference() throws {
 		let document = try PresentationLoader.load(from: fixtures.appendingPathComponent("RichNativeReexport.pro"))
 		let bitmap = try PresentationRenderer(document: document).render(cue: document.orderedCues[3])
 		let image = NSImage(size: bitmap.size)
 		image.addRepresentation(bitmap)
 		let reference = try #require(NSImage(contentsOf: fixtures.appendingPathComponent("RichNativeSlide.png")))
-		withKnownIssue("Native 22 text has a five-point horizontal inset and vertical-centering difference from the existing renderer; preserve the independent native PNG until qualified.") {
+		withKnownIssue("Native 22 alignment matches, but glyph antialiasing still differs at 32 letter-edge pixels; retain the exact independent native PNG comparison.") {
 			if let failure = Snapshotting<NSImage, NSImage>.proCRUDImage().diffing.diffV2(reference, image) {
 				Issue.record(Comment(rawValue: failure.0))
 			}
@@ -169,6 +188,22 @@ struct NativeTextEditingTests {
 		let bytes = try patch?.snapshot ?? Data(contentsOf: base.appendingPathExtension("loro"))
 		let vector = try patch?.versionVector ?? Data(contentsOf: base.appendingPathExtension("vector"))
 		return try .init(identity: .init(documentID: #require(UUID(uuidString: "bfa7b647-93ab-5ee6-b397-ec61b08bcfee")), scope: .shared, kind: "Presentation", corePath: "Default/ProCRUDTarget22Acceptance", availability: .available, byteCount: Int64(bytes.count), sha256: nil, updatedAtMilliseconds: 0), snapshot: bytes, versionVector: vector, lastSharedVersionVector: nil)
+	}
+
+	private func occupiedPixels(in image: CGImage) throws -> IndexSet {
+		var bytes = [UInt8](repeating: 0, count: image.width * image.height * 4)
+		let colorSpace = try #require(CGColorSpace(name: CGColorSpace.sRGB))
+		let context = try #require(CGContext(
+			data: &bytes,
+			width: image.width,
+			height: image.height,
+			bitsPerComponent: 8,
+			bytesPerRow: image.width * 4,
+			space: colorSpace,
+			bitmapInfo: CGImageAlphaInfo.premultipliedLast.rawValue,
+		))
+		context.draw(image, in: CGRect(x: 0, y: 0, width: image.width, height: image.height))
+		return IndexSet(stride(from: 3, to: bytes.count, by: 4).compactMap { bytes[$0] == 0 ? nil : $0 / 4 })
 	}
 
 	private var fixtures: URL {
