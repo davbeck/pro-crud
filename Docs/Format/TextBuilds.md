@@ -216,9 +216,15 @@ without resegmentation; use native ProPresenter to edit those modes.
   timing are retained, so this is a warning rather than a blanket rejection of
   native documents. Other active Delivery modes produce
   `builds.unverified-text-delivery`.
-- Static rendering draws the stored, unanimated composition. It does not
-  evaluate Build In, Build Out, Delivery, or Build Order state.
+- Default static rendering draws the stored, unanimated composition.
+- `render --build-steps` exports the initial state and a settled state after
+  every stored Build Order entry. It supports object Build In/Out and By Bullet
+  Delivery. Text keeps its full layout and font fitting as units appear.
+  Underline/unknown Delivery modes and inconsistent schedules fail explicitly.
+  Start conditions, delays, and transition effects do not change these states:
+  automatic and grouped entries still receive individual images/pages. This
+  previews the stored schedule rather than reproducing live click progression.
 
 After authoring, verify initial visibility and every advance through the final
 text unit in ProPresenter, particularly when using alternate Themes or custom
-start conditions. A static render cannot verify click progression.
+start conditions. Build-step previews cannot verify live click progression.

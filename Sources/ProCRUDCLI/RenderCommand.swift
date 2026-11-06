@@ -28,6 +28,7 @@ struct Render: ParsableCommand {
 	@Option(help: "Exact shared native Presentation stream UUID. INPUT must be its native workspace root; --output must be separate from that root.") var nativeStream: String?
 	@Option(name: .customLong("format"), help: "Comma-delimited output formats: png, jpg, heic, pdf, or json.") var formats = FormatList([.png])
 	@Option(help: "One-based slide number to render. Repeat to select multiple slides.") var slide: [Int] = []
+	@Flag(help: "Render the initial state and each settled Build Order step to images or PDF pages.") var buildSteps = false
 	@Option(help: "Arrangement UUID, selected, or native. Overrides playlist-item and presentation selections.") var arrangement: String?
 	@Option(help: "Theme file, theme directory, or .proTheme archive applied transiently before rendering.") var theme: String?
 	@Option(help: "Archive-relative Theme payload path when a theme archive contains multiple documents.") var themeDocument: String?
@@ -43,6 +44,9 @@ struct Render: ParsableCommand {
 	@Flag(help: "Replace an existing output file or folder.") var replace = false
 
 	func run() throws {
+		guard !buildSteps || !formats.values.contains(.json) else {
+			throw ValidationError("--build-steps supports image and PDF formats; omit json from --format.")
+		}
 		let inputURL = URL(fileURLWithPath: input)
 		let nativeSnapshot: NativeWorkspaceSnapshot?
 		var documents: [LoadedPresentationDocument]
@@ -90,6 +94,15 @@ struct Render: ParsableCommand {
 		}
 		if let (sourceName, diagnostic) = diagnostics.first(where: { $0.1.severity == .error }) {
 			throw ValidationError("[\(sourceName)] \(diagnostic.description)")
+		}
+
+		if buildSteps {
+			for loaded in documents {
+				_ = try PresentationRenderer(document: loaded.document).imageFileNames(
+					slideIndices: slideIndices,
+					buildSteps: true,
+				)
+			}
 		}
 
 		if formats.values.count == 1, let format = formats.values.first {
@@ -261,8 +274,9 @@ struct Render: ParsableCommand {
 				documents: documents.map(\.document),
 				to: outputURL,
 				slideIndices: slideIndices,
+				buildSteps: buildSteps,
 			)
-			print("Rendered \(result.slideCount) slides to \(outputURL.path)")
+			print("Rendered \(result.slideCount) \(buildSteps ? "build states" : "slides") to \(outputURL.path)")
 			return
 		}
 
@@ -278,12 +292,12 @@ struct Render: ParsableCommand {
 				? outputURL.appendingPathComponent(loaded.sourceName, isDirectory: true)
 				: outputURL
 			let result = try PresentationRenderer(document: loaded.document).render(
-				options: RenderOptions(outputDirectory: directory, imageType: imageType),
+				options: RenderOptions(outputDirectory: directory, imageType: imageType, buildSteps: buildSteps),
 				slideIndices: slideIndices,
 			)
 			rendered += result.slideCount
 		}
-		print("Rendered \(rendered) slides to \(outputURL.path)")
+		print("Rendered \(rendered) \(buildSteps ? "build states" : "slides") to \(outputURL.path)")
 	}
 
 	private func selectedSlideIndices(in documents: [LoadedPresentationDocument]) throws -> Set<Int>? {
@@ -367,14 +381,19 @@ struct Render: ParsableCommand {
 			let directory = loaded.usesOutputSubdirectory
 				? outputURL.appendingPathComponent(loaded.sourceName, isDirectory: true)
 				: outputURL
-			let indices: Set<Int>
-			if let slideIndices {
-				indices = slideIndices
-			} else {
-				indices = try Set(loaded.document.cueOccurrences().indices)
+			let imageType: RenderOptions.ImageType = switch format {
+			case .png: .png
+			case .jpg: .jpg
+			case .heic: .heic
+			case .pdf, .json: fatalError("Single-file formats handled above")
 			}
-			for index in indices {
-				let destination = directory.appendingPathComponent("\(index + 1).\(format.rawValue)")
+			let names = try PresentationRenderer(document: loaded.document).imageFileNames(
+				imageType: imageType,
+				slideIndices: slideIndices,
+				buildSteps: buildSteps,
+			)
+			for name in names {
+				let destination = directory.appendingPathComponent(name)
 				if FileManager.default.fileExists(atPath: destination.path) {
 					throw ValidationError("Refusing to overwrite existing image: \(destination.path)")
 				}

@@ -345,6 +345,24 @@ A single format keeps the existing output behavior: images use an output
 directory, while PDF and JSON use an output file. Without `--slide`, all slides
 are rendered.
 
+Add `--build-steps` to PNG, JPG, HEIC, or PDF output to export the initial
+state followed by each settled Build Order entry:
+
+```sh
+pro-crud render deck.pro --build-steps --format png,pdf --output Builds
+```
+
+A slide with builds uses `1-build-0.png` for its initial state, then
+`1-build-1.png`, `1-build-2.png`, and so on. Slides without scheduled builds keep
+`1.png`. PDF pages follow the same slide/build order. `--slide` continues to
+select slide occurrences before expanding their builds. Bundle/playlist image
+subdirectories and arrangement repetitions retain the normal output structure.
+The option supports object Build In/Out and By Bullet Delivery, preserves text
+layout, and ignores animation timing, delays, and start grouping. Underline and
+unknown Delivery modes or inconsistent schedules are rejected before CLI output
+is replaced. `--build-steps` cannot be combined with JSON output. See
+[Text builds and Delivery](TextBuilds.md) for the supported storage model.
+
 ## Template And Look Resolution
 
 `render` can resolve an external Theme template onto every selected source

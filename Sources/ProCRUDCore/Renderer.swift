@@ -10,10 +10,12 @@ import UniformTypeIdentifiers
 public struct RenderOptions: Sendable {
 	public var outputDirectory: URL
 	public var imageType: ImageType
+	public var buildSteps: Bool
 
-	public init(outputDirectory: URL, imageType: ImageType = .png) {
+	public init(outputDirectory: URL, imageType: ImageType = .png, buildSteps: Bool = false) {
 		self.outputDirectory = outputDirectory
 		self.imageType = imageType
+		self.buildSteps = buildSteps
 	}
 
 	public enum ImageType: Sendable, Equatable {
@@ -75,28 +77,29 @@ public final class PresentationRenderer {
 	public func render(options: RenderOptions, slideIndices: Set<Int>? = nil) throws -> RenderResult {
 		try fileManager.createDirectory(at: options.outputDirectory, withIntermediateDirectories: true)
 
-		let cues = try selectedCues(slideIndices: slideIndices)
-		for occurrence in cues {
+		let frames = try renderFrames(slideIndices: slideIndices, buildSteps: options.buildSteps)
+		for frame in frames {
+			let occurrence = frame.occurrence
 			try validateForRendering(occurrence.cue, storageIndex: occurrence.cueStorageIndex)
-			let image = try renderValidated(cue: occurrence.cue)
-			let outputURL = options.outputDirectory.appendingPathComponent("\(occurrence.sequenceIndex + 1).\(options.imageType.fileExtension)")
+			let image = try renderValidated(cue: occurrence.cue, buildStep: frame.buildStep)
+			let outputURL = options.outputDirectory.appendingPathComponent("\(frame.fileStem).\(options.imageType.fileExtension)")
 			try image.data(for: options.imageType).write(to: outputURL)
 		}
 
-		return RenderResult(slideCount: cues.count, outputDirectory: options.outputDirectory)
+		return RenderResult(slideCount: frames.count, outputDirectory: options.outputDirectory)
 	}
 
-	public func renderPDF(to outputURL: URL, slideIndices: Set<Int>? = nil) throws -> RenderResult {
-		try Self.renderPDF(documents: [document], to: outputURL, slideIndices: slideIndices)
+	public func renderPDF(to outputURL: URL, slideIndices: Set<Int>? = nil, buildSteps: Bool = false) throws -> RenderResult {
+		try Self.renderPDF(documents: [document], to: outputURL, slideIndices: slideIndices, buildSteps: buildSteps)
 	}
 
-	public static func renderPDF(documents: [PresentationDocument], to outputURL: URL, slideIndices: Set<Int>? = nil) throws -> RenderResult {
+	public static func renderPDF(documents: [PresentationDocument], to outputURL: URL, slideIndices: Set<Int>? = nil, buildSteps: Bool = false) throws -> RenderResult {
 		let renderers = documents.map { PresentationRenderer(document: $0) }
 		let renderInputs = try renderers.map { renderer in
-			try (renderer: renderer, cues: renderer.selectedCues(slideIndices: slideIndices))
+			try (renderer: renderer, frames: renderer.renderFrames(slideIndices: slideIndices, buildSteps: buildSteps))
 		}
-		guard let firstInput = renderInputs.first(where: { !$0.cues.isEmpty }),
-		      let first = firstInput.cues.first
+		guard let firstInput = renderInputs.first(where: { !$0.frames.isEmpty }),
+		      let first = firstInput.frames.first?.occurrence
 		else {
 			throw RenderError.pdfCreationFailed
 		}
@@ -109,20 +112,43 @@ public final class PresentationRenderer {
 		defer { context.closePDF() }
 		var slideCount = 0
 		for input in renderInputs {
-			for occurrence in input.cues {
+			for frame in input.frames {
+				let occurrence = frame.occurrence
 				try input.renderer.validateForRendering(occurrence.cue, storageIndex: occurrence.cueStorageIndex)
 				let size = try input.renderer.canvasSize(for: occurrence.cue)
 				var pageBox = CGRect(origin: .zero, size: size)
 				context.beginPDFPage([kCGPDFContextMediaBox as String: NSData(bytes: &pageBox, length: MemoryLayout<CGRect>.size)] as CFDictionary)
 				let previousContext = NSGraphicsContext.current
 				NSGraphicsContext.current = NSGraphicsContext(cgContext: context, flipped: false)
-				input.renderer.draw(cue: occurrence.cue, canvasSize: size)
+				input.renderer.draw(cue: occurrence.cue, canvasSize: size, buildStep: frame.buildStep)
 				NSGraphicsContext.current = previousContext
 				context.endPDFPage()
 				slideCount += 1
 			}
 		}
 		return RenderResult(slideCount: slideCount, outputDirectory: outputURL.deletingLastPathComponent())
+	}
+
+	private struct Frame {
+		var occurrence: PresentationCueOccurrence
+		var buildStep: SlideBuildStep?
+		var fileStem: String
+	}
+
+	private func renderFrames(slideIndices: Set<Int>?, buildSteps: Bool) throws -> [Frame] {
+		try selectedCues(slideIndices: slideIndices).flatMap { occurrence in
+			let states = try buildSteps ? SlideBuildStep.states(for: occurrence.cue) : []
+			let stem = String(occurrence.sequenceIndex + 1)
+			guard buildSteps else { return [Frame(occurrence: occurrence, fileStem: stem)] }
+			return states.enumerated().map { index, state in
+				Frame(occurrence: occurrence, buildStep: state, fileStem: states.count == 1 ? stem : "\(stem)-build-\(index)")
+			}
+		}
+	}
+
+	/// Planned image names in render order, including build expansion when requested.
+	public func imageFileNames(imageType: RenderOptions.ImageType = .png, slideIndices: Set<Int>? = nil, buildSteps: Bool = false) throws -> [String] {
+		try renderFrames(slideIndices: slideIndices, buildSteps: buildSteps).map { "\($0.fileStem).\(imageType.fileExtension)" }
 	}
 
 	private func selectedCues(slideIndices: Set<Int>?) throws -> [PresentationCueOccurrence] {
@@ -139,7 +165,7 @@ public final class PresentationRenderer {
 		return try renderValidated(cue: cue)
 	}
 
-	private func renderValidated(cue: Rv_Data_Cue) throws -> NSBitmapImageRep {
+	private func renderValidated(cue: Rv_Data_Cue, buildStep: SlideBuildStep? = nil) throws -> NSBitmapImageRep {
 		let canvasSize = try canvasSize(for: cue)
 		guard let bitmap = NSBitmapImageRep(
 			bitmapDataPlanes: nil,
@@ -165,7 +191,7 @@ public final class PresentationRenderer {
 		NSGraphicsContext.current = bitmapContext
 		defer { NSGraphicsContext.current = previousContext }
 
-		draw(cue: cue, canvasSize: canvasSize)
+		draw(cue: cue, canvasSize: canvasSize, buildStep: buildStep)
 
 		return bitmap
 	}
@@ -188,7 +214,7 @@ public final class PresentationRenderer {
 		return size
 	}
 
-	private func draw(cue: Rv_Data_Cue, canvasSize: CGSize) {
+	private func draw(cue: Rv_Data_Cue, canvasSize: CGSize, buildStep: SlideBuildStep? = nil) {
 		let slide = cue.actions.compactMap(\.presentationBaseSlide).first
 		let canvas = CGRect(origin: .zero, size: canvasSize)
 		let context = NSGraphicsContext.current?.cgContext
@@ -203,7 +229,8 @@ public final class PresentationRenderer {
 		}
 
 		if let slide {
-			for slideElement in slide.elements.reversed() {
+			for (index, slideElement) in slide.elements.enumerated().reversed() {
+				guard buildStep?.hiddenElements.contains(index) != true else { continue }
 				let element = elementResolvingAlternateText(for: slideElement, in: slide)
 				let hasAlternateTextLink = slideElement.dataLinks.contains(where: { dataLink in
 					if case .alternateText? = dataLink.propertyType {
@@ -212,7 +239,7 @@ public final class PresentationRenderer {
 						false
 					}
 				})
-				draw(element: element, canvasSize: canvasSize)
+				draw(element: element, canvasSize: canvasSize, visibleTextUnits: buildStep?.visibleTextUnits[index])
 				if hasAlternateTextLink {
 					drawAlternateTextLinkOutline(around: element, canvasSize: canvasSize)
 				}
@@ -766,6 +793,7 @@ public final class PresentationRenderer {
 	private func draw(
 		element: Rv_Data_Graphics.Element,
 		canvasSize: CGSize,
+		visibleTextUnits: Set<Int>? = nil,
 	) {
 		guard !element.hidden else { return }
 
@@ -827,6 +855,7 @@ public final class PresentationRenderer {
 				in: rect,
 				lineFill: element.hasFill && element.fill.enable ? element.fill : nil,
 				lineFillMask: lineFillMask,
+				visibleTextUnits: visibleTextUnits,
 			)
 		}
 	}
@@ -1425,8 +1454,9 @@ public final class PresentationRenderer {
 		in elementRect: CGRect,
 		lineFill: Rv_Data_Graphics.Fill? = nil,
 		lineFillMask: Rv_Data_Graphics.Text.LineFillMask? = nil,
+		visibleTextUnits: Set<Int>? = nil,
 	) {
-		guard let layout = effectiveTextLayout(text: text, in: elementRect) else { return }
+		guard let layout = effectiveTextLayout(text: text, in: elementRect, visibleTextUnits: visibleTextUnits) else { return }
 
 		if let lineFill, let lineFillMask {
 			drawLineFills(
@@ -1449,6 +1479,7 @@ public final class PresentationRenderer {
 	private func effectiveTextLayout(
 		text: Rv_Data_Graphics.Text,
 		in elementRect: CGRect,
+		visibleTextUnits: Set<Int>? = nil,
 	) -> EffectiveTextLayout? {
 		guard let decodedText = decodedText(from: text),
 		      decodedText.attributedString.length > 0
@@ -1456,6 +1487,9 @@ public final class PresentationRenderer {
 			return nil
 		}
 		let attributedString = decodedText.attributedString
+		if let visibleTextUnits {
+			attributedString.setAttributedString(SlideBuildStep.maskedText(attributedString, visibleUnits: visibleTextUnits))
+		}
 
 		applyCustomFontMetadata(from: text.attributes, to: attributedString)
 		applyTextTransform(from: text, to: attributedString)
@@ -1473,6 +1507,9 @@ public final class PresentationRenderer {
 		}
 		applyTextShadowFallback(from: text.shadow, to: attributedString)
 		normalizeShadows(in: attributedString)
+		if visibleTextUnits != nil {
+			SlideBuildStep.hideMarkedText(in: attributedString)
+		}
 		let preparedText = NSAttributedString(attributedString: attributedString)
 
 		let margins = text.margins
@@ -1658,6 +1695,8 @@ public final class PresentationRenderer {
 		var lineRects: [CGRect] = []
 		layoutManager.enumerateLineFragments(forGlyphRange: glyphRange) { _, usedRect, _, glyphRange, _ in
 			guard glyphRange.length > 0 else { return }
+			let character = layoutManager.characterIndexForGlyph(at: glyphRange.location)
+			guard attributedString.attribute(SlideBuildStep.hiddenTextAttribute, at: character, effectiveRange: nil) == nil else { return }
 			lineRects.append(usedRect)
 		}
 		guard !lineRects.isEmpty else { return }
@@ -2552,6 +2591,7 @@ public enum RenderError: Error, CustomStringConvertible {
 	case nativeMediaFile(path: String, source: String, underlyingError: any Error)
 	case pngEncodingFailed
 	case pdfCreationFailed
+	case unsupportedBuildSteps(String)
 
 	public var description: String {
 		switch self {
@@ -2563,6 +2603,8 @@ public enum RenderError: Error, CustomStringConvertible {
 			"Cannot render native file media at \(path) from \(source): \(underlyingError)"
 		case .pngEncodingFailed:
 			"Could not encode the rendered bitmap."
+		case let .unsupportedBuildSteps(reason):
+			"Cannot render build steps: \(reason)"
 		case .pdfCreationFailed:
 			"Could not create the PDF output."
 		}
