@@ -412,7 +412,14 @@ with `dump`, then use `--theme-document` with its archive-relative document path
 and `--template` with the exact template name. Copy the Theme into the task
 workspace before customizing it. Prefer semantic element names with
 `edit set-text --text`; plain text retains the element's base style. Use RTF
-only for intentional mixed inline styling.
+only for intentional mixed inline styling. Prefer Cocoa-generated RTF. For
+hand-authored RTF, use installed PostScript face names and explicit appropriate
+charsets in every font-table entry (`\fcharset0` for ANSI faces). See the
+[complete mixed-style example](references/presentation-authoring.md#mixed-style-rtf).
+After editing, run `validate` and render; investigate unavailable-font warnings
+and compare the decoded faces with the intended style.
+A successful RTF decode can still substitute a font. Verify the result in
+ProPresenter before delivery.
 
 ## Theme templates and Looks
 

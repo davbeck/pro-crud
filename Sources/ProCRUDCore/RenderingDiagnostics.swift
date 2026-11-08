@@ -19,6 +19,7 @@ public struct RenderingDiagnostic: Sendable, Equatable, CustomStringConvertible 
 		case nonfiniteElementRotation = "rendering.nonfinite-element-rotation"
 		case missingTextRTF = "rendering.missing-text-rtf"
 		case invalidTextRTF = "rendering.invalid-text-rtf"
+		case unavailableRTFFont = "rendering.unavailable-rtf-font"
 		case invalidTextCustomAttributeRange = "rendering.invalid-text-custom-attribute-range"
 		case missingMediaURL = "rendering.missing-media-url"
 		case unresolvedMedia = "rendering.unresolved-media"
@@ -263,6 +264,7 @@ public extension PresentationDocument {
 				message: "Text payload is present but has no RTF data, so it draws no glyphs.",
 			)]
 		}
+		ProcessFontRegistry.registerFonts(referencedByRTF: text.rtfData)
 		guard let attributed = try? NSAttributedString(
 			data: text.rtfData,
 			options: [.documentType: NSAttributedString.DocumentType.rtf],
@@ -276,7 +278,7 @@ public extension PresentationDocument {
 			)]
 		}
 
-		var results: [RenderingDiagnostic] = []
+		var results = RTFFontDiagnostics.diagnostics(for: text.rtfData, decoded: attributed, at: "\(path)/rtf_data")
 		for (index, attribute) in text.attributes.customAttributes.enumerated() {
 			let start = Int(attribute.range.start)
 			let end = Int(attribute.range.end)

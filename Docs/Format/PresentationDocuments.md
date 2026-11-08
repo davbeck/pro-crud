@@ -480,13 +480,36 @@ Fully styled Cocoa RTF is the visible text source. ProPresenter preserves RTF ru
 pro-crud edit set-text deck.pro --path '/cues[index=0]/actions[index=0]/slide/presentation/base_slide/elements[index=0]/element/text' --text 'Plain text'
 
 # Mixed styling supplied directly by the caller
-pro-crud edit set-text deck.pro --path '/cues[index=0]/actions[index=0]/slide/presentation/base_slide/elements[index=0]/element/text' --rtf '{\rtf1\ansi Heading \b bold\b0}'
+pro-crud edit set-text deck.pro --path '/cues[index=0]/actions[index=0]/slide/presentation/base_slide/elements[index=0]/element/text' --rtf '{\rtf1\ansi\ansicpg1252\deff0{\fonttbl{\f0\fnil\fcharset0 Helvetica;}{\f1\fnil\fcharset0 Helvetica-Bold;}}\f0\fs48 Regular {\f1 Bold} regular.}'
 
 # Mixed styling loaded without shell escaping
 pro-crud edit set-text deck.pro --path '/cues[index=0]/actions[index=0]/slide/presentation/base_slide/elements[index=0]/element/text' --rtf-file content.rtf
 ```
 
 Inline and file RTF are decoded before the presentation is changed, and their original bytes are preserved. The first RTF run also updates the text box's compatibility font metadata; mixed run styling remains in the RTF itself.
+
+Prefer Cocoa-generated RTF. When authoring mixed styles by hand, declare each
+face explicitly, including its appropriate charset. This complete ANSI example
+uses separate regular and bold faces at 24 points (`\fs48`):
+
+```rtf
+{\rtf1\ansi\ansicpg1252\deff0
+{\fonttbl{\f0\fnil\fcharset0 Helvetica;}{\f1\fnil\fcharset0 Helvetica-Bold;}}
+\f0\fs48 Regular {\f1 Bold} regular.}
+```
+
+Use installed PostScript face names; for example, substitute
+`Montserrat-Regular` and `Montserrat-Bold` only when both faces are installed.
+`\fcharset0` is appropriate for these ANSI declarations, not a universal
+replacement for other charsets. Font discovery does not require `\fcharset`;
+explicit declarations remain a useful authoring convention. A successful decode does not guarantee that
+the requested font was used: the first-run metadata reflects the decoded face,
+including any substitution. `set-text --text` avoids hand-authored RTF for
+uniform styling.
+
+Run `pro-crud validate OUTPUT.pro` and render the edited document. Font warnings
+include the component path, requested declaration, and decoded face list. Check
+those faces and verify the result in ProPresenter before delivery.
 
 For a registered local native 22 workspace, use `workspace set-text ROOT
 --stream PRESENTATION_UUID --action SLIDE_ACTION_UUID --element ELEMENT_UUID

@@ -59,7 +59,7 @@ enum ProcessFontRegistry {
 	}()
 
 	static func registerFonts(referencedByRTF data: Data) {
-		for postScriptName in referencedPostScriptNames(in: data) where NSFont(name: postScriptName, size: 12) == nil {
+		for postScriptName in RTFFontTable.referencedNames(in: data) where NSFont(name: postScriptName, size: 12) == nil {
 			guard let requestedFont = fontFiles.first(where: {
 				$0.postScriptName.compare(postScriptName, options: .caseInsensitive) == .orderedSame
 			}) else {
@@ -79,19 +79,6 @@ enum ProcessFontRegistry {
 				guard shouldRegister else { continue }
 				CTFontManagerRegisterFontsForURL(url as CFURL, .process, nil)
 			}
-		}
-	}
-
-	private static func referencedPostScriptNames(in data: Data) -> [String] {
-		guard let rtf = String(data: data, encoding: .utf8),
-		      let expression = try? NSRegularExpression(pattern: #"\\fcharset\d+\s+([^;}]+)"#)
-		else {
-			return []
-		}
-		let range = NSRange(rtf.startIndex..., in: rtf)
-		return expression.matches(in: rtf, range: range).compactMap { match in
-			guard let nameRange = Range(match.range(at: 1), in: rtf) else { return nil }
-			return String(rtf[nameRange])
 		}
 	}
 }

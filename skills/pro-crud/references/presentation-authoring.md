@@ -385,3 +385,28 @@ editable candidate:
 5. Preview every relevant Look and validate live behavior that static rendering
    cannot reproduce, including builds, transitions, timers, macros, camera,
    masks, props, messages, and other runtime layers.
+
+## Mixed-style RTF
+
+Prefer `edit set-text --text` for uniform styling and Cocoa-generated RTF for
+mixed styles. For hand-authored RTF, declare installed PostScript face names
+with appropriate charsets. Save this complete example as `content.rtf`, then
+supply it through `edit set-text --rtf-file content.rtf` with the exact text
+component path:
+
+```rtf
+{\rtf1\ansi\ansicpg1252\deff0
+{\fonttbl{\f0\fnil\fcharset0 Helvetica;}{\f1\fnil\fcharset0 Helvetica-Bold;}}
+\f0\fs48 Regular {\f1 Bold} regular.}
+```
+
+This uses Helvetica Regular and Bold at 24 points. Substitute
+`Montserrat-Regular` and `Montserrat-Bold` only when both faces are installed.
+Use `\fcharset0` for these ANSI faces; other charsets need the appropriate
+value. Font discovery works with or without the declaration.
+
+Run `validate` and render after editing. A successful decode can still
+substitute a face, and the stored first-run font metadata reflects that decoded
+face. Font warnings report the requested declaration and the element's decoded
+face list; unused table declarations may also be reported. Investigate warnings
+and verify the visible result in ProPresenter.

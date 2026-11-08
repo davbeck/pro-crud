@@ -178,6 +178,19 @@ Text rendering follows these rules:
 
 Generated text should use platform-native Cocoa RTF when targeting ProPresenter compatibility.
 
+`render` and `validate` warn when a conventional plain-name font-table declaration
+is unavailable to the process (`rendering.unavailable-rtf-font`). The warning
+names the requested declaration and all faces decoded in that element. A font table can
+contain unused declarations; this is not a per-run substitution mapping. Encoded
+font names and entries containing nested alternate-name destinations are not
+currently inspected. These warnings do not rewrite RTF, replace fonts, or fail
+validation. Font discovery handles conventional braced and flat font tables
+independently of charset declarations; Cocoa still performs the actual RTF decoding.
+ProPresenter 22 (369098875) rendered the tested installed Montserrat and
+CMG Sans Regular/Bold pairs identically with and without `\fcharset0`.
+See [Styled Text Editing](PresentationDocuments.md#styled-text-editing) for a
+complete mixed-style example with explicit charset declarations.
+
 ## Text Layout
 
 `Graphics.Text.vertical_alignment` is applied within the text element's bounds after measuring the attributed string. Top, middle, and bottom alignment are independent of RTF paragraph alignment.
