@@ -22,6 +22,8 @@ public enum NativePresentationEdit: Codable, Sendable, Equatable {
 	case removeArrangement(UUID)
 	case clearDocumentActionArrangement(UUID)
 	case removeMediaAction(UUID)
+	case playlist(NativePlaylistEdit)
+	case template(NativeTemplateEdit)
 }
 
 public enum NativeSlideNotesContent: Codable, Sendable, Equatable {
@@ -56,25 +58,36 @@ public struct NativeLocalPatch: Sendable {
 	public let payloadFingerprint: Data
 	public let sha256: Data
 	public let timestampMilliseconds: Int64
+	let referenceReadSet: [NativeWorkspaceStream]?
 
 	public static func prepare(stream: NativeWorkspaceStream, edit: NativePresentationEdit, operationID: UUID = UUID(), date: Date = Date()) throws -> Self? {
 		try prepare(stream: stream, edits: [edit], operationID: operationID, date: date)
 	}
 
-	public static func prepare(stream: NativeWorkspaceStream, edits: [NativePresentationEdit], operationID: UUID = UUID(), date: Date = Date()) throws -> Self? {
-		guard stream.identity.kind == "Presentation", stream.identity.scope == .shared else {
-			throw NativeSemanticError.invalidValue(path: stream.identity.documentID.uuidString, expected: "shared Presentation stream")
+	public static func prepare(stream: NativeWorkspaceStream, edits: [NativePresentationEdit], operationID: UUID = UUID(), date: Date = Date(), context: NativeWorkspaceSnapshot? = nil) throws -> Self? {
+		try prepare(stream: stream, edits: edits, operationID: operationID, date: date, context: context, referenceReadSet: context?.streams)
+	}
+
+	static func prepare(stream: NativeWorkspaceStream, edits: [NativePresentationEdit], operationID: UUID = UUID(), date: Date = Date(), context: NativeWorkspaceSnapshot?, referenceReadSet: [NativeWorkspaceStream]?) throws -> Self? {
+		guard stream.identity.scope == .shared else {
+			throw NativeSemanticError.invalidValue(path: stream.identity.documentID.uuidString, expected: "shared native document stream")
 		}
-		_ = try stream.presentationLayout()
 		guard let original = stream.snapshot, let vector = stream.versionVector else { throw NativeWorkspaceError.unavailableStream(stream.identity.documentID.uuidString) }
 		let document = LoroDoc()
 		_ = try document.import(bytes: original)
 		let originalVersion = try VersionVector.decode(bytes: vector)
 		for edit in edits {
 			let value = try NativeWorkspaceValue(document.getDeepValue())
-			let root = try value.object(at: "/").required("root", at: "/")
-			let layout = try NativePresentationLayout(root: root)
-			try apply(edit, document: document, identity: stream.identity, value: value, layout: layout)
+			switch edit {
+			case let .playlist(edit): try NativePlaylistEditing.apply(edit, document: document, identity: stream.identity, context: context)
+			case let .template(edit): try NativeTemplateEditing.apply(edit, document: document, identity: stream.identity)
+			default:
+				guard stream.identity.kind == "Presentation" else { throw NativeSemanticError.invalidValue(path: stream.identity.documentID.uuidString, expected: "Presentation operation on a shared Presentation") }
+				let root = try value.object(at: "/").required("root", at: "/")
+				let layout = try NativePresentationLayout(root: root)
+				guard layout.id == stream.identity.documentID else { throw NativeSemanticError.invalidValue(path: "/root/uuid", expected: "matching stream identity") }
+				try apply(edit, document: document, identity: stream.identity, value: value, layout: layout)
+			}
 		}
 		let timestamp = Int64(date.timeIntervalSince1970 * 1000)
 		guard timestamp >= 0 else { throw NativeSemanticError.invalidValue(path: "/commit/timestamp", expected: "nonnegative timestamp") }
@@ -90,12 +103,14 @@ public struct NativeLocalPatch: Sendable {
 		let version = stored.stateVv().encode()
 		return .init(operationID: operationID, identity: stream.identity, originalSnapshot: original, originalVersionVector: vector,
 		             snapshot: snapshot, versionVector: version, update: update, payloadFingerprint: Data(SHA256.hash(data: update)),
-		             sha256: Data(SHA256.hash(data: snapshot)), timestampMilliseconds: timestamp)
+		             sha256: Data(SHA256.hash(data: snapshot)), timestampMilliseconds: timestamp,
+		             referenceReadSet: stream.identity.kind == "Presentation" ? nil : referenceReadSet ?? context?.streams)
 	}
 
 	private static func apply(_ edit: NativePresentationEdit, document: LoroDoc, identity: NativeWorkspaceStream.Identity, value: NativeWorkspaceValue, layout: NativePresentationLayout) throws {
 		let root = document.getMap(id: "root")
 		switch edit {
+		case .playlist, .template: preconditionFailure("Document operations are dispatched before Presentation operations")
 		case let .presentationName(name):
 			guard !name.isEmpty else { throw NativeSemanticError.invalidValue(path: "/root/name", expected: "nonempty presentation name") }
 			try root.insert(key: "name", v: name)

@@ -145,14 +145,19 @@ public struct NativeMediaInventory: Encodable, Sendable {
 		return issues
 	}
 
-	static func resolve(_ locator: MediaReference.Locator, workspaceRoot: URL) throws -> URL {
+	static func resolve(_ locator: MediaReference.Locator, workspaceRoot: URL, resourceRoot: URL? = nil) throws -> URL {
 		if locator.remote != nil {
 			throw NativeSemanticError.unsupportedNode(path: locator.field, kind: "remote/live source; not a missing local file")
 		}
 		let candidate: URL
 		if let path = locator.localPath {
-			guard locator.localRoot == 10 else { throw NativeSemanticError.unsupportedNode(path: locator.field, kind: "relative root \(locator.localRoot.map(String.init) ?? "absent") needs its explicit resource/volume context") }
-			candidate = try contained(path, root: workspaceRoot)
+			if locator.localRoot == 10 {
+				candidate = try contained(path, root: workspaceRoot)
+			} else if locator.localRoot == 12, let resourceRoot {
+				candidate = try contained(path, root: resourceRoot)
+			} else {
+				throw NativeSemanticError.unsupportedNode(path: locator.field, kind: "relative root \(locator.localRoot.map(String.init) ?? "absent") needs its explicit resource/volume context")
+			}
 		} else if let path = locator.relative {
 			candidate = try contained(path, root: workspaceRoot)
 		} else if let string = locator.absolute {
@@ -228,8 +233,8 @@ public extension NativeWorkspaceStream {
 	}
 }
 
-/// Read-only encoding of independently scoped native configuration roots.
-/// This does not export or reconstruct the Workspace/configuration documents.
+/// Encoding of independently scoped native configuration roots. Export uses
+/// separate dependency and interchange adapters; projection alone is read-only.
 enum NativeConfigurationAdapter {
 	static func message(for identity: NativeWorkspaceStream.Identity) -> String? {
 		switch (identity.kind, identity.scope) {

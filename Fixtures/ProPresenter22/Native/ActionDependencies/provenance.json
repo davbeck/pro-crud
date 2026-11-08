@@ -1,0 +1,194 @@
+{
+  "application": "ProPresenter",
+  "version": "22",
+  "build": "369098875",
+  "osVersion": "27.0.1",
+  "date": "2026-10-16",
+  "source": "Owned native Macro/timer/Look/image controls, independently authored Presentation, production native playlist link, separate CLI dependency workspace import with native continuation and warning-free re-export. Includes actual unadapted collection and Theme-unit negative controls; client physical outputs excluded.",
+  "files": [
+    {
+      "path": "CLIWorkspace/Configuration/Macros",
+      "sha256": "1e320b35af1e6de45627b264abdcd9609ddc26b33f5f280ab909d4f0abf570f8"
+    },
+    {
+      "path": "CLIWorkspace/Configuration/Timers",
+      "sha256": "596467d17c224f23d515e97997b1d2629b6c5e1294de8637b8b79fac4e58e8f7"
+    },
+    {
+      "path": "CLIWorkspace/Configuration/Workspace",
+      "sha256": "b5e7ba257a47f07439e87f4ec407b03de6a25bc2745c375a57a3ce6be5d47b38"
+    },
+    {
+      "path": "CLIWorkspace/Libraries/Default/Owned Dependencies.pro",
+      "sha256": "71495d45ab5eaa86bc01701351563cfe696a8ce0ce5f69bdc8c968cc4f2c57f2"
+    },
+    {
+      "path": "CLIWorkspace/Media/322e4d08-cba2-4b08-bd43-842ae317f6df/SharedRectangle.png",
+      "sha256": "f2ff729c982781c305820664296dbe2f81e847a1108bac5d1d0fbb1c9d83c2ff"
+    },
+    {
+      "path": "CLIWorkspace/Playlists/Library",
+      "sha256": "329f27acc8ba71412725b977168337865efe7d5afd5a83c5e20e02e1f3b9146f"
+    },
+    {
+      "path": "CLIWorkspace/Themes/CLI Template Ordering/Theme",
+      "sha256": "060b3ef77863937548a17acb7bb93d80a403f76e094a46fd445501630c22925b"
+    },
+    {
+      "path": "CLIWorkspace/pro-crud-dependencies.json",
+      "sha256": "a7b9d750569a33ee413300f2aa5ebc22de6d157bb9310f7f98cb994a66748bf5"
+    },
+    {
+      "path": "NativeMacrosContinued",
+      "sha256": "0bfecb824abee0958d8b2accbf1b5de92e82c08f1411cf9eeb388a8bf1e360c2"
+    },
+    {
+      "path": "NativeMacrosReference",
+      "sha256": "b0e57c362334916dd923a4d47cc6aa5a36278dca182cffe760b28a53eb3c3c08"
+    },
+    {
+      "path": "OwnedInput.pro",
+      "sha256": "7bf5223dd960dadd7e6f12358a5583b4a387c66ac3aacbf56d0a9aaf6427e627"
+    },
+    {
+      "path": "SourceLinkManifest.json",
+      "sha256": "f2fcf80046a6183cb491c2acb43352ce87f56bdafe6332aae3354ce3aaeb85ff"
+    },
+    {
+      "path": "continued-macros.loro",
+      "sha256": "1b210546c69f2f7c9dda32eef64a236dd9b269cfac6d458cbf62a7e420d97d0a"
+    },
+    {
+      "path": "continued-macros.vector",
+      "sha256": "c8a8834d10f2daed5112c7b602b6d0acc8928f9529e3343803e4fba63044f296"
+    },
+    {
+      "path": "imported-macros.loro",
+      "sha256": "83b480e12096eb6c9d73f3ecf0a15eff7533eb8de9aa1817646d91399c75eef3"
+    },
+    {
+      "path": "imported-macros.vector",
+      "sha256": "171139cd77c9f11a812f2e1c8c6c095da685e54b2e87e8c4d17e268f048885eb"
+    },
+    {
+      "path": "imported-media-associations.json",
+      "sha256": "04b287ea83acb65cd92b0fa3a06010a25b48d5680bed6d410e972ab8bd787588"
+    },
+    {
+      "path": "imported-playlistlibrary.loro",
+      "sha256": "4a8ce41388801eba049c573617ca31201a52d6a1e124b16de53cb2db5f4e7c4b"
+    },
+    {
+      "path": "imported-playlistlibrary.vector",
+      "sha256": "e299020d0f368ad0fe8bac39d8e11a997204ea8371e80a8d2afc3c6942a4e356"
+    },
+    {
+      "path": "imported-presentation.loro",
+      "sha256": "f774905b93e249f1798d1590696a25134d003ad097133e5255ba2d3435f06a1a"
+    },
+    {
+      "path": "imported-presentation.vector",
+      "sha256": "597bc67a7ee5a35e73ee5bfd912ac67f30043536abf3ac5ff30274abd6b895cc"
+    },
+    {
+      "path": "imported-streams.json",
+      "sha256": "58ab4fe150f026fa58f669e2bd0e35f4592bc348f794faee6ce01917c127b0f4"
+    },
+    {
+      "path": "imported-theme.loro",
+      "sha256": "e0a27de81fa05d8397da30a196cb32c19b413af4fbd6d42867aa2fecc6d71f3d"
+    },
+    {
+      "path": "imported-theme.vector",
+      "sha256": "e7043d843414cd804dd8bd4e9492f0d95e7c5d9a575bec4a96f7e0049835c080"
+    },
+    {
+      "path": "imported-timers.loro",
+      "sha256": "b4b7ecbde4facabfeb687183b2d4adda907ed8c37dbf58e56f7dea3347f8ebac"
+    },
+    {
+      "path": "imported-timers.vector",
+      "sha256": "613b2db070725613bee535a03ed78e368abd9ba60b74c6689ce3f512238f1f56"
+    },
+    {
+      "path": "imported-workspace.loro",
+      "sha256": "13328ee0837f9d291cde0883bb50b6e636fae63c4d53c783f3589bf3edb230a0"
+    },
+    {
+      "path": "imported-workspace.vector",
+      "sha256": "d04d19e85c1e5f38fce446a962e968d3ce93c11f89f904317ffee3acb9e8bc00"
+    },
+    {
+      "path": "source-macros.loro",
+      "sha256": "e56edce4fe61a7078ba13ad8931c87b623d7e4361c941c676f82b744ae67918d"
+    },
+    {
+      "path": "source-macros.vector",
+      "sha256": "171139cd77c9f11a812f2e1c8c6c095da685e54b2e87e8c4d17e268f048885eb"
+    },
+    {
+      "path": "source-playlistlibrary.loro",
+      "sha256": "1c7248a47a60cd3255d3fc30bab82a4497eb0e3f369443a3276d69df7bf3ff5b"
+    },
+    {
+      "path": "source-playlistlibrary.vector",
+      "sha256": "b8e179db532fe23feaaffb04730197c89ebe682c95384ec229144e16c211243b"
+    },
+    {
+      "path": "source-presentation.loro",
+      "sha256": "f774905b93e249f1798d1590696a25134d003ad097133e5255ba2d3435f06a1a"
+    },
+    {
+      "path": "source-presentation.vector",
+      "sha256": "597bc67a7ee5a35e73ee5bfd912ac67f30043536abf3ac5ff30274abd6b895cc"
+    },
+    {
+      "path": "source-streams.json",
+      "sha256": "337cdecc22bcca9b874c51a87b231ede63ca8629b653eb919d920798005290cb"
+    },
+    {
+      "path": "source-theme.loro",
+      "sha256": "e0a27de81fa05d8397da30a196cb32c19b413af4fbd6d42867aa2fecc6d71f3d"
+    },
+    {
+      "path": "source-theme.vector",
+      "sha256": "e7043d843414cd804dd8bd4e9492f0d95e7c5d9a575bec4a96f7e0049835c080"
+    },
+    {
+      "path": "source-timers.loro",
+      "sha256": "b4b7ecbde4facabfeb687183b2d4adda907ed8c37dbf58e56f7dea3347f8ebac"
+    },
+    {
+      "path": "source-timers.vector",
+      "sha256": "613b2db070725613bee535a03ed78e368abd9ba60b74c6689ce3f512238f1f56"
+    },
+    {
+      "path": "source-workspace.loro",
+      "sha256": "6eb79aa907c65c36944af9be24ff7044e18443ceb3a5cf998b078bba25fcda7d"
+    },
+    {
+      "path": "source-workspace.vector",
+      "sha256": "18b48a78fec3355fb7c254ccd2f31bf7f281c8ebc7521ffe3dba01eccc7272f6"
+    },
+    {
+      "path": "unadapted-import-macros.loro",
+      "sha256": "7677fb3c30030a7d66c39dcc7f99e744f911221aa132e6e55a4b08c531ea78b6"
+    },
+    {
+      "path": "unadapted-import-macros.vector",
+      "sha256": "e266a1cc988724e32605eec8274a606c30705277de2c8ce730865e26b257ecd2"
+    },
+    {
+      "path": "unconverted-import-theme.loro",
+      "sha256": "dcadc4d65c3db4507dab6aeeedcc46e0986e796e78c3f3b0f6e76ce1e2a87c17"
+    },
+    {
+      "path": "unconverted-import-theme.vector",
+      "sha256": "e7043d843414cd804dd8bd4e9492f0d95e7c5d9a575bec4a96f7e0049835c080"
+    },
+    {
+      "path": "unconverted-theme-stream.json",
+      "sha256": "85abac20bb0e771b14dedbc08754eeac9910747868997a9def07aea3fca5b32b"
+    }
+  ]
+}

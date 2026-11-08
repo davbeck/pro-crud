@@ -1,0 +1,19 @@
+{
+  "changed" : true,
+  "operationCount" : 8,
+  "receipts" : [
+    {
+      "alreadyApplied" : false,
+      "documentID" : "F1D34FE9-54BC-5CCE-AA9B-975968DEAEAE",
+      "operationID" : "71DB94CD-D8A0-4280-B47E-4933EF959C15",
+      "versionVector" : "A5TrNowFq8+K4MuZkIDfAW4BIg=="
+    },
+    {
+      "alreadyApplied" : false,
+      "documentID" : "3BD14EE4-BDD4-541A-AE01-F9E4ED9E35BE",
+      "operationID" : "9140AE81-619C-4A1D-9D38-1756183B1AD4",
+      "versionVector" : "ArvG05Wr6ZzDIQYB0AY="
+    }
+  ],
+  "root" : "/Users/davbeck/Library/Application Support/RenewedVision/ProPresenter/Workspaces/9f65d640-6477-441e-9b71-70ef74bb12d7"
+}

@@ -1,0 +1,10 @@
+{"version":1,"operations":[
+{"stream":"f1d34fe9-54bc-5cce-aa9b-975968deaeae","op":"add-playlist-group","node":"77999999-0000-4000-8000-000000000001","parent":"93DB59CF-FECE-5A79-A81C-1E408059AC7A","name":"CLI Playlist Folder"},
+{"stream":"f1d34fe9-54bc-5cce-aa9b-975968deaeae","op":"add-playlist","node":"77999999-0000-4000-8000-000000000002","parent":"77999999-0000-4000-8000-000000000001","name":"CLI Playlist Editing"},
+{"stream":"f1d34fe9-54bc-5cce-aa9b-975968deaeae","op":"add-playlist-header","node":"77999999-0000-4000-8000-000000000003","parent":"77999999-0000-4000-8000-000000000002","name":"CLI Section"},
+{"stream":"f1d34fe9-54bc-5cce-aa9b-975968deaeae","op":"add-playlist-presentation","node":"77999999-0000-4000-8000-000000000004","parent":"77999999-0000-4000-8000-000000000002","after":"77999999-0000-4000-8000-000000000003","name":"Owned acceptance","presentation":"bfa7b647-93ab-5ee6-b397-ec61b08bcfee"},
+{"stream":"f1d34fe9-54bc-5cce-aa9b-975968deaeae","op":"add-playlist-presentation","node":"77999999-0000-4000-8000-000000000005","parent":"77999999-0000-4000-8000-000000000002","after":"77999999-0000-4000-8000-000000000004","name":"Owned media","presentation":"12080506-ffda-5a60-9e6d-4c99a9a8f82f"},
+{"stream":"f1d34fe9-54bc-5cce-aa9b-975968deaeae","op":"set-playlist-item-hidden","item":"77999999-0000-4000-8000-000000000004","hidden":true},
+{"stream":"3bd14ee4-bdd4-541a-ae01-f9e4ed9e35be","op":"rename-template","template":"99999999-0000-4000-8000-000000000001","name":"CLI Template Editing"},
+{"stream":"3bd14ee4-bdd4-541a-ae01-f9e4ed9e35be","op":"set-template-text","template":"99999999-0000-4000-8000-000000000001","element":"2F8CECB1-5673-40A3-BC7F-2A053D4E0668","text":"Native template acceptance"}
+]}

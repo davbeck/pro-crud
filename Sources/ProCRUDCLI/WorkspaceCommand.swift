@@ -5,7 +5,7 @@ import ProCRUDCore
 struct WorkspaceCommand: ParsableCommand {
 	static let configuration = CommandConfiguration(
 		commandName: "workspace", abstract: "Inspect, export, and apply supported local edits to an explicitly selected ProPresenter workspace.",
-		subcommands: [WorkspaceArrangementReferences.self, WorkspaceApply.self, WorkspaceInspect.self, WorkspaceInventory.self, WorkspaceContents.self, WorkspaceConfiguration.self, WorkspaceMedia.self, WorkspaceExport.self, WorkspaceExportPlaylist.self, WorkspaceSetCopyrightTitle.self, WorkspaceSetSlideNotes.self, WorkspaceSetText.self, WorkspaceMoveCue.self, WorkspaceTransferCue.self, WorkspaceRenameCueGroup.self, WorkspaceSetArrangementGroups.self, WorkspaceDump.self, WorkspaceDiscover.self],
+		subcommands: [WorkspaceExportDependencies.self, WorkspacePlanningCenterSequence.self, WorkspaceArrangementReferences.self, WorkspaceApply.self, WorkspaceInspect.self, WorkspaceInventory.self, WorkspaceContents.self, WorkspaceConfiguration.self, WorkspaceMedia.self, WorkspaceExport.self, WorkspaceExportPlaylist.self, WorkspaceSetCopyrightTitle.self, WorkspaceSetSlideNotes.self, WorkspaceSetText.self, WorkspaceMoveCue.self, WorkspaceTransferCue.self, WorkspaceRenameCueGroup.self, WorkspaceSetArrangementGroups.self, WorkspaceDump.self, WorkspaceDiscover.self],
 	)
 }
 
@@ -73,9 +73,9 @@ struct WorkspaceSetSlideNotes: ParsableCommand {
 }
 
 struct WorkspaceExportPlaylist: ParsableCommand {
-	static let configuration = CommandConfiguration(commandName: "export-playlist", abstract: "Export one standard native playlist with its media-free Presentation dependencies to a separate .proPlaylist archive.")
+	static let configuration = CommandConfiguration(commandName: "export-playlist", abstract: "Export a native playlist with its portable Presentation and file dependencies to a separate .proPlaylist archive.")
 	@Argument(help: "Exact native workspace root.") var input: String
-	@Option(help: "Exact standard playlist UUID from workspace contents; this is a tree node, not the PlaylistLibrary stream UUID.") var playlist: String
+	@Option(help: "Exact playlist UUID from workspace contents; this is a tree node, not the PlaylistLibrary stream UUID.") var playlist: String
 	@Option(help: "Separate .proPlaylist output path.") var output: String
 	@OptionGroup var target: TargetVersionOptions
 	@Flag(help: "Replace an existing archive atomically.") var replace = false

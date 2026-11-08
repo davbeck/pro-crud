@@ -35,11 +35,24 @@ checks mapped Presentation/Theme, playlist and configuration views, including
 independent client streams. Statuses include document ID and scope. Unknown
 fields and unavailable content remain explicit; this does not enable
 configuration export/editing.
-Export a standard playlist and its media-free Presentation dependencies with
+Export a playlist and its portable Presentation/file dependencies with
 `workspace export-playlist ROOT --playlist PLAYLIST_NODE_UUID --output PATH`.
 Select the tree node UUID from `workspace contents`; repeated links and hidden
-items remain intact. Connected/provider items, media and other action
-dependencies return capability errors. Use native export for those cases.
+items remain intact. Connected wrappers and their local associations are retained.
+Target 22 packages supported schema-1 file media from slide/header/cue/playback-marker
+actions, preserves separate occurrence/asset identities and copies shared files once.
+Missing occurrences and unqualified action dependencies are reported together.
+Provider/live/device dependencies remain gated. A playlist cannot install
+configuration definitions; use `workspace export-dependencies ROOT --playlist UUID
+--output NEW_DIRECTORY` to create a separate target-22 workspace directory with
+Presentation/Macro/timer/Look/Theme dependencies and their files. Owning
+configuration collections are copied as units; unresolved dependencies block
+publication together. Import the directory as a new workspace through Settings →
+General → Active Workspace → Manage Workspaces → Add → Import Legacy ProPresenter
+Folder. Existing output directories are rejected. Physical outputs, live state
+and running timers belong to the receiving workspace; ProPresenter may rebuild
+screen dimensions from its local display bindings. Qualified HLS
+sources stay remote. This does not enable native media-store writes.
 For supported content, export an exact
 shared stream with `workspace export ROOT --stream UUID --output PATH`; output
 is a separate `.pro` or `Theme` file and defaults to target 22. Media identity
@@ -109,7 +122,7 @@ group occurrences; repeat `--group` for each occurrence or use `--clear` for an
 empty arrangement. Both use the same offline/local checks and retain native
 history. For several supported operations, use `workspace apply ROOT --file
 NATIVE_EDITS.json --registry PATH`. Its version-1 manifest contains `operations`
-with explicit `stream` UUID and `op` fields; see the installed format reference
+with explicit shared document `stream` UUID and `op` fields; see the installed format reference
 for operation-specific fields. All operations prepare before one atomic commit,
 with ordered edits within each Presentation, one receipt per changed document
 and no changes if any operation fails. RTF paths are relative to the manifest.
@@ -122,6 +135,32 @@ with the new name. Unmapped template metadata blocks copying. Existing
 arrangements stay unchanged; add `set-arrangement-groups` in the same batch when
 the new group belongs in an arrangement. Matching stable-ID replay makes no
 change. This operation does not create an empty group or split at its first cue.
+Native playlist batches support `rename-playlist-node`, `move-playlist-node`,
+`remove-playlist-node`, `add-playlist-group`, `add-playlist`,
+`add-playlist-header` and `add-playlist-presentation`. Use tree `node`/`parent`
+UUIDs, explicit names and stable new IDs. Omitted `after` inserts/moves first.
+Removal requires an item or empty non-root container, and checks remaining
+references across mapped scopes. Connected/provider structure stays protected.
+For connected items, use `set-playlist-item-hidden` with `item` and `hidden`,
+`link-planning-center-item` with `item`, local `presentation`, new `linkedItem`
+and optional `arrangement`, or `unlink-planning-center-item` with `item`.
+Use `set-playlist-item-arrangement` with `item` and an `arrangement` UUID or
+explicit null for Master. These edit local overlays only and retain remote data.
+
+Use `workspace planning-center-sequence --help` for the stored-sequence workflow.
+Start with `--dry-run` and inspect exact group-name matches, including repeats.
+Applying requires explicit local Presentation/arrangement/nested-item IDs and
+`--registry`; it publishes the definition and local link/selection atomically.
+It does not refresh plans, upload/download attachments or change remote sequences.
+CLI playlist exports preserve connected metadata; native Export → Playlist can
+flatten the connection into standard local items.
+
+Native Theme batches support `rename-template`, `move-template` and
+`set-template-text`, using the Theme stream and base-slide `template` UUID.
+Text also requires an `element` UUID and exactly one of `text` or `rtfFile`.
+These retain native history and use the same static-text policy as Presentation
+text edits. Native template application/duplication and build editing remain gated.
+
 Native batches also accept `rename-arrangement` with `arrangement` UUID and
 `name`, and `select-arrangement` with `arrangement` UUID or explicit JSON `null`
 for Master. Naming preserves the group sequence; selection preserves all

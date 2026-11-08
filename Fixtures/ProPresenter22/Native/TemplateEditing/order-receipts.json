@@ -1,0 +1,13 @@
+{
+  "changed" : true,
+  "operationCount" : 2,
+  "receipts" : [
+    {
+      "alreadyApplied" : false,
+      "documentID" : "ADD2EE1F-C3F7-52F8-8239-805F0836168F",
+      "operationID" : "9F35797C-75E8-437E-8E28-DF364A704C75",
+      "versionVector" : "AsrD1o3OxqffVgQBiA0="
+    }
+  ],
+  "root" : "/Users/davbeck/Library/Application Support/RenewedVision/ProPresenter/Workspaces/9f65d640-6477-441e-9b71-70ef74bb12d7"
+}

@@ -5,6 +5,20 @@ import Testing
 
 @Suite("Native MediaStore inspection")
 struct NativeMediaStoreTests {
+	@Test func dependencyExportRequiresTheDeclaredNativeAssociationWithoutRewritingIt() throws {
+		let store = try NativeMediaStoreSnapshot.read(at: fixtures)
+		let occurrences = try JSONDecoder().decode([NativeMediaInventory.Occurrence].self, from: Data(contentsOf: modelFixtures.appendingPathComponent("ObservedOccurrences.json")))
+		for occurrence in occurrences {
+			let reference = try #require(UUID(uuidString: occurrence.reference.referenceID)), asset = try #require(occurrence.reference.assetID.flatMap(UUID.init(uuidString:)))
+			if store.references.first(where: { $0.id == reference })?.assetID == asset {
+				try NativeDependencyExport.requireAssociation(occurrence: reference, asset: asset, in: store)
+			} else {
+				#expect(throws: NativeSemanticError.self) { try NativeDependencyExport.requireAssociation(occurrence: reference, asset: asset, in: store) }
+			}
+		}
+		#expect(throws: NativeSemanticError.self) { try NativeDependencyExport.requireAssociation(occurrence: UUID(), asset: UUID(), in: store) }
+	}
+
 	@Test func nativeSnapshotMatchesTheIndependentManifestTableAndWALOracleWithoutWrites() throws {
 		let before = try hashes(fixtures)
 		let store = try NativeMediaStoreSnapshot.read(at: fixtures)

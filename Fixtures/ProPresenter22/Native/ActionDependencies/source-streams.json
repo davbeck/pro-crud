@@ -1,0 +1,38 @@
+[
+  {
+    "prefix": "source-macros",
+    "documentID": "deedc043-67cd-5656-88c2-0060b6789d2a",
+    "kind": "Macros",
+    "corePath": null
+  },
+  {
+    "prefix": "source-playlistlibrary",
+    "documentID": "f1d34fe9-54bc-5cce-aa9b-975968deaeae",
+    "kind": "PlaylistLibrary",
+    "corePath": null
+  },
+  {
+    "prefix": "source-timers",
+    "documentID": "a2c63259-c4fb-5887-81d0-01c1147479f1",
+    "kind": "Timers",
+    "corePath": null
+  },
+  {
+    "prefix": "source-workspace",
+    "documentID": "2301e198-02cb-567a-9b93-4473e97ef0c2",
+    "kind": "Workspace",
+    "corePath": null
+  },
+  {
+    "prefix": "source-presentation",
+    "documentID": "2589445d-f798-4f18-ba41-3d13c7c0c351",
+    "kind": "Presentation",
+    "corePath": "Default/Owned Dependencies"
+  },
+  {
+    "prefix": "source-theme",
+    "documentID": "5e9ba769-36f8-57c6-b46c-513c6f785a89",
+    "kind": "Theme",
+    "corePath": "CLI Template Ordering/Theme"
+  }
+]

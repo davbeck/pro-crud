@@ -151,3 +151,47 @@ upload, download, or otherwise modify Planning Center Services.
 Connected-playlist export/import, conversion to standard, and preservation of
 local overlays across remote refreshes are not specified by this file-editing
 contract. Use ProPresenter for those service workflows.
+
+
+## Native 22 local workflows
+
+In native 22 storage, inspect `workspace contents ROOT` and the shared
+PlaylistLibrary stream with `workspace dump ROOT --stream UUID`. Version-1
+`workspace apply` batches support local `link-planning-center-item`,
+`unlink-planning-center-item`, `set-playlist-item-hidden` and
+`set-playlist-item-arrangement` operations. Their UUID fields and transaction
+rules are documented in [Top-level file formats](TopLevelFileFormats.md).
+These native operations preserve the remote plan/item snapshots and shared tree
+placements. Unlinking deletes `linked_data`; repeating it makes no change.
+Client expansion state and media-store records remain independent.
+
+A stored Planning Center sequence can drive a local arrangement:
+
+```sh
+pro-crud workspace planning-center-sequence /exact/native/root \
+  --stream PLAYLIST_LIBRARY_STREAM_UUID --item OUTER_ITEM_UUID \
+  --presentation PRESENTATION_STREAM_UUID --arrangement LOCAL_ARRANGEMENT_UUID \
+  --name 'Service Sequence' --linked-item NEW_LOCAL_ITEM_UUID --dry-run
+```
+
+The preview reports ordered group names and UUIDs. Each name must match exactly
+one local cue group. Repeated names produce repeated occurrences; missing or
+ambiguous labels fail before any write. Omit `--dry-run` and provide `--registry
+/exact/path/registry-v1.sqlite3` to apply with ProPresenter and helpers stopped.
+The arrangement UUID identifies the definition to create or update; its stored
+Presentation selection stays unchanged. The item selects this arrangement
+locally. An existing link must target the explicitly selected Presentation;
+reassignment requires explicit unlinking. Visibility stays unchanged. A matching
+replay creates no receipts. Definition and link publication share one transaction,
+with all reference reads checked before commit.
+
+This workflow uses the remote snapshot already stored locally. Refresh, upload,
+download, attachment association and remote sequence changes require the
+respective authenticated service workflow and are not performed by this command.
+The native 22 local contract is qualified against build 369098875. Authenticated
+refresh/reconciliation and cross-account behavior are outside this contract.
+
+CLI `workspace export-playlist` retains connected wrappers, remote metadata and
+local overlays. Native 22 **Export → Playlist** instead flattens connected items
+into standard local items; that export is a snapshot of local content and must
+not be treated as a preserved service connection.

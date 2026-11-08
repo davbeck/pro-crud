@@ -1,0 +1,98 @@
+[
+  {
+    "componentPath": "/cues[index=0]/actions[index=1]/media/element",
+    "declaredAssetID": "322e4d08-cba2-4b08-bd43-842ae317f6df",
+    "documentID": "12080506-FFDA-5A60-9E6D-4C99A9A8F82F",
+    "materializedAssetID": "322E4D08-CBA2-4B08-BD43-842AE317F6DF",
+    "nativeAvailability": "Ready",
+    "referenceID": "80eb4ec7-9507-5bb1-be56-1b42ab4f077a",
+    "scope": 0,
+    "status": "matched",
+    "storedAssetPath": "/Users/davbeck/Library/Application Support/RenewedVision/ProPresenter/Workspaces/9f65d640-6477-441e-9b71-70ef74bb12d7/Media/Assets/SharedRectangle.png",
+    "transformationID": "38F2D42D-B74E-4A5C-8A28-08FCD9168CC5"
+  },
+  {
+    "componentPath": "/cues[index=1]/actions[index=1]/media/element",
+    "declaredAssetID": "322e4d08-cba2-4b08-bd43-842ae317f6df",
+    "documentID": "12080506-FFDA-5A60-9E6D-4C99A9A8F82F",
+    "materializedAssetID": "322E4D08-CBA2-4B08-BD43-842AE317F6DF",
+    "nativeAvailability": "Ready",
+    "referenceID": "a334238d-6c81-5441-85f6-3c61ffaf9004",
+    "scope": 0,
+    "status": "matched",
+    "storedAssetPath": "/Users/davbeck/Library/Application Support/RenewedVision/ProPresenter/Workspaces/9f65d640-6477-441e-9b71-70ef74bb12d7/Media/Assets/SharedRectangle.png",
+    "transformationID": "4E09ED1E-7712-448A-BCBC-F840327EA31A"
+  },
+  {
+    "componentPath": "/cues[index=0]/actions[index=1]/media/element",
+    "declaredAssetID": "322e4d08-cba2-4b08-bd43-842ae317f6df",
+    "documentID": "6F2A2586-CFD2-4041-A2D1-8FE750517F25",
+    "materializedAssetID": "322E4D08-CBA2-4B08-BD43-842AE317F6DF",
+    "nativeAvailability": "Ready",
+    "referenceID": "11aa0673-9cb2-5782-bc64-de10e7b5719f",
+    "scope": 0,
+    "status": "matched",
+    "storedAssetPath": "/Users/davbeck/Library/Application Support/RenewedVision/ProPresenter/Workspaces/9f65d640-6477-441e-9b71-70ef74bb12d7/Media/Assets/SharedRectangle.png",
+    "transformationID": "ECDE1BAC-DD63-4F88-9C15-654750777569"
+  },
+  {
+    "componentPath": "/cues[index=1]/actions[index=1]/media/element",
+    "declaredAssetID": "322e4d08-cba2-4b08-bd43-842ae317f6df",
+    "documentID": "6F2A2586-CFD2-4041-A2D1-8FE750517F25",
+    "materializedAssetID": "322E4D08-CBA2-4B08-BD43-842AE317F6DF",
+    "nativeAvailability": "Ready",
+    "referenceID": "dda7e5e7-a628-5194-99fc-a896520413df",
+    "scope": 0,
+    "status": "matched",
+    "storedAssetPath": "/Users/davbeck/Library/Application Support/RenewedVision/ProPresenter/Workspaces/9f65d640-6477-441e-9b71-70ef74bb12d7/Media/Assets/SharedRectangle.png",
+    "transformationID": "F8C889E2-C06F-4A10-AF68-F3188DCA9AB0"
+  },
+  {
+    "componentPath": "/cues[index=0]/actions[index=1]/media/element",
+    "declaredAssetID": "322e4d08-cba2-4b08-bd43-842ae317f6df",
+    "documentID": "5E2D8736-70E0-4FD9-8F49-03CE0EAFC2C0",
+    "materializedAssetID": "322E4D08-CBA2-4B08-BD43-842AE317F6DF",
+    "nativeAvailability": "Ready",
+    "referenceID": "910c5232-359e-5909-b8f1-82e49f6fa5fd",
+    "scope": 0,
+    "status": "matched",
+    "storedAssetPath": "/Users/davbeck/Library/Application Support/RenewedVision/ProPresenter/Workspaces/9f65d640-6477-441e-9b71-70ef74bb12d7/Media/Assets/SharedRectangle.png",
+    "transformationID": "0239A6DD-BAF1-4BE5-B581-93B1A5FB9509"
+  },
+  {
+    "componentPath": "/cues[index=1]/actions[index=1]/media/element",
+    "declaredAssetID": "322e4d08-cba2-4b08-bd43-842ae317f6df",
+    "documentID": "5E2D8736-70E0-4FD9-8F49-03CE0EAFC2C0",
+    "materializedAssetID": "322E4D08-CBA2-4B08-BD43-842AE317F6DF",
+    "nativeAvailability": "Ready",
+    "referenceID": "e09f573a-4ab8-5e85-8826-2e116e01812d",
+    "scope": 0,
+    "status": "matched",
+    "storedAssetPath": "/Users/davbeck/Library/Application Support/RenewedVision/ProPresenter/Workspaces/9f65d640-6477-441e-9b71-70ef74bb12d7/Media/Assets/SharedRectangle.png",
+    "transformationID": "1F6B46ED-3018-488B-A8C3-008A9704B859"
+  },
+  {
+    "componentPath": "/cues[index=0]/actions[index=1]/media/element",
+    "declaredAssetID": "322e4d08-cba2-4b08-bd43-842ae317f6df",
+    "documentID": "EC403BB6-50AD-5C08-8E9A-4F979BD1F69E",
+    "materializedAssetID": "322E4D08-CBA2-4B08-BD43-842AE317F6DF",
+    "nativeAvailability": "Ready",
+    "referenceID": "62d0441b-6809-5e1d-88c4-77841de732cb",
+    "scope": 0,
+    "status": "matched",
+    "storedAssetPath": "/Users/davbeck/Library/Application Support/RenewedVision/ProPresenter/Workspaces/9f65d640-6477-441e-9b71-70ef74bb12d7/Media/Assets/SharedRectangle.png",
+    "transformationID": "EF41AA78-838C-421E-B8F3-FC3EF9CB57E3"
+  },
+  {
+    "componentPath": "/cues[index=1]/actions[index=1]/media/element",
+    "declaredAssetID": "322e4d08-cba2-4b08-bd43-842ae317f6df",
+    "documentID": "EC403BB6-50AD-5C08-8E9A-4F979BD1F69E",
+    "materializedAssetID": "322E4D08-CBA2-4B08-BD43-842AE317F6DF",
+    "nativeAvailability": "Ready",
+    "referenceID": "f210168d-f62e-5ddf-a555-cbdc3e691873",
+    "scope": 0,
+    "status": "matched",
+    "storedAssetPath": "/Users/davbeck/Library/Application Support/RenewedVision/ProPresenter/Workspaces/9f65d640-6477-441e-9b71-70ef74bb12d7/Media/Assets/SharedRectangle.png",
+    "transformationID": "B71B2F9C-3202-4E7E-B529-78D4E6224D09"
+  }
+]

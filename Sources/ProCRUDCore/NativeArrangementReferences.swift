@@ -103,9 +103,11 @@ enum NativeArrangementDeletion {
 		let replacements = try Dictionary(uniqueKeysWithValues: patches.map { patch in
 			let before = NativeWorkspaceStream(identity: patch.identity, snapshot: patch.originalSnapshot, versionVector: patch.originalVersionVector, lastSharedVersionVector: nil)
 			let after = NativeWorkspaceStream(identity: patch.identity, snapshot: patch.snapshot, versionVector: patch.versionVector, lastSharedVersionVector: nil)
-			let retained = try Set(after.presentationLayout().arrangements.map(\.id))
-			for arrangement in try before.presentationLayout().arrangements where !retained.contains(arrangement.id) {
-				removed.append((patch.identity.documentID, arrangement))
+			if patch.identity.kind == "Presentation" {
+				let retained = try Set(after.presentationLayout().arrangements.map(\.id))
+				for arrangement in try before.presentationLayout().arrangements where !retained.contains(arrangement.id) {
+					removed.append((patch.identity.documentID, arrangement))
+				}
 			}
 			return (patch.identity.documentID, after)
 		})

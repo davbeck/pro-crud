@@ -1,0 +1,106 @@
+{
+  "application": "ProPresenter",
+  "version": "22",
+  "build": "369098875",
+  "osVersion": "27.0.1",
+  "date": "2026-10-15",
+  "source": "Owned synthetic offline Planning Center interchange; native imported wrapper and visibility, production local sequence/link transaction, exact reopen, continued native unhide/unlink and portable CLI connected re-import. No authenticated service operation.",
+  "files": [
+    {
+      "path": "CLIInput.proPlaylist",
+      "sha256": "b6610eb9b5b668397fb885129bde447aef90d1d358f1d16050254c3ada4004b3"
+    },
+    {
+      "path": "NativeLinked.proPlaylist",
+      "sha256": "04070b88026d95a2d1cf508f76bfff16a0ad0df94c643dcf25ea9b9e6fcf5157"
+    },
+    {
+      "path": "OwnedOfflineInput.proPlaylist",
+      "sha256": "8ee5ac8bc024b0aa9512c6d01e5175785a683b03c10c44fed4909b2ce9419eeb"
+    },
+    {
+      "path": "cli-after.loro",
+      "sha256": "4e0fbfa89a97ed31da7007be3183f676eed543a6396f3fe319a9ae3df77b118b"
+    },
+    {
+      "path": "cli-after.vector",
+      "sha256": "c01c4c55d23f77ae1a2a73b7ef66f18fc4ade05bb1de24eff6c2fde51c4fd9b8"
+    },
+    {
+      "path": "cli-before.loro",
+      "sha256": "8931790edc2b6cc860b7d68baa8728d27e2e21fa41d2e6e2d6fe8b6ad83bb165"
+    },
+    {
+      "path": "cli-before.vector",
+      "sha256": "93ab4c9064c21f147bed679f54df549511bf506780c30d5572eef734af591887"
+    },
+    {
+      "path": "native-continued.loro",
+      "sha256": "ede3b162929416cca487e348741d179f37ea615d061f7b61d028de5f025c1c2b"
+    },
+    {
+      "path": "native-continued.vector",
+      "sha256": "d680a3eda5e6b3fec3eeb30d782cff4cc15d8d49e4609fc0d8c46c38ab2e2f08"
+    },
+    {
+      "path": "native-open.loro",
+      "sha256": "4e0fbfa89a97ed31da7007be3183f676eed543a6396f3fe319a9ae3df77b118b"
+    },
+    {
+      "path": "native-open.vector",
+      "sha256": "c01c4c55d23f77ae1a2a73b7ef66f18fc4ade05bb1de24eff6c2fde51c4fd9b8"
+    },
+    {
+      "path": "native-unlinked.loro",
+      "sha256": "4196de86dc3e7c1aa56f4833491b8c522e29546d96f9be68c66d18d2a4478930"
+    },
+    {
+      "path": "native-unlinked.vector",
+      "sha256": "4c76158e7cac1f006a7d9e16ebd7c52656625ce2518c128fbd007b3081049405"
+    },
+    {
+      "path": "portable-import.loro",
+      "sha256": "de749289bd8e07de1909265e4b73fe52e5c11fd7ae3bb53d8dafcadc997d25ed"
+    },
+    {
+      "path": "portable-import.vector",
+      "sha256": "f8de9acc9d54e510414853cf136fbcde170eccecbd5dbc750020d99ede25e42a"
+    },
+    {
+      "path": "presentation-after.loro",
+      "sha256": "ff51ae5c1d5aab14c08d76ed3a9fe285a215982a923427f7743fe2f1fee44856"
+    },
+    {
+      "path": "presentation-after.vector",
+      "sha256": "e914e5f2ac29bca43e929915c30e452921a20442685081e7b3c0a67b9ca8e6ef"
+    },
+    {
+      "path": "presentation-before.loro",
+      "sha256": "7be3c3f4f9f4f972bae76ec477428312c3492223d54c66fa742d37fb936b1679"
+    },
+    {
+      "path": "presentation-before.vector",
+      "sha256": "7c7efc97ec5795bb3477337239621748614bb67540ee42ee8da3cb1ab1f25c72"
+    },
+    {
+      "path": "presentation-continued.loro",
+      "sha256": "ff51ae5c1d5aab14c08d76ed3a9fe285a215982a923427f7743fe2f1fee44856"
+    },
+    {
+      "path": "presentation-continued.vector",
+      "sha256": "e914e5f2ac29bca43e929915c30e452921a20442685081e7b3c0a67b9ca8e6ef"
+    },
+    {
+      "path": "presentation-open.loro",
+      "sha256": "ff51ae5c1d5aab14c08d76ed3a9fe285a215982a923427f7743fe2f1fee44856"
+    },
+    {
+      "path": "presentation-open.vector",
+      "sha256": "e914e5f2ac29bca43e929915c30e452921a20442685081e7b3c0a67b9ca8e6ef"
+    },
+    {
+      "path": "receipts.json",
+      "sha256": "67ccbf47ea99d490d9d79b3eacdbb23e733949fb182eb0797ecab58ba0e0d30b"
+    }
+  ]
+}

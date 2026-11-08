@@ -373,7 +373,7 @@ public enum DocumentArchive {
 		var kind: DocumentKind
 	}
 
-	private static func validateWorkspacePath(
+	static func validateWorkspacePath(
 		_ path: String,
 		limits: ArchiveLimits,
 	) throws {

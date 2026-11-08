@@ -6,6 +6,22 @@ import Testing
 
 @Suite("Native edit manifest")
 struct NativeEditManifestTests {
+	@Test func nativePlaylistAndTemplateOperationsRequireScopedIdentitiesAndExplicitOverlayValues() throws {
+		let stream = UUID(), node = UUID(), parent = UUID(), target = UUID(), linked = UUID(), element = UUID()
+		let instructions: [[String: Any]] = [
+			["stream": stream.uuidString, "op": "add-playlist", "node": node.uuidString, "parent": parent.uuidString, "name": "Service"],
+			["stream": stream.uuidString, "op": "set-playlist-item-hidden", "item": node.uuidString, "hidden": true],
+			["stream": stream.uuidString, "op": "link-planning-center-item", "item": node.uuidString, "presentation": target.uuidString, "linkedItem": linked.uuidString],
+			["stream": stream.uuidString, "op": "set-playlist-item-arrangement", "item": node.uuidString, "arrangement": NSNull()],
+			["stream": stream.uuidString, "op": "set-template-text", "template": node.uuidString, "element": element.uuidString, "text": ""],
+		]
+		#expect(try decode(instructions).map(\.edit) == [.playlist(.create(id: node, parent: parent, name: "Service", kind: .playlist, after: nil)), .playlist(.hidden(node, true)), .playlist(.link(item: node, presentation: target, linkedID: linked, arrangement: nil)), .playlist(.arrangement(item: node, arrangement: nil)), .template(.text(slide: node, element: element, content: .text("")))])
+		for instruction in instructions {
+			#expect(throws: ValidationError.self) { try decode([instruction.merging(["remotePlanUpdate": true]) { _, new in new }]) }
+		}
+		#expect(throws: ValidationError.self) { try decode([["stream": stream.uuidString, "op": "set-playlist-item-arrangement", "item": node.uuidString]]) }
+	}
+
 	@Test func orderedOperationsDecodeWithoutImplicitConversionOrFieldLoss() throws {
 		let stream = UUID(), group = UUID(), cue = UUID(), anchor = UUID(), arrangement = UUID(), action = UUID()
 		let instructions: [[String: Any]] = [

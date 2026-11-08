@@ -25,7 +25,10 @@ enum NativeMediaRendering {
 			throw NativeSemanticError.invalidValue(path: path, expected: "explicit resource/workspace root for a relative file source")
 		}
 		do {
-			return try NativeMediaInventory.resolve(locator, workspaceRoot: contextRoot ?? URL(fileURLWithPath: "/"))
+			// Only the coherent portable form selects archive-local context here.
+			// An arbitrary native ROOT_CURRENT_RESOURCE still needs its own owner.
+			let resourceRoot = try NativePortableMedia.qualifies(media.serializedData()) ? contextRoot : nil
+			return try NativeMediaInventory.resolve(locator, workspaceRoot: contextRoot ?? URL(fileURLWithPath: "/"), resourceRoot: resourceRoot)
 		} catch {
 			throw RenderError.nativeMediaFile(path: "\(path)/\(locator.field)", source: locator.localPath ?? locator.relative ?? locator.absolute ?? "", underlyingError: error)
 		}

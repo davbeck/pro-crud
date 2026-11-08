@@ -1,0 +1,4 @@
+{"version":1,"operations":[
+{"stream":"add2ee1f-c3f7-52f8-8239-805f0836168f","op":"move-template","template":"5E740E72-2D50-4FDD-ABF4-8A37BEC0D02F"},
+{"stream":"add2ee1f-c3f7-52f8-8239-805f0836168f","op":"rename-template","template":"5E740E72-2D50-4FDD-ABF4-8A37BEC0D02F","name":"CLI First Template"}
+]}

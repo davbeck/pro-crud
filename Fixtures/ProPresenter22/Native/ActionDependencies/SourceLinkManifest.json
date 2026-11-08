@@ -1,0 +1,19 @@
+{
+  "version": 1,
+  "operations": [
+    {
+      "stream": "F1D34FE9-54BC-5CCE-AA9B-975968DEAEAE",
+      "op": "rename-playlist-node",
+      "node": "67CA9682-2249-5331-94CD-2144B2B3557B",
+      "name": "Owned Workspace Dependencies"
+    },
+    {
+      "stream": "F1D34FE9-54BC-5CCE-AA9B-975968DEAEAE",
+      "op": "add-playlist-presentation",
+      "node": "A2999999-0000-4000-8000-000000000024",
+      "parent": "67CA9682-2249-5331-94CD-2144B2B3557B",
+      "name": "Owned Dependencies",
+      "presentation": "2589445D-F798-4F18-BA41-3D13C7C0C351"
+    }
+  ]
+}

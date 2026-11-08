@@ -3,7 +3,7 @@ import Foundation
 import ProCRUDCore
 
 struct WorkspaceApply: ParsableCommand {
-	static let configuration = CommandConfiguration(commandName: "apply", abstract: "Apply a JSON batch of supported native Presentation edits atomically. Quit ProPresenter and stop workspace helpers first.")
+	static let configuration = CommandConfiguration(commandName: "apply", abstract: "Apply a JSON batch of supported native document edits atomically. Quit ProPresenter and stop workspace helpers first.")
 	@Argument(help: "Exact registered local native workspace root.") var input: String
 	@Option(help: "Version-1 native edit manifest. All operations are prepared before any database write.") var file: String
 	@Option(help: "Exact local registry-v1.sqlite3 path.") var registry: String
@@ -60,6 +60,7 @@ enum NativeEditManifest {
 			case edit(NativePresentationEdit)
 			case rtfFile(action: UUID, path: String)
 			case textRTFFile(action: UUID, element: UUID, path: String)
+			case templateRTFFile(slide: UUID, element: UUID, path: String)
 		}
 
 		func resolve(relativeTo directory: URL) throws -> NativePresentationOperation {
@@ -68,6 +69,7 @@ enum NativeEditManifest {
 			case let .edit(value): edit = value
 			case let .rtfFile(action, path): edit = try .slideNotes(actionID: action, content: .rtf(Data(contentsOf: URL(fileURLWithPath: path, relativeTo: URL(fileURLWithPath: directory.path, isDirectory: true)))))
 			case let .textRTFFile(action, element, path): edit = try .slideText(actionID: action, elementID: element, content: .rtf(Data(contentsOf: URL(fileURLWithPath: path, relativeTo: URL(fileURLWithPath: directory.path, isDirectory: true)))))
+			case let .templateRTFFile(slide, element, path): edit = try .template(.text(slide: slide, element: element, content: .rtf(Data(contentsOf: URL(fileURLWithPath: path, relativeTo: URL(fileURLWithPath: directory.path, isDirectory: true))))))
 			}
 			return .init(documentID: stream, edit: edit)
 		}
@@ -78,6 +80,58 @@ enum NativeEditManifest {
 			let op = try container.decode(Operation.self, forKey: .op)
 			let fields: Set<String>
 			switch op {
+			case .renamePlaylistNode:
+				fields = ["node", "name"]
+				payload = try .edit(.playlist(.rename(container.decode(UUID.self, forKey: .node), container.decode(String.self, forKey: .name))))
+			case .setPlaylistItemHidden:
+				fields = ["item", "hidden"]
+				payload = try .edit(.playlist(.hidden(container.decode(UUID.self, forKey: .item), container.decode(Bool.self, forKey: .hidden))))
+			case .movePlaylistNode:
+				fields = ["node", "parent", "after"]
+				payload = try .edit(.playlist(.move(container.decode(UUID.self, forKey: .node), parent: container.decode(UUID.self, forKey: .parent), after: container.decodeIfPresent(UUID.self, forKey: .after))))
+			case .removePlaylistNode:
+				fields = ["node"]
+				payload = try .edit(.playlist(.remove(container.decode(UUID.self, forKey: .node))))
+			case .addPlaylistGroup, .addPlaylist, .addPlaylistHeader, .addPlaylistPresentation:
+				fields = ["node", "parent", "name", "after"]
+				var allowed = fields
+				let kind: NativePlaylistEdit.NewNode
+				switch op {
+				case .addPlaylistGroup: kind = .group
+				case .addPlaylist: kind = .playlist
+				case .addPlaylistHeader: kind = .header
+				default:
+					allowed.formUnion(["presentation", "arrangement"])
+					kind = try .presentation(container.decode(UUID.self, forKey: .presentation), arrangement: container.decodeIfPresent(UUID.self, forKey: .arrangement))
+				}
+				try requireKeys(allowed.union(["stream", "op"]), decoder: decoder)
+				payload = try .edit(.playlist(.create(id: container.decode(UUID.self, forKey: .node), parent: container.decode(UUID.self, forKey: .parent), name: container.decode(String.self, forKey: .name), kind: kind, after: container.decodeIfPresent(UUID.self, forKey: .after))))
+				return
+			case .linkPlanningCenterItem:
+				fields = ["item", "presentation", "linkedItem", "arrangement"]
+				payload = try .edit(.playlist(.link(item: container.decode(UUID.self, forKey: .item), presentation: container.decode(UUID.self, forKey: .presentation), linkedID: container.decode(UUID.self, forKey: .linkedItem), arrangement: container.decodeIfPresent(UUID.self, forKey: .arrangement))))
+			case .unlinkPlanningCenterItem:
+				fields = ["item"]
+				payload = try .edit(.playlist(.unlink(container.decode(UUID.self, forKey: .item))))
+			case .setPlaylistItemArrangement:
+				fields = ["item", "arrangement"]
+				guard container.contains(.arrangement) else { throw invalid("Provide an arrangement UUID or explicit null for Master.", decoder: decoder) }
+				payload = try .edit(.playlist(.arrangement(item: container.decode(UUID.self, forKey: .item), arrangement: container.decodeIfPresent(UUID.self, forKey: .arrangement))))
+			case .renameTemplate:
+				fields = ["template", "name"]
+				payload = try .edit(.template(.rename(container.decode(UUID.self, forKey: .template), container.decode(String.self, forKey: .name))))
+			case .moveTemplate:
+				fields = ["template", "after"]
+				payload = try .edit(.template(.move(container.decode(UUID.self, forKey: .template), after: container.decodeIfPresent(UUID.self, forKey: .after))))
+			case .setTemplateText:
+				fields = ["template", "element", "text", "rtfFile"]
+				let slide = try container.decode(UUID.self, forKey: .template), element = try container.decode(UUID.self, forKey: .element)
+				guard container.contains(.text) != container.contains(.rtfFile) else { throw invalid("set-template-text requires exactly one of text or rtfFile.", decoder: decoder) }
+				if container.contains(.text) {
+					payload = try .edit(.template(.text(slide: slide, element: element, content: .text(container.decode(String.self, forKey: .text)))))
+				} else {
+					payload = try .templateRTFFile(slide: slide, element: element, path: container.decode(String.self, forKey: .rtfFile))
+				}
 			case .setCopyrightTitle:
 				fields = ["title"]
 				payload = try .edit(.copyrightTitle(container.decode(String.self, forKey: .title)))
@@ -147,6 +201,20 @@ enum NativeEditManifest {
 	}
 
 	private enum Operation: String, Decodable {
+		case renamePlaylistNode = "rename-playlist-node"
+		case setPlaylistItemHidden = "set-playlist-item-hidden"
+		case movePlaylistNode = "move-playlist-node"
+		case removePlaylistNode = "remove-playlist-node"
+		case addPlaylistGroup = "add-playlist-group"
+		case addPlaylist = "add-playlist"
+		case addPlaylistHeader = "add-playlist-header"
+		case addPlaylistPresentation = "add-playlist-presentation"
+		case linkPlanningCenterItem = "link-planning-center-item"
+		case unlinkPlanningCenterItem = "unlink-planning-center-item"
+		case setPlaylistItemArrangement = "set-playlist-item-arrangement"
+		case renameTemplate = "rename-template"
+		case moveTemplate = "move-template"
+		case setTemplateText = "set-template-text"
 		case setCopyrightTitle = "set-copyright-title"
 		case setNotes = "set-notes"
 		case setSlideNotes = "set-slide-notes"
@@ -166,7 +234,7 @@ enum NativeEditManifest {
 	}
 
 	private enum Key: String, CodingKey {
-		case version, operations, stream, op, title, text, action, element, rtfFile, cue, after, group, name, arrangement, groups, newArrangement, select, templateGroup
+		case version, operations, stream, op, title, text, action, element, rtfFile, cue, after, group, name, arrangement, groups, newArrangement, select, templateGroup, node, parent, item, hidden, presentation, linkedItem, template
 	}
 
 	private struct AnyKey: CodingKey {

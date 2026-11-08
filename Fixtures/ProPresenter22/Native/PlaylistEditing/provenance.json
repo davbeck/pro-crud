@@ -1,0 +1,118 @@
+{
+  "application": "ProPresenter",
+  "version": "22",
+  "build": "369098875",
+  "osVersion": "27.0.1",
+  "date": "2026-10-15",
+  "source": "Independent native rename/visibility controls; production mixed PlaylistLibrary/Theme batch; native reopen, native playlist export and corrected portable import with platform negative control.",
+  "files": [
+    {
+      "path": "CLIInput.proPlaylist",
+      "sha256": "15c70e8e8e074c3ccbd63ffee00a5acb32f695506a438ff2f4f08acec8fd6dea"
+    },
+    {
+      "path": "CLIManifest.json",
+      "sha256": "ff7654152f2ac7b428c2385f13c635c869fb4c845aa4b90c9df269e05ed129c7"
+    },
+    {
+      "path": "NativeReexport.proPlaylist",
+      "sha256": "787499bfb56067517f1a82948ca966782b9d3278f3d21ac1ea25a9efb97bf2a8"
+    },
+    {
+      "path": "asset-associations.json",
+      "sha256": "0cc42fff5ca14a31318d270ba9edd935ef579cbd356db9fa01cc1e355460cc94"
+    },
+    {
+      "path": "cli-after.loro",
+      "sha256": "ba5b5ebba88a843efcd4ed173988a62875a972e760d5cf9a92884ebc849c87f4"
+    },
+    {
+      "path": "cli-after.vector",
+      "sha256": "844411bfca81e471db623b7064075120cd887ffd6e2ba3a963788155f230d6b5"
+    },
+    {
+      "path": "cli-before.loro",
+      "sha256": "4e84e219ce213f7f33bac13ffae7e435e6dc5555855540625c514b8be86cb3a1"
+    },
+    {
+      "path": "cli-before.vector",
+      "sha256": "37e3404728f93032991ddc51a6afcdaa06a61f4a36a546329e27ff12a367df68"
+    },
+    {
+      "path": "native-after-import.loro",
+      "sha256": "dd532c2760ec56d6e5321d52a611f4d481b042c7db05c0b9b5c7303d020f0bbe"
+    },
+    {
+      "path": "native-after-import.vector",
+      "sha256": "4842fc487fdcce10357b238271aec60911632849b4e2c1dab90e503ff2a949f7"
+    },
+    {
+      "path": "native-before.loro",
+      "sha256": "24cba5797df6bf205fbc65e941961f94a5768947b737ff17de95c01a32707e0e"
+    },
+    {
+      "path": "native-before.vector",
+      "sha256": "a61ab66e61a88b2bb5fb7c108d2c540fa734382253acb6141acc2c104a5798e8"
+    },
+    {
+      "path": "native-connected-before.loro",
+      "sha256": "17789161374854aa798ba5120896cd719a46d7f4c040480a04bbc7c44ebbf35b"
+    },
+    {
+      "path": "native-connected-before.vector",
+      "sha256": "c5aa22a8a91c5fdbca1039ca470de881be7a240d1ec0ff1e94ba52d2d4915f41"
+    },
+    {
+      "path": "native-connected-hidden.loro",
+      "sha256": "8931790edc2b6cc860b7d68baa8728d27e2e21fa41d2e6e2d6fe8b6ad83bb165"
+    },
+    {
+      "path": "native-connected-hidden.vector",
+      "sha256": "93ab4c9064c21f147bed679f54df549511bf506780c30d5572eef734af591887"
+    },
+    {
+      "path": "native-hidden.loro",
+      "sha256": "80c54c167af81c3f71700c348d17171635d528383199947ecfbedd96a5809292"
+    },
+    {
+      "path": "native-hidden.vector",
+      "sha256": "576acfe257b0a647bd21e26087bf27f92318324e90150f7f21aa21b01b0e4959"
+    },
+    {
+      "path": "native-imported-media.loro",
+      "sha256": "ebf8738c2e6451e5625c07b00f45cd4d094e6c86b98d29031badffde42c18663"
+    },
+    {
+      "path": "native-imported-media.vector",
+      "sha256": "9236b7cf7e000d1acdfd82178059e54509f94b13c3fa737a66b8498720ebc964"
+    },
+    {
+      "path": "native-open.loro",
+      "sha256": "ba5b5ebba88a843efcd4ed173988a62875a972e760d5cf9a92884ebc849c87f4"
+    },
+    {
+      "path": "native-open.vector",
+      "sha256": "844411bfca81e471db623b7064075120cd887ffd6e2ba3a963788155f230d6b5"
+    },
+    {
+      "path": "native-platform-import.loro",
+      "sha256": "1a116203e7c59ac005adf704f2b69153e3726b2b97a0adffeb07594f62c95d69"
+    },
+    {
+      "path": "native-platform-import.vector",
+      "sha256": "5aa9312eceee08ff5840b625f56d83c587e1efda36fe740326b8c11d0bc59816"
+    },
+    {
+      "path": "native-renamed.loro",
+      "sha256": "4e84e219ce213f7f33bac13ffae7e435e6dc5555855540625c514b8be86cb3a1"
+    },
+    {
+      "path": "native-renamed.vector",
+      "sha256": "37e3404728f93032991ddc51a6afcdaa06a61f4a36a546329e27ff12a367df68"
+    },
+    {
+      "path": "receipts.json",
+      "sha256": "c4fd9af1b3b096ccf1e6e2f9d3f8b6fd9f13dbc52aeba059c2f96afc513e4a04"
+    }
+  ]
+}

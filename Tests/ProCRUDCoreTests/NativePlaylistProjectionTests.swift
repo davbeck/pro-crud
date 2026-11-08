@@ -6,6 +6,94 @@ import Testing
 
 @Suite("Native playlist materialization")
 struct NativePlaylistProjectionTests {
+	@Test func otherActionAndMetadataFilesKeepTheirOwnBytesAndPlatform() throws {
+		try withExportSnapshot(media: true) { snapshot, output in
+			let asset = snapshot.root.appendingPathComponent("Media/Assets/SharedRectangle.png"), attachment = snapshot.root.appendingPathComponent("Source.pptx")
+			try FileManager.default.createDirectory(at: asset.deletingLastPathComponent(), withIntermediateDirectories: true)
+			try FileManager.default.copyItem(at: fixtures.appendingPathComponent("Interchange/MediaIdentity/Media/Assets/SharedRectangle.png"), to: asset)
+			let bytes = Data("independent external presentation file".utf8); try bytes.write(to: attachment)
+			let source = try #require(snapshot.streams.first { $0.identity.kind == "Presentation" }).protobufProjection().presentation()
+			var media = try nativeMedia(in: source)
+			let url = Rv_Data_URL.with { $0.absoluteString = attachment.absoluteString; $0.platform = .macos }
+			media.metadata.manufactureURL = url
+			let header = Rv_Data_PlaylistItem.Header.with {
+				$0.actions = [.with { $0.type = .backgroundMedia; $0.media.element = media }, .with { $0.type = .externalPresentation; $0.externalPresentation.url = url }]
+			}
+			let exporter = NativeDependencyExport(snapshot: snapshot, target: .v22, directory: output.deletingLastPathComponent())
+			let result = try Rv_Data_PlaylistItem.Header(serializedBytes: exporter.rewrite(header.serializedData(), message: Rv_Data_PlaylistItem.Header.protoMessageName, path: "/header"))
+			#expect(exporter.issues.isEmpty)
+			let metadata = result.actions[0].media.element.metadata.manufactureURL, external = result.actions[1].externalPresentation.url
+			#expect(metadata.relativePath == external.relativePath && metadata.platform == .macos && external.platform == .macos)
+			#expect(try Data(contentsOf: output.deletingLastPathComponent().appendingPathComponent(metadata.relativePath)) == bytes)
+			let image = try #require(MediaReference(media: result.actions[0].media.element).activeLocators.first?.relative)
+			#expect(image != metadata.relativePath)
+			#expect(try Data(contentsOf: output.deletingLastPathComponent().appendingPathComponent(image)) == Data(contentsOf: asset))
+		}
+	}
+
+	@Test func headerActionsAndPlaybackMarkerActionsPackageAllOfTheirMedia() throws {
+		try withExportSnapshot(media: true) { snapshot, output in
+			let asset = snapshot.root.appendingPathComponent("Media/Assets/SharedRectangle.png")
+			try FileManager.default.createDirectory(at: asset.deletingLastPathComponent(), withIntermediateDirectories: true)
+			try FileManager.default.copyItem(at: fixtures.appendingPathComponent("Interchange/MediaIdentity/Media/Assets/SharedRectangle.png"), to: asset)
+			let source = try #require(snapshot.streams.first { $0.identity.kind == "Presentation" }).protobufProjection().presentation()
+			let media = try nativeMedia(in: source)
+			var marker = Rv_Data_Action.with { $0.type = .backgroundMedia; $0.uuid.string = UUID().uuidString; $0.media.element = media }
+			marker.media.element.uuid.string = UUID().uuidString
+			let action = Rv_Data_Action.with { $0.type = .backgroundMedia; $0.media.element = media; $0.media.markers = [.with { $0.actions = [marker] }] }
+			let header = Rv_Data_PlaylistItem.Header.with { $0.actions = [action] }
+			let exporter = NativeDependencyExport(snapshot: snapshot, target: .v22, directory: output.deletingLastPathComponent())
+			let data = try exporter.rewrite(header.serializedData(), message: Rv_Data_PlaylistItem.Header.protoMessageName, path: "/header")
+			#expect(exporter.issues.isEmpty)
+			let references = try MediaReference.collect(protobuf: data, messageType: Rv_Data_PlaylistItem.Header.protoMessageName)
+			#expect(references.count == 2 && Set(references.map(\.referenceID)).count == 2)
+			#expect(Set(references.compactMap { $0.activeLocators.first?.relative }).count == 1)
+			#expect(try DocumentLoader.recursiveFiles(in: output.deletingLastPathComponent().appendingPathComponent("Media")).count == 1)
+		}
+	}
+
+	@Test func dependencyFailuresIncludeEveryMissingOccurrenceAndConfigurationReference() throws {
+		try withExportSnapshot(media: true) { snapshot, output in
+			let source = try #require(snapshot.streams.first { $0.identity.kind == "Presentation" }).protobufProjection().presentation()
+			let media = try nativeMedia(in: source)
+			let header = Rv_Data_PlaylistItem.Header.with {
+				$0.actions = [.with { $0.type = .backgroundMedia; $0.media.element = media }, .with { $0.type = .macro; $0.macro.identification.parameterUuid.string = UUID().uuidString }]
+			}
+			let exporter = NativeDependencyExport(snapshot: snapshot, target: .v22, directory: output.deletingLastPathComponent())
+			_ = try exporter.rewrite(header.serializedData(), message: Rv_Data_PlaylistItem.Header.protoMessageName, path: "/header")
+			#expect(Set(exporter.issues.map(\.feature)) == ["native-media-dependency", "native-action-dependency", "native-configuration-dependency"])
+			#expect(throws: DocumentCompatibilityError.self) { try exporter.publishDocuments() }
+		}
+	}
+
+	@Test func portableFileMediaKeepsOccurrenceIdentitiesAndSharesOnePackagedAsset() throws {
+		try withExportSnapshot(media: true) { snapshot, output in
+			let asset = snapshot.root.appendingPathComponent("Media/Assets/SharedRectangle.png")
+			try FileManager.default.createDirectory(at: asset.deletingLastPathComponent(), withIntermediateDirectories: true)
+			try FileManager.default.copyItem(at: fixtures.appendingPathComponent("Interchange/MediaIdentity/Media/Assets/SharedRectangle.png"), to: asset)
+			let result = try NativePlaylistExporter.bundle(from: snapshot, playlistID: #require(UUID(uuidString: "d0ab014c-0771-4441-9de5-c61098ca8f3c")), to: output)
+			#expect(result.compatibility.canWrite)
+			let directory = try DocumentArchive.expand(output)
+			let presentation = try Rv_Data_Presentation(serializedBytes: Data(contentsOf: directory.appendingPathComponent(result.dependencies[0].archivePath)))
+			let references = try MediaReference.collect(protobuf: presentation.serializedData(), messageType: Rv_Data_Presentation.protoMessageName)
+			#expect(references.count == 2 && Set(references.map(\.referenceID)).count == 2)
+			#expect(Set(references.compactMap(\.assetID)).count == 1)
+			#expect(references.allSatisfy { $0.activeLocators.first?.localRoot == 12 })
+			#expect(try DocumentLoader.recursiveFiles(in: directory).filter { $0.pathExtension == "png" }.count == 1)
+			for reference in references {
+				let relative = try #require(reference.activeLocators.first?.relative)
+				#expect(try Data(contentsOf: directory.appendingPathComponent(relative)) == Data(contentsOf: asset))
+			}
+			let native = try PresentationLoader.load(nativeDocumentID: result.dependencies[0].documentID, from: snapshot).document
+			let expected = try native.orderedCues.map { try PresentationRenderer(document: native).render(cue: $0).representation(using: .png, properties: [:]) }
+			try FileManager.default.removeItem(at: asset)
+			let portable = try #require(PresentationLoader.loadPresentations(from: output).first).document
+			#expect(!portable.renderingDiagnostics.contains { $0.code == .unsupportedNativeMedia || $0.code == .missingMediaURL })
+			let actual = try portable.orderedCues.map { try PresentationRenderer(document: portable).render(cue: $0).representation(using: .png, properties: [:]) }
+			#expect(actual == expected)
+		}
+	}
+
 	@Test(arguments: ProPresenterTargetVersion.allCases)
 	func portableExportRetainsRepeatedItemsAndEmbedsTheSharedDependencyOnce(target: ProPresenterTargetVersion) throws {
 		try withExportSnapshot { snapshot, output in
@@ -23,6 +111,7 @@ struct NativePlaylistProjectionTests {
 			#expect(items[1].presentation.documentPath == items[2].presentation.documentPath)
 			#expect(items[1].presentation.documentPath.relativePath == result.dependencies[0].archivePath)
 			#expect(items[1].presentation.documentPath.local.root == .currentResource)
+			#expect(items[1].presentation.documentPath.platform.rawValue == 1)
 			#expect(items[1].presentation.documentPath.local.path == result.dependencies[0].archivePath)
 			// The hidden occurrence is retained in the file but ordinary playlist
 			// rendering continues to select only the visible occurrence.
@@ -36,7 +125,7 @@ struct NativePlaylistProjectionTests {
 			let incomplete = NativeWorkspaceSnapshot(root: snapshot.root, workspaceID: snapshot.workspaceID, metadata: [:], streams: snapshot.streams.filter { $0.identity.kind != "Presentation" })
 			let sentinel = Data("existing archive".utf8)
 			try sentinel.write(to: output)
-			#expect(throws: NativeSemanticError.self) {
+			#expect(throws: DocumentCompatibilityError.self) {
 				try NativePlaylistExporter.bundle(from: incomplete, playlistID: #require(UUID(uuidString: "d0ab014c-0771-4441-9de5-c61098ca8f3c")), to: output, replace: true)
 			}
 			#expect(try Data(contentsOf: output) == sentinel)
@@ -81,7 +170,7 @@ struct NativePlaylistProjectionTests {
 				_ = try NativePlaylistExporter.bundle(from: snapshot, playlistID: #require(UUID(uuidString: "d0ab014c-0771-4441-9de5-c61098ca8f3c")), to: output, replace: true)
 				Issue.record("Unqualified media was exported.")
 			} catch let error as DocumentCompatibilityError {
-				#expect(error.report.issues.map(\.feature) == ["native-media-dependency"])
+				#expect(error.report.issues.map(\.feature) == ["native-media-dependency", "native-media-dependency"])
 				#expect(!error.report.canWrite)
 			}
 			#expect(try Data(contentsOf: output) == sentinel)
@@ -199,6 +288,17 @@ struct NativePlaylistProjectionTests {
 		case let .list(value): .list(value: value.map(loro))
 		case let .map(value): .map(value: value.mapValues(loro))
 		}
+	}
+
+	private func nativeMedia(in presentation: Rv_Data_Presentation) throws -> Rv_Data_Media {
+		var result: [Rv_Data_Media] = []
+		_ = try NativeDependencyWire.rewrite(presentation.serializedData(), message: Rv_Data_Presentation.protoMessageName, path: "") { data, message, _ in
+			if message == Rv_Data_Media.protoMessageName {
+				try result.append(Rv_Data_Media(serializedBytes: data)); return data
+			}
+			return nil
+		}
+		return try #require(result.first)
 	}
 
 	private func withExportSnapshot(media: Bool = false, _ body: (NativeWorkspaceSnapshot, URL) throws -> Void) throws {

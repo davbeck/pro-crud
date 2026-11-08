@@ -49,9 +49,8 @@ open before inspection.
 Other database schemas and storage markers are rejected explicitly.
 `workspace inventory ROOT --projections` checks native Presentation, Theme and
 playlist protobuf views. Playlist views preserve the shared tree and matching
-client node expansion state separately. Connected-playlist local overlays remain
-unsupported. Export one standard playlist with media-free Presentation
-dependencies using:
+client node expansion state separately. Export one playlist with its portable
+Presentation and file dependencies using:
 
 ```sh
 pro-crud workspace export-playlist /exact/native/root --playlist PLAYLIST_UUID \
@@ -63,10 +62,48 @@ PlaylistLibrary stream UUID. Both profiles (21 and 22) preserve ordered repeated
 links, hidden items, headers and arrangements. Each shared Presentation is
 embedded once under a UUID directory with its original filename; both URL
 representations point into the archive. ProPresenter may add its normal name
-collision suffix on import into a populated library. Connected/provider items,
-media, header actions and other action dependencies currently return structured
-compatibility errors before output publication. Source and output paths must
-remain separate.
+collision suffix on import into a populated library. Platform metadata is retained
+alongside the two portable URL representations; it is required for native link
+resolution. Connected wrappers and local links remain intact in CLI exports.
+Target 22 also packages supported schema-1 file media, including header, cue and
+playback-marker actions. Per-occurrence UUIDs and shared asset UUIDs stay distinct;
+shared assets are copied once, and conflicting contents under one asset UUID fail.
+Real native roots also require matching live Reference/Asset associations; changed
+MediaStore captures abort export. No MediaStore records are rewritten.
+Selected native locators are resolved exactly without filename fallback. Qualified
+HLS sources remain remote and are never downloaded. Missing file/link occurrences
+and action dependencies that require receiving-workspace configuration are
+reported together before output publication. Provider, device and unqualified
+runtime dependencies remain capability errors. A playlist archive cannot install
+Macros, Looks, timers or physical output configuration. Source and output paths
+must remain separate.
+
+For action definitions, use a separate workspace directory:
+
+```sh
+pro-crud workspace export-dependencies /exact/native/root --playlist PLAYLIST_UUID \
+  --output /separate/path/ServiceWorkspace
+```
+
+This target-22 export follows local Presentation links, Macro actions, timer and
+Look selectors, Theme assignments and referenced media/audio playlists. Mapped
+Prop, message, clear-group and stage-layout definitions use their owning stores.
+Definition UUIDs must resolve exactly; a name-only selector must be unique.
+Owning configuration collections are copied as units, including their ordered
+membership and dependencies. Files use workspace-relative paths and shared assets
+are copied once. The source remains unchanged. Missing files/definitions,
+unavailable content, unknown fields and unqualified runtime/preset/provider
+dependencies block publication together. The destination must be a new directory;
+this command has no replacement or target-21 mode.
+
+Import the resulting directory through **Settings → General → Active Workspace →
+Manage Workspaces → Add → Import Legacy ProPresenter Folder**. This creates a
+separate workspace; it does not merge definitions into an existing workspace.
+Saved Looks and logical screen identities are included. Client physical outputs,
+live Look and running timer state remain local to the receiving workspace.
+ProPresenter can rebuild canvas dimensions from its local display bindings during
+import. Active Theme scroller forms beyond the qualified inactive left-scrolling
+representation remain explicit errors.
 
 General native document edits and strict media validation require their native
 adapters. Render a supported shared Presentation directly with
@@ -178,8 +215,10 @@ For example, `native-edits.json` can contain:
 ```
 
 Use actual UUIDs from workspace inspection. Manifest operations run in order
-within each Presentation and share one Loro commit; all changed Presentations
-and receipts publish in one transaction. Any invalid operation prevents the
+within each shared document and share one Loro commit; all changed streams
+and receipts publish in one transaction. Presentation definitions prepare before
+local playlist links, so an arrangement created in this batch can be selected by
+an item in the same batch. Any invalid operation prevents the
 entire batch from publishing, and conflicts roll back every affected stream.
 An entirely matching batch makes no change. The manifest version is independent
 of the application version. The same stopped-writer/local-registration rules apply.
@@ -202,6 +241,34 @@ of the application version. The same stopped-writer/local-registration rules app
 | `remove-arrangement` | Existing `arrangement` UUID; removes its definition and selects Master if it was selected |
 | `clear-document-action-arrangement` | `action` UUID of a Presentation cue's document action; clears only its arrangement selector |
 | `remove-media-action` | `action` UUID of a media/foreground/background action in a cue with a presentation slide; an absent action is a no-op |
+| `rename-playlist-node` | `node` UUID and nonempty `name`; standard non-root nodes |
+| `add-playlist-group`, `add-playlist` | New `node` UUID, destination `parent` group UUID, nonempty `name`, optional sibling `after`; omitted `after` inserts first |
+| `add-playlist-header` | New `node` UUID, destination playlist `parent` UUID, nonempty `name`, optional sibling `after`; creates a black header |
+| `add-playlist-presentation` | New `node`, playlist `parent`, local `presentation` stream UUIDs, nonempty `name`, optional `arrangement` and sibling `after` |
+| `move-playlist-node` | Existing `node`, compatible destination `parent` and optional sibling `after`; omitted `after` moves first; preserves the placement identity |
+| `remove-playlist-node` | Existing item or empty non-root playlist/group `node`; remaining trigger references and uninspected scopes block deletion |
+| `set-playlist-item-hidden` | Outer `item` UUID and explicit `hidden` Boolean; also allowed on connected items |
+| `link-planning-center-item` | Outer `item`, local `presentation` stream, new nested `linkedItem` UUIDs; optional local `arrangement` UUID |
+| `unlink-planning-center-item` | Outer `item` UUID; deletes only the nested local association; already unlinked is a no-op |
+| `set-playlist-item-arrangement` | Outer `item` UUID and `arrangement` UUID or explicit `null` for Master; supports direct and connected local links |
+| `rename-template` | Theme stream, template base-slide `template` UUID and nonempty `name` |
+| `move-template` | Theme stream, `template` UUID and optional sibling `after`; omitted `after` moves first |
+| `set-template-text` | Theme stream, `template` and `element` UUIDs; exactly one of `text` or `rtfFile`; same static-text policy as `set-text` |
+
+Playlist creation uses caller-provided stable identities. Matching replay leaves
+existing visibility overlays intact; incompatible identity reuse fails. Moving
+nodes checks parent kinds, sibling anchors and cycles. Connected and provider-owned
+structure cannot be renamed, reordered or deleted through generic operations.
+Local association, arrangement and visibility edits preserve remote snapshots,
+outer identity and order. New links resolve exact native logical library paths;
+linked items must be explicitly unlinked before reassignment. Theme text editing
+retains the canvas, element identity, actions and every unrelated native field.
+All edits retain client streams and media-store data.
+
+Use `workspace planning-center-sequence --dry-run` to inspect a stored song
+sequence's exact local group mapping. Applying it requires `--registry` and stopped
+writers; it atomically creates/updates an explicit local arrangement and links or
+selects it on the connected item. See [Planning Center playlists](PlanningCenterPlaylists.md).
 
 Splitting requires a cue after the first cue of its current group. It creates a
 new group immediately after that group and moves the selected cue and following

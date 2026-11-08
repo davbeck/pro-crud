@@ -1,0 +1,102 @@
+{
+  "application": "ProPresenter",
+  "version": "22",
+  "build": "369098875",
+  "osVersion": "27.0.1",
+  "date": "2026-10-15",
+  "source": "Owned Deep Look Theme; production rename/static-text edits, byte-identical native reopen and independent native Theme export.",
+  "files": [
+    {
+      "path": "NativeOrderReexport.proTheme",
+      "sha256": "aee0c35e334d31401b2e68d74da76ceeb63e5fc3a1687c33f0ce8ac6e6d8aa15"
+    },
+    {
+      "path": "NativeReexport.proTheme",
+      "sha256": "c57283d1405378bf6cde9a694ee8922ec79ea780c6249bde22c94dcefc2851dd"
+    },
+    {
+      "path": "OrderInput.proTheme",
+      "sha256": "5a28787c70791a56daa56baf261d44aa41f3c4cd2e250c02877635abe19bceca"
+    },
+    {
+      "path": "OrderManifest.json",
+      "sha256": "4b6664b93107e48af788eca27ef18f062afb0191bdcff0abcad56b2c8b9c59c3"
+    },
+    {
+      "path": "cli-after.loro",
+      "sha256": "452b4a1c9cf0f2e9d0bfad2282c7be9038530facdc8d4e048515d7a776b6cc8c"
+    },
+    {
+      "path": "cli-after.vector",
+      "sha256": "b74c443a3c8be420031cd9bb12db329fc959be77be24ab378978094a2bfeef37"
+    },
+    {
+      "path": "cli-before.loro",
+      "sha256": "1f14d5c989de4dd7d4aa231dd2f470b52d4625dc8d0949c551ff0a1eab670298"
+    },
+    {
+      "path": "cli-before.vector",
+      "sha256": "d9c4cc3af714b3dd67d7e8796be7f78917a41a055e90459d38702a8511b12d39"
+    },
+    {
+      "path": "native-before.loro",
+      "sha256": "1f14d5c989de4dd7d4aa231dd2f470b52d4625dc8d0949c551ff0a1eab670298"
+    },
+    {
+      "path": "native-before.vector",
+      "sha256": "d9c4cc3af714b3dd67d7e8796be7f78917a41a055e90459d38702a8511b12d39"
+    },
+    {
+      "path": "native-exported.loro",
+      "sha256": "452b4a1c9cf0f2e9d0bfad2282c7be9038530facdc8d4e048515d7a776b6cc8c"
+    },
+    {
+      "path": "native-exported.vector",
+      "sha256": "b74c443a3c8be420031cd9bb12db329fc959be77be24ab378978094a2bfeef37"
+    },
+    {
+      "path": "native-open.loro",
+      "sha256": "452b4a1c9cf0f2e9d0bfad2282c7be9038530facdc8d4e048515d7a776b6cc8c"
+    },
+    {
+      "path": "native-open.vector",
+      "sha256": "b74c443a3c8be420031cd9bb12db329fc959be77be24ab378978094a2bfeef37"
+    },
+    {
+      "path": "order-after.loro",
+      "sha256": "33e0fbf66345f08d04902cb294541d1ac582912822b4c851b5874fae37bcf04e"
+    },
+    {
+      "path": "order-after.vector",
+      "sha256": "a76320292edd28b14de441f2552608390365f6acd43e4a3431b980ac692d166a"
+    },
+    {
+      "path": "order-before.loro",
+      "sha256": "1a794960fb88c95a5b592b9370b01e70a3eb243702d0d5dd05eb79fca13b2c86"
+    },
+    {
+      "path": "order-before.vector",
+      "sha256": "e7043d843414cd804dd8bd4e9492f0d95e7c5d9a575bec4a96f7e0049835c080"
+    },
+    {
+      "path": "order-exported.loro",
+      "sha256": "4226cd466eec75478ddc35f64ff837f8ff5382cc8848ef440cb57ffee0d2bf2c"
+    },
+    {
+      "path": "order-exported.vector",
+      "sha256": "a76320292edd28b14de441f2552608390365f6acd43e4a3431b980ac692d166a"
+    },
+    {
+      "path": "order-open.loro",
+      "sha256": "33e0fbf66345f08d04902cb294541d1ac582912822b4c851b5874fae37bcf04e"
+    },
+    {
+      "path": "order-open.vector",
+      "sha256": "a76320292edd28b14de441f2552608390365f6acd43e4a3431b980ac692d166a"
+    },
+    {
+      "path": "order-receipts.json",
+      "sha256": "221ec015fceeac27d9a5f7ffe7d399fd246a3e691268b33b5af67f827b6dac1a"
+    }
+  ]
+}

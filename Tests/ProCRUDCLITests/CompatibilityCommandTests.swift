@@ -32,6 +32,11 @@ struct CompatibilityCommandTests {
 		#expect(throws: (any Error).self) { try WorkspaceDiscover.parse(["--registry", "/tmp/registry-v1.sqlite3", "--preferences", "/tmp/ProPresenter.plist"]) }
 		let playlist = try WorkspaceExportPlaylist.parse(["/tmp/Exact", "--playlist", UUID().uuidString, "--output", "/tmp/Export.proPlaylist", "--target-version", "21"])
 		#expect(playlist.target.targetVersion == .v21)
+		let dependencyArguments = ["/tmp/Exact", "--playlist", UUID().uuidString, "--output", "/tmp/NewWorkspace"]
+		#expect(try ProCRUD.parseAsRoot(["workspace", "export-dependencies"] + dependencyArguments) is WorkspaceExportDependencies)
+		#expect(throws: (any Error).self) { try WorkspaceExportDependencies.parse(["/tmp/Exact", "--playlist", "invalid", "--output", "/tmp/NewWorkspace"]) }
+		#expect(throws: (any Error).self) { try WorkspaceExportDependencies.parse(dependencyArguments + ["--replace"]) }
+		#expect(throws: (any Error).self) { try WorkspaceExportDependencies.parse(dependencyArguments + ["--target-version", "21"]) }
 	}
 
 	@Test

@@ -100,6 +100,14 @@ public enum DocumentCompatibility {
 		return DocumentCompatibilityReport(profile: .init(targetVersion: target), sourceApplicationMajorVersion: source, issues: analyzer.issues)
 	}
 
+	/// Only the dependency exporter calls this after resolving the full closure
+	/// and copying its files. Ordinary raw writes retain their existing gates.
+	static func analyzeNativeDependencies(_ data: Data, message: String) throws -> DocumentCompatibilityReport {
+		var analyzer = try Analyzer(schema: .bundled(version: .v22), target: .v22, source: nil, workspaceDependencies: true)
+		try analyzer.inspect(data, message: message, path: "")
+		return .init(profile: .init(targetVersion: .v22), sourceApplicationMajorVersion: nil, issues: analyzer.issues)
+	}
+
 	public static func sourceApplicationMajorVersion(_ payload: DocumentPayload) -> UInt32? {
 		switch payload {
 		case let .presentation(value): value.hasApplicationInfo ? value.applicationInfo.applicationVersion.majorVersion : nil
@@ -114,13 +122,15 @@ public enum DocumentCompatibility {
 		let source: UInt32?
 		let baseline21: ProtobufSchema
 		let native22: ProtobufSchema
+		let workspaceDependencies: Bool
 		var issues: [DocumentCompatibilityIssue] = []
 		private var enumCache: [String: Set<Int32>] = [:]
 
-		init(schema: ProtobufSchema, target: ProPresenterTargetVersion, source: UInt32?) throws {
+		init(schema: ProtobufSchema, target: ProPresenterTargetVersion, source: UInt32?, workspaceDependencies: Bool = false) throws {
 			self.schema = schema
 			self.target = target
 			self.source = source
+			self.workspaceDependencies = workspaceDependencies
 			baseline21 = try .baseline21()
 			native22 = try .bundled(version: .v22)
 		}
@@ -130,10 +140,10 @@ public enum DocumentCompatibility {
 			if message == "rv.data.Action.MediaType", target == .v22 {
 				nativeHLS = try NativeHLSInterchange.qualifiesAction(data)
 			} else if message == "rv.data.Media" {
-				nativeHLS = try nativeHLS && NativeHLSInterchange.qualifiesMedia(data)
+				nativeHLS = try (nativeHLS && NativeHLSInterchange.qualifiesMedia(data)) || (target == .v22 && NativePortableMedia.qualifies(data, root: workspaceDependencies ? 10 : 12))
 			}
 			let selectedSchema: ProtobufSchema
-			switch (nativeHLS, message) {
+			switch (nativeHLS || workspaceDependencies, message) {
 			case (true, _): selectedSchema = native22
 			case (_, "rv.data.TimedPlayback.Sequence"), (_, "rv.data.TimedPlayback.Sequence.SequenceItem"): selectedSchema = native22
 			case (_, "rv.data.CollectionElementType"): selectedSchema = baseline21
@@ -163,7 +173,7 @@ public enum DocumentCompatibility {
 					continue
 				}
 				guard let field = known[wire.number] else {
-					append("unknown-field", path: "\(path)/field[\(wire.number)][index=\(index)]", unsupported: target == .v21 || nativeHLS,
+					append("unknown-field", path: "\(path)/field[\(wire.number)][index=\(index)]", unsupported: target == .v21 || nativeHLS || workspaceDependencies,
 					       message: "Wire field \(wire.number) of \(message) is opaque. Its bytes can be preserved, but its behavior and dependencies are unqualified for the requested target.")
 					continue
 				}
@@ -171,9 +181,9 @@ public enum DocumentCompatibility {
 				if field.isMessage, let nested = field.typeName, let payload = wire.payload {
 					try inspect(payload, message: nested, path: fieldPath, keyMapping: keyMapping || (message == "rv.data.KeyMapping" && (101 ... 106).contains(wire.number)), nativeHLS: nativeHLS)
 				} else if field.type == .enum, let type = field.typeName, let value = wire.varint,
-				          let values = enumValues(type, nativeHLS: nativeHLS), !values.contains(Int32(truncatingIfNeeded: value))
+				          let values = enumValues(type, nativeHLS: nativeHLS || workspaceDependencies), !values.contains(Int32(truncatingIfNeeded: value))
 				{
-					append("unknown-enum-value", path: fieldPath, unsupported: target == .v21 || nativeHLS,
+					append("unknown-enum-value", path: fieldPath, unsupported: target == .v21 || nativeHLS || workspaceDependencies,
 					       message: "Enum \(type) value \(value) has no qualified target behavior.")
 				}
 			}

@@ -458,3 +458,21 @@ or text Delivery state will be dropped, or template settings retained. By Bullet
 children and schedule references are rebuilt for the assigned text. There is
 no explicit precedence policy. The current implicit behavior and
 support limits are documented in [TextBuilds.md](TextBuilds.md).
+
+
+## Native 22 Theme editing
+
+For a shared native Theme stream, `workspace apply` supports `rename-template`,
+`move-template` and `set-template-text`. Select templates by base-slide UUID and
+text slots by element UUID, rather than names or list indices. Plain text uses
+the existing element's default style; RTF supplies complete formatting. Static
+text replacement clears old range attributes and updates the atomic font metadata
+while retaining unrelated geometry, actions and native history. Text delivery
+and element builds remain gated. Matching text/name/order is a no-op.
+
+These operations use the same offline local-registration checks and atomic
+multi-stream transactions as native Presentation edits. See the operation table
+in [Top-level file formats](TopLevelFileFormats.md). Applying a Theme to a native
+Presentation, creating/duplicating native templates and editing native build
+semantics remain separate operations; use the exported-document template workflow
+for those cases.

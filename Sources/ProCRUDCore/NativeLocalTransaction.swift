@@ -39,6 +39,16 @@ public struct NativePresentationOperation: Sendable, Equatable {
 }
 
 public enum NativeLocalWorkspaceWriter {
+	public static func applyPlanningCenterSequence(in root: URL, registry: URL, playlistStreamID: UUID, itemID: UUID, presentationID: UUID, arrangementID: UUID, name: String, linkedItemID: UUID) throws -> [NativeLocalCommitReceipt] {
+		try withOfflineWriteAccess(to: root, registry: registry) { snapshot in
+			let sequence = try NativePlanningCenterSequence(snapshot: snapshot, playlistStreamID: playlistStreamID, itemID: itemID, presentationID: presentationID, arrangementID: arrangementID, name: name, linkedItemID: linkedItemID)
+			let prepared = try prepareTransaction(sequence.operations, in: snapshot)
+			return try commitPrepared(prepared.patches, expectedReferenceStreams: snapshot.streams, database: root.appendingPathComponent("DocumentStore/workspace-v1.sqlite3")) {
+				try verifyLocalWorkspace(root.resolvingSymlinksInPath(), registry: registry)
+			}
+		}
+	}
+
 	/// Explicit offline writer setup. SQLite may initialize its normal WAL
 	/// sidecars; ordinary read-only inspection never takes this path. The normal
 	/// handles remain open while the consistent reader and transaction run.
@@ -88,12 +98,23 @@ public enum NativeLocalWorkspaceWriter {
 			}
 			grouped[operation.documentID, default: []].append(operation.edit)
 		}
-		let patches = try order.compactMap { id in
+		var effective = snapshot
+		var prepared: [UUID: NativeLocalPatch] = [:]
+		// Local links may select arrangements created in this same transaction.
+		let preparationOrder = order.filter { id in snapshot.streams.contains { $0.identity.documentID == id && $0.identity.kind == "Presentation" } } + order.filter { id in !snapshot.streams.contains { $0.identity.documentID == id && $0.identity.kind == "Presentation" } }
+		for id in preparationOrder {
 			guard let stream = snapshot.streams.first(where: { $0.identity.documentID == id && $0.identity.scope == .shared }) else { throw NativeSemanticError.missingReference(path: "/streams", identity: id.uuidString) }
-			return try NativeLocalPatch.prepare(stream: stream, edits: grouped[id] ?? [])
+			if let patch = try NativeLocalPatch.prepare(stream: stream, edits: grouped[id] ?? [], context: effective, referenceReadSet: snapshot.streams) {
+				prepared[id] = patch
+				effective = .init(root: snapshot.root, workspaceID: snapshot.workspaceID, metadata: snapshot.metadata, streams: effective.streams.map {
+					$0.identity.documentID == id && $0.identity.scope == .shared ? .init(identity: $0.identity, snapshot: patch.snapshot, versionVector: patch.versionVector, lastSharedVersionVector: $0.lastSharedVersionVector) : $0
+				})
+			}
 		}
+		let patches = order.compactMap { prepared[$0] }
 		let readSet = try NativeArrangementDeletion.validate(patches, in: snapshot)
-		return (patches, readSet)
+		_ = try NativePlaylistDeletion.validate(patches, in: snapshot)
+		return (patches, patches.contains { $0.identity.kind != "Presentation" } ? snapshot.streams : readSet)
 	}
 
 	public static func commit(_ patches: [NativeLocalPatch], to root: URL, registry: URL) throws -> [NativeLocalCommitReceipt] {
@@ -179,7 +200,17 @@ public enum NativeLocalWorkspaceWriter {
 			if let readSet = try NativeArrangementDeletion.validate(pending, in: arrangementReferenceSnapshot) {
 				try verifyReferenceReadSet(readSet, database: database)
 			}
+			if let readSet = try NativePlaylistDeletion.validate(pending, in: arrangementReferenceSnapshot) {
+				try verifyReferenceReadSet(readSet, database: database)
+			}
 		}
+		for patch in patches where expectedReferenceStreams == nil && patch.referenceReadSet != nil {
+			let pending = try database.query("SELECT 1 FROM workspace_operation_receipts WHERE operation_id=?", [.blob(uuidBytes(patch.operationID))]) { _ in true }.isEmpty
+			if pending, let expected = patch.referenceReadSet {
+				try verifyReferenceReadSet(expected, database: database)
+			}
+		}
+
 		var receipts: [NativeLocalCommitReceipt] = []
 		for patch in patches {
 			let operation = uuidBytes(patch.operationID)

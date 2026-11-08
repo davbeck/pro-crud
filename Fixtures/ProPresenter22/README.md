@@ -148,3 +148,26 @@ native-received streams and independent re-exports. The native manifest with
 workspace paths is excluded. See
 `Internal/Research/Format/ProPresenter22RenderingCorpus.md`. These references do
 not replace the 21.4 snapshots or claim complete 22 rendering parity.
+
+
+## Playlist, connected overlay and Theme editing controls
+
+`Native/PlaylistEditing`, `Native/PlanningCenterEditing` and
+`Native/TemplateEditing` retain owned controls and production local transactions
+from 22 beta build 369098875 on macOS 27.0.1. Per-directory provenance hashes name
+the files. The Planning Center source is an explicitly synthetic offline format
+control with no authenticated plan refresh or attachment requests. Native
+Export → Playlist flattens its connection; the CLI-preserved connection is tested
+through a separate actual native re-import. The native Theme export normalizes
+inactive horizontal scroller distance by element width; histories remain exact.
+See `Internal/Research/Format/ProPresenter22PlaylistTemplateEditing.md` for the
+operation scope, negative controls, receipts and remaining capability gates.
+
+`Native/ActionDependencies` retains owned shared source/receiving histories, the
+CLI-generated dependency workspace, independent native Macro exports and actual
+negative controls for lost collection definitions and repeated Theme distance
+conversion. The source Presentation is independently authored; its Macro, timer,
+Look and image actions use native-authored definitions. The final native import,
+continued Macro rename and warning-free independent Legacy Workspace export use
+22 beta build 369098875 on macOS 27.0.1. Physical output configuration is excluded
+from the retained fixtures. See `Internal/Research/Format/ProPresenter22ActionDependencyExport.md`.

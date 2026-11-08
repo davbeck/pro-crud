@@ -1,0 +1,31 @@
+{
+  "documents" : [
+    {
+      "messageType" : "rv.data.MacrosDocument",
+      "path" : "Configuration\/Macros"
+    },
+    {
+      "messageType" : "rv.data.TimersDocument",
+      "path" : "Configuration\/Timers"
+    },
+    {
+      "messageType" : "rv.data.ProPresenterWorkspace",
+      "path" : "Configuration\/Workspace"
+    },
+    {
+      "messageType" : "rv.data.Presentation",
+      "path" : "Libraries\/Default\/Owned Dependencies.pro"
+    },
+    {
+      "messageType" : "rv.data.PlaylistDocument",
+      "path" : "Playlists\/Library"
+    },
+    {
+      "messageType" : "rv.data.Template.Document",
+      "path" : "Themes\/CLI Template Ordering\/Theme"
+    }
+  ],
+  "path" : "\/Users\/davbeck\/Developer\/pro-crud\/.build\/CLIWorkspaceDependenciesVerified",
+  "playlistID" : "67CA9682-2249-5331-94CD-2144B2B3557B",
+  "workspaceID" : "F020EBDB-EF65-4FAB-B719-6F3893847E39"
+}

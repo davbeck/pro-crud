@@ -114,6 +114,15 @@ struct NativeMediaRenderingTests {
 		#expect(missing.renderingDiagnostics.contains { $0.code == .unsupportedNativeMedia && $0.severity == .error })
 		#expect(throws: (any Error).self) { try PresentationRenderer(document: missing).render(cue: missing.orderedCues[0]) }
 		#expect(throws: NativeSemanticError.self) { try NativeMediaRendering.resolvedFile(selectedMedia(document), contextRoot: nil) }
+		let resourceURL = Rv_Data_URL.with {
+			$0.relativePath = "Media/Assets/LogoTransparent.png"
+			$0.local.root = .currentResource; $0.local.path = $0.relativePath
+		}
+		let resource = try Rv_Data_Media(serializedBytes: selectedMedia(document).serializedData() + field(5, field(3, field(1, field(1, resourceURL.serializedData())))))
+		// A selected resource locator alone is not the coherent portable graph.
+		// An unrelated file at the same path in a workspace must not supply it.
+		#expect(try !NativePortableMedia.qualifies(resource.serializedData()))
+		#expect(throws: RenderError.self) { try NativeMediaRendering.resolvedFile(resource, contextRoot: document.mediaDirectory) }
 	}
 
 	@Test func unsupportedSourcesColorAlphaBlurAndUnknownFieldsRemainExplicitErrors() throws {
