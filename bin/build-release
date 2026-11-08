@@ -307,8 +307,9 @@ fi
 cp "$loro_license" "$staging_directory/LICENSE-Loro.txt"
 cp "$project_root/Sources/CXXHash/LICENSE.txt" "$staging_directory/LICENSE-xxHash.txt"
 
-if [[ "$($binary --version)" != "$version" ]]; then
-	echo "Built binary did not report version $version." >&2
+reported_version="$version ($(git rev-parse --short HEAD))"
+if [[ "$($binary --version)" != "$reported_version" ]]; then
+	echo "Built binary did not report version $reported_version." >&2
 	exit 1
 fi
 

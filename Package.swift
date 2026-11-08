@@ -60,7 +60,14 @@ let package = Package(
 				.copy("../../Docs/Format"),
 				.copy("Resources/Protobuf"),
 			],
-			plugins: [.plugin(name: "SwiftLintBuildToolPlugin", package: "SwiftLintPlugins")],
+			plugins: [
+				.plugin(name: "SwiftLintBuildToolPlugin", package: "SwiftLintPlugins"),
+				.plugin(name: "GitVersionPlugin"),
+			],
+		),
+		.plugin(
+			name: "GitVersionPlugin",
+			capability: .buildTool(),
 		),
 		.executableTarget(
 			name: "FixtureGenerator",

@@ -4,7 +4,12 @@ import Testing
 
 @Suite("Argument parser")
 struct ArgumentParserTests {
-	@Test func reportsReleaseVersion() {
-		#expect(ProCRUD.configuration.version == proCRUDVersion)
+	@Test func reportsBuildVersion() {
+		#if DEBUG
+			let prefix = "DEBUG "
+		#else
+			let prefix = ""
+		#endif
+		#expect(ProCRUD.configuration.version == "\(prefix)\(proCRUDVersion) (\(proCRUDGitCommit))")
 	}
 }
