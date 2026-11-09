@@ -41,11 +41,13 @@ HLS actions and fills produce `rendering.unsupported-runtime-media`, including
 media-only cues and sources without native asset identities. Static rendering
 does not fetch the stream or use superseded file locators as a preview.
 
-Use `--workspace ROOT --look LOOK_UUID --screen SCREEN_UUID` with this input to
-apply a supported media-free native Look. When the source and Look workspace
-are the same root, Presentation, shared/client configuration and selected Theme
-are read from the same consistent snapshot. No running app, API, or Cloud
-connection is required.
+Use `--screen SCREEN_UUID`, `--screens all`, `--look LOOK_UUID`, or
+`--macro MACRO_UUID` to resolve configuration from the native input workspace.
+For exported inputs and bundles, provide `--workspace ROOT`. See
+[screen, Look, and Macro rendering](ThemeDocuments.md#screen-look-and-macro-rendering)
+for state traversal, fixed variations, recursive screen-output links, and
+multiple-screen output. Presentation and native configuration dependencies can
+share one consistent snapshot; no running app, API, or Cloud connection is required.
 
 ## Canvas And Coordinates
 

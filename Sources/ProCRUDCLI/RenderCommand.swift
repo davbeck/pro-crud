@@ -35,19 +35,34 @@ struct Render: ParsableCommand {
 	@Option(help: "Exact template name, UUID path, or source path.") var template: String?
 	@Option(help: "Look-style destination canvas, WIDTHxHEIGHT. Requires --theme.") var size: String?
 	@Flag(help: "Include identity-safe copies of template actions in the transient render.") var includeTemplateActions = false
-	@Option(help: "ProPresenter user-workspace root used to resolve a persisted Look.") var workspace: String?
-	@Option(help: "Persisted audience Look name or UUID. Requires --workspace and --screen.") var look: String?
-	@Option(help: "Audience screen name or UUID. Requires --workspace and --look.") var screen: String?
+	@Option(help: "ProPresenter workspace root containing Looks, Macros, screens, and Themes. Defaults to INPUT with --native-stream.") var workspace: String?
+	@Option(help: "Fixed audience Look name or UUID. Defaults to the main audience screen; requires --workspace.") var look: String?
+	@Option(help: "Macro name or UUID whose recursive Look actions select a fixed variation. Requires --workspace.") var macro: String?
+	@Option(name: [.customLong("screen"), .customLong("screens")], parsing: .upToNextOption, help: "Audience screen names or UUIDs, or all. Repeat or pass several values. Defaults to the first configured audience screen. Requires --workspace.") var screen: [String] = []
 	@Option(help: "Write template assignment and scaling diagnostics as JSON.") var templateReport: String?
 	@Option(name: [.short, .long], help: "Output folder for images or multiple formats; output file for a single PDF or JSON.") var output: String?
 	@Flag(help: "Add output files without replacing existing files.") var merge = false
 	@Flag(help: "Replace an existing output file or folder.") var replace = false
+
+	private var configurationWorkspace: String? {
+		workspace ?? (nativeStream != nil && (look != nil || macro != nil || !screen.isEmpty) ? input : nil)
+	}
 
 	func run() throws {
 		guard !buildSteps || !formats.values.contains(.json) else {
 			throw ValidationError("--build-steps supports image and PDF formats; omit json from --format.")
 		}
 		let inputURL = URL(fileURLWithPath: input)
+		if let workspace, nativeStream == nil {
+			let root = URL(fileURLWithPath: workspace).resolvingSymlinksInPath().standardizedFileURL.path
+			let destination = formats.values.count == 1 ? resolvedSingleOutputURL(for: inputURL, format: formats.values[0]) : resolvedMultipleOutputURL(for: inputURL)
+			for url in [destination] + (templateReport.map { [URL(fileURLWithPath: $0)] } ?? []) {
+				let path = url.resolvingSymlinksInPath().standardizedFileURL.path
+				guard path != root, !path.hasPrefix(root + "/"), !root.hasPrefix(path == "/" ? "/" : path + "/") else {
+					throw ValidationError("Workspace render output and template reports must be separate from the configuration workspace and its parent directories.")
+				}
+			}
+		}
 		let nativeSnapshot: NativeWorkspaceSnapshot?
 		var documents: [LoadedPresentationDocument]
 		if let nativeStream {
@@ -78,10 +93,8 @@ struct Render: ParsableCommand {
 		}
 		var diagnostics: [(sourceName: String, diagnostic: RenderingDiagnostic)] = []
 		for loaded in documents {
-			var diagnosedCueStorageIndices = Set<Int>()
 			for occurrence in try loaded.document.cueOccurrences()
-				where (slideIndices?.contains(occurrence.sequenceIndex) ?? true) &&
-				diagnosedCueStorageIndices.insert(occurrence.cueStorageIndex).inserted
+				where slideIndices?.contains(occurrence.sequenceIndex) ?? true
 			{
 				diagnostics.append(contentsOf:
 					loaded.document.renderingDiagnostics(for: occurrence.cue).map { (loaded.sourceName, $0) })
@@ -155,24 +168,20 @@ struct Render: ParsableCommand {
 		slideIndices: Set<Int>?,
 		nativeSnapshot: NativeWorkspaceSnapshot?,
 	) throws -> ResolvedDocuments {
-		let lookOptionCount = [workspace != nil, look != nil, screen != nil].count(where: { $0 })
-		guard lookOptionCount == 0 || lookOptionCount == 3 else {
-			throw ValidationError("--workspace, --look, and --screen must be provided together.")
-		}
+		let hasLookOptions = configurationWorkspace != nil || look != nil || macro != nil || !screen.isEmpty
+		guard !hasLookOptions || configurationWorkspace != nil else { throw ValidationError("Screen, Look, and Macro rendering requires --workspace.") }
+		guard look == nil || macro == nil else { throw ValidationError("--look and --macro select alternative fixed variations; provide only one.") }
 		let hasDirectThemeOptions = theme != nil || themeDocument != nil || template != nil || size != nil || includeTemplateActions
-		guard lookOptionCount == 0 || !hasDirectThemeOptions else {
-			throw ValidationError("Persisted Look options cannot be combined with --theme, --theme-document, --template, --size, or --include-template-actions.")
+		guard !hasLookOptions || !hasDirectThemeOptions else {
+			throw ValidationError("Workspace rendering cannot be combined with --theme, --theme-document, --template, --size, or --include-template-actions.")
 		}
-		guard theme != nil || !hasDirectThemeOptions else {
-			throw ValidationError("--theme-document, --template, --size, and --include-template-actions require --theme.")
+		guard theme != nil || !hasDirectThemeOptions else { throw ValidationError("--theme-document, --template, --size, and --include-template-actions require --theme.") }
+		guard theme != nil || hasLookOptions || templateReport == nil else { throw ValidationError("--template-report requires direct Theme or workspace rendering.") }
+		if let workspace = configurationWorkspace {
+			return try resolveLooks(in: source, workspace: workspace, slideIndices: slideIndices, nativeSnapshot: nativeSnapshot)
 		}
-		guard theme != nil || lookOptionCount == 3 || templateReport == nil else {
-			throw ValidationError("--template-report requires direct Theme or persisted Look rendering.")
-		}
-
 		let candidate: ThemeTemplateSource.Candidate
 		let destinationSize: CGSize?
-		var lookWarnings: [String] = []
 		if let theme {
 			candidate = try ThemeTemplateSource.select(
 				ThemeTemplateSource.candidates(
@@ -182,17 +191,6 @@ struct Render: ParsableCommand {
 				named: template,
 			)
 			destinationSize = try size.map(DocumentFactory.canvasSize)
-		} else if let workspace, let look, let screen {
-			let workspaceURL = URL(fileURLWithPath: workspace).resolvingSymlinksInPath().standardizedFileURL
-			let selection: LookTemplateSelection
-			if let nativeSnapshot, workspaceURL == nativeSnapshot.root.resolvingSymlinksInPath().standardizedFileURL {
-				selection = try LookResolver.resolve(snapshot: nativeSnapshot, look: look, screen: screen)
-			} else {
-				selection = try LookResolver.resolve(workspace: workspaceURL, look: look, screen: screen)
-			}
-			candidate = selection.template
-			destinationSize = selection.destinationSize
-			lookWarnings = selection.warnings
 		} else {
 			return ResolvedDocuments(documents: source, reports: [])
 		}
@@ -211,10 +209,34 @@ struct Render: ParsableCommand {
 				slideIndices: nativeSlideIndices,
 			)
 			documents[index].document = resolution.document
-			for var report in resolution.reports {
-				report.warnings.append(contentsOf: lookWarnings)
-				report.warnings = Array(Set(report.warnings)).sorted()
-				reports.append(report)
+			reports.append(contentsOf: resolution.reports)
+		}
+		return ResolvedDocuments(documents: documents, reports: reports)
+	}
+
+	private func resolveLooks(in source: [LoadedPresentationDocument], workspace: String, slideIndices: Set<Int>?, nativeSnapshot: NativeWorkspaceSnapshot?) throws -> ResolvedDocuments {
+		let url = URL(fileURLWithPath: workspace).resolvingSymlinksInPath().standardizedFileURL
+		let configuration: RenderConfiguration
+		if let nativeSnapshot, url == nativeSnapshot.root.resolvingSymlinksInPath().standardizedFileURL {
+			configuration = try RenderConfiguration(snapshot: nativeSnapshot)
+		} else {
+			configuration = try RenderConfiguration(workspace: url)
+		}
+		let screens = try configuration.selectScreens(screen)
+		var documents: [LoadedPresentationDocument] = []
+		var reports: [TemplateResolutionReport] = []
+		for selected in screens {
+			for var loaded in source {
+				let resolution = try PresentationLookResolver.resolve(document: loaded.document, configuration: configuration, screen: selected, look: look, macro: macro, slideIndices: slideIndices)
+				loaded.document = resolution.document
+				if screens.count > 1 {
+					let safeName = selected.name.components(separatedBy: CharacterSet.alphanumerics.inverted).filter { !$0.isEmpty }.joined(separator: "-")
+					let directory = "\(safeName)-\(selected.uuid)"
+					loaded.sourceName = loaded.usesOutputSubdirectory ? directory + "/" + loaded.sourceName : directory
+					loaded.usesOutputSubdirectory = true
+				}
+				documents.append(loaded)
+				reports.append(contentsOf: resolution.reports)
 			}
 		}
 		return ResolvedDocuments(documents: documents, reports: reports)

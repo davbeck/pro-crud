@@ -20,6 +20,21 @@ struct NativeWorkspaceDependencyExportTests {
 		}
 	}
 
+	@Test func renderConfigurationReadsNativeOwnedMacrosAndTheirLookWithoutAnAppConnection() throws {
+		let source = try NativeWorkspaceSnapshot(root: fixtures, workspaceID: UUID(), metadata: [:], streams: streams("source"))
+		let configuration = try RenderConfiguration(snapshot: source)
+		let macros = try configuration.macros()
+		let id = try macroID
+		let selected = try #require(macros.first { UUID(uuidString: $0.uuid.string) == id })
+		#expect(selected.name == "ProCRUD Dependency Macro")
+		let resolver = LookActionResolver(configuration: configuration, macros: macros)
+		let look = try #require(try resolver.look(actions: selected.actions, startingAt: nil))
+		let exported = try Rv_Data_MacrosDocument(serializedBytes: Data(contentsOf: fixtures.appendingPathComponent("NativeMacrosReference")))
+		let reference = try #require(exported.macros.first?.actions.first { $0.type == .audienceLook }?.audienceLook.identification)
+		#expect(UUID(uuidString: look.uuid.string) == UUID(uuidString: reference.parameterUuid.string))
+		#expect(look.screenLooks.count == 1)
+	}
+
 	@Test func nativeContinuationAndReexportKeepTheMacroIdentityAndActions() throws {
 		let reference = try Rv_Data_MacrosDocument(serializedBytes: Data(contentsOf: fixtures.appendingPathComponent("NativeMacrosReference")))
 		let exported = try Rv_Data_MacrosDocument(serializedBytes: Data(contentsOf: fixtures.appendingPathComponent("NativeMacrosContinued")))

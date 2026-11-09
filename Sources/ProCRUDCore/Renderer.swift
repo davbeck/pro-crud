@@ -71,6 +71,7 @@ public final class PresentationRenderer {
 				EffectiveRendering.Arrangement(name: $0.name, uuid: $0.uuid, path: $0.path)
 			},
 			slides: slides,
+			screen: document.renderScreen,
 		)
 	}
 
@@ -198,7 +199,7 @@ public final class PresentationRenderer {
 
 	private func canvasSize(for cue: Rv_Data_Cue) throws -> CGSize {
 		guard let size = cue.actions.compactMap(\.presentationBaseSlide).first?.size.cgSize else {
-			return CGSize(width: 3840, height: 2160)
+			return document.renderCanvasSize ?? CGSize(width: 3840, height: 2160)
 		}
 		guard size.width.isFinite,
 		      size.height.isFinite,

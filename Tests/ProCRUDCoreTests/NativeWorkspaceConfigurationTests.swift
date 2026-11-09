@@ -62,7 +62,7 @@ struct NativeWorkspaceConfigurationTests {
 		}
 	}
 
-	@Test func selectedTemplateMediaBlocksPreviewButUnusedTemplateMediaDoesNot() throws {
+	@Test func unresolvedSelectedTemplateMediaFailsButUnusedTemplateMediaDoesNot() throws {
 		let (fixture, original) = try lookSnapshot()
 		let source = try #require(original.streams.first { $0.identity.kind == "Theme" })
 		var root = try source.decodedValue().object(at: "/").required("root", at: "/").object(at: "/root")
@@ -179,6 +179,36 @@ struct NativeWorkspaceConfigurationTests {
 		look["future_visual_behavior"] = .boolean(true)
 		root["audience_looks"] = .list([.map(look)])
 		#expect(throws: NativeProjectionError.self) { try NativeWorkspaceConfiguration(snapshot: snapshot(fixture, shared: root)) }
+	}
+
+	@Test func nativeLookRebasesQualifiedSelectedThemeMediaWithoutChangingNativeHistory() throws {
+		let (fixture, original) = try lookSnapshot()
+		let source = try #require(original.streams.first { $0.identity.kind == "Theme" })
+		let before = source.snapshot
+		var root = try source.decodedValue().object(at: "/").required("root", at: "/").object(at: "/root")
+		var slides = try root.required("slides", at: "/root").array(at: "/root/slides")
+		var selected = try #require(slides.first).object(at: "/slide")
+		var base = try selected.required("base_slide", at: "/slide").object(at: "/base")
+		var elements = try base.required("elements", at: "/base").array(at: "/elements")
+		var entry = try #require(elements.first).object(at: "/entry")
+		var element = try entry.required("element", at: "/entry").object(at: "/element")
+		let asset = fixtures.appendingPathComponent("Interchange/MediaIdentity/Media/Assets/SharedRectangle.png")
+		let media: NativeWorkspaceValue = .map([
+			"uuid": .string(UUID().uuidString), "asset_id": .string(UUID().uuidString), "identity_schema_version": .string("1"),
+			"TypeProperties": .map(["__tag": .string("image"), "image": .map([
+				"file": .map(["local_url": .map(["Storage": .map(["__tag": .string("absolute_string"), "absolute_string": .string(asset.absoluteString)])])]),
+			])]),
+		])
+		element["fill"] = .map(["enable": .boolean(true), "FillType": .map(["__tag": .string("media"), "media": media])])
+		entry["element"] = .map(element); elements[0] = .map(entry); base["elements"] = .list(elements)
+		selected["base_slide"] = .map(base); slides[0] = .map(selected); root["slides"] = .list(slides)
+		let replaced = try stream(id: source.identity.documentID, scope: .shared, root: root, kind: "Theme", corePath: "Owned/Theme")
+		let snapshot = NativeWorkspaceSnapshot(root: original.root, workspaceID: original.workspaceID, metadata: [:], streams: original.streams.map { $0.identity.kind == "Theme" ? replaced : $0 })
+		let resolved = try LookResolver.resolve(snapshot: snapshot, look: fixture.savedID.uuidString, screen: fixture.screenID.uuidString)
+		#expect(resolved.template.preferredMediaReferences.contains { $0.renderPath == asset.absoluteString })
+		#expect(resolved.template.slide.baseSlide.elements[0].element.fill.media.url.absoluteString == asset.absoluteString)
+		#expect(source.snapshot == before)
+		#expect(replaced.snapshot == snapshot.streams.first { $0.identity.kind == "Theme" }?.snapshot)
 	}
 
 	private struct Fixture {

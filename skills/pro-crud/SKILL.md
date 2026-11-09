@@ -81,10 +81,19 @@ edits, exports and bundles. Streams are never downloaded by these workflows;
 static rendering reports an unsupported runtime source. Other native media
 editing/packaging gates still apply.
 `workspace configuration ROOT` lists saved/live Looks, screens and Theme links.
-For a selected Theme slide without media, preview a native Look with
-`render PRESENTATION --workspace ROOT --look UUID --screen UUID`. This reads
-stored native streams without an app/API connection. A disabled-screen warning
-does not enable that output.
+Render screen variations with `render PRESENTATION --workspace ROOT --screen NAME`
+to follow attached Looks and recursive Macro actions in cue order. Omit the screen
+to use the main (first configured audience) screen; use `--screens NAME NAME` or
+`--screens all` for several outputs. `--look NAME_OR_UUID` or `--macro NAME_OR_UUID`
+selects a fixed variation. Bundles require the workspace for their configuration
+and Theme dependencies. Native inputs with `--native-stream UUID` use their own
+workspace unless `--workspace` selects another. Native configuration and selected
+Theme file media are read from the captured workspace without an app/API connection.
+Output-screen links render the referenced audience screen's static composition;
+cycles and unresolved references fail. JSON identifies screens, and
+`--template-report` identifies each slide occurrence's Look and Theme resolution.
+This previews stored slide composition and reports unavailable runtime layers.
+A disabled-screen warning does not enable that output.
 Use `workspace discover --registry PATH` to list registered identities without
 selecting an active workspace.
 Use `workspace discover --preferences PLIST_PATH` for legacy macOS registration

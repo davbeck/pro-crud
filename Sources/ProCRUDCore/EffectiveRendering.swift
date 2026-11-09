@@ -18,6 +18,12 @@ public struct EffectiveRendering: Codable, Sendable {
 		public var uuid: String
 		public var arrangement: Arrangement?
 		public var slides: [Slide]
+		public var screen: Screen? = nil
+	}
+
+	public struct Screen: Codable, Sendable {
+		public var uuid: String
+		public var name: String
 	}
 
 	public struct Arrangement: Codable, Sendable {

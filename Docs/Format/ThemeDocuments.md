@@ -385,40 +385,101 @@ Unselected cues remain untouched in the transient copy, so an invalid canvas or
 RTF on an unselected cue does not make a selected-slide render fail. Without
 `--slide`, every ordered cue is considered.
 
-### Persisted Look rendering
+### Screen, Look, and Macro rendering
 
-Static file rendering can decode `Configuration/Workspace`, select an audience
-Look and screen by exact name or UUID, follow the stored theme path and template
-slide UUID, and resolve against the union of that logical screen's output
-bounds:
+Use `--workspace` to supply the configuration dependencies for a presentation,
+playlist, or Presentation Bundle. Bundles contain presentation/media payloads;
+they do not contain the workspace's Looks, Macros, screens, or Theme definitions.
+The workspace can be a legacy user workspace or a supported native 22 workspace.
+It is read without contacting or modifying the running app.
 
 ```sh
-pro-crud render Presentation.pro \
-  --workspace Workspace \
-  --look 'Stream Match' \
-  --screen Projector
+# Follow attached Look actions and recursive Macro actions for one screen.
+pro-crud render Service.probundle --workspace /path/to/Workspace \
+  --screen Livestream --output Stream
+
+# Render a fixed Look or the Look selected by a Macro.
+pro-crud render Service.probundle --workspace /path/to/Workspace \
+  --look 'Sermon Notes' --output Notes
+pro-crud render Service.probundle --workspace /path/to/Workspace \
+  --macro 'Scripture Sermon' --screen Livestream --output Scripture
+
+# Select several audience screens, or every configured audience screen.
+pro-crud render Service.probundle --workspace /path/to/Workspace \
+  --screens Projector Livestream --output Both
+pro-crud render Service.probundle --workspace /path/to/Workspace \
+  --screens all --output All
 ```
 
-The Look and audience screen must each match exactly one name or UUID, and the
-Look must contain exactly one mapping for that screen. Multi-child canvases
-require finite positive bounds for every child and use their union. A
-single-child screen can fall back to its configured output-mode size; an
-invalid or renderer-oversized canvas fails instead of being guessed.
+Names match exactly; UUIDs match case-insensitively. Referenced actions use their
+UUID when present and use a unique name only when no UUID is stored. A stale
+UUID never falls back to a same-named definition. Without `--screen`/`--screens`,
+the first configured audience screen is the main screen. Repeat either option
+or pass several values after it. Explicit screen order is retained and duplicate
+selections are removed. Stage screens are not audience Theme targets.
 
-This is a static equivalent of the alternate-template portion of a Look. It
-does not contact or mutate a running ProPresenter instance. It uses
-`runtimeLook`, resolves only selected slides when `--slide` is present, and
-never includes template actions. The Look's persisted background/foreground
-switches are reported but are not yet separated in the file renderer.
+`--look` and `--macro` are mutually exclusive fixed variations: their resolved
+Look applies to every selected slide, independently of attached cue actions.
+A Macro expands nested Macros recursively and must reach an enabled Look action.
+Other runtime actions are not executed. Disabled actions are ignored. The static
+resolver processes enabled actions in stored order, with the last Look winning.
+Cycles, missing/ambiguous definitions, and delayed Look/Macro actions fail
+explicitly before existing render output is replaced.
 
-For a native 22 workspace, the same command resolves saved/shared or live/client
-Looks and the selected Theme stream from one consistent database snapshot.
-Selected slides containing media remain gated pending native media rebasing;
-unused slides and ignored Theme actions do not block a media-free selection.
-ROOT_CURRENT_RESOURCE in a Workspace Look refers to that workspace, separately
-from a Theme element's own resource directory. Stored disabled-screen state
-produces a warning without enabling output. Missing local configuration can use
-valid shared logical dimensions; missing Theme/template identities fail explicitly.
+Without a fixed selector, rendering begins with the workspace's persisted live
+Look, then follows each cue's attached Look/Macro actions in the selected
+arrangement order. State carries forward through cues without a Look change.
+Earlier cue actions are inspected even with `--slide`; only selected slide
+content and its Theme dependencies are rendered. Later cues are not inspected.
+Repeated arrangement occurrences keep independent Look state. If no live or
+preceding Look can be resolved, select a fixed Look or Macro explicitly. Each
+presentation in a bundle/playlist starts independently from the persisted live
+Look; this is a static document preview, not a simulation of playlist playback.
+
+A Look mapping selects its stored Theme document and template-slide UUID. The
+Theme targets that screen's canvas directly. For a mapping with no alternate
+Theme, source geometry and text are uniformly aspect-fitted and centered on the
+screen canvas. Source objects, identities, and build/Delivery metadata are
+retained. Scalar stroke/shadow/feather/custom-media-bound scaling has the same
+limits reported by the template resolver. Cue media actions keep the existing
+file-renderer composition behavior.
+
+Output-screen data links in visible elements recursively render the referenced
+audience screen's variation for the same cue occurrence, including that screen's
+Look Theme. The resulting static PNG replaces the placeholder fill in the
+transient view. Missing screens and cyclic screen links fail explicitly.
+These images use the stored source composition; they do not simulate runtime
+layers, changing external content, or the referenced screen's animated build
+state. Other runtime data links retain their existing rendering limits.
+
+Multiple-screen image exports use `screen-name-UUID` folders, followed by any
+existing presentation subfolders. PDF pages and JSON presentations are grouped
+in selected screen order. JSON includes each presentation's screen identity;
+`--template-report` includes presentation, one-based slide occurrence, Look,
+screen, template, and scaling diagnostics. These outputs share the same resolved
+view. Preview resources have the same temporary lifetime as extracted bundle
+media. Render output and reports must be outside the configuration workspace
+and its parent directories.
+
+For native 22 inputs, omit the redundant configuration root:
+
+```sh
+pro-crud render /path/to/Workspace --native-stream PRESENTATION_UUID \
+  --screens all --output /separate/Preview
+```
+
+Presentation, shared/client configuration, Macro definitions, and selected Themes
+then come from one consistent snapshot. Native Theme images and video thumbnails
+use the native preview resolver's exact selected file locators; unsupported
+providers, identity schemas, color/alpha modes, and unavailable files fail
+explicitly. Ignored Theme actions and unused templates do not block selection.
+A disabled screen produces a warning without enabling it. Shared logical canvas
+dimensions can be used when local output hardware is absent.
+
+This remains the static alternate-Theme portion of a Look. It does not include
+Theme actions, masks, runtime props, messages, announcements, live video, or
+separate presentation-background/foreground layer switches. Those limitations
+are reported with the render diagnostics.
 
 ## Compatibility Limits
 
@@ -433,8 +494,8 @@ Resolution reports identify these limits:
    current implementation uses a documented base-plus-source-exceptions model,
    discards range-only entries, and preserves `originalFontSize`/
    `fontScaleFactor` values without resolution scaling.
-4. A persisted Look without an alternate template currently fails explicitly;
-   ordinary source-canvas aspect fit is not yet implemented. Masks and runtime
+4. Source-canvas previews without an alternate Theme uniformly fit geometry and
+   text, with the scalar-scaling limits above. Masks and runtime
    props, messages, announcements, live video, and other external layers are
    reported but cannot be reconstructed from a presentation file alone.
 5. Action copying is explicit because native media-action inclusion and merge

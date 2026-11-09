@@ -63,6 +63,10 @@ public struct PresentationDocument: Sendable {
 	/// arrangement is selected.
 	public var arrangementSelection: ArrangementSelection?
 	var temporaryResourceOwners: [TemporaryDirectoryOwner]
+	/// Transient render state keyed by arrangement occurrence, never persisted.
+	var renderCueOverrides: [Int: Rv_Data_Cue] = [:]
+	public var renderScreen: EffectiveRendering.Screen?
+	var renderCanvasSize: CGSize?
 	/// Media identities introduced from a separately loaded resource, such as a
 	/// Theme. Their exact URLs must win over a same-named asset beside the source
 	/// presentation, while ordinary document media retains archive-local precedence.
@@ -187,7 +191,7 @@ public struct PresentationDocument: Sendable {
 					cueStorageIndex: storageIndex,
 					arrangementGroupOccurrenceIndex: nil,
 					groupUUID: firstGroupUUIDByCueStorageIndex[storageIndex],
-					cue: presentation.cues[storageIndex],
+					cue: renderCueOverrides[sequenceIndex] ?? presentation.cues[storageIndex],
 				)
 			}
 		}
@@ -204,7 +208,7 @@ public struct PresentationDocument: Sendable {
 					cueStorageIndex: cueStorageIndex,
 					arrangementGroupOccurrenceIndex: groupOccurrenceIndex,
 					groupUUID: group.group.uuid.string,
-					cue: presentation.cues[cueStorageIndex],
+					cue: renderCueOverrides[result.count] ?? presentation.cues[cueStorageIndex],
 				))
 			}
 			cueOffset += cueCount
