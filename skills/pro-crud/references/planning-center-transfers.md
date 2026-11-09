@@ -6,6 +6,30 @@ individual `.pro` presentation attachments and standalone media cues. Its
 documented workflow does not synchronize media inside presentations, including
 slide backgrounds.
 
+Presentation transfers support non-song plan items, including sermons and
+announcements. Renewed Vision's walkthrough demonstrates a song and a sermon
+`.pro` both uploading and then automatically downloading and linking when the
+plan is imported again. A sermon does not need to be represented as a song.
+
+## Attach a `.pro` to a sermon or other plan item
+
+1. Prepare and validate the individual `.pro` presentation.
+2. In Services, open **Plans → the plan → Order → the sermon or other item →
+   Files → Add File**. Upload the actual `.pro` file to that item's Files tab.
+   For example, attach `Sermon.pro` directly to the Sermon item in the order.
+3. In ProPresenter, enable **Automatically Download Presentations and Media**,
+   choose the **Download Library**, and import the plan using **+ → Planning
+   Center Service** beside the library/playlist list.
+4. Verify that the intended presentation downloaded and linked to the item. For
+   an existing playlist, apply **Update Available** when offered. If necessary,
+   use **Add an attachment from Planning Center** on the item and drag the
+   intended `.pro` from the Attachment Manager onto it. Unlink another local
+   presentation first if it is already associated with that item.
+
+Use the specific item's Files tab rather than the plan-wide Files section in
+the left sidebar. A plan-wide file is not associated with a particular playlist
+item. Headers organize the order; use a content item for the presentation.
+
 ## Attach a `.pro` for a song
 
 1. Prepare and validate the individual `.pro` presentation. If the source is a
@@ -29,17 +53,16 @@ slide backgrounds.
    Manager and drag the intended attachment onto the item. If another local
    presentation is already linked, unlink it before selecting the replacement.
 
-Attach the file to the song/arrangement used by the plan. A general plan-level
-attachment is a separate location; placing a `.pro` there does not establish
-the item attachment association needed by this workflow. Uploading a file
-somewhere in Services also does not import its plan into ProPresenter.
+For reusable song presentations, attach the file to the song/arrangement used by
+the plan. Arrangement/key selection is specific to this song-library workflow;
+it is not a requirement for sermon or other direct plan-item attachments.
+Uploading a file somewhere in Services does not import its plan into ProPresenter.
 
 For standalone images or videos, attach the file to a Services **Media** item
 and schedule that item in the plan. Do not assume a `.pro` attached to a Media
-item follows the song-presentation auto-download rule. For sermon or announcement
-presentations, verify attachment availability and linking in ProPresenter's
-Attachment Manager, or import the presentation locally and link it to the
-appropriate plan item.
+item follows the same automatic selection rules as a direct plan-item `.pro`
+attachment. Use the Attachment Manager to select a presentation explicitly when
+necessary, or import it locally and link it to the appropriate plan item.
 
 ## Transfer controls and selection
 
@@ -48,9 +71,10 @@ appropriate plan item.
   Services item. **Automatically Upload Presentations and Media** automates
   that attachment upload for linked items in Planning Center playlists.
 - **Automatically Download Presentations and Media** selects a ProPresenter
-  presentation attachment for a song item and a media attachment for a media
-  item. It does not download every attachment or scan the entire Services
-  account. Keep one intended compatible attachment per item when practical;
+  presentation attachment for presentation-bearing items, including songs and
+  sermons, and a media attachment for a media item. It does not download every
+  attachment or scan the entire Services account. Keep one intended compatible
+  attachment per item when practical;
   Renewed Vision's guides describe selection as both the first attachment and
   the most recent attachment. Do not depend on ordering to select a version.
 - **Automatically Check for Plan Updates** detects changes, including compatible
@@ -87,6 +111,7 @@ remote attachments, refresh plans, or run the integration's downloads.
 - [Renewed Vision: Adding a Planning Center Plan to ProPresenter](https://support.renewedvision.com/hc/en-us/articles/360062310714-Adding-a-Planning-Center-Plan-to-ProPresenter)
 - [Renewed Vision: Planning Center Online Preferences](https://support.renewedvision.com/hc/en-us/articles/1500003710301-Planning-Center-Online-Preferences)
 - [Planning Center: Add files to a song](https://help.planningcenter.com/en/139434-add-files-to-a-song.html)
+- [Planning Center: Add files to a plan](https://help.planningcenter.com/en/139463-add-files-to-a-plan.html)
 - [Planning Center: Create, upload, or link to files](https://help.planningcenter.com/en/139415-create%2C-upload%2C-or-link-to-files.html)
 - [Planning Center: Edit a song from a plan](https://help.planningcenter.com/en/139433-edit-a-song-from-a-plan.html)
 - [Planning Center: Set up the service order](https://help.planningcenter.com/en/139467-set-up-the-service-order.html)
