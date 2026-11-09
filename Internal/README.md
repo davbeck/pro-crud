@@ -36,6 +36,9 @@ reference generation and snapshot installation.
   indexing hypotheses, proposed commands, and the experiment matrix.
 - [Planning Center research](Research/Format/PlanningCenterPlaylists.md): local
   workspace inspection, visibility diffs, and service-workflow experiments.
+- [Services integration acceptance](Testing/PlanningCenterServicesAcceptance.md):
+  CLI upload, native Planning Center download/link, and ProPresenter re-export
+  verification.
 - [Rendering research](Research/Format/RenderingBehavior.md): fixture evidence,
   renderer validation strategy, and gaps in native comparisons.
 - [Presentation evidence](Research/Format/PresentationEvidence.md): element
