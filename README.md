@@ -40,6 +40,8 @@ ProPresenter is a trademark of Renewed Vision, LLC. pro-crud is an independent, 
   Look-style result without modifying the source presentation.
 - Validate document structure and rendering, with optional workspace media checks.
 - Preserve protobuf fields that are unknown to the checked-in schema.
+- Authenticate with Planning Center Services, discover song/arrangement IDs, and
+  upload or download individual presentation attachments.
 - Print the bundled format reference and protobuf schema.
 - Install bundled AI-agent skills for document workflows and the official
   ProPresenter API.
@@ -133,6 +135,23 @@ To build and install the current source instead:
 ```sh
 git clone https://github.com/davbeck/pro-crud.git
 cd pro-crud
+cp .env.example .env
+```
+
+For OAuth sign-in, set `PLANNING_CENTER_CLIENT_ID` in `.env` to a public Planning
+Center OAuth application's client ID. Register
+`http://127.0.0.1:49173/oauth/callback` as its callback. SecretsManager generates
+the compiled configuration; `.env` is ignored by Git. No client secret is used.
+Keep the `PLANNING_CENTER_CLIENT_ID` declaration from `.env.example`; an empty
+value builds with personal access token support. A missing `.env` or declaration
+is a build configuration error.
+SecretsManager embeds all exported `.env` values. Supply personal access tokens
+at runtime through the login prompt or environment, rather than exporting them
+in this build configuration.
+
+Then build and install:
+
+```sh
 swift build -c release
 sudo install -m 755 \
   "$(swift build -c release --show-bin-path)/pro-crud" \
@@ -159,6 +178,25 @@ commands above also remove the obsolete combined bundle used by earlier builds.
 
 ## Quick start
 
+### Planning Center Services
+
+```sh
+pro-crud planning-center login
+# Or: pro-crud planning-center login --personal-access-token
+pro-crud planning-center list songs --title 'Amazing Grace'
+pro-crud planning-center list arrangements --song 789
+pro-crud planning-center attachments upload 'Amazing Grace.pro' \
+  --song 789 --arrangement 234 --dry-run
+```
+
+Upload creates an attachment on the specified arrangement for ProPresenter's
+Planning Center integration to discover. See the
+[authentication and transfer guide](skills/pro-crud/references/planning-center-api.md)
+for uploads, downloads, Keychain storage, and integration settings. These commands
+do not control a running ProPresenter instance or synchronize slide media.
+
+### Commands
+
 The main commands are:
 
 | Command             | Purpose                                                    |
@@ -171,6 +209,7 @@ The main commands are:
 | `validate`          | Check document structure, rendering, and media integrity   |
 | `docs`              | Print or export the bundled format and protobuf references |
 | `skill install`     | Link the bundled agent skills into supported agents        |
+| `planning-center`   | Authenticate, find Services IDs, and transfer attachments |
 
 Inspect a document as text or semantic JSON, or print its known-schema protobuf JSON:
 

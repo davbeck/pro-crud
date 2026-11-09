@@ -1,5 +1,5 @@
 {
-  "originHash" : "5c4b319148d28e3d0f9a912f6889a5784811de84e2be3d49c7e7ad09ce0fb3c8",
+  "originHash" : "0bf38cc67776f3755f218fda764919f41a4766ac2efe8e33ecec73234a551ef7",
   "pins" : [
     {
       "identity" : "loro-swift",
@@ -8,6 +8,15 @@
       "state" : {
         "revision" : "625f3e696fca4be3ae77de8b3404fa6753554f21",
         "version" : "1.13.3"
+      }
+    },
+    {
+      "identity" : "secretsmanager",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/vdka/SecretsManager.git",
+      "state" : {
+        "revision" : "66af2ab2e88b2d68a2385734fa86c87c3236d44f",
+        "version" : "1.1.4"
       }
     },
     {

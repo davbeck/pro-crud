@@ -12,6 +12,7 @@ let package = Package(
 		.library(name: "ProCRUDCore", targets: ["ProCRUDCore"]),
 	],
 	dependencies: [
+		.package(url: "https://github.com/vdka/SecretsManager.git", from: "1.1.4"),
 		.package(url: "https://github.com/loro-dev/loro-swift.git", exact: "1.13.3"),
 		.package(url: "https://github.com/apple/swift-protobuf.git", from: "1.30.0"),
 		.package(url: "https://github.com/apple/swift-argument-parser.git", from: "1.5.0"),
@@ -21,6 +22,15 @@ let package = Package(
 		.package(url: "https://github.com/nicklockwood/SwiftFormat", from: "0.62.1"),
 	],
 	targets: [
+		.target(
+			name: "PlanningCenterKit",
+			plugins: [.plugin(name: "SwiftLintBuildToolPlugin", package: "SwiftLintPlugins")],
+		),
+		.testTarget(
+			name: "PlanningCenterKitTests",
+			dependencies: ["PlanningCenterKit", .product(name: "CustomDump", package: "swift-custom-dump")],
+			plugins: [.plugin(name: "SwiftLintBuildToolPlugin", package: "SwiftLintPlugins")],
+		),
 		.systemLibrary(name: "CSQLite"),
 		.target(name: "CXXHash", exclude: ["README.md", "LICENSE.txt"]),
 		.target(
@@ -51,6 +61,7 @@ let package = Package(
 		.executableTarget(
 			name: "ProCRUDCLI",
 			dependencies: [
+				"PlanningCenterKit",
 				"ProCRUDCore",
 				.product(name: "ArgumentParser", package: "swift-argument-parser"),
 				.product(name: "SwiftProtobuf", package: "swift-protobuf"),
@@ -63,6 +74,7 @@ let package = Package(
 			plugins: [
 				.plugin(name: "SwiftLintBuildToolPlugin", package: "SwiftLintPlugins"),
 				.plugin(name: "GitVersionPlugin"),
+				.plugin(name: "SecretsManagerPlugin", package: "SecretsManager"),
 			],
 		),
 		.plugin(

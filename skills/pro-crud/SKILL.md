@@ -346,11 +346,17 @@ source and `Created` copy, and removal reports the original group as `Removed`.
 
 ## Planning Center playlists
 
-For Planning Center attachment placement, automatic presentation/media transfers,
+For authenticated Planning Center Services discovery and `.pro` attachment
+upload/download commands, read
+[`references/planning-center-api.md`](references/planning-center-api.md).
+Use `planning-center login` for OAuth or `login --personal-access-token` for
+church-local credentials.
+
+For attachment placement, ProPresenter's automatic presentation/media transfers,
 and `.pro` versus `.probundle` delivery, read
 [`references/planning-center-transfers.md`](references/planning-center-transfers.md).
-Those transfers are performed by ProPresenter's integration, separately from the
-local document operations below.
+Services attachment commands and ProPresenter's integration are separate from
+the local playlist document operations below.
 
 A connected Planning Center playlist owns its outer plan-item wrappers and
 order remotely, but each wrapper's nested `linked_data` is a local ProPresenter
