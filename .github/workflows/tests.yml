@@ -16,6 +16,9 @@ jobs:
     steps:
       - uses: actions/checkout@v7
 
+      - name: Configure build environment
+        run: cp .env.example .env
+
       - name: Select Xcode 26.6
         run: sudo xcode-select --switch /Applications/Xcode_26.6.app
 

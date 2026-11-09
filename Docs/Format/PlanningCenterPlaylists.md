@@ -91,6 +91,12 @@ structure independently of the source plan.
 
 ## `pro-crud` Support
 
+The separate `planning-center` command family authenticates with Services,
+discovers remote IDs, uploads `.pro` files to song arrangements, and downloads
+attachments. See the [Services API guide](../../skills/pro-crud/references/planning-center-api.md).
+It does not refresh or reconcile connected playlist documents. The local document
+operations described below do not make remote API requests.
+
 The checked-in protobuf schema includes `PlanningCenterPlan`,
 `Playlist.pco_plan`, and `PlaylistItem.planning_center`. Connected-playlist
 support builds on that lossless representation:
