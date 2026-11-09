@@ -109,7 +109,10 @@ output path must not exist. Download does not import or link the file in
 ProPresenter; validate and inspect a downloaded `.pro` before using it.
 
 HTTP failures produce a nonzero exit status. Rate-limit errors report the
-server's retry interval; requests are not automatically replayed. Credential
+server's retry interval. A newly uploaded file can briefly return Planning
+Center's specific S3-not-ready response. Download retries that rejected `open`
+action after 1, 2, and 4 seconds, then reports failure if it is still unavailable.
+Other errors and file/attachment creation requests are not retried. Credential
 values and raw authentication response bodies are not printed.
 
 ## Official API documentation

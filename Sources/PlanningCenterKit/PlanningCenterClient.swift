@@ -51,15 +51,18 @@ public actor PlanningCenterClient {
 	private let store: any PlanningCenterCredentialStore
 	private let transport: PlanningCenterTransport
 	private let now: @Sendable () -> Date
+	private let sleep: @Sendable (Duration) async throws -> Void
 	private static let root = "https://api.planningcenteronline.com/services/v2/"
 	private static let userAgent = "pro-crud (https://github.com/davbeck/pro-crud)"
 
 	public init(store: any PlanningCenterCredentialStore = PlanningCenterKeychain(), transport: PlanningCenterTransport = .live,
-	            now: @escaping @Sendable () -> Date = { Date() })
+	            now: @escaping @Sendable () -> Date = { Date() },
+	            sleep: @escaping @Sendable (Duration) async throws -> Void = { try await Task.sleep(for: $0) })
 	{
 		self.store = store
 		self.transport = transport
 		self.now = now
+		self.sleep = sleep
 	}
 
 	public func signIn(personalClientID: String, secret: String) async throws {
@@ -159,7 +162,7 @@ public actor PlanningCenterClient {
 	public func download(attachmentID: String, at target: PlanningCenterTarget, to output: URL) async throws {
 		guard !FileManager.default.fileExists(atPath: output.path) else { throw CocoaError(.fileWriteFileExists) }
 		let id = try PlanningCenterTarget.validatedID(attachmentID)
-		let data = try await request(url: apiURL(target.path + "/attachments/\(id)/open"), method: "POST")
+		let data = try await openAttachment(url: apiURL(target.path + "/attachments/\(id)/open"))
 		let activity = try JSONDecoder().decode(PlanningCenterDocument<PlanningCenterResource>.self, from: data).data
 		guard let address = activity.attributes?["attachment_url"]?.string, let url = URL(string: address),
 		      url.scheme == "https", url.host != nil, url.user == nil, url.password == nil
@@ -171,6 +174,17 @@ public actor PlanningCenterClient {
 		try Self.check(response)
 		// copyItem fails if output appeared while the download was in progress.
 		try FileManager.default.copyItem(at: file, to: output)
+	}
+
+	private func openAttachment(url: URL) async throws -> Data {
+		// Newly created attachments can precede their S3 object by a few seconds.
+		// Only replay the explicitly rejected open action, never file/attachment creation.
+		let delays: [Duration] = [.seconds(1), .seconds(2), .seconds(4)]
+		for delay in delays {
+			do { return try await request(url: url, method: "POST") }
+			catch PlanningCenterError.attachmentNotReady { try await sleep(delay) }
+		}
+		return try await request(url: url, method: "POST")
 	}
 
 	private func apiURL(_ path: String) throws -> URL {
@@ -218,6 +232,12 @@ public actor PlanningCenterClient {
 			request.setValue("Basic " + Data("\(auth.clientID):\(auth.secret)".utf8).base64EncodedString(), forHTTPHeaderField: "Authorization")
 		}
 		let (data, response) = try await transport.send(request)
+		if response.statusCode == 422, url.path.hasSuffix("/open"),
+		   let failure = try? JSONDecoder().decode(PlanningCenterAPIFailure.self, from: data),
+		   failure.errors.contains(where: { $0.detail == "File does not exist on S3. Please try again later." })
+		{
+			throw PlanningCenterError.attachmentNotReady
+		}
 		try Self.check(response)
 		return data
 	}
@@ -244,6 +264,11 @@ public actor PlanningCenterClient {
 			throw PlanningCenterError.http(status: response.statusCode, retryAfter: response.value(forHTTPHeaderField: "Retry-After"))
 		}
 	}
+}
+
+private struct PlanningCenterAPIFailure: Decodable {
+	struct Entry: Decodable { let detail: String? }
+	let errors: [Entry]
 }
 
 private struct OAuthToken: Decodable {

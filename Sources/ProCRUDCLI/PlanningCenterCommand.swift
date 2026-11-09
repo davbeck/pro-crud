@@ -96,7 +96,7 @@ struct PlanningCenterStatus: AsyncParsableCommand {
 			result["method"] = .string(method.rawValue)
 			let identity = try await client.identity()
 			result["person_id"] = .string(identity.id)
-			result["name"] = identity.attributes?["name"] ?? .null
+			result["name"] = identity.attributes?["full_name"] ?? .null
 		}
 		try print(prettyJSON(result))
 	}

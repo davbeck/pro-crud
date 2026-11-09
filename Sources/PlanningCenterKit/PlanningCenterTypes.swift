@@ -5,6 +5,7 @@ public enum PlanningCenterError: Error, LocalizedError {
 	case oauthUnavailable
 	case http(status: Int, retryAfter: String?)
 	case invalidResponse
+	case attachmentNotReady
 	case invalidTarget
 	case invalidCallback
 	case authorizationDenied
@@ -25,6 +26,7 @@ public enum PlanningCenterError: Error, LocalizedError {
 			default: "Planning Center returned HTTP \(status)."
 			}
 		case .invalidResponse: "Planning Center returned an unexpected response."
+		case .attachmentNotReady: "Planning Center is still preparing this attachment. Try downloading it again shortly."
 		case .invalidTarget: "Select one attachment destination: song and arrangement (optionally key), media, plan, or plan item. IDs must be positive integers."
 		case .invalidCallback: "The Planning Center login callback did not match this sign-in attempt."
 		case .authorizationDenied: "Planning Center authorization was declined."

@@ -143,6 +143,9 @@ Center OAuth application's client ID. Register
 `http://127.0.0.1:49173/oauth/callback` as its callback. SecretsManager generates
 the compiled configuration; `.env` is ignored by Git. No client secret is used.
 An empty `.env` or empty client ID builds with personal access token support.
+SecretsManager embeds all exported `.env` values. Supply personal access tokens
+at runtime through the login prompt or environment, rather than exporting them
+in this build configuration.
 
 Then build and install:
 

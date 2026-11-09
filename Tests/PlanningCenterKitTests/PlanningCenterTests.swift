@@ -50,7 +50,7 @@ private func response(_ request: URLRequest, _ json: String, status: Int = 200, 
 	return try (Data(json.utf8), #require(HTTPURLResponse(url: url, statusCode: status, httpVersion: nil, headerFields: headers)))
 }
 
-private let person = #"{"data":{"type":"Person","id":"42","attributes":{"name":"Test Person"}}}"#
+private let person = #"{"data":{"type":"Person","id":"42","attributes":{"full_name":"Test Person"}}}"#
 private let pat = PlanningCenterCredentials(method: .personalAccessToken, clientID: "test-id", secret: "test-secret")
 
 struct PlanningCenterOAuthTests {
@@ -295,5 +295,49 @@ struct PlanningCenterCallbackReuseTests {
 		let port = try await completeLogin()
 		let next = try PlanningCenterCallback(port: port)
 		try expectNoDifference(next.localPort, port)
+	}
+}
+
+struct PlanningCenterAttachmentReadinessTests {
+	private let pendingFile = #"{"errors":[{"status":"422","title":null,"detail":"File does not exist on S3. Please try again later."}]}"#
+
+	@Test func newlyUploadedFileIsRetriedUntilItsURLIsAvailable() async throws {
+		let directory = FileManager.default.temporaryDirectory.appendingPathComponent(UUID().uuidString)
+		try FileManager.default.createDirectory(at: directory, withIntermediateDirectories: true)
+		defer { try? FileManager.default.removeItem(at: directory) }
+		let incoming = directory.appendingPathComponent("incoming")
+		let output = directory.appendingPathComponent("Song.pro")
+		try Data("ready".utf8).write(to: incoming)
+		let fixture = HTTPFixture([
+			{ request in try response(request, pendingFile, status: 422) },
+			{ request in try response(request, #"{"data":{"type":"AttachmentActivity","id":"4","attributes":{"attachment_url":"https://files.example.com/ready"}}}"#) },
+		])
+		let delays = Mutex<[Duration]>([])
+		let transport = PlanningCenterTransport(send: { try await fixture.send($0) }, download: { request in
+			let url = try #require(request.url)
+			let response = try #require(HTTPURLResponse(url: url, statusCode: 200, httpVersion: nil, headerFields: nil))
+			return (incoming, response)
+		})
+		let client = PlanningCenterClient(store: MemoryCredentials(pat), transport: transport, sleep: { delay in delays.withLock { $0.append(delay) } })
+		try await client.download(attachmentID: "3", at: PlanningCenterTarget(song: "1", arrangement: "2"), to: output)
+		expectNoDifference(delays.withLock { $0 }, [.seconds(1)])
+		try expectNoDifference(Data(contentsOf: output), Data("ready".utf8))
+	}
+
+	@Test func readinessRetriesAreBoundedAndOtherRejectionsAreNotRetried() async throws {
+		let fixture = HTTPFixture((0 ..< 4).map { _ in { request in try response(request, pendingFile, status: 422) } })
+		let delays = Mutex<[Duration]>([])
+		let client = await PlanningCenterClient(store: MemoryCredentials(pat), transport: fixture.transport, sleep: { delay in delays.withLock { $0.append(delay) } })
+		let target = try PlanningCenterTarget(song: "1", arrangement: "2")
+		let output = FileManager.default.temporaryDirectory.appendingPathComponent(UUID().uuidString)
+		await #expect(throws: PlanningCenterError.self) { try await client.download(attachmentID: "3", at: target, to: output) }
+		expectNoDifference(delays.withLock { $0 }, [.seconds(1), .seconds(2), .seconds(4)])
+		let requests = await fixture.requests
+		expectNoDifference(requests.count, 4)
+		let rejected = HTTPFixture([{ request in try response(request, #"{"errors":[{"status":"422","detail":"Invalid attachment"}]}"#, status: 422) }])
+		let other = await PlanningCenterClient(store: MemoryCredentials(pat), transport: rejected.transport, sleep: { _ in Issue.record("Must not retry other 422 errors") })
+		await #expect(throws: PlanningCenterError.self) { try await other.download(attachmentID: "3", at: target, to: output) }
+		let rejectedRequests = await rejected.requests
+		expectNoDifference(rejectedRequests.count, 1)
 	}
 }
