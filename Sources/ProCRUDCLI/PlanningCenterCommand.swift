@@ -12,12 +12,8 @@ struct PlanningCenterCommand: AsyncParsableCommand {
 	)
 
 	static var clientID: String? {
-		#if PLANNING_CENTER_OAUTH_CONFIGURED
-			let value = Secrets.planningCenterClientId
-			return value.isEmpty ? nil : value
-		#else
-			return nil
-		#endif
+		let value = Secrets.planningCenterClientId
+		return value.isEmpty ? nil : value
 	}
 }
 

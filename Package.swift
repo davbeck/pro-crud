@@ -1,13 +1,6 @@
 // swift-tools-version: 6.3
 
-import Foundation
 import PackageDescription
-
-// SecretsManager emits no source when .env contains no keys. Keep OAuth optional.
-let environmentFile = URL(fileURLWithPath: #filePath).deletingLastPathComponent().appendingPathComponent(".env")
-let hasPlanningCenterClientID = (try? String(contentsOf: environmentFile, encoding: .utf8))?
-	.components(separatedBy: .newlines)
-	.contains { $0.hasPrefix("export PLANNING_CENTER_CLIENT_ID=") || $0 == "export PLANNING_CENTER_CLIENT_ID" } ?? false
 
 let package = Package(
 	name: "ProCRUD",
@@ -78,11 +71,11 @@ let package = Package(
 				.copy("../../Docs/Format"),
 				.copy("Resources/Protobuf"),
 			],
-			swiftSettings: hasPlanningCenterClientID ? [.define("PLANNING_CENTER_OAUTH_CONFIGURED")] : [],
 			plugins: [
 				.plugin(name: "SwiftLintBuildToolPlugin", package: "SwiftLintPlugins"),
 				.plugin(name: "GitVersionPlugin"),
-			] + (hasPlanningCenterClientID ? [.plugin(name: "SecretsManagerPlugin", package: "SecretsManager")] : []),
+				.plugin(name: "SecretsManagerPlugin", package: "SecretsManager"),
+			],
 		),
 		.plugin(
 			name: "GitVersionPlugin",

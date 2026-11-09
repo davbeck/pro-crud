@@ -142,7 +142,9 @@ For OAuth sign-in, set `PLANNING_CENTER_CLIENT_ID` in `.env` to a public Plannin
 Center OAuth application's client ID. Register
 `http://127.0.0.1:49173/oauth/callback` as its callback. SecretsManager generates
 the compiled configuration; `.env` is ignored by Git. No client secret is used.
-An empty `.env` or empty client ID builds with personal access token support.
+Keep the `PLANNING_CENTER_CLIENT_ID` declaration from `.env.example`; an empty
+value builds with personal access token support. A missing `.env` or declaration
+is a build configuration error.
 SecretsManager embeds all exported `.env` values. Supply personal access tokens
 at runtime through the login prompt or environment, rather than exporting them
 in this build configuration.
