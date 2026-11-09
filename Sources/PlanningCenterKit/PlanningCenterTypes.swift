@@ -7,6 +7,7 @@ public enum PlanningCenterError: Error, LocalizedError {
 	case invalidResponse
 	case attachmentNotReady
 	case invalidTarget
+	case invalidUploadTarget
 	case invalidCallback
 	case authorizationDenied
 	case callbackTimeout
@@ -28,6 +29,7 @@ public enum PlanningCenterError: Error, LocalizedError {
 		case .invalidResponse: "Planning Center returned an unexpected response."
 		case .attachmentNotReady: "Planning Center is still preparing this attachment. Try downloading it again shortly."
 		case .invalidTarget: "Select one attachment destination: song and arrangement (optionally key), media, plan, or plan item. IDs must be positive integers."
+		case .invalidUploadTarget: "Upload requires --song and --arrangement, or --service-type, --plan, and --item. Plan-wide, key, and media destinations support list/download only."
 		case .invalidCallback: "The Planning Center login callback did not match this sign-in attempt."
 		case .authorizationDenied: "Planning Center authorization was declined."
 		case .callbackTimeout: "Planning Center sign-in timed out. Run planning-center login again."
@@ -107,6 +109,14 @@ public struct PlanningCenterTarget: Sendable {
 		} else {
 			throw PlanningCenterError.invalidTarget
 		}
+	}
+
+	/// Uploads require an exact arrangement or plan item, never a plan-wide attachment.
+	public func validateUpload() throws {
+		let parts = path.split(separator: "/")
+		let arrangement = parts.count == 4 && parts[0] == "songs" && parts[2] == "arrangements"
+		let item = parts.count == 6 && parts[0] == "service_types" && parts[2] == "plans" && parts[4] == "items"
+		guard arrangement || item else { throw PlanningCenterError.invalidUploadTarget }
 	}
 
 	public static func validatedID(_ id: String) throws -> String {

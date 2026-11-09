@@ -185,7 +185,11 @@ struct PlanningCenterClientTests {
 		#expect(throws: PlanningCenterError.self) { try PlanningCenterTarget(media: "0") }
 	}
 
-	@Test func uploadAssociatesFileUUIDWithExactArrangementAndVerifies() async throws {
+	@Test(arguments: try [
+		PlanningCenterTarget(song: "1", arrangement: "2"),
+		PlanningCenterTarget(serviceType: "1", plan: "2", item: "4"),
+	])
+	func uploadAssociatesFileUUIDWithExactDestinationAndVerifies(target: PlanningCenterTarget) async throws {
 		let directory = FileManager.default.temporaryDirectory.appendingPathComponent(UUID().uuidString)
 		try FileManager.default.createDirectory(at: directory, withIntermediateDirectories: true)
 		defer { try? FileManager.default.removeItem(at: directory) }
@@ -201,22 +205,38 @@ struct PlanningCenterClientTests {
 				return try response(request, #"{"data":[{"type":"File","id":"file-uuid"}]}"#)
 			},
 			{ request in
-				expectNoDifference(request.url?.path, "/services/v2/songs/1/arrangements/2/attachments")
+				expectNoDifference(request.url?.path, "/services/v2/" + target.path + "/attachments")
 				let payload = try JSONDecoder().decode(JSONValue.self, from: #require(request.httpBody))
 				expectNoDifference(payload, .object(["data": .object(["type": .string("Attachment"), "attributes": .object(["filename": .string("Song.pro"), "file_upload_identifier": .string("file-uuid")])])]))
 				return try response(request, #"{"data":{"type":"Attachment","id":"3","attributes":{"filename":"Song.pro"}}}"#)
 			},
 			{ request in
 				expectNoDifference(request.httpMethod, "GET")
-				expectNoDifference(request.url?.path, "/services/v2/songs/1/arrangements/2/attachments/3")
+				expectNoDifference(request.url?.path, "/services/v2/" + target.path + "/attachments/3")
 				return try response(request, #"{"data":{"type":"Attachment","id":"3","attributes":{"filename":"Song.pro"}}}"#)
 			},
 		])
 		let client = await PlanningCenterClient(store: MemoryCredentials(pat), transport: fixture.transport)
-		let receipt = try await client.upload(presentation: file, to: PlanningCenterTarget(song: "1", arrangement: "2"))
+		let receipt = try await client.upload(presentation: file, to: target)
 		expectNoDifference(receipt.id, "3")
 		let requests = await fixture.requests
 		expectNoDifference(requests.count, 3)
+	}
+
+	@Test(arguments: try [
+		PlanningCenterTarget(serviceType: "1", plan: "2"),
+		PlanningCenterTarget(media: "1"),
+		PlanningCenterTarget(song: "1", arrangement: "2", key: "3"),
+	])
+	func uploadRejectsUnsupportedTargetWithoutNetworkRequests(target: PlanningCenterTarget) async throws {
+		let fixture = HTTPFixture([])
+		let client = await PlanningCenterClient(store: MemoryCredentials(pat), transport: fixture.transport)
+		do {
+			_ = try await client.upload(presentation: URL(fileURLWithPath: "/missing.pro"), to: target)
+			Issue.record("Expected invalid upload destination")
+		} catch PlanningCenterError.invalidUploadTarget {}
+		let requests = await fixture.requests
+		#expect(requests.isEmpty)
 	}
 
 	@Test func downloadOmitsCredentialsAndRefusesToOverwrite() async throws {

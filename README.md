@@ -40,7 +40,7 @@ ProPresenter is a trademark of Renewed Vision, LLC. pro-crud is an independent, 
   Look-style result without modifying the source presentation.
 - Validate document structure and rendering, with optional workspace media checks.
 - Preserve protobuf fields that are unknown to the checked-in schema.
-- Authenticate with Planning Center Services, discover song/arrangement IDs, and
+- Authenticate with Planning Center Services, discover plan/item and song/arrangement IDs, and
   upload or download individual presentation attachments.
 - Print the bundled format reference and protobuf schema.
 - Install bundled AI-agent skills for document workflows and the official
@@ -189,8 +189,15 @@ pro-crud planning-center attachments upload 'Amazing Grace.pro' \
   --song 789 --arrangement 234 --dry-run
 ```
 
-Upload creates an attachment on the specified arrangement for ProPresenter's
-Planning Center integration to discover. See the
+For a sermon, announcement, or other plan item, use an exact item destination:
+
+```sh
+pro-crud planning-center attachments upload 'Sermon.pro' \
+  --service-type 123 --plan 456 --item 567 --dry-run
+```
+
+Upload creates an attachment on the specified arrangement or plan item for
+ProPresenter's Planning Center integration to discover. See the
 [authentication and transfer guide](skills/pro-crud/references/planning-center-api.md)
 for uploads, downloads, Keychain storage, and integration settings. These commands
 do not control a running ProPresenter instance or synchronize slide media.

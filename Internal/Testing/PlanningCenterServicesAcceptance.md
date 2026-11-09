@@ -74,3 +74,31 @@ this media-free target-22 sample on this build. It does not qualify background
 media synchronization, overwriting an already linked local presentation,
 multiple compatible attachment selection, other app versions, or unattended
 plan updates without applying a refresh.
+
+## Direct plan-item attachment creation
+
+Verified November 9, 2026 against the same disposable test organization using
+public Services API requests. The published Attachment documentation lists
+item attachment reads but only arrangement attachment creation; the direct item
+creation route was therefore checked against the live API before enabling it.
+
+Created a disposable non-song content item in service type `1839056`, plan
+`93236544`. Uploaded the existing media-free synthetic `.pro` sample containing
+only “Planning Center → ProPresenter / End-to-end import verified”, then posted
+its file upload identifier and filename to
+`service_types/{service_type_id}/plans/{plan_id}/items/{item_id}/attachments`.
+Creation succeeded; GET of the returned attachment ID and item attachment list
+both confirmed the filename and association. Deleted the disposable item and
+its attachment afterward. An initial invalid-file-identifier probe returned
+HTTP 500 and its disposable item was also deleted; writes were not retried.
+
+This verifies direct non-song item attachment creation/readback/listing. It does
+not establish automatic selection for media-linked items or native download
+behavior beyond the separately documented song-arrangement acceptance above.
+
+The updated CLI's `--dry-run` returned the exact plan-item destination. A full
+live CLI upload was stopped while waiting in `SecItemCopyMatching`, before any
+upload request, and its disposable plan item was deleted by the test scaffold.
+Live API verification above and the mocked client upload/readback tests passed;
+the full CLI suite also passed, including successful dry runs for both supported
+destination forms. No Keychain settings or credentials were changed.

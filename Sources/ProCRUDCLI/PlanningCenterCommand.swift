@@ -139,9 +139,9 @@ struct PlanningCenterAttachmentTargetOptions: ParsableArguments {
 	@Option(help: "Services arrangement ID within the song.") var arrangement: String?
 	@Option(help: "Services key ID within the arrangement (list/download only).") var key: String?
 	@Option(help: "Services media ID (list/download only).") var media: String?
-	@Option(help: "Services service type ID (list/download only).") var serviceType: String?
-	@Option(help: "Services plan ID (list/download only).") var plan: String?
-	@Option(help: "Services plan item ID (list/download only).") var item: String?
+	@Option(help: "Services service type ID. Upload also requires --plan and --item.") var serviceType: String?
+	@Option(help: "Services plan ID. Upload also requires --service-type and --item.") var plan: String?
+	@Option(help: "Services plan item ID within the plan.") var item: String?
 
 	func target() throws -> PlanningCenterTarget {
 		try PlanningCenterTarget(song: song, arrangement: arrangement, key: key, media: media, serviceType: serviceType, plan: plan, item: item)
@@ -162,16 +162,16 @@ struct PlanningCenterAttachmentList: AsyncParsableCommand {
 }
 
 struct PlanningCenterAttachmentUpload: AsyncParsableCommand {
-	static let configuration = CommandConfiguration(commandName: "upload", abstract: "Validate and add a .pro attachment to a song arrangement, available in every key. Existing attachments remain.")
+	static let configuration = CommandConfiguration(commandName: "upload", abstract: "Validate and add a .pro attachment to a song arrangement or any plan item. Existing attachments remain.")
 	@Argument(help: "Path to the individual .pro presentation.") var input: String
-	@Option(help: "Destination Services song ID.") var song: String
-	@Option(help: "Destination Services arrangement ID.") var arrangement: String
+	@OptionGroup var destination: PlanningCenterAttachmentTargetOptions
 	@Flag(help: "Validate the presentation and report the destination without uploading.") var dryRun = false
 
 	func run() async throws {
 		let url = URL(fileURLWithPath: input)
 		guard url.pathExtension.lowercased() == "pro" else { throw ValidationError("Upload requires an individual .pro presentation.") }
-		let target = try PlanningCenterTarget(song: song, arrangement: arrangement)
+		let target = try destination.target()
+		try target.validateUpload()
 		let document = try DocumentLoader.load(from: url)
 		guard case .presentation = document.payload else { throw ValidationError("Upload requires a presentation document.") }
 		let report = DocumentValidator.validate(document)

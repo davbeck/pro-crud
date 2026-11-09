@@ -11,10 +11,24 @@ announcements. Renewed Vision's walkthrough demonstrates a song and a sermon
 `.pro` both uploading and then automatically downloading and linking when the
 plan is imported again. A sermon does not need to be represented as a song.
 
+For CLI authentication and destination discovery, read
+[Planning Center Services API](planning-center-api.md). The CLI uploads to song
+arrangements or directly to any content item in a plan. ProPresenter performs
+the subsequent automatic download and local linking.
+
 ## Attach a `.pro` to a sermon or other plan item
 
 1. Prepare and validate the individual `.pro` presentation.
-2. In Services, open **Plans → the plan → Order → the sermon or other item →
+2. Upload directly to the exact item with the CLI:
+
+   ```sh
+   pro-crud planning-center attachments upload 'Sermon.pro' \
+     --service-type SERVICE_TYPE_ID --plan PLAN_ID --item ITEM_ID --dry-run
+   pro-crud planning-center attachments upload 'Sermon.pro' \
+     --service-type SERVICE_TYPE_ID --plan PLAN_ID --item ITEM_ID
+   ```
+
+   Or, in Services, open **Plans → the plan → Order → the sermon or other item →
    Files → Add File**. Upload the actual `.pro` file to that item's Files tab.
    For example, attach `Sermon.pro` directly to the Sermon item in the order.
 3. In ProPresenter, enable **Automatically Download Presentations and Media**,
@@ -35,11 +49,18 @@ item. Headers organize the order; use a content item for the presentation.
 1. Prepare and validate the individual `.pro` presentation. If the source is a
    `.probundle`, expand it and select the intended `.pro` payload; renaming the
    archive does not convert it into a presentation.
-2. In Services, open **Songs → the song → the arrangement used in the plan →
+2. Upload to the scheduled song arrangement with the CLI:
+
+   ```sh
+   pro-crud planning-center attachments upload 'Amazing Grace.pro' \
+     --song SONG_ID --arrangement ARRANGEMENT_ID
+   ```
+
+   Or, in Services, open **Songs → the song → the arrangement used in the plan →
    Files → +** and upload the actual `.pro` file. Attach it to the arrangement
    for availability in every key, or to a specific key when intentionally limited
-   to that key. For example, attach `Amazing Grace.pro` to the scheduled
-   arrangement's Files, available for all keys.
+   to that key (key-specific uploads use the Services UI). For example, attach
+   `Amazing Grace.pro` to the scheduled arrangement's Files, available for all keys.
 3. Add that song to the plan's order of service with the matching arrangement
    and, for key-specific attachments, the matching key. You can also open the
    song in the plan and use **Files → Add files to linked song**.
@@ -56,6 +77,8 @@ item. Headers organize the order; use a content item for the presentation.
 For reusable song presentations, attach the file to the song/arrangement used by
 the plan. Arrangement/key selection is specific to this song-library workflow;
 it is not a requirement for sermon or other direct plan-item attachments.
+A direct plan-item upload can also target a song- or media-linked item, but it
+attaches only to that plan occurrence, not the reusable song or media entry.
 Uploading a file somewhere in Services does not import its plan into ProPresenter.
 
 For standalone images or videos, attach the file to a Services **Media** item
@@ -101,9 +124,10 @@ Provide those assets on the receiving computer and verify media resolution, or
 use the manual bundle import workflow. A separately transferred media cue does
 not automatically become a background inside a downloaded presentation.
 
-These instructions describe ProPresenter's Services integration. The local
-playlist link/unlink operations in this skill do not upload files, associate
-remote attachments, refresh plans, or run the integration's downloads.
+The CLI attachment commands contact Services; ProPresenter's integration handles
+automatic download and linking. The local playlist link/unlink operations in
+this skill do not upload files, associate remote attachments, refresh plans, or
+run the integration's downloads.
 
 ## Official references
 
