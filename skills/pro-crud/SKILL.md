@@ -346,6 +346,12 @@ source and `Created` copy, and removal reports the original group as `Removed`.
 
 ## Planning Center playlists
 
+For Planning Center attachment placement, automatic presentation/media transfers,
+and `.pro` versus `.probundle` delivery, read
+[`references/planning-center-transfers.md`](references/planning-center-transfers.md).
+Those transfers are performed by ProPresenter's integration, separately from the
+local document operations below.
+
 A connected Planning Center playlist owns its outer plan-item wrappers and
 order remotely, but each wrapper's nested `linked_data` is a local ProPresenter
 association. Start with `dump`; it reports the plan identity, remote item,
