@@ -3,6 +3,7 @@ ProPresenter is presentations software, primarily designed for use in churches. 
 ### Project and API scope
 
 - `pro-crud` reads and writes ProPresenter document files; it does not implement or wrap the official ProPresenter HTTP API, which controls a running ProPresenter instance.
+- `planning-center` commands use the public Planning Center Services API for authentication, discovery, and attachment transfer. Keep that client in `PlanningCenterKit`, independent of document parsing and the local ProPresenter API skill.
 - The CLI embeds and installs two independent agent skills: `pro-crud` for document workflows and `propresenter-api` for the official API. They are included together because file preparation and live control are often used alongside each other.
 - `.agents/skills/propresenter-computer-use` and `.agents/skills/release-pro-crud` are project-only contributor skills. Keep them outside `skills/` so they are not embedded or installed by the CLI.
 - Keep the `propresenter-api` skill self-contained and grounded in official API documentation. It must not depend on or refer to `pro-crud` or this repository.
