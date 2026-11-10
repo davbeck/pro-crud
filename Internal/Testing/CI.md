@@ -26,7 +26,10 @@ and #4, as well as the merged `main` commits. Reference images and comparison
 precision are unchanged. GitHub currently labels this runner as a public preview;
 see its [image inventory](https://github.com/actions/runner-images/blob/main/images/macos/xcode-27-arm64-Readme.md).
 The workflow reports OS and toolchain versions to help diagnose future image
-updates. Tests run with normal Swift Testing parallelism.
+updates. The workflow preserves the existing
+`SWT_EXPERIMENTAL_MAXIMUM_PARALLELIZATION_WIDTH=1` setting. An unrestricted
+hosted run built successfully but stalled after starting the core tests, despite
+passing locally; concurrency changes need a separate investigation.
 
 To run the same checks locally on macOS 27.0.1 with Xcode 27.0:
 
