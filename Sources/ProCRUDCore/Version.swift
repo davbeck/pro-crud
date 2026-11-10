@@ -1,1 +1,1 @@
-public let proCRUDVersion = "0.2.0"
+public let proCRUDVersion = "0.3.0"

@@ -165,15 +165,16 @@ intel_triple="x86_64-apple-macosx26.0"
 arm_scratch_path="$project_root/.build/release-arm64"
 intel_scratch_path="$project_root/.build/release-x86_64"
 
-swift build -c release --triple "$arm_triple" \
+# Keep build-tool dependencies on the host architecture when cross-compiling.
+swift build --build-system native -c release --triple "$arm_triple" \
 	--scratch-path "$arm_scratch_path"
-swift build -c release --triple "$intel_triple" \
+swift build --build-system native -c release --triple "$intel_triple" \
 	--scratch-path "$intel_scratch_path"
 
-arm_binary_directory=$(swift build -c release --triple "$arm_triple" \
+arm_binary_directory=$(swift build --build-system native -c release --triple "$arm_triple" \
 	--scratch-path "$arm_scratch_path" \
 	--show-bin-path)
-intel_binary_directory=$(swift build -c release --triple "$intel_triple" \
+intel_binary_directory=$(swift build --build-system native -c release --triple "$intel_triple" \
 	--scratch-path "$intel_scratch_path" \
 	--show-bin-path)
 core_resource_bundle_name="ProCRUD_ProCRUDCore.bundle"
