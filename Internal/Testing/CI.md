@@ -39,7 +39,7 @@ To run the same checks locally on macOS 27.0.1 with Xcode 27.0:
 cp .env.example .env # Only when .env does not already exist.
 bin/format --lint
 bin/lint
-swift test
+SWT_EXPERIMENTAL_MAXIMUM_PARALLELIZATION_WIDTH=1 swift test
 ```
 
 The application's minimum supported OS remains macOS 26. This workflow pins the
