@@ -812,7 +812,7 @@ public enum TemplateMediaMaterializer {
 	}
 }
 
-private enum TemplateMediaResolver {
+enum TemplateMediaResolver {
 	private struct ResourceRoots {
 		var theme: URL
 		var resource: URL

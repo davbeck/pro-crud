@@ -65,6 +65,16 @@ public struct TemplateResolutionReport: Codable, Sendable {
 	public var removedSourceElements: [Element]
 	public var unfilledTemplateElements: [Element]
 	public var warnings: [String]
+	public var context: Context? = nil
+
+	public struct Context: Codable, Sendable {
+		public var presentationUUID: String
+		public var slideIndex: Int
+		public var lookUUID: String
+		public var lookName: String
+		public var screenUUID: String
+		public var screenName: String
+	}
 }
 
 public struct TemplateResolutionResult: Sendable {
@@ -887,7 +897,7 @@ public enum TemplateResolver {
 			warnings.append("Media crop/custom-image bounds are preserved without additional scaling because their ProPresenter behavior is unproven.")
 		}
 		if templateSlide.elements.contains(where: { !$0.dataLinks.isEmpty }) {
-			warnings.append("Known intra-slide data-link UUIDs were remapped; runtime data-link resolution itself is not emulated.")
+			warnings.append("Known intra-slide data-link UUIDs were remapped. Rendering support depends on the data-link kind and workspace context.")
 		}
 		if hasBuildState(in: templateSlide) {
 			warnings.append("Template Build In/Out and Build Order state is retained in the resolved slide; native precedence and remapping behavior are unproven.")

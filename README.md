@@ -276,20 +276,21 @@ slides. `--template-report` contains the same selected set. Template actions
 are excluded from transient rendering unless `--include-template-actions` is
 passed; enabling it appends fresh copies after each cue's existing actions.
 
-Or resolve the alternate template selected by a persisted Look against its
-configured audience-screen canvas:
+Render a screen variation using attached Looks and recursive Macros, resolving
+configuration and Theme dependencies from a local workspace:
 
 ```sh
-pro-crud render Welcome.pro \
+pro-crud render Service.probundle \
   --workspace '/path/to/UserWorkspace' \
-  --look 'Stream Match' \
-  --screen Projector \
-  --output Stream
+  --screens Projector Livestream \
+  --output Screens
 ```
 
-This static path requires an alternate template. It cannot reconstruct masks
-or other runtime-only layers, does not separate persisted presentation
-background/foreground switches, and never includes template actions.
+The main audience screen is the default; use `--screens all` for every audience
+screen. `--look 'Sermon Notes'` or `--macro 'Scripture Sermon'` selects a fixed
+variation. Native inputs can use their own workspace with `--native-stream`.
+See [screen rendering](Docs/Format/ThemeDocuments.md#screen-look-and-macro-rendering)
+for cue-state rules, screen-output links, reports, and static rendering limits.
 
 Extract an archive and create a portable bundle:
 

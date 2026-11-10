@@ -31,7 +31,7 @@ public enum LookResolverError: Error, CustomStringConvertible, Sendable {
 		case let .missingScreenMapping(look, screen):
 			"Look \(look) does not contain exactly one mapping for audience screen \(screen)."
 		case let .missingTemplateReference(look, screen):
-			"Look \(look) has no alternate template for audience screen \(screen); ordinary screen aspect-fit rendering is not yet emulated."
+			"Look \(look) does not reference an alternate Theme template for audience screen \(screen)."
 		case let .invalidTemplateURL(value):
 			"Look template path could not be resolved: \(value)"
 		case let .invalidScreenSize(screen):
@@ -64,7 +64,7 @@ public enum LookResolver {
 			looks.append(workspace.liveAudienceLook)
 		}
 		let matchingLooks = looks.filter {
-			$0.name == lookSelector || $0.uuid.string == lookSelector
+			$0.name == lookSelector || (!lookSelector.isEmpty && $0.uuid.string.caseInsensitiveCompare(lookSelector) == .orderedSame)
 		}
 		guard matchingLooks.count == 1, let look = matchingLooks.first else {
 			throw LookResolverError.ambiguousLook(
@@ -75,7 +75,7 @@ public enum LookResolver {
 
 		let audienceScreens = workspace.proScreens.filter { $0.screenType == .audience }
 		let matchingScreens = audienceScreens.filter {
-			$0.name == screenSelector || $0.uuid.string == screenSelector
+			$0.name == screenSelector || (!screenSelector.isEmpty && $0.uuid.string.caseInsensitiveCompare(screenSelector) == .orderedSame)
 		}
 		guard matchingScreens.count == 1, let screen = matchingScreens.first else {
 			throw LookResolverError.ambiguousScreen(
@@ -146,19 +146,23 @@ public enum LookResolver {
 		let matches = theme.slides.enumerated().filter { UUID(uuidString: $0.element.baseSlide.uuid.string) == templateID }
 		guard let selected = matches.first else { throw NativeSemanticError.missingReference(path: reference.logicalPath ?? themeID.uuidString, identity: templateID.uuidString) }
 		guard matches.count == 1 else { throw NativeSemanticError.duplicateIdentity(path: reference.logicalPath ?? themeID.uuidString, identity: templateID.uuidString) }
-		guard try MediaReference.collect(protobuf: selected.element.baseSlide.serializedData(), messageType: "rv.data.Slide").isEmpty else {
-			throw NativeSemanticError.unsupportedNode(path: "\(reference.logicalPath ?? themeID.uuidString)/\(templateID)", kind: "native Look template media rebasing; use a Legacy Workspace export for this Look")
-		}
 		var selectedTheme = theme
 		var renderedTemplate = selected.element
-		// Persisted Look rendering does not execute Theme actions. Keep them in
-		// the source history, outside this static rendering capability check.
+		// Adapt only the selected slide. Template actions are never executed or
+		// included in a persisted Look preview.
 		renderedTemplate.actions = []
+		var preview = DocumentFactory.presentation(name: "Look template preview")
+		preview.cues[0].actions[0].slide.presentation.baseSlide = renderedTemplate.baseSlide
+		preview = try NativeMediaRendering.compatibilityView(preview, contextRoot: snapshot.root)
+		renderedTemplate.baseSlide = preview.cues[0].actions[0].slide.presentation.baseSlide
+		let rebased = TemplateMediaResolver.rebase(template: renderedTemplate, resourceDirectory: snapshot.root,
+		                                           themeDocumentPath: "Themes/" + (reference.logicalPath ?? "Theme"), showRoot: snapshot.root)
+		renderedTemplate = rebased.template
 		selectedTheme.slides = [renderedTemplate]
 		try DocumentCompatibility.analyze(.init(payload: .theme(selectedTheme), origin: .workspace(snapshot.root))).requireSupported()
 		let candidate = ThemeTemplateSource.Candidate(name: selected.element.name, sourcePath: "\(reference.logicalPath ?? themeID.uuidString)#\(selected.offset)", componentPath: "/slides[index=\(selected.offset)]",
-		                                              themeDocumentPath: reference.logicalPath ?? "Theme", resourceDirectory: snapshot.root, mediaWarnings: [], preferredAbsoluteMediaURLs: [],
-		                                              preferredMediaReferences: [], slide: renderedTemplate, temporaryResourceOwner: nil)
+		                                              themeDocumentPath: reference.logicalPath ?? "Theme", resourceDirectory: snapshot.root, mediaWarnings: rebased.warnings, preferredAbsoluteMediaURLs: rebased.preferredAbsoluteMediaURLs,
+		                                              preferredMediaReferences: ThemeTemplateSource.mediaReferences(in: renderedTemplate), slide: renderedTemplate, temporaryResourceOwner: nil)
 		let size: CGSize
 		if let width = screen.logicalWidth, let height = screen.logicalHeight,
 		   width.isFinite, height.isFinite, width >= 1, height >= 1, width * height <= PresentationRenderer.maximumCanvasPixelCount
@@ -180,8 +184,8 @@ public enum LookResolver {
 		return .init(lookName: look.name, screenName: screen.name, destinationSize: size, template: candidate, warnings: Array(Set(warnings)).sorted())
 	}
 
-	private static func warnings(mapping: Rv_Data_ProAudienceLook.ProScreenLook, candidate: ThemeTemplateSource.Candidate) -> [String] {
-		var warnings = candidate.mediaWarnings
+	static func warnings(mapping: Rv_Data_ProAudienceLook.ProScreenLook, candidate: ThemeTemplateSource.Candidate? = nil) -> [String] {
+		var warnings = candidate?.mediaWarnings ?? []
 		if mapping.propsEnabled || mapping.liveVideoEnabled || mapping.announcementsEnabled ||
 			mapping.propsLayerEnabled || mapping.messagesLayerEnabled || !mapping.maskUuid.string.isEmpty
 		{
@@ -193,7 +197,7 @@ public enum LookResolver {
 		return warnings
 	}
 
-	private static func workspacePaths(from input: URL) throws -> (root: URL, file: URL) {
+	static func workspacePaths(from input: URL) throws -> (root: URL, file: URL) {
 		try WorkspaceInspector.requireLegacyAccess(at: input)
 		var isDirectory: ObjCBool = false
 		if FileManager.default.fileExists(atPath: input.path, isDirectory: &isDirectory), !isDirectory.boolValue,
@@ -213,14 +217,10 @@ public enum LookResolver {
 	}
 
 	private static func resolve(_ value: Rv_Data_URL, workspaceRoot: URL) throws -> URL {
-		if case let .absoluteString(string)? = value.storage,
-		   let url = URL(string: string), url.isFileURL,
-		   FileManager.default.fileExists(atPath: url.path)
+		if case let .local(local)? = value.relativeFilePath,
+		   local.root == .show || local.root == .currentResource
 		{
-			return url
-		}
-		if case let .absoluteString(string)? = value.storage, string.hasPrefix("/") {
-			let url = URL(fileURLWithPath: string)
+			let url = workspaceRoot.appendingPathComponent(local.path)
 			if FileManager.default.fileExists(atPath: url.path) {
 				return url
 			}
@@ -231,18 +231,21 @@ public enum LookResolver {
 				return url
 			}
 		}
-		if case let .local(local)? = value.relativeFilePath,
-		   local.root == .show || local.root == .currentResource
-		{
-			let url = workspaceRoot.appendingPathComponent(local.path)
-			if FileManager.default.fileExists(atPath: url.path) {
+		if case let .absoluteString(string)? = value.storage {
+			if let url = URL(string: string), url.isFileURL, FileManager.default.fileExists(atPath: url.path) {
 				return url
+			}
+			if string.hasPrefix("/") {
+				let url = URL(fileURLWithPath: string)
+				if FileManager.default.fileExists(atPath: url.path) {
+					return url
+				}
 			}
 		}
 		throw LookResolverError.invalidTemplateURL(value.renderPath)
 	}
 
-	private static func screenSize(_ screen: Rv_Data_ProPresenterScreen) throws -> CGSize {
+	static func screenSize(_ screen: Rv_Data_ProPresenterScreen) throws -> CGSize {
 		let children: [Rv_Data_Screen] = switch screen.arrangement {
 		case let .arrangementSingle(value): value.screens
 		case let .arrangementCombined(value): value.screens
