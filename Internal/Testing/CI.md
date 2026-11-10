@@ -13,8 +13,10 @@ Both formatting and lint use the package's resolved tool versions.
 Commits made with `GITHUB_TOKEN` do not trigger push or pull-request workflows,
 so the formatter explicitly dispatches CI after creating a formatting commit.
 This requires `actions: write` in addition to `contents: write` for that workflow.
-The dispatched run checks the updated branch and shares a concurrency group with
-the PR run, cancelling obsolete checks. No personal access token is required.
+The dispatched run checks the updated branch. PR merge checks and manually
+dispatched branch checks use separate concurrency groups: GitHub reports them
+separately, so a branch check must not cancel a PR's merge check. New PR updates
+still cancel earlier runs for that PR. No personal access token is required.
 Run `bin/format` locally to apply formatting or `bin/format --lint` to check it.
 
 Tests use the `xcode-27` Apple silicon runner with Xcode 27.0. Its macOS 27.0.1
