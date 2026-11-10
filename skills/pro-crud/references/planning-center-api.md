@@ -3,7 +3,9 @@
 Use `pro-crud planning-center` to authenticate with Planning Center Services,
 find remote IDs, and transfer individual `.pro` attachments. These commands
 contact Planning Center directly; they do not require the Planning Center MCP
-or a running ProPresenter instance. Local playlist edit commands remain local.
+or a running ProPresenter instance. Local playlist edit commands remain local. For attachment placement, native
+automatic downloads, and bundle delivery, see
+[Planning Center transfers](planning-center-transfers.md).
 
 ## Sign in
 
@@ -66,21 +68,37 @@ pro-crud planning-center attachments upload 'Amazing Grace.pro' \
   --song 789 --arrangement 234
 ```
 
+For any content item in a plan, including sermons and announcements, use the
+service type, plan, and item IDs returned by discovery:
+
+```sh
+pro-crud planning-center attachments upload 'Sermon.pro' \
+  --service-type 123 --plan 456 --item 567 --dry-run
+pro-crud planning-center attachments upload 'Sermon.pro' \
+  --service-type 123 --plan 456 --item 567
+```
+
 Upload validates the individual `.pro` locally, uploads its bytes, creates an
-attachment on the explicit song arrangement, and reads it back for verification.
+attachment on the exact song arrangement or plan item, and reads it back for
+verification. Direct item uploads also support items linked to songs or media;
+they attach only to that occurrence in the plan, not the reusable library entry.
+Headers organize the order; select a content item for presentation delivery.
 The result contains the attachment ID. `--dry-run` validates and reports the
 local file and remote destination without making network requests.
 
 Uploads create new attachments and preserve existing ones. Inspect the destination
 before retrying an interrupted upload; attachment creation is not automatically
 retried and a server may have accepted a request whose response was lost. Keep
-one intended `.pro` per arrangement when possible to avoid ambiguous automatic
-selection. This command currently uploads to song arrangements only.
+one intended `.pro` per destination when possible to avoid ambiguous automatic
+selection. Upload requires either `--song ID --arrangement ID` or
+`--service-type ID --plan ID --item ID`; incomplete or mixed destinations are
+rejected before any upload, including with `--dry-run`. Plan-wide, key-specific,
+and media-library destinations support list/download only.
 
 In ProPresenter, enable **Automatically Download Presentations and Media**, set
 **Download Library**, and import the plan using **+ → Planning Center Service**.
-Verify the presentation linked to the song. Existing library matching can link
-another local copy. Apply **Update Available** when offered, or use the item's
+Verify the presentation linked to the intended item. Existing library matching
+can link another local copy. Apply **Update Available** when offered, or use the item's
 Planning Center Attachment Manager to select the intended attachment manually.
 The CLI upload does not import a plan, replace an existing local link, or trigger
 slides. Presentation backgrounds and other referenced slide media are not

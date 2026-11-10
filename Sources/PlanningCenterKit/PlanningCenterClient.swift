@@ -122,12 +122,9 @@ public actor PlanningCenterClient {
 		try await list(path: target.path + "/attachments")
 	}
 
-	/// Creates an arrangement attachment. Never replaces or deletes an existing attachment.
+	/// Creates a song arrangement or direct plan-item attachment. Never replaces or deletes an existing attachment.
 	public func upload(presentation: URL, to target: PlanningCenterTarget) async throws -> PlanningCenterResource {
-		let parts = target.path.split(separator: "/")
-		guard parts.count == 4, parts[0] == "songs", parts[2] == "arrangements" else {
-			throw PlanningCenterError.invalidTarget
-		}
+		try target.validateUpload()
 		let filename = presentation.lastPathComponent
 		guard !filename.contains("\r"), !filename.contains("\n"), !filename.contains("\""), filename.lowercased().hasSuffix(".pro") else {
 			throw PlanningCenterError.invalidTarget
