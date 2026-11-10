@@ -28,6 +28,9 @@ unresolved hypotheses, experiment procedures, and progress history here.
 [Fixture export workflow](../Fixtures/ProPresenter/README.md) describes native
 reference generation and snapshot installation.
 
+[CI checks](Testing/CI.md) describes workflow triggers, local validation, and
+the rendering test environment.
+
 - [Experiment backlog](Research/Format/Experiments.md): research procedures,
   completed comparisons, and remaining questions.
 - [Theme research](Research/Format/ThemeDocuments.md): controlled input layouts,

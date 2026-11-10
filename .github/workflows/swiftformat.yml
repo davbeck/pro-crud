@@ -10,24 +10,40 @@ on:
       - "Package.resolved"
       - "bin/format"
 
-env:
-  GITHUB_ELEVATED_TOKEN: ${{ secrets.CI_GITHUB_TOKEN }}
+permissions:
+  contents: write
+  actions: write
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
 
 jobs:
   format:
     runs-on: ubuntu-24.04
-    permissions:
-      # Give the default GITHUB_TOKEN write permission to commit and push the
-      # added or changed files to the repository.
-      contents: write
+    timeout-minutes: 15
 
     steps:
       - uses: actions/checkout@v7
 
-      - run: cp .env.example .env
+      - name: Configure build environment
+        run: cp .env.example .env
 
-      - run: bin/format
+      - name: Format Swift
+        run: bin/format
 
       - uses: stefanzweifel/git-auto-commit-action@v7
+        id: commit
         with:
           commit_message: format
+          file_pattern: "*.swift"
+          disable_globbing: true
+
+      # GITHUB_TOKEN commits do not trigger push/pull_request workflows.
+      # Dispatch CI explicitly so the formatted commit also receives checks.
+      - name: Check the formatting commit
+        if: steps.commit.outputs.changes_detected == 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+          BRANCH: ${{ github.ref_name }}
+        run: gh workflow run tests.yml --ref "$BRANCH"

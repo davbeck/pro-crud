@@ -1,17 +1,22 @@
-name: tests
+name: CI
 
 on:
   push:
-    branches: ["**"]
+    branches: [main]
   pull_request:
+  workflow_dispatch:
 
 permissions:
   contents: read
 
+concurrency:
+  group: ${{ github.workflow }}-${{ github.head_ref || github.ref_name }}
+  cancel-in-progress: true
+
 jobs:
-  test:
-    runs-on: macos-26
-    timeout-minutes: 30
+  lint:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
 
     steps:
       - uses: actions/checkout@v7
@@ -19,10 +24,29 @@ jobs:
       - name: Configure build environment
         run: cp .env.example .env
 
-      - name: Select Xcode 26.6
-        run: sudo xcode-select --switch /Applications/Xcode_26.6.app
+      - name: Run SwiftLint
+        run: bin/lint
+
+  test:
+    # Native 22 exact text-placement references were exported on macOS 27.0.1.
+    # Keep AppKit and system fonts aligned with that environment.
+    # https://github.com/actions/runner-images/blob/main/images/macos/xcode-27-arm64-Readme.md
+    runs-on: xcode-27
+    timeout-minutes: 30
+    env:
+      DEVELOPER_DIR: /Applications/Xcode_27.app/Contents/Developer
+
+    steps:
+      - uses: actions/checkout@v7
+
+      - name: Configure build environment
+        run: cp .env.example .env
+
+      - name: Report toolchain and OS
+        run: |
+          sw_vers
+          xcodebuild -version
+          swift --version
 
       - name: Run tests
-        env:
-          SWT_EXPERIMENTAL_MAXIMUM_PARALLELIZATION_WIDTH: 1
         run: swift test
