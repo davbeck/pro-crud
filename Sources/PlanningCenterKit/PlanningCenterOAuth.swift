@@ -40,13 +40,13 @@ public struct PlanningCenterOAuth: Sendable {
 		      components.path == "/oauth/callback"
 		else { throw PlanningCenterError.invalidCallback }
 		let items = components.queryItems ?? []
-		guard items.filter({ $0.name == "state" }).count == 1,
+		guard items.count(where: { $0.name == "state" }) == 1,
 		      items.first(where: { $0.name == "state" })?.value == state
 		else { throw PlanningCenterError.invalidCallback }
 		if items.contains(where: { $0.name == "error" }) {
 			throw PlanningCenterError.authorizationDenied
 		}
-		guard items.filter({ $0.name == "code" }).count == 1,
+		guard items.count(where: { $0.name == "code" }) == 1,
 		      let code = items.first(where: { $0.name == "code" })?.value, !code.isEmpty
 		else { throw PlanningCenterError.invalidCallback }
 		return code

@@ -374,6 +374,8 @@ ProPresenter 21.4 exports use stored entries and ZIP64 size fields even for smal
 
 Archive parsing and extraction are in-process and bounded. Before writing any output, the reader limits entry count, central-directory work, individual and aggregate expanded sizes, compression ratios, path lengths, and processing time. It rejects encrypted entries, unsupported methods, duplicate normalized destinations, traversal, symbolic links, and special files. Extraction uses a fresh sibling staging directory, resolved containment checks, and restrictive `0700` directory/`0600` regular-file permissions before atomically moving the completed tree into place.
 
+An extraction integrity failure triggers one silent retry from freshly read archive metadata, within the original processing deadline. This accommodates transient reads or source updates between directory parsing and extraction. The retry still validates all entry sizes and checksums; persistent integrity failures remain errors. ProPresenter's supported ZIP64 conventions are accepted without archive-format warnings.
+
 New archives preserve the useful ProPresenter conventions—stored data, UTF-8 names, and ZIP64 sizes—while using relative member names and standards-correct ZIP64 extras and central-directory sizes. The codec dispatch currently accepts stored and raw-DEFLATE entries; an unknown future compression method produces a specific unsupported-method error rather than being mistaken for a damaged protobuf payload.
 
 For `.proTheme`, the internal directory name is the imported theme name; the

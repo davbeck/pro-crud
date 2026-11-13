@@ -276,6 +276,59 @@ struct ZIPArchiveTests {
 	}
 
 	@Test
+	func retriesIntegrityFailureWithFreshArchiveMetadata() throws {
+		try withZIPTemporaryDirectory { directory in
+			let original = makeStoredZIP(
+				entries: [FixtureEntry(name: "/Assets/old.png", data: Data(repeating: 1, count: 131_073))],
+				zip64EndRecords: true,
+				declaredCentralDirectoryOvercount: 98,
+			)
+			let archiveURL = try write(original, named: "updating.probundle", in: directory)
+			let reader = try ZIPReader(archiveURL: archiveURL, limits: .default)
+			let contents = Data(repeating: 2, count: 196_609)
+			let replacement = makeStoredZIP(
+				entries: [FixtureEntry(name: "/Assets/new.png", data: contents)],
+				zip64EndRecords: true,
+				declaredCentralDirectoryOvercount: 98,
+			)
+			// Deterministically replace the source after parsing, before extraction.
+			try replacement.data.write(to: archiveURL, options: .atomic)
+			let destination = directory.appendingPathComponent("expanded", isDirectory: true)
+
+			try reader.extract(to: destination)
+
+			try expectNoDifference(Data(contentsOf: destination.appendingPathComponent("Assets/new.png")), contents)
+			expectNoDifference(reader.entries.map(\.rawName), ["/Assets/new.png"])
+			expectNoDifference(reader.fileSize, UInt64(replacement.data.count))
+			#expect(!FileManager.default.fileExists(atPath: destination.appendingPathComponent("Assets/old.png").path))
+			try expectNoDifference(directoryContents(directory), ["expanded", "updating.probundle"])
+		}
+	}
+
+	@Test
+	func integrityRetryRevalidatesArchivePaths() throws {
+		try withZIPTemporaryDirectory { directory in
+			let archiveURL = try write(
+				makeStoredZIP(entries: [FixtureEntry(name: "payload.pro", data: Data("original".utf8))]),
+				named: "updating.probundle",
+				in: directory,
+			)
+			let reader = try ZIPReader(archiveURL: archiveURL, limits: .default)
+			let replacement = makeStoredZIP(entries: [
+				FixtureEntry(name: "../evil.pro", data: Data("replaced".utf8)),
+			])
+			try replacement.data.write(to: archiveURL, options: .atomic)
+			let destination = directory.appendingPathComponent("expanded", isDirectory: true)
+
+			expectNoDifference(
+				caughtArchiveError { try reader.extract(to: destination) },
+				Optional(ArchiveError.invalidEntry("../evil.pro")),
+			)
+			try expectNoDifference(directoryContents(directory), ["updating.probundle"])
+		}
+	}
+
+	@Test
 	func rejectsCRCMismatchAndRemovesTransactionalOutput() throws {
 		try withZIPTemporaryDirectory { directory in
 			let fixture = makeStoredZIP(entries: [

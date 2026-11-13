@@ -79,7 +79,7 @@ struct NativePlaylistProjectionTests {
 			#expect(references.count == 2 && Set(references.map(\.referenceID)).count == 2)
 			#expect(Set(references.compactMap(\.assetID)).count == 1)
 			#expect(references.allSatisfy { $0.activeLocators.first?.localRoot == 12 })
-			#expect(try DocumentLoader.recursiveFiles(in: directory).filter { $0.pathExtension == "png" }.count == 1)
+			#expect(try DocumentLoader.recursiveFiles(in: directory).count(where: { $0.pathExtension == "png" }) == 1)
 			for reference in references {
 				let relative = try #require(reference.activeLocators.first?.relative)
 				#expect(try Data(contentsOf: directory.appendingPathComponent(relative)) == Data(contentsOf: asset))

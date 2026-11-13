@@ -144,7 +144,7 @@ struct NativeWorkspaceDependencyExportTests {
 				Issue.record("An incomplete workspace dependency closure was published.")
 			} catch let error as DocumentCompatibilityError {
 				#expect(error.report.issues.contains { $0.feature == "native-media-dependency" })
-				#expect(error.report.issues.filter { $0.feature == "native-workspace-dependency" }.count >= 2)
+				#expect(error.report.issues.count(where: { $0.feature == "native-workspace-dependency" }) >= 2)
 			}
 			#expect(!FileManager.default.fileExists(atPath: output.path))
 			#expect(try FileManager.default.contentsOfDirectory(atPath: output.deletingLastPathComponent().path) == ["Source"])
