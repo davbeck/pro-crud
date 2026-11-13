@@ -293,10 +293,10 @@ public enum DocumentLoader {
 		validatesPayload: Bool,
 	) throws -> ProPresenterDocument {
 		let reader = try ZIPReader(archiveURL: url, limits: limits)
-		let entries = reader.entries.map(\.rawName)
 		let temporaryDirectory = FileManager.default.temporaryDirectory
 			.appendingPathComponent("ProCRUD-\(UUID().uuidString)", isDirectory: true)
 		try reader.extract(to: temporaryDirectory)
+		let entries = reader.entries.map(\.rawName)
 		let owner = TemporaryDirectoryOwner(url: temporaryDirectory)
 		var result: ProPresenterDocument
 		switch kind {

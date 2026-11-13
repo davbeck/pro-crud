@@ -30,8 +30,8 @@ struct ZIPEntry: Sendable {
 final class ZIPReader {
 	let archiveURL: URL
 	let limits: ArchiveLimits
-	let entries: [ZIPEntry]
-	let fileSize: UInt64
+	private(set) var entries: [ZIPEntry]
+	private(set) var fileSize: UInt64
 
 	private let deadline: ArchiveDeadline
 
@@ -52,6 +52,20 @@ final class ZIPReader {
 	}
 
 	func extract(to destinationURL: URL) throws {
+		do {
+			try extractOnce(to: destinationURL)
+		} catch ArchiveError.integrityCheckFailed {
+			// Cloud-backed files can change between directory parsing and payload
+			// reads. Retry the whole transaction with fresh metadata, silently.
+			// Keep the original deadline and require every checksum to pass again.
+			let refreshed = try ZIPReader(archiveURL: archiveURL, limits: limits, deadline: deadline)
+			try refreshed.extractOnce(to: destinationURL)
+			entries = refreshed.entries
+			fileSize = refreshed.fileSize
+		}
+	}
+
+	private func extractOnce(to destinationURL: URL) throws {
 		try deadline.check()
 		let fileManager = FileManager.default
 		guard !fileManager.fileExists(atPath: destinationURL.path) else {
